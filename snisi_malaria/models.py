@@ -930,11 +930,11 @@ receiver(post_save, sender=AggEpidemioMalariaR)(post_save_report)
 reversion.register(AggEpidemioMalariaR, follow=['snisireport_ptr'])
 
 ############
-# WEEKLY MALARIAR
+# DAILY MALARIAR
 ############
 
 
-class WeeklyMalariaRIFace(models.Model):
+class DailyMalariaRIFace(models.Model):
 
     class Meta:
         abstract = True
@@ -968,7 +968,7 @@ class WeeklyMalariaRIFace(models.Model):
         return self.total_for_field(inspect.stack()[0][3])
 
 
-class WeeklyMalariaR(WeeklyMalariaRIFace, SNISIReport):
+class DailyMalariaR(DailyMalariaRIFace, SNISIReport):
 
     RECEIPT_FORMAT = ("MRW-{entity__slug}/"
                       "{period__year_short}{period__month}"
@@ -981,17 +981,17 @@ class WeeklyMalariaR(WeeklyMalariaRIFace, SNISIReport):
         verbose_name = _("Weekly Malaria Report")
         verbose_name_plural = _("Weekly Malaria Reports")
 
-receiver(pre_save, sender=WeeklyMalariaR)(pre_save_report)
-receiver(post_save, sender=WeeklyMalariaR)(post_save_report)
+receiver(pre_save, sender=DailyMalariaR)(pre_save_report)
+receiver(post_save, sender=DailyMalariaR)(post_save_report)
 
-reversion.register(WeeklyMalariaR, follow=['snisireport_ptr'])
+reversion.register(DailyMalariaR, follow=['snisireport_ptr'])
 
 
-class AggWeeklyMalariaR(WeeklyMalariaRIFace,
-                        PeriodicAggregatedReportInterface, SNISIReport):
+class AggDailyMalariaR(DailyMalariaRIFace,
+                       PeriodicAggregatedReportInterface, SNISIReport):
 
     RECEIPT_FORMAT = None
-    INDIVIDUAL_CLS = WeeklyMalariaR
+    INDIVIDUAL_CLS = DailyMalariaR
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     UNIQUE_TOGETHER = [('period', 'entity')]
 
@@ -1044,7 +1044,7 @@ class AggWeeklyMalariaR(WeeklyMalariaRIFace,
                 .filter(entity__in=entity.get_natural_children(
                     skip_slugs=['health_area']))
 
-        return super(AggWeeklyMalariaR, cls).create_from(
+        return super(AggDailyMalariaR, cls).create_from(
             period=period,
             entity=entity,
             created_by=created_by,
@@ -1054,19 +1054,19 @@ class AggWeeklyMalariaR(WeeklyMalariaRIFace,
     @classmethod
     def generate_receipt(cls, instance):
 
-        fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)
+        # fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)
 
-        extra_field = {
-            'week_part': "S{}".format(fwp_num) if fwp_num else ""
-        }
+        extra_field = {}
+        #     'week_part': "S{}".format(fwp_num) if fwp_num else ""
+        # }
         receipt_format = ("AMRW-{entity__slug}/"
                           "{period__year_short}{period__month}"
-                          "{week_part}-{rand}")
+                          "{period__day}-{rand}")
         return generate_receipt(
             instance=instance,
             receipt_format=receipt_format, **extra_field)
 
-receiver(pre_save, sender=AggWeeklyMalariaR)(pre_save_report_incomplete)
-receiver(post_save, sender=AggWeeklyMalariaR)(post_save_report)
+receiver(pre_save, sender=AggDailyMalariaR)(pre_save_report_incomplete)
+receiver(post_save, sender=AggDailyMalariaR)(post_save_report)
 
-reversion.register(AggWeeklyMalariaR, follow=['snisireport_ptr'])
+reversion.register(AggDailyMalariaR, follow=['snisireport_ptr'])

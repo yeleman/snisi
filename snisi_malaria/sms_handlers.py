@@ -17,7 +17,7 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_malaria.models import MalariaR
 from snisi_malaria.integrity import (MalariaRSourceReportChecker,
-                                     WeeklyMalariaRIntegrityChecker,
+                                     DailyMalariaRIntegrityChecker,
                                      create_report, PROJECT_BRAND)
 from snisi_tools.sms import send_sms
 from snisi_sms.reply import SMSReply
@@ -419,7 +419,7 @@ def weekly_malaria_report(message):
 
     # now we have well formed and authenticated data.
     # let's check for business-logic errors.
-    checker = WeeklyMalariaRIntegrityChecker()
+    checker = DailyMalariaRIntegrityChecker()
 
     # feed data holder with sms provided data
     for key, value in arguments.items():

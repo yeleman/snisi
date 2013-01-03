@@ -15,7 +15,7 @@ from snisi_core.models.Reporting import (get_autobot, ExpectedReporting,
                                          ReportClass, PERIODICAL_AGGREGATED)
 from snisi_core.models.Periods import DayPeriod
 from snisi_malaria.models import (EpidemioMalariaR,
-                                  WeeklyMalariaR, AggWeeklyMalariaR)
+                                  DailyMalariaR, AggDailyMalariaR)
 
 logger = logging.getLogger(__name__)
 
@@ -30,13 +30,13 @@ class Command(BaseCommand):
         dsmopti = Entity.get_or_none("HFD9")
         autobot = get_autobot()
 
-        logger.info("Clear all WeeklyMalariaR and AggWeeklyMalariaR...")
-        WeeklyMalariaR.objects.all().delete()
-        AggWeeklyMalariaR.objects.all().delete()
+        logger.info("Clear all DailyMalariaR and AggDailyMalariaR...")
+        DailyMalariaR.objects.all().delete()
+        AggDailyMalariaR.objects.all().delete()
         logger.info("\tdone.")
 
-        # Export all EpidemioMalariaR into WeeklyMalariaR
-        logger.info("Generate WeeklyMalariaR for EpidemioMalariaR...")
+        # Export all EpidemioMalariaR into DailyMalariaR
+        logger.info("Generate DailyMalariaR for EpidemioMalariaR...")
 
         for exp in ExpectedReporting.objects.filter(
                 report_class__slug__startswith='malaria_weekly_epidemio') \
@@ -81,29 +81,28 @@ class Command(BaseCommand):
                 logger.debug("\tchange date to {}".format(
                     epi_report.created_on))
                 DEBUG_change_system_date(epi_report.created_on, True)
-                weekly_report = WeeklyMalariaR.objects.create(**data)
-                logger.info("Created {}".format(weekly_report))
+                daily_report = DailyMalariaR.objects.create(**data)
+                logger.info("Created {}".format(daily_report))
 
-                new_exp.acknowledge_report(weekly_report)
+                new_exp.acknowledge_report(daily_report)
             else:
                 epi_report = None
 
         logger.info("\tdone.")
 
+        # need to handle AggWeek (and AggMonth ?)
 
-        ## need to handle AggWeek (and AggMonth ?)
+        logger.info("Generate AggDailyMalariaR for all DayPeriod")
 
-        logger.info("Generate AggWeeklyMalariaR for all DayPeriod")
-
-        ps = DayPeriod.all_from(WeeklyMalariaR.objects.all().first().period,
-                                WeeklyMalariaR.objects.all().last().period)
+        ps = DayPeriod.all_from(DailyMalariaR.objects.all().first().period,
+                                DailyMalariaR.objects.all().last().period)
 
         for period in ps:
-            gen_time = epi_report.extended_reporting_period.end_on + \
+            gen_time = period.end_on + \
                 datetime.timedelta(seconds=28800)  # 8h
             DEBUG_change_system_date(gen_time, True)
             for entity in [dsmopti, dsbandiagara, rsmopti, mali]:
-                agg_report = AggWeeklyMalariaR.create_from(
+                agg_report = AggDailyMalariaR.create_from(
                     period=period,
                     entity=entity,
                     created_by=autobot)

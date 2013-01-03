@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('snisi_core', '0009_auto_20150415_0902'),
+        ('snisi_core', '0010_auto_20150710_1405'),
         ('snisi_malaria', '0003_auto_20150526_0941'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AggWeeklyMalariaR',
+            name='AggDailyMalariaR',
             fields=[
                 ('snisireport_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='snisi_core.SNISIReport')),
                 ('nb_source_reports_expected', models.PositiveIntegerField(null=True, blank=True)),
@@ -30,8 +30,8 @@ class Migration(migrations.Migration):
                 ('u5_total_confirmed_malaria_cases', models.PositiveIntegerField(verbose_name='Total Confirmed Malaria Cases')),
                 ('o5_total_confirmed_malaria_cases', models.PositiveIntegerField(verbose_name='Total Confirmed Malaria Cases')),
                 ('pw_total_confirmed_malaria_cases', models.PositiveIntegerField(verbose_name='Total Confirmed Malaria Cases')),
-                ('agg_sources', models.ManyToManyField(related_name='aggregated_agg_aggweeklymalariar_reports', verbose_name='Aggr. Sources (all)', to='snisi_malaria.AggWeeklyMalariaR', blank=True)),
-                ('direct_agg_sources', models.ManyToManyField(related_name='direct_aggregated_agg_aggweeklymalariar_reports', verbose_name='Aggr. Sources (direct)', to='snisi_malaria.AggWeeklyMalariaR', blank=True)),
+                ('agg_sources', models.ManyToManyField(related_name='aggregated_agg_aggdailymalariar_reports', verbose_name='Aggr. Sources (all)', to='snisi_malaria.AggDailyMalariaR', blank=True)),
+                ('direct_agg_sources', models.ManyToManyField(related_name='direct_aggregated_agg_aggdailymalariar_reports', verbose_name='Aggr. Sources (direct)', to='snisi_malaria.AggDailyMalariaR', blank=True)),
             ],
             options={
                 'verbose_name': 'Aggregated Weekly Malaria Report',
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             bases=('snisi_core.snisireport', models.Model),
         ),
         migrations.CreateModel(
-            name='WeeklyMalariaR',
+            name='DailyMalariaR',
             fields=[
                 ('snisireport_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='snisi_core.SNISIReport')),
                 ('u5_total_confirmed_malaria_cases', models.PositiveIntegerField(verbose_name='Total Confirmed Malaria Cases')),
@@ -54,13 +54,13 @@ class Migration(migrations.Migration):
             bases=('snisi_core.snisireport', models.Model),
         ),
         migrations.AddField(
-            model_name='aggweeklymalariar',
+            model_name='aggdailymalariar',
             name='direct_indiv_sources',
-            field=models.ManyToManyField(related_name='direct_source_agg_aggweeklymalariar_reports', verbose_name='Primary. Sources (direct)', to='snisi_malaria.WeeklyMalariaR', blank=True),
+            field=models.ManyToManyField(related_name='direct_source_agg_aggdailymalariar_reports', verbose_name='Primary. Sources (direct)', to='snisi_malaria.DailyMalariaR', blank=True),
         ),
         migrations.AddField(
-            model_name='aggweeklymalariar',
+            model_name='aggdailymalariar',
             name='indiv_sources',
-            field=models.ManyToManyField(related_name='source_agg_aggweeklymalariar_reports', verbose_name='Primary. Sources (all)', to='snisi_malaria.WeeklyMalariaR', blank=True),
+            field=models.ManyToManyField(related_name='source_agg_aggdailymalariar_reports', verbose_name='Primary. Sources (all)', to='snisi_malaria.DailyMalariaR', blank=True),
         ),
     ]

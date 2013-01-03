@@ -24,7 +24,7 @@ from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthFifthWeek)
 from snisi_malaria.models import (MalariaR,
                                   EpidemioMalariaR, AggEpidemioMalariaR,
-                                  WeeklyMalariaR, AggWeeklyMalariaR)
+                                  DailyMalariaR, AggDailyMalariaR)
 from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation)
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
@@ -697,17 +697,17 @@ def create_weekly_report(provider, expected_reporting, completed_on,
             period=day_period,
             entity=expected_reporting.entity)
 
-        day_report = WeeklyMalariaR.start(
+        day_report = DailyMalariaR.start(
             period=day_expected.period,
             entity=day_expected.entity,
             created_by=provider,
-            completion_status=WeeklyMalariaR.COMPLETE,
+            completion_status=DailyMalariaR.COMPLETE,
             completed_on=completed_on,
-            integrity_status=WeeklyMalariaR.CORRECT,
+            integrity_status=DailyMalariaR.CORRECT,
             arrival_status=integrity_checker.get('arrival_status'),
-            validation_status=WeeklyMalariaR.NOT_VALIDATED)
+            validation_status=DailyMalariaR.NOT_VALIDATED)
 
-        for field in WeeklyMalariaR.data_fields():
+        for field in DailyMalariaR.data_fields():
             setattr(day_report, field,
                     integrity_checker.get('day{}_{}'.format(daynum, field)))
 
@@ -729,7 +729,7 @@ def create_weekly_report(provider, expected_reporting, completed_on,
 
     # create weekly aggregated report
     try:
-        report = AggWeeklyMalariaR.create_from(
+        report = AggDailyMalariaR.create_from(
             period=expected_reporting.period,
             entity=expected_reporting.entity,
             created_by=provider)
@@ -751,7 +751,7 @@ def create_weekly_report(provider, expected_reporting, completed_on,
                             receipt=report.receipt))
 
 
-class WeeklyMalariaRIntegrityChecker(ReportIntegrityChecker):
+class DailyMalariaRIntegrityChecker(ReportIntegrityChecker):
 
     DOMAIN = get_domain()
 
@@ -789,7 +789,7 @@ class WeeklyMalariaRIntegrityChecker(ReportIntegrityChecker):
             pass
 
         for day_num in range(1, 1 + nb_days_this_week):
-            for field in WeeklyMalariaR.data_fields():
+            for field in DailyMalariaR.data_fields():
                 fname = "day{}_{}".format(day_num, field)
                 if not self.has(fname):
                     self.add_missing(_("Données manquantes "
