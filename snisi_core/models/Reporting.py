@@ -456,20 +456,59 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
         except:
             return None
 
-    def get_expected_reportings(self, with_source=True, with_agg=True):
-        erl = []
-        if with_source:
-            erl += ExpectedReporting.objects.filter(
+    # overridable
+    def build_source_entities(self):
+        return self.entity.get_descendants_of(include_self=True)
+
+    # overridable
+    def build_source_exp_reportings(self):
+        return list(set(
+            ExpectedReporting.objects.filter(
                 report_class=self.report_class(for_source=True),
                 period=self.period,
                 entity__slug__in=[
-                    e.slug for e in self.entity.get_descendants_of(
-                        include_self=True)])
-        if with_agg:
-            erl += ExpectedReporting.objects.filter(
+                    e.slug for e in self.source_entities])))
+
+    # overridable
+    def build_agg_exp_reportings(self):
+        return list(set(
+            ExpectedReporting.objects.filter(
                 report_class=self.report_class(for_source=False),
                 period=self.period,
-                entity__slug=self.entity.slug)
+                entity__slug=self.entity.slug)))
+
+    @property
+    def source_entities(self):
+        cache = getattr(self, '_source_entities', None)
+        if cache is None:
+            setattr(self, '_source_entities', self.build_source_entities())
+            return self.source_entities
+        return cache
+
+    @property
+    def source_exp_reportings(self):
+        cache = getattr(self, '_source_exp_reportings', None)
+        if cache is None:
+            setattr(self, '_source_exp_reportings',
+                    self.build_source_exp_reportings())
+            return self.source_exp_reportings
+        return cache
+
+    @property
+    def agg_exp_reportings(self):
+        cache = getattr(self, '_agg_exp_reportings', None)
+        if cache is None:
+            setattr(self, '_agg_exp_reportings',
+                    self.build_agg_exp_reportings())
+            return self.agg_exp_reportings
+        return cache
+
+    def get_expected_reportings(self, with_source=True, with_agg=True):
+        erl = []
+        if with_source:
+            erl += self.source_exp_reportings
+        if with_agg:
+            erl += self.agg_exp_reportings
         return list(set(erl))
 
     @classmethod
@@ -728,10 +767,6 @@ class PeriodicAggregatedReportInterface(models.Model):
                                   for r in e.arrived_reports.all()
                                   if e.satisfied]
         self.nb_source_reports_expected = len(source_expecteds)
-
-        # nb_source_reports_expected
-        self.nb_source_reports_arrived = len([
-            e for e in source_expecteds if e.satisfied])
 
         # nb_source_reports_arrived
         self.nb_source_reports_arrived = len(source_arrived_reports)

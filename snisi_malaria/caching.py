@@ -19,6 +19,8 @@ def update_cluster_caches_for(cluster):
             update_malaria_monthly_routine_sms_cache,
         'malaria_weekly_epidemiology':
             update_malaria_weekly_epidemiology_cache,
+        'malaria_weekly_routine':
+            update_malaria_weekly_routine_cache,
     }.get(cluster.slug, lambda c: False)(cluster)
 
 
@@ -35,6 +37,12 @@ def update_malaria_monthly_routine_sms_cache(cluster):
 
 
 def update_malaria_weekly_epidemiology_cache(cluster):
+    # update member's list JSON cache.
+    return generate_json_cache_from_cluster_members(
+        cluster, skip_slugs=['health_area', 'vfq'])
+
+
+def update_malaria_weekly_routine_cache(cluster):
     # update member's list JSON cache.
     return generate_json_cache_from_cluster_members(
         cluster, skip_slugs=['health_area', 'vfq'])
