@@ -496,6 +496,16 @@ class Period(models.Model):
             period = YearPeriod.find_create_from(year)
         return period
 
+    def get_day_periods(self):
+        days = [DayPeriod.find_create_by_date(self.start_on)]
+        while True:
+            day = days[-1].following()
+            if day.end_on <= self.end_on:
+                days.append(day)
+            else:
+                break
+        return days
+
     def save(self, *args, **kwargs):
         # update pk so it reflects the period data.
         # we want to make sure any FK remains attached to the correct

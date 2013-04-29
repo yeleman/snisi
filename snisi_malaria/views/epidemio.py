@@ -16,7 +16,7 @@ from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthThirdWeek,
                                                 FixedMonthFourthWeek,
                                                 FixedMonthFifthWeek)
-from snisi_malaria.models import AggEpidemioMalariaR
+from snisi_malaria.models import AggEpidemioMalariaR, AggWeeklyMalariaR
 from snisi_web.utils import entity_periods_context
 from snisi_malaria.epidemio_utils import get_threshold
 
@@ -32,7 +32,7 @@ def display_epidemio(request,
     context = {}
 
     root = request.user.location
-    cluster = Cluster.get_or_none('malaria_weekly_epidemiology')
+    cluster = Cluster.get_or_none('malaria_weekly_routine')
 
     context.update(entity_periods_context(
         request=request,
@@ -56,9 +56,8 @@ def display_epidemio(request,
         FixedMonthFifthWeek,
     ]
 
-    # main data holder is a list (periods indexed) of dict
-    # each containing the period, the threshold and for each fixed-week
-    # the corresponding report if exist.
+    # all AggWeeklyMalariaR
+    agg_weekly_data = []
     epidemio_data = []
     for month_period in context['periods']:
 
@@ -68,25 +67,31 @@ def display_epidemio(request,
                                        month_period.middle().year,
                                        month_period.middle().month)}
 
-        # loop on fixed weeks and try to find a period and report
         for periodcls in period_classes:
+
             week_period = periodcls.find_create_from(
                 month_period.middle().year, month_period.middle().month)
 
             if week_period is not None:
                 # retrieve weekly report
                 try:
-                    report = AggEpidemioMalariaR.objects.get(
+                    report = AggWeeklyMalariaR.objects.get(
                         entity=context['entity'], period=week_period)
-                except AggEpidemioMalariaR.DoesNotExist:
+                except AggWeeklyMalariaR.DoesNotExist:
                     continue
+
+                agg_weekly_data.append({
+                    'week': week_period,
+                    'report': report})
 
                 # update data-dict
                 month_data.update({'week{}'.format(
                     week_period.FIXED_WEEK_NUM): report})
+
         epidemio_data.append(month_data)
 
-    context.update({'epidemio_data': epidemio_data})
+    context.update({'agg_weekly_data': agg_weekly_data,
+                    'epidemio_data': epidemio_data})
 
     return render(request,
                   kwargs.get('template_name', 'malaria/epidemio.html'),

@@ -23,6 +23,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
 from snisi_malaria.xls_export import malaria_monthly_routine_as_xls
+from snisi_malaria.utils import weekdaynum_for_datetime
 
 
 class MalariaRIface(object):
@@ -978,8 +979,8 @@ class DailyMalariaR(DailyMalariaRIFace, SNISIReport):
 
     class Meta:
         app_label = 'snisi_malaria'
-        verbose_name = _("Weekly Malaria Report")
-        verbose_name_plural = _("Weekly Malaria Reports")
+        verbose_name = _("Daily Malaria Report")
+        verbose_name_plural = _("Daily Malaria Reports")
 
 receiver(pre_save, sender=DailyMalariaR)(pre_save_report)
 receiver(post_save, sender=DailyMalariaR)(post_save_report)
@@ -997,8 +998,8 @@ class AggDailyMalariaR(DailyMalariaRIFace,
 
     class Meta:
         app_label = 'snisi_malaria'
-        verbose_name = _("Aggregated Weekly Malaria Report")
-        verbose_name_plural = _("Aggregated Weekly Malaria Reports")
+        verbose_name = _("Aggregated Daily Malaria Report")
+        verbose_name_plural = _("Aggregated Daily Malaria Reports")
 
     # all source reports (CSCOM)
     indiv_sources = models.ManyToManyField(
@@ -1070,3 +1071,220 @@ receiver(pre_save, sender=AggDailyMalariaR)(pre_save_report_incomplete)
 receiver(post_save, sender=AggDailyMalariaR)(post_save_report)
 
 reversion.register(AggDailyMalariaR, follow=['snisireport_ptr'])
+
+
+class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
+
+    RECEIPT_FORMAT = None
+    INDIVIDUAL_CLS = DailyMalariaR
+    REPORTING_TYPE = PERIODICAL_AGGREGATED
+    UNIQUE_TOGETHER = [('period', 'entity')]
+
+    class Meta:
+        app_label = 'snisi_malaria'
+        verbose_name = _("Aggregated Weekly Malaria Report")
+        verbose_name_plural = _("Aggregated Weekly Malaria Reports")
+
+    day1_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day1_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day1_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day2_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day2_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day2_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day3_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day3_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day3_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day4_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day4_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day4_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day5_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day5_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day5_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day6_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day6_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day6_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    day7_u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day7_o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    day7_pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+    pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"), default=0)
+
+    # all source reports (CSCOM)
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (all)"),
+        blank=True,
+        related_name='source_agg_%(class)s_reports',
+        symmetrical=False)
+
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (direct)"),
+        blank=True,
+        related_name='direct_source_agg_%(class)s_reports',
+        symmetrical=False)
+
+    def catsum(self, prefix=''):
+        return sum([getattr(self, '{p}{c}_total_confirmed_malaria_cases'
+                                  .format(p=prefix, c=cat), 0)
+                    for cat in ('u5', 'o5', 'pw')])
+
+    @property
+    def total_confirmed_malaria_cases(self):
+        return self.catsum()
+
+    def catpc(self, cat, prefix=''):
+        field = '{p}{c}_total_confirmed_malaria_cases'.format(p=prefix, c=cat)
+        tfield = '{p}total_confirmed_malaria_cases'.format(p=prefix)
+        try:
+            return getattr(self, field) / getattr(self, tfield) * 100
+        except ZeroDivisionError:
+            return None
+
+    @property
+    def u5pc_total_confirmed_malaria_cases(self):
+        return self.catpc('u5')
+
+    @property
+    def o5pc_total_confirmed_malaria_cases(self):
+        return self.catpc('o5')
+
+    @property
+    def pwpc_total_confirmed_malaria_cases(self):
+        return self.catpc('pw')
+
+    @property
+    def day1_total_confirmed_malaria_cases(self):
+        return self.catsum('day1_')
+
+    @property
+    def day2_total_confirmed_malaria_cases(self):
+        return self.catsum('day2_')
+
+    @property
+    def day3_total_confirmed_malaria_cases(self):
+        return self.catsum('day3_')
+
+    @property
+    def day4_total_confirmed_malaria_cases(self):
+        return self.catsum('day4_')
+
+    @property
+    def day5_total_confirmed_malaria_cases(self):
+        return self.catsum('day5_')
+
+    @property
+    def day6_total_confirmed_malaria_cases(self):
+        return self.catsum('day6_')
+
+    @property
+    def day7_total_confirmed_malaria_cases(self):
+        return self.catsum('day7_')
+
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+
+        for idx, day in enumerate(period.get_day_periods()):
+            print(day, idx)
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+            else:
+                indiv_sources = []
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
+
+        return super(AggWeeklyMalariaR, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
+
+    @classmethod
+    def update_instance_with_indiv(cls, report, instance):
+
+        prefix = 'day{}'.format(
+            weekdaynum_for_datetime(report.period.start_on))
+
+        # copy values from DayMalariaR to proper day fields
+        for field in report.data_fields():
+            nfield = '{}_{}'.format(prefix, field)
+
+            setattr(report, nfield,
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, nfield, 0) or 0))
+
+            # update counter on week-long fields
+            setattr(report, field,
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
+
+    @classmethod
+    def update_instance_with_agg(cls, report, instance):
+        for field in cls.data_fields():
+            setattr(report, field,
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
+
+    @classmethod
+    def generate_receipt(cls, instance):
+
+        fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)
+
+        extra_field = {
+            'week_part': "S{}".format(fwp_num) if fwp_num else ""
+        }
+        receipt_format = ("AMRW-{entity__slug}/"
+                          "{period__year_short}{period__month}"
+                          "{week_part}-{rand}")
+        return generate_receipt(
+            instance=instance,
+            receipt_format=receipt_format, **extra_field)
+
+receiver(pre_save, sender=AggWeeklyMalariaR)(pre_save_report_incomplete)
+receiver(post_save, sender=AggWeeklyMalariaR)(post_save_report)
+
+reversion.register(AggWeeklyMalariaR, follow=['snisireport_ptr'])

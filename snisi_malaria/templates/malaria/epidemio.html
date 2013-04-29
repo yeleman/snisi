@@ -1,30 +1,8 @@
 {% extends "base.html" %}
+{% load snisi %}
+{% load l10n %}
 
 {% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
-
-{% block onJQready %}
-entities_browser = getEntitiesBrowser({
-    parentID: 'entity_periods_filter',
-    baseURL: '/api/entities/getclusterchildren/malaria_weekly_epidemiology',
-    root: "{{ root.slug }}",
-    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
-    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
-    auto_launch: true,
-    add_default_option: true,
-    default_option: {value: '-1', label: "AUCUN"}
-});
-registerEntityPeriodsFilter({
-    entity_browser: entities_browser,
-    periodAID: 'filter_periodA',
-    periodBID: 'filter_periodB',
-    url_tmpl: "{% url 'malaria_epidemio' %}/<entity>/<period_str>"
-});
-
-
-$.each(hc_graphs, function (idx) {
-    new Highcharts.Chart(hc_graphs[idx]);
-});
-{% endblock %}
 
 {% block content %}
 
@@ -46,128 +24,304 @@ $.each(hc_graphs, function (idx) {
 {% else %}
 
 <h3 class="caption"><strong>Suivi épidémiologique hebdomadaire du paludisme à </strong> {{ entity }} (District de {{ entity.get_health_district }})</h3>
-<div id="graph"></div>
-<script type="text/javascript">
-{% load snisi %}
-{% load l10n %}
-var PERCENT = "";
-hc_graphs.push({
-    chart: {
-        renderTo: 'graph',
-        zoomType: 'x',
-        spacingRight: 20
-    },
-    legend: {},
-    title: {text: null},
-    xAxis: {
-        type: 'datetime',
-        maxZoom: 1 * 24 * 3600000,
-        dateTimeLabelFormats: {
-            millisecond: '%H:%M:%S.%L',
-            second: '%H:%M:%S',
-            minute: '%H:%M',
-            hour: '%H:%M',
-            day: '%e. %b',
-            week: '%e. %b',
-            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
-            year: '%Y'
-        }
-    },
-    yAxis: {
-        title: {text: "Nombre de cas"},
-        min:0,
-    },
-    series: [
-        // {
-        //     type: 'areaspline',
-        //     name: "Cas de paludisme notifiés à {{ reports.0.entity }}",
-        //     data: {% localize off %}[{% for report in reports %}[{{ report.period.start_on|to_jstimestamp }}, {{ report.total_consultation_all_causes|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        // },
-        // Threshold
-        {
-            type: 'areaspline',
-            name: "Seuil d'alerte mensuel",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.threshold|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // Week 5
-        {
-            type: 'column',
-            name: "Semaine 5",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week5.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // Week 4
-        {
-            type: 'column',
-            name: "Semaine 4",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week4.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // Week 3
-        {
-            type: 'column',
-            name: "Semaine 3",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week3.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // Week 2
-        {
-            type: 'column',
-            name: "Semaine 2",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week2.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // Week 1
-        {
-            type: 'column',
-            name: "Semaine 1",
-            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week1.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-    ],
-    tooltip:  {
-        formatter: function() {
-            var s = '';
-            var total = 0;
-            var threshold = 0;
-            $.each(this.points, function(i, point) {
-                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
-                if (point.series.type == 'column') {
-                    total += point.y;
-                } else {
-                    threshold = point.y;
-                }
-            });
-            var diff = total - threshold;
-            s += '<b>Total: ' + total + '</b> ('+ diff +')';
+<div id="graph1"></div>
 
-            return s;
-        },
-        shared: true
-    },
-    plotOptions: {
-        line: {
-            animation: false,
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: true
-        },
-        column: {
-            stacking: true,
-            animation: false,
-            enableMouseTracking: true,
-            dataLabels: {
-                color: 'black',
-                enabled: false,
-            }
-        }
-    },
-    exporting: {
-        enabled: true,
-    },
-    credits: {
-        enabled: true,
-        text: "© PNLP – {{ periodb }}",
-        href: null
-    },
-});
-</script>
+<h3 class="caption"><strong>Pourcentages des cas confirmés par tranches d'âge à </strong> {{ entity }}</h3>
+<div id="graph2"></div>
+
+<h3 class="caption"><strong>Nombre de cas confirmés par tranches d'âge à </strong> {{ entity }}</h3>
+<div id="graph3"></div>
 
 {% endif %}
+{% endblock %}
+
+{% block onJQready %}
+
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    baseURL: '/api/entities/getclusterchildren/malaria_weekly_routine',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'malaria_epidemio' %}/<entity>/<period_str>"
+});
+
+var tmpl = {
+    chart: {renderTo: null, },
+    legend: {},
+    title: {text: null},
+    xAxis: {categories: [{% for week_data in weekly_data %} "{{ week_data.report.period }}", {% endfor %}], labels: { rotation: -90}, },
+    yAxis: {title: null, min:0,},
+    series: [],
+    plotOptions: {column: {animation: false, dataLabels: { color: 'black', enabled: true,}}},
+    exporting: {enabled: true,},
+    credits: { enabled: true, text: "© PNLP – {{ periodb }}", href: null },
+};
+
+var graph1 = $.extend(true, {}, tmpl);
+graph1.chart.renderTo = 'graph1';
+graph1.chart.zoomType = 'x';
+graph1.chart.spacingRight = 20;
+graph1.xAxis = {
+    type: 'datetime',
+    maxZoom: 1 * 24 * 3600000,
+    dateTimeLabelFormats: {
+        millisecond: '%H:%M:%S.%L',
+        second: '%H:%M:%S',
+        minute: '%H:%M',
+        hour: '%H:%M',
+        day: '%e. %b',
+        week: '%e. %b',
+        month: '%B %Y',
+        year: '%Y'
+    }
+};
+graph1.series = [
+
+    // Threshold
+    {
+        type: 'areaspline',
+        name: "Seuil d'alerte mensuel",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.threshold|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+    // Week 5
+    {
+        type: 'column',
+        name: "Semaine 5",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week5.total_confirmed_malaria_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+    // Week 4
+    {
+        type: 'column',
+        name: "Semaine 4",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week4.total_confirmed_malaria_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+    // Week 3
+    {
+        type: 'column',
+        name: "Semaine 3",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week3.total_confirmed_malaria_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+    // Week 2
+    {
+        type: 'column',
+        name: "Semaine 2",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week2.total_confirmed_malaria_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+
+    // Week 1
+    {
+        type: 'column',
+        name: "Semaine 1",
+        data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week1.total_confirmed_malaria_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+    },
+];
+graph1.tooltip = {
+    formatter: function() {
+        var s = '';
+        var total = 0;
+        var threshold = 0;
+        $.each(this.points, function(i, point) {
+            s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
+            if (point.series.type == 'column') {
+                total += point.y;
+            } else {
+                threshold = point.y;
+            }
+        });
+        var diff = total - threshold;
+        s += '<b>Total: ' + total + '</b> ('+ diff +')';
+
+        return s;
+    },
+    shared: true
+};
+graph1.plotOptions.column = {
+    stacking: true,
+    animation: false,
+    enableMouseTracking: true,
+    dataLabels: {
+        color: 'black',
+        enabled: false,
+    }
+};
+hc_graphs.push(graph1);
+
+var graph2 = $.extend(true, {}, tmpl);
+graph2.chart.renderTo = 'graph2';
+graph2.xAxis = {
+	categories: [
+		{% for week_data in agg_weekly_data %} "{{ week_data.report.period }}", {% endfor %}],
+	labels: { rotation: -90}, },
+graph2.yAxis = {
+	title: null,
+	min:0,
+    max:100,
+    show_as_percentage: true,
+    labels: {    	
+    	formatter: function () { return this.value + '%'; }
+    }
+};
+graph2.plotOptions.column = {
+    stacking: true,
+    animation: false,
+    enableMouseTracking: true,
+    dataLabels: {
+        color: 'black',
+        enabled: false,
+    }
+};
+graph2.series = [
+    {
+        type: 'column',
+        name: "Pourcentage de cas Moins de 5ans",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.u5pc_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+
+    {
+        type: 'column',
+        name: "Pourcentage de cas 5ans et plus",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.o5pc_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+
+    {
+        type: 'column',
+        name: "Pourcentage de cas de femmes enceintes",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.pwpc_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+graph2.tooltip = {
+	enabled: true,
+    formatter: function() {
+    	if (this.y != null) {
+    		var nf = (Math.round(this.y * 10) / 10).toString().replace('.', ',');
+			return this.series.name + ' : ' + nf + '%';
+    	}
+    }
+};
+hc_graphs.push(graph2);
+
+var graph3 = $.extend(true, {}, tmpl);
+graph3.chart.renderTo = 'graph3';
+graph3.xAxis = {
+	categories: [
+		{% for week_data in agg_weekly_data %} "{{ week_data.report.period }}", {% endfor %}],
+	labels: { rotation: -90}, },
+graph3.series = [
+    {
+        type: 'spline',
+        name: "Nombre de cas Moins de 5ans",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.u5_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+
+    {
+        type: 'spline',
+        name: "Nombre de cas 5ans et plus",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.o5_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+
+    {
+        type: 'spline',
+        name: "Nombre de cas de femmes enceintes",
+        data: {% localize off %}
+        [
+        	{% for week_data in agg_weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.pw_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+hc_graphs.push(graph3);
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+
 {% endblock %}
