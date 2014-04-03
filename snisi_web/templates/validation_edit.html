@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block title %}Rapport {{ report }}{% endblock %}
+
+
+{% block content %}
+<h2>Validation {{ user.get_access }}</h2>
+
+{% include edit_template with report=report form=form %}
+
+{% endblock %}
+
+{% block onJQready %}
+$('[data-toggle="popover"]').popover({trigger:'hover', placement: 'top', html:true});
+{% endblock %}

@@ -1,0 +1,72 @@
+
+.inline-data {
+	font-weight: bold;
+}
+
+.pure-table.all-left th, .pure-table.all-left td {
+	text-align: left;
+}
+
+table.pure-table {
+    border-collapse: collapse;
+
+    color: @text-table;
+    font-weight: normal;
+}
+
+
+.pure-table th {
+    background: none repeat scroll 0 0 @green;
+    color: @text-table-head;
+    font-weight: normal;
+    /*text-transform: uppercase;*/
+}
+
+
+.pure-table tr {
+    border-bottom: solid 6px @border-table-nodata;
+}
+
+.pure-table tr:nth-child(even) td:not(.error) {
+    background-color: @background-table-even;
+}
+
+.pure-table tr:nth-child(odd) td:not(.error) {
+    background-color: @background-table-odd;
+}
+
+.pure-table td a, .pure-table td a:visited, .pure-table td a:hover, .pure-table td a:link {
+    color: @text-content;
+}
+
+
+.pure-table td.nodata {
+    background-color: @background-dark !important;
+}
+
+tr.spacer, tr.spacer td {
+    background-color: transparent !important;
+}
+
+.pure-table td.changed {
+    background-color: orange;
+}
+
+.pure-table td.error {
+    background-color: @red;
+    /*.alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);*/
+}
+
+.pure-table.report-table tr th:first-of-type {
+    text-align: left;
+}
+
+table.pure-table {
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+	.pure-skin-snisi .pure-table td, .pure-skin-snisi .pure-table th {
+		padding: 0.1em;
+	}
+}

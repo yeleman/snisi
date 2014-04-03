@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Monitoring de la collecte{% endblock %}
+
+{% block content %}
+
+{% include "misc/entity_filter.html" with reportclass=True btn=True label="Filtrer" %}
+
+<h2>{{ expected_reports|length }} Rapports attendus non arrivés</h2>
+
+<table class="pure-table">
+<tr>
+    <th>Localité</th>
+    <th>District</th>
+    <!-- <th>Role</th> -->
+    <th>Période</th>
+    <th>Période rapportage</th>
+    <th>Période Étendue</th>
+</tr>
+{% for exp in expected_reports %}
+<tr>
+    <td>{% include "parts/reportclsicon.html" with reportcls=exp.report_class %}
+        {% include "parts/entity_link.html" with entity=exp.entity %}</td>
+    <td>{% include "parts/entity_link.html" with entity=exp.entity.get_health_district %}</td>
+    <!-- <td>{{ exp.reporting_role }}</td> -->
+    <td>{{ exp.period }}</td>
+    <td>{{ exp.reporting_period }}</td>
+    <td>{{ exp.extended_reporting_period }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

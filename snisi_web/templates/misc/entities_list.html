@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% block title %}Carte Sanitaire Numérique – {{ entity }}{% endblock %}
+
+{% block content %}
+
+<h2>{{ entity }}</h2>
+
+{% if entities %}
+<ol>
+{% for child_entity in entities %}
+<li>{% include "parts/entity_link.html" with entity=child_entity %}</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% endblock %}

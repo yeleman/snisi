@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="malaria" model="snisi_core.domain">
+        <field type="CharField" name="name">Paludisme</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="technical_contact" rel="ManyToOneRel">adolo</field>
+        <field to="snisi_core.provider" name="operational_contact" rel="ManyToOneRel">mkonat1</field>
+        <field type="CharField" name="short_description">Données de routine PNLP</field>
+        <field type="TextField" name="description"></field>
+        <field type="CharField" name="module_path">snisi_malaria</field>
+    </object>
+</django-objects>

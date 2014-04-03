@@ -1,0 +1,132 @@
+{% load snisi %}
+
+<hr />
+{% with report=expected.arrived_report %}
+<table class="pure-table table-striped table-bordered all-left">
+    <tr>
+        <th>{{ expected.report_class.name }}</th>
+        <td>{{ expected.period }}</td>
+        <td>{% include "parts/entity_link.html" with entity=expected.entity %}</td>
+        <td>{% if expected.satisfied %}<i class="fa fa-check"></i> Rapport reçu{% else %}Réçu {{ expected.arrived_reports.count }} / {{ expected.amount_expected }}{% endif %}</td>
+    </tr>
+{% if report %}
+    <tr>
+        <th>Réception</th>
+        <td>{{ report.created_on }}</td>
+        <th>Créateur</th>
+        <td>{% include "parts/user_link.html" with provider=report.created_by %}</td>
+    </tr>
+
+    {% if report.created_on != report.modified_on %}
+    <tr>
+        <th>Modification</th><td  colspan="3"<span class="inline-data">{{ report.modified_on }}</span>, <span class="inline-data">{% include "parts/user_link.html" with provider=report.modified_by %}</span>.</td>
+    </tr>
+    {% endif %}
+
+    <tr>
+        <th>Promptitude</th>
+        <td>{% if report.on_time%}<i class="fa fa-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
+        <th>Complétude</th>
+        <td>{% if report.complete%}<i class="fa fa-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
+    </tr>
+
+    <tr>
+        <th>Validation</th>
+        {% if report.validated %}
+        <td colspan="3"><i class="fa fa-check"></i> Validé le <span class="inline-data">{{ report.validated_on }}</span> par <span class="inline-data">{% include "parts/user_link.html" with provider=report.validated_by %}{% if report.auto_validated %} (auto){% endif %}</span>.</td>
+        {% else %}
+        <td colspan="3">{{ report.verbose_validation_status }}</td>
+        {% endif %}
+    </tr>
+    {% if expected.arrived_report.validated %}
+    <tr>
+        <th>Exporter le rapport</th>
+        <td>{% include "parts/download_report_button.html" with report_class=expected.report_class report=expected.arrived_report %}</td>
+        <th>Nº reçu</th>
+        <td>{{ expected.arrived_report.receipt }}</td>
+    </tr>
+    {% endif %}
+{% else %}
+    <tr>
+        <td colspan="4">Rapport non reçu.</td>
+    </tr>
+{% endif %}
+</table>
+{% endwith %}
+
+{% if expected.arrived_report %}
+
+<hr />
+
+{% if expected.arrived_report.validated %}
+    {% include expected.report_class.slug|reporttmpl with report=expected.arrived_report %}
+{% else %}
+    <p>Ce rapport n'est pas encore validé.</p>
+{% endif %}
+
+{% if expected.arrived_report.is_aggregated %}
+
+<h2>Bulletin rapport aggrégé</h2>
+
+<table class="pure-table table-striped table-bordered all-left">
+    <tr>
+        <th colspan="4">Rapports Sources</th>
+        <th>Directs</th>
+        <td>{{ expected.arrived_report.direct_indiv_sources.count }}</td>
+        <th>Tous</th>
+        <td>{{ expected.arrived_report.indiv_sources.count }}</td>
+    </tr>
+    <tr>
+        <th>Attendus</th>
+        <td>{{ expected.arrived_report.nb_source_reports_expected }}</td>
+        <th>Arrivés</th>
+        <td>{{ expected.arrived_report.nb_source_reports_arrived }}</td>
+        <th>À temps</th>
+        <td>{{ expected.arrived_report.nb_source_reports_arrived_on_time }}</td>
+        <th>corrects</th>
+        <td>{{ expected.arrived_report.nb_source_reports_arrived_correct }}</td>
+    </tr>
+    <tr>
+        <th>Complets</th>
+        <td>{{ expected.arrived_report.nb_source_reports_arrived_complete }}</td>
+        <th>Modifiés</th>
+        <td>{{ expected.arrived_report.nb_source_reports_altered }}</td>
+        <th>Validés</th>
+        <td>{{ expected.arrived_report.nb_source_reports_validated }}</td>
+        <th>Auto-validés</th>
+        <td>{{ expected.arrived_report.nb_source_reports_auto_validated }}</td>
+    </tr>
+    <tr>
+        <th colspan="4">Rapports Aggrégés</th>
+        <th>Directs</th>
+        <td>{{ expected.arrived_report.direct_agg_sources.count }}</td>
+        <th>Tous</th>
+        <td>{{ expected.arrived_report.agg_sources.count }}</td>
+    </tr>
+    <tr>
+        <th>Modifiés</th>
+        <td>{{ expected.arrived_report.nb_agg_reports_altered }}</td>
+        <th>Validés</th>
+        <td>{{ expected.arrived_report.nb_agg_reports_validated }}</td>
+        <th>Auto-validés</th>
+        <td colspan="3">{{ expected.arrived_report.nb_agg_reports_auto_validated }}</td>
+    </tr>
+</table>
+
+<h3>Sources individuelles</h3>
+<ul class="two-columns">
+    {% for r in expected.arrived_report.indiv_sources.all %}
+    <li>{% include "parts/report_link.html" with report=r %}</li>
+    {% endfor %}
+</ul>
+
+<h3>Sources aggrégées</h3>
+<ul class="two-columns">
+    {% for r in expected.arrived_report.agg_sources.all %}
+    <li>{% include "parts/report_link.html" with report=r %}</li>
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+{% endif %}

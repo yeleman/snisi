@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% load i18n %}
+
+{% block title %}Annuaire{% endblock %}
+
+{% block content %}
+
+<form id="filter_form" class="pure-form" method="POST">
+    <legend>Filtrer les résultats</legend>
+
+    {% for field in form %}
+    {{ field }}
+    {% endfor %}
+
+    <button type="submit" class="pure-button pure-button-primary">Filtrer</button>
+</form>
+
+
+{% if providers != None %}
+
+<hr />
+
+<p class="alert alert-info">Votre recherche a retourné {{ providers|length }} résultat{{ providers|length|pluralize }}.</p>
+
+{% endif %}
+{% if providers %}
+
+<table class="pure-table">
+    <tr>
+        <th>Noms</th><th>Role</th><th>Localité</th><th>Téléphone</th>
+    </tr>
+    {% for provider in providers %}
+    <tr>
+        <td><a href="{% url 'public_profile' username=provider.username %}">{{ provider.get_title_full_name }}</a></td>
+        <td{% if provider.is_central %} colspan="2"{% endif %}>{{ provider.role }}</td>
+        {% if not provider.is_central %}
+        <td>{% include "parts/entity_link.html" with entity=provider.location %}</td>{% endif %}
+        <td>{% if provider.email %}<a href="mailto:{{provider.email}}"><i class="fa fa-envelope"></i></a> {% endif %}
+            <span {%if provider.primary_number.category.slug == 'flotte' %}title="Numéro Flotte" class="flotte"{% endif %}>{{ provider.primary_phone|phone }}</span> {% if provider.all_numbers|length > 1 %} <small title="{{ provider|nb_extra_nums }} autre{{ provider|nb_extra_nums|pluralize }} numéro{{ provider|nb_extra_nums|pluralize }} disponible{{ provider|nb_extra_nums|pluralize }}">(+{{ provider|nb_extra_nums }})</small>{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
+
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'filter_form',
+    lineage: ['health_region', 'health_district', 'health_area'],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true
+});
+{% endblock %}

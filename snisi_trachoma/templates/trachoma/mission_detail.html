@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Mission TT Backlog {{ mission.receipt }}{% endblock %}
+
+{% block content %}
+
+<h2>Mission {{ mission.receipt }} à {{ mission.entity }}</h2>
+
+<table class="pure-table">
+<tr>
+    <th>RÉGION</th>
+        <td>{% include "parts/entity_link.html" with entity=mission.entity.get_health_region %}</td>
+    <th>Opérateur</th>
+        <td>{% include "parts/user_link.html" with provider=mission.operator %}</td>
+</tr>
+<tr>
+    <th>DISTRICT</th>
+        <td>{% include "parts/entity_link.html" with entity=mission.entity.get_health_district %}</td>
+    <th>Début mission</th>
+        <td>{{ mission.started_on }}</td>
+</tr>
+<tr>
+    <th>STRATÉGIE</th>
+        <td>{{ mission.strategy }}</td>
+    <th>Fin mission</th>
+        <td>{% if mission.completion_status == mission.COMPLETE %}{{ mission.ended_on }}{% else %}En cours…{% endif %}</td>
+</tr>
+</table>
+
+<table class="pure-table data-centered data-first-col-left">
+<tr>
+    <th rowspan="2">Village</th>
+    <th colspan="2">Consultés</th>
+    <th colspan="2">Opérés</th>
+    <th colspan="2">Refus</th>
+    <th colspan="2">Récidive</th>
+    <th>Relais ?</th>
+    <th>Arrivée</th>
+    <th>Départ</th>
+</tr>
+<tr>
+    <th>H</th>
+    <th>F</th>
+    <th>H</th>
+    <th>F</th>
+    <th>H</th>
+    <th>F</th>
+    <th>H</th>
+    <th>F</th>
+    <th>Oui/Non</th>
+    <th>Date</th>
+    <th>Date</th>
+</tr>
+
+{% for visit in mission.village_reports.all %}
+<tr>
+    <td>{% include "parts/entity_link.html" with entity=visit.location.casted %}</td>
+    <td>{{ visit.consultation_male }}</td>
+    <td>{{ visit.consultation_female }}</td>
+    <td>{{ visit.surgery_male }}</td>
+    <td>{{ visit.surgery_female }}</td>
+    <td>{{ visit.refusal_male }}</td>
+    <td>{{ visit.refusal_female }}</td>
+    <td>{{ visit.recidivism_male }}</td>
+    <td>{{ visit.recidivism_female }}</td>
+    <td>{{ visit.community_assistance }}</td>
+    <td>{{ visit.arrived_on }}</td>
+    <td>{{ visit.left_on }}</td>
+</tr>
+{% empty %}
+<tr><td colspan="12">Aucune visite village pour le moment.</td></tr>
+{% endfor %}
+{% if mission.village_reports.count %}
+<tr>
+    <td><strong>TOTAL</strong></td>
+    <td>{{ mission.consultation_male }}</td>
+    <td>{{ mission.consultation_female }}</td>
+    <td>{{ mission.surgery_male }}</td>
+    <td>{{ mission.surgery_female }}</td>
+    <td>{{ mission.refusal_male }}</td>
+    <td>{{ mission.refusal_female }}</td>
+    <td>{{ mission.recidivism_male }}</td>
+    <td>{{ mission.recidivism_female }}</td>
+    <td>{{ mission.nb_community_assistance }} vil.</td>
+    <td colspan="2">{{ mission.nb_days_median }}j.</td>
+</tr>
+{% endif %}
+</table>
+
+{% endblock %}

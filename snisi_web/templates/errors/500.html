@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Érreur serveur ({{ error_num }})</h2>
+<p>La page ou requête que vous demandé a générée une erreur innatendue.</p>
+<p>Merci de réessayer dans un petit môment.</p>
+{% include "parts/contact_hotline.html" with intro="Si le problème persiste" %}
+<p><img src="{% static "img/500_hippo.png" %}" />
+{% endblock %}

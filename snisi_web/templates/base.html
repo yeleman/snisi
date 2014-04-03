@@ -1,0 +1,123 @@
+{% load staticfiles %}<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ brand_short}} | {% block title %}{{ brand_full }}{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" media="screen" type="text/css" href="{% static "css/snisi_all.min.css" %}" title="{{ brand_short }}" />
+    <!-- <link rel="stylesheet" media="print" type="text/css" href="{% static "css/print.css" %}" /> -->
+    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABoklEQVQ4jaWQ3UvCYBjF928GhaxszdDUQkIIlhejBmpplmPv/Mh9VKYQRARCdVMEfcl0LKNCii666H84XYy9Y2AJdeDAuXjP73mel2EYhslkMsJfzHjlSPESC0oXC0oXi+QOCdXCqvaAtcNHSK0B1g8dCKaD5YaNhGohJt8jUrwEBcTke8SJhTixkKxYSOs2xOYAameI+tkb1M4QpZNXiM0BUvU+4sSFjAQs1XoQTAf5o2ec9z5xPfhC6+oDamcIqf2EtG7/DkhWLAimg8LxCzyNAkTLtz4gWr6lAE9S+4lm7eKd5uXGmA3GKVXvI1mxkFRugoCE6q6fqvd/LAumg7RuI63bSNUefID3855/Ei+b4EoGuJKB6XzNB6w0bay2HMyT/bEnzG7pCBc0sDniA3jZwDzZDwB42aSZ29ZoDhc0zGw0EJKqowG8bIKXTcyVjcDU2aKO8KZbHgmIKHt+ece12DyBeHBKp07nG2Czu2Czu5gUFR/A7eiBMlcy6K1eeWbDL4ekahDA5gh96K3J5ghCUpV6ak3GpKhQT6zsuYD/6hv1gI8mX/OCxgAAAABJRU5ErkJggg==" />
+    <meta http-equiv="Content-Language" content="fr-fr" />
+    <meta name="ROBOTS" content="ALL" />
+    <meta name="Copyright" content="PNLP, ANTIM, YELEMAN" />
+    <meta name="keywords" content="pnlp, mali, paludisme, antim, sms" />
+    <meta name="description" content="{{ brand_full }} au Mali. Données SMS et Web." />
+    <script type="text/javascript">
+    hc_graphs = [];
+    var alertFallback = false; if (typeof console === "undefined" || typeof console.log === "undefined") { console = {}; if (alertFallback) { console.log = function(msg) { alert(msg);}; } else { console.log = function() {}; } }
+    </script>
+</head>
+<body class="pure-skin-snisi {% block page_slug %}{{ page_slug }}{% endblock %}">
+    <div id="layout">
+
+        <a href="#menu" id="menuLink" class="pure-menu-link">
+            <span></span>
+        </a>
+
+        <div id="menu">
+            <div class="pure-menu pure-menu-open">
+                <!-- <a href="/" class="pure-menu-heading">SNISI</a> -->
+                <ul>
+                    <li class="home"><a class="" href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Tableau de bord {{ brand_short }}</a></li>
+                    <li><a class="" href="{% url 'addressbook' %}"><i class="fa fa-users"></i> Annuaire</a></li>
+                    <li><a class="" href="{% url 'upload' %}"><i class="fa fa-upload"></i> Envoi rapport</a></li>
+                    <li><a class="" href="{% url 'validation' %}"><i class="fa fa-check-square-o"></i> Validation rapports</a></li>
+                    <li><a class="" href="{% url 'entities_list' %}"><i class="fa fa-h-square"></i> Carte sanitaire SNISI</a></li>
+                </ul>
+                <a href="/" class="pure-menu-heading">Monitoring</a>
+                <ul>
+                    <li><a class="" href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
+                    <li><a class="pure-button-disabled" href="#">Collecte données occasionnelles</a></li>
+                    <li><a class="pure-button-disabled" href="#">Collecte (par localité)</a></li>
+                    <li><a class="pure-button-disabled" href="#">Gestion Utilisateurs</a></li>
+                </ul>
+                <a class="pure-menu-heading">PALUDISME</a>
+                <ul>
+                    <li><a class="" href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
+                    <li><a class="" href="{% url 'malaria_view' %}">Données analysées</a></li>
+                    <li><a class="" href="{% url 'malaria_epidemio' %}">Surveillance épi.</a></li>
+                    <li><a class="" href="{% url 'malaria_map' %}">Cartographie</a></li>
+                    <li><a class="" href="{% url 'malaria_quarter_report' %}">Rapports trimestriels</a></li>
+                </ul>
+                <a class="pure-menu-heading">CÉCITÉ</a>
+                <ul>
+                    <li><a class="" href="{% url 'trachoma_missions' %}">Données brutes</a></li>
+                    <li><a class="" href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
+                </ul>
+                <a href="/" class="pure-menu-heading pure-button-disabled">SANTÉ REPRODUCTION</a>
+                <ul>
+                    <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
+                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
+                </ul>
+                <a href="/" class="pure-menu-heading pure-button-disabled">MOUSTIQUAIRES</a>
+                <ul>
+                    <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
+                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
+                </ul>
+                <a href="/" class="pure-menu-heading pure-button-disabled">ÉPIDÉMIO. HEBDO.</a>
+                <ul>
+                    <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
+                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="main">
+
+            <header></header>
+
+            <section class="content">
+                {% if messages %}
+                <div id="notifications" class="">
+                {% for message in messages %}
+                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="fa fa-times close-notif-button"></i></p>
+                {% endfor %}
+                </div>
+                {% endif %}
+                <div class="content-container">
+                    {% block content %}
+                    <h1>Tableau de bord général</h1>
+                    <p>Utilisez le menu en haut à gauche pour naviguer</p>
+                    {% endblock %}
+                </div>
+            </section>
+
+            <footer>
+                <div class="pure-menu pure-menu-open pure-menu-horizontal footer-menu">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" title="Accèder au profil" class="pure-menu-heading"><i class="fa fa-user-md"></i> {{ user }}</a>
+                    {% endif %}
+                    <ul>
+                        <li><a href="{% url 'contact' %}"><i class="fa fa-envelope"></i> Contact</a></li>
+                        <li><a href="{% url 'support' %}"><i class="fa fa-question"></i> Support</a></li>
+                        <li><a href="{% url 'about' %}"><i class="fa fa-info-circle"></i> À propos</a></li>
+                        <li><a href="{% url 'resources' %}"><i class="fa fa-download"></i> Ressources</a></li>
+                        {% if user.is_authenticated %}<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Se déconnecter</a></li>{% endif %}
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<script src="{% static "js/snisi.js" %}"></script>
+{% block assets %}{% endblock %}
+<script>
+$(document).ready(function(){
+main();
+{% block onJQready %}{% endblock %}
+});</script>
+</html>

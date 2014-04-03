@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% block title %}Mon profil{% endblock %}
+
+{% block content %}
+
+{% pure_form form csrf_token=csrf_token legend="Mes informations" submit_text="Enregistrer les modifications" %}
+
+<div class="pure-form pure-form-aligned">
+    <legend>Mes numéros de téléphone</legend>
+
+    <fieldset>
+
+        <p class="alert alert-warning"><i class="fa fa-warning"></i> Attention, si vous effacez tous vos numéros, nous ne pourrons plus vous contacter et vous ne recevrez pas d'alertes.<br />
+            Supprimez un numéro uniquement si celui-ci ne vous appartient plus.</p>
+
+        {% for number in user.phone_numbers.all %}
+        <div class="pure-control-group">
+            <label for="">{{ number.category.name }}</label>
+            <input type="tel" readonly="readonly" value="{{ number.identity|phone }}" />
+            <a href="{% url 'profile-remove-number' number.identity %}"><button class="pure-button pure-button-primary">Supprimer</button></a>
+        </div>
+        {% endfor %}
+
+    </fieldset>
+</div>
+
+{% pure_form phone_form csrf_token=csrf_token legend="Ajouter un numéro" submit_text="Ajouter" pure_class="inline" %}
+
+{% pure_form passwd_form csrf_token=csrf_token legend="Changer de mot de passe" submit_text="Changer le mot de passe" %}
+
+{% endblock %}

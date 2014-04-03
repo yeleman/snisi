@@ -1,0 +1,5 @@
+{% if table.rendering_type == 'graph' %}
+    {% include "parts/indicator_graph.html" with table=table %}
+{% else %}
+    {% include "parts/indicator_table.html" with table=table id=id %}
+{% endif %}

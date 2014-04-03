@@ -1,0 +1,25 @@
+<div id="report_entity_filter" class="pure-form" method="POST">
+    <legend>Naviguer dans les rapports <em>{{ reportcls.name }}</em></legend>
+    <input type="hidden" id="filter_reportcls" value="{{ reportcls.slug }}" />
+    {{ root }}
+
+    {% for select in entity_paths %}
+    <select id="filter_{{ select.level.slug }}">
+        <option disabled="disabled">{{ select.level.name|upper }}</option>
+        <option value="___" label="~ AUCUN ~">~ AUCUN ~</option>
+        {% for itemid, item in select.elems %}
+        <option value="{{ itemid }}" {% if select.selected = itemid %} selected="selected"{% endif %}>{{ item }}</option>
+        {% endfor %}
+    </select>
+    {% endfor %}
+
+    <label for="filter_period">Période</label>
+    <select id="filter_period">
+        <option disabled="disabled">Période</option>
+        {% for itemid, item in periods %}
+        <option value="{{ itemid }}" {% if period.strid = itemid %} selected="selected"{% endif %}>{{ item }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="pure-button pure-button-primary">Filtrer</button>
+</div>

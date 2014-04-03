@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block title %}Validation de rapports{% endblock %}
+
+
+{% block content %}
+<h2>Rapports à valider pour {{ user.location.display_typed_name }}</h2>
+{% if pending_list|length == 0 %}
+<p>Il n'y a aucun rapport en attente de validation par le {{ user.role }} de {{ user.location }}.</p>
+{% else %}
+<p>Vous avez {{ pending_list|length }} rapport{{ pending_list|length|pluralize }} à valider :</p>
+<table class="pure-table validation-list">
+    <tr><th>Rapport</th><th>Nº reçu</th><th>Reçu le</th><th>Période de validation</th><th>Contact</th></tr>
+    {% for exp_val in pending_list %}
+    <tr data-receipt="{{ exp_val.report.receipt }}">
+        <td>{% include "parts/reportclsicon.html" with reportcls=exp_val.report.casted.report_class %}
+            {% include "parts/entity_link.html" with entity=exp_val.report.entity %}</td>
+        <td><a class="report-url" href="{% url 'validation_edit' exp_val.report.receipt %}">{{ exp_val.report.receipt }}</a></td>
+        <td>{{ exp_val.report.created_on }}</th>
+        <td>{{ exp_val.validation_period }}</td>
+        <td>{% include "parts/user_link.html" with provider=exp_val.report.created_by %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
+
+{% block onJQready %}
+var report_edit_url = "{% url 'validation_edit' 'AAAA' %}";
+$('[data-toggle="popover"]').popover({trigger:'hover', placement: 'top', html:true});
+$('.validation-list tr[data-receipt!=""]').on('click', function (e) {
+    window.location = $(this).find('a.report-url').attr('href');
+});
+{% endblock %}

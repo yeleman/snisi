@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    baseURL: '/api/entities/getclusterchildren/malaria_weekly_epidemiology',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'malaria_epidemio' %}/<entity>/<period_str>"
+});
+
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}
+
+{% block content %}
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    <legend>Suivi épidémiologique du Paludisme</legend>
+    {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" label="À" selected_period=periodb all_periods=all_periods %}
+
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+{% if not entity.casted in cluster.members %}
+<div class="alert">
+<p class="alert alert-warning">{% include "parts/entity_link.html" with entity=entity %} ne fait pas partie du cluster <strong>{{ cluster }}</strong>. Merci de séléctionner une unité sanitaire.</p>
+</div>
+{% else %}
+
+<h3 class="caption"><strong>Suivi épidémiologique hebdomadaire du paludisme à </strong> {{ entity }} (District de {{ entity.get_health_district }})</h3>
+<div id="graph"></div>
+<script type="text/javascript">
+{% load snisi %}
+{% load l10n %}
+var PERCENT = "";
+hc_graphs.push({
+    chart: {
+        renderTo: 'graph',
+        // defaultSeriesType: 'areaspline',
+        backgroundColor: '#ebebeb',
+        zoomType: 'x',
+        spacingRight: 20
+    },
+    colors: [
+       '#4572A7',
+       '#AA4643',
+       '#89A54E',
+       '#80699B',
+       '#3D96AE',
+       '#DB843D',
+       '#92A8CD',
+       '#A47D7C',
+       '#B5CA92'
+    ],
+    legend: {},
+    title: {text: null},
+    xAxis: {
+        type: 'datetime',
+        maxZoom: 1 * 24 * 3600000,
+        dateTimeLabelFormats: {
+            millisecond: '%H:%M:%S.%L',
+            second: '%H:%M:%S',
+            minute: '%H:%M',
+            hour: '%H:%M',
+            day: '%e. %b',
+            week: '%e. %b',
+            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
+            year: '%Y'
+        }
+    },
+    yAxis: {
+        title: {text: "Nombre de cas"},
+        min:0,
+    },
+    series: [
+        // {
+        //     type: 'areaspline',
+        //     name: "Cas de paludisme notifiés à {{ reports.0.entity }}",
+        //     data: {% localize off %}[{% for report in reports %}[{{ report.period.start_on|to_jstimestamp }}, {{ report.total_consultation_all_causes|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
+        // },
+        // Threshold
+        {
+            type: 'areaspline',
+            name: "Seuil d'alerte mensuel",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.threshold|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // Week 5
+        {
+            type: 'column',
+            name: "Semaine 5",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week5.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // Week 4
+        {
+            type: 'column',
+            name: "Semaine 4",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week4.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // Week 3
+        {
+            type: 'column',
+            name: "Semaine 3",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week3.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // Week 2
+        {
+            type: 'column',
+            name: "Semaine 2",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week2.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // Week 1
+        {
+            type: 'column',
+            name: "Semaine 1",
+            data: {% localize off %}[{% for month_data in epidemio_data %}[{{ month_data.period.start_on|to_jstimestamp }}, {{ month_data.week1.u5_total_consultation_all_causes|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+    ],
+    tooltip:  {
+        formatter: function() {
+            var s = '';
+            var total = 0;
+            var threshold = 0;
+            $.each(this.points, function(i, point) {
+                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
+                if (point.series.type == 'column') {
+                    total += point.y;
+                } else {
+                    threshold = point.y;
+                }
+            });
+            var diff = total - threshold;
+            s += '<b>Total: ' + total + '</b> ('+ diff +')';
+
+            return s;
+        },
+        shared: true
+    },
+    plotOptions: {
+        line: {
+            animation: false,
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: true
+        },
+        column: {
+            stacking: true,
+            animation: false,
+            enableMouseTracking: true,
+            dataLabels: {
+                color: 'black',
+                enabled: false,
+            }
+        }
+    },
+    exporting: {
+        enabled: true,
+    },
+    credits: {
+        enabled: true,
+        text: "© PNLP – {{ periodb }}",
+        href: null
+    },
+});
+</script>
+
+{% endif %}
+{% endblock %}

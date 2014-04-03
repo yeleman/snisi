@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block assets %}{% include "assets/mapbox.html" %}{% endblock %}
+
+{% block content %}
+
+<h3 class="titlecontainer"><span id="map_title"></span><br /><span id="map_subtitle"></span></h3>
+<nav id="tab_bar" class="tabs"></nav>
+
+<div class="pure-g">
+<div class="pure-u-1-5">
+    <div class="map-sidebar" id="sidebar2">
+        <div  class="pure-form pure-form-stacked">
+            <fieldset>
+                <legend>Sélection indicateur</legend>
+                <select name="indicators" id="indicator_section_select"></select>
+                <select name="indicators" id="indicator_select"></select>
+
+            </fieldset>
+            <fieldset>
+                <legend>Sélection période</legend>
+                <select name="year" id="year_select">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="month" id="month_select">
+                    {% for month_num, month_name in months.items %}
+                        <option value="{{ month_num }}">{{ month_name }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <fieldset>
+                <legend>Sélection district</legend>
+                <select name="health_district" id="health_district_select">
+                </select>
+
+            </fieldset>
+            <div class="exportbuttons">
+                <a id="export_map_btn" disabled="disabled" class="pure-button pure-button-primary">Exporter</a>&nbsp;
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="map-holder pure-u-4-5">
+    <div id="map"></div>
+    <div id="exported_map"></div>
+    <canvas id="canvas" style="display:none;"></canvas>
+</div>
+</div>
+{% endblock %}
+
+{% block onJQready %}
+var all_indicators = {};
+{% for section, indicators in indicators.items %}
+all_indicators["{{ section}}"] = [{% for indicator in indicators %}{slug: "{{ indicator.slug }}", name: "{{ indicator.name }}"},{% endfor %}];
+{% endfor %}
+
+mapManager = getMalariaMapManager({load: true, indicators: all_indicators});
+mapExporter = getMapExporter({mapManager: mapManager, auto_click:true});
+
+{% endblock %}

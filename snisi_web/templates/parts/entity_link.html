@@ -1,0 +1,1 @@
+<span data-toggle="popover" data-content="{{ entity.display_full_typed_name }}">{% if not entity.active %}<s>{% endif %}{{ entity.display_name }}{% if not entity.active %}</s>{% endif %} (<a href="{% url 'entity_profile' entity.slug %}">{{ entity.slug }}</a>)</span>

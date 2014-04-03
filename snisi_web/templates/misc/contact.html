@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block title %}Support technique{% endblock %}
+
+{% block content %}
+<p>Lorsque vous rencontrez des difficultés opérationneles avec le système, le point de départ est toujours l'<a href="{% url 'about' %}">aide en ligne</a>.</p>
+<p>Si vous ne trouvez pas de solution dans la rubrique d'aide ou que vous rencontrez un problème technique, remplissez le formulaire ci-dessous. Un membre de la cellule concernée prendra contact avec vous.</p>
+
+{% pure_form form submit_text="Envoyer la demande" csrf_token=csrf_token legend="Contactez-nous" %}
+
+{% endblock %}

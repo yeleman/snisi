@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block content %}
+
+<div id="report_entity_filter" class="pure-form" method="POST">
+    <legend>Naviguer dans les rapports <em>{{ reportcls.name }}</em></legend>
+    <input type="hidden" id="filter_reportcls" value="{{ cluster.slug }}" />
+
+   {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    <label for="filter_period">Période</label>
+    <select id="filter_period">
+        <option disabled="disabled">Période</option>
+        {% for itemid, item in periods %}
+        <option value="{{ itemid }}" {% if period.strid = itemid %} selected="selected"{% endif %}>{{ item }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="pure-button pure-button-primary">Filtrer</button>
+</div>
+
+{% if expected = None %}
+<p>Aucun rapport {{ reportcls.name }} attendu pour cette période dans cette localité. Merci de vérifier votre demande.</p>
+{% else %}
+
+{% include "parts/report_header.html" with expected=expected %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'report_entity_filter',
+    baseURL: '/api/entities/getclusterchildren/malaria_monthly_routine',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerReportBrowserFilter(entities_browser);
+{% endblock %}

@@ -1,0 +1,114 @@
+{% load snisi %}
+
+<table class="pure-table">
+<tr>
+    <th>CSCom</th>
+    <td>{% include "parts/entity_link.html" with entity=report.entity.casted %}</td>
+    <th>Période</th>
+    <td>{{ report.period.casted }}</td>
+</tr>
+<tr>
+    <th>Réception</th>
+    <td>{{ report.created_on }}</td>
+    <th>Créateur</th>
+    <td>{{ report.created_by }}</td>
+</tr>
+{% if report.created_on != report.modified_on %}
+<tr>
+    <th>Modification</th><td  colspan="3"<span class="inline-data">{{ report.modified_on }}</span>, <span class="inline-data">{{ report.modified_by }}</span>.</td>
+</tr>
+{% endif %}
+
+<tr>
+    <th>Promptitude</th>
+    <td>{% if report.on_time %}<i class="fa fa-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
+    <th>Complétude</th>
+    <td>{% if report.complete %}<i class="fa fa-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
+</tr>
+
+<tr>
+    <th>Nº de reçu</th>
+    <td>{{ report.receipt }}</td>
+    <th>Validation</th>
+    <td>{{ report.expected_validations.get.validation_period }} <a data-must-confirm="1" data-confirm-text="Êtes vous sûr de vouloir valider le rapport {{report.receipt}} ?---Il ne sera plus modifiable ensuite." href="{% url 'validation_do_validate' report.receipt %}" class="pure-button button-small button-success confirm" id="validate_form" title="Valide le rapport tel qu'enregistré."><i class="fa fa-check"></i> Valider le rapport</a></td>
+</tr>
+</table>
+
+
+
+<form id="edit_report_form" class="pure-form" method="POST" action="{% url 'validation_edit' report.receipt %}">
+{% csrf_token %}
+    <legend>Modification des données sources</legend>
+    <p>Si pour une raison ou une autre, les données sources présentes ci-dessous <strong>ne sont pas réelles</strong>, vous pouvez les modifier avant de les valider.<br />
+    Merci d'effectuer vos modifications en accord avec le créateur du rapport ({% include "parts/user_link.html" with provider=report.created_by %}) et/ou la personne ayant collecté les données.</p>
+
+{% if form.errors %}
+<div class="alert alert-danger">
+<h3 class="alert-danger">Données incorectes.</h3>
+<p>Vos modifications contiennent {{ form.errors|length }} erreur{{ form.errors|length|pluralize }} de saisie.</p>
+<p>Ce sont généralement des champs laissés vide ou une erreur de frappe. Notez que les chiffres ne doivent contenir aucune séparation.</p>
+<p>Le{{ form.errors|length|pluralize }} champ{{ form.errors|length|pluralize }} concerné{{ form.errors|length|pluralize }} s'affiche{{ form.errors|length|pluralize:"nt" }} en rouge.</p>
+</div>
+{% endif %}
+
+{% if data_checker.feedbacks|length %}
+<div class="alert alert-{{ data_checker.feedbacks.0.level|lvl2css }}">
+<h3 class="alert-{{ data_checker.feedbacks.0.level|lvl2css }}">Données incohérentes</h3>
+<p>Les nouvelles données que vous essayez d'enregistrer sont incohérentes :</p>
+<ul>
+{% for feedback in data_checker.feedbacks %}
+    <li>{{ feedback.render }}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+<table class="pure-table center report-table">
+<tr><th rowspan="2" class="center">Classification</th><th colspan="3" class="center">Consultation</th></tr>
+<tr><th class="center">Moins de 5 ans</th><th class="center">5 ans et plus</th><th class="center">Femmes enceintes</th></tr>
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_consultation_all_causes f2=form.o5_total_consultation_all_causes f3=form.pw_total_consultation_all_causes dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_suspected_malaria_cases f2=form.o5_total_suspected_malaria_cases f3=form.pw_total_suspected_malaria_cases dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_tested_malaria_cases f2=form.o5_total_tested_malaria_cases f3=form.pw_total_tested_malaria_cases dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_confirmed_malaria_cases f2=form.o5_total_confirmed_malaria_cases f3=form.pw_total_confirmed_malaria_cases dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_simple_malaria_cases f2=form.o5_total_simple_malaria_cases f3=form.pw_total_simple_malaria_cases dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_severe_malaria_cases f2=form.o5_total_severe_malaria_cases f3=form.pw_total_severe_malaria_cases dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_treated_malaria_cases f2=form.o5_total_treated_malaria_cases f3=form.pw_total_treated_malaria_cases dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th rowspan="2" class="center">Classification</th><th colspan="3" class="center">Hospitalisations</th></tr>
+<tr><th class="center">Moins de 5 ans</th><th class="center">5 ans et plus</th><th class="center">Femmes enceintes</th></tr>
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_inpatient_all_causes f2=form.o5_total_inpatient_all_causes f3=form.pw_total_inpatient_all_causes dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_malaria_inpatient f2=form.o5_total_malaria_inpatient f3=form.pw_total_malaria_inpatient dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th rowspan="2" class="center">Classification</th><th colspan="3" class="center">Décès</th></tr>
+<tr><th class="center">Moins de 5 ans</th><th class="center">5 ans et plus</th><th class="center">Femmes enceintes</th></tr>
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_death_all_causes f2=form.o5_total_death_all_causes f3=form.pw_total_death_all_causes dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_malaria_death f2=form.o5_total_malaria_death f3=form.pw_total_malaria_death dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th rowspan="2" class="center">Classification</th><th colspan="3" class="center">MILD distribués</th></tr>
+<tr><th class="center">Moins de 5 ans</th><th class="center">5 ans et plus</th><th class="center">Femmes enceintes</th></tr>
+{% include "parts/malaria_report_form_row.html" with f1=form.u5_total_distributed_bednets f3=form.pw_total_distributed_bednets dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th rowspan="1" class="center">Classification</th><th colspan="3" class="center">CPN/SP des femmes enceintes</th></tr>
+{% include "parts/malaria_report_form_row.html" with f3=form.pw_total_anc1 dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f3=form.pw_total_sp1 dataonly=0 %}
+{% include "parts/malaria_report_form_row.html" with f3=form.pw_total_sp2 dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th>CTA</th><th class="center">{{ form.stockout_act_children.label }}</th><th class="center">{{ form.stockout_act_youth.label }}</th><th class="center">{{ form.stockout_act_adult.label }}</th></tr>
+{% include "parts/malaria_report_form_row.html" with so=1 f1=form.stockout_act_children f2=form.stockout_act_youth f3=form.stockout_act_adult dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th>PEC de Paludisme grave</th><th class="center">{{ form.stockout_artemether.label }}</th><th class="center">{{ form.stockout_quinine.label }}</th><th class="center">{{ form.stockout_serum.label }}</th></tr>
+{% include "parts/malaria_report_form_row.html" with so=1 f1=form.stockout_artemether f2=form.stockout_quinine f3=form.stockout_serum dataonly=0 %}
+<tr class="spacer"><td colspan="4">&nbsp;</td></tr>
+<tr><th></th><th class="center">{{ form.stockout_bednet.label }}</th><th class="center">{{ form.stockout_rdt.label }}</th><th class="center">{{ form.stockout_sp.label }}</th></tr>
+{% include "parts/malaria_report_form_row.html" with so=1 f1=form.stockout_bednet f2=form.stockout_rdt f3=form.stockout_sp dataonly=0 %}
+</table>
+
+<fieldset>
+    <p class="alert alert-warning"><i class="fa fa-warning"></i> Les modifications seront enregistrées comme étant les données originales primaires de l'{{ report.entity.display_typed_name }}. Il ne sera <strong>plus possible de rétablir les valeurs précédentes</strong>.</p>
+    <div class="pure-control-group">
+        <label></label>
+        <button data-reset-form="edit_report_form" class="pure-button reset" title="Ré-initialise les valeurs du formulaire à celles de départ."><i class="fa fa-refresh"></i> Annuler modifications</button>
+        <button data-must-confirm="1" data-confirm-text="Êtes-vous sûr de vouloir enregistrer les modifications ?---Il ne sera plus possible de retourner en arrière." class="pure-button button-warning"><i class="fa fa-save"></i> Enregistrer les modifications</button>
+    </div>
+</fieldset>
+</form>

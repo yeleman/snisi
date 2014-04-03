@@ -1,0 +1,192 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ai ts=4 sts=4 et sw=4 nu
+
+from __future__ import (unicode_literals, absolute_import,
+                        division, print_function)
+import logging
+import os
+import tempfile
+
+import requests
+from py3compat import text_type
+from django.template import loader, Context
+from rtfw import Paragraph, Table, BorderPS, FramePS, Cell, Image, ParagraphPS
+
+from snisi_web.templatetags.snisi import number_format
+
+logger = logging.getLogger(__name__)
+
+
+globaloptions = '''
+{
+    lang: {
+    months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    decimalPoint: ",",
+    downloadPNG: "Exporter en PNG",
+    drillUpText: "Revenir à {series.name}.",
+    loading: "Chargement…",
+    printChart: "Imprimer",
+    numericSymbols: [null, null, null, null, null, null],
+    resetZoom: "Restaurer niveau de zoom.",
+    resetZoomTitle: "Restaurer le niveau de zoom 1:1.",
+    shortMonths: [ "Jan" , "Fév" , "Mar" , "Avr" , "Mai" , "Jui" , "Juil" , "Aôu" , "Sep" , "Oct" , "Nov" , "Déc"],
+    thousandsSep: " ",
+    contextButtonTitle: "Menu contextuel"
+},
+global: {
+    useUTC: true
+}
+}'''
+
+
+def retrieve_chart_from_highcharts(highcharts):
+
+    payload = {
+        'content': 'options',
+        'options': highcharts,
+        'globaloptions': globaloptions,
+        'type': 'image/png',
+        'width': '440',
+        'scale': '',
+        'constr': 'Chart',
+        'callback': ''}
+
+    url = "http://export.highcharts.com"
+    req = requests.post(url, data=payload)
+
+    if req.status_code == requests.codes.ok:
+        return req.content
+
+    return None
+
+
+def neutral_style(document, indicator_table):
+    return Paragraph(document.StyleSheet.ParagraphStyles.Normal)
+
+
+def widgets_for_indicator(document, indicator_table, break_before=False):
+    constructor = graph_for_indicator \
+        if indicator_table.rendering_type == 'graph' \
+        else table_for_indicator
+    widgets =  [title_for_indicator(document, indicator_table,
+                                    break_before=break_before)]
+    if indicator_table.rendering_type == 'table':
+        widgets.append(neutral_style(document, indicator_table))
+    widgets.append(constructor(document, indicator_table))
+    return widgets
+
+
+def title_for_indicator(document, indicator_table, break_before=False):
+    if indicator_table.name:
+        text = "{} : {}".format(indicator_table.name,
+                                indicator_table.caption)
+    else:
+        text = indicator_table.caption
+    p = Paragraph(document.StyleSheet.ParagraphStyles.Heading2,
+                  ParagraphPS().SetPageBreakBefore( break_before ))
+    p.append(text)
+    return p
+
+
+def graph_for_indicator(document, indicator_table):
+
+    # get the highcharts code
+    context = {'table': indicator_table, 'id': ''}
+    highcharts = loader.get_template('highcharts_graph.js') \
+                       .render(Context(context))
+
+    # get the image from highcharts.com
+    content = retrieve_chart_from_highcharts(highcharts)
+    if content is None:
+        return None
+
+    # write image to a temporary file
+    f = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+    f.write(content)
+    f.close()
+
+    # create the image object and remove temp file
+    try:
+        image = Image(f.name)
+    except:
+        logger.error("Failed to create image")
+        print(highcharts)
+        raise
+        return Paragraph("Erreur")
+
+    os.unlink(f.name)
+
+    ps = ParagraphPS(alignment=ParagraphPS.CENTER)
+    p = Paragraph(document.StyleSheet.ParagraphStyles.Normal, ps)
+    p.append(image)
+    return p
+
+
+def table_for_indicator(document, indicator_table):
+
+    col_large = 3000
+    col_regular = 1000
+    # col1 = 3000
+    # col2 = 1000
+    # col3 = 1000
+    # col4 = 1000
+    # col5 = 1000
+    # col6 = 1000
+    # col7 = 1000
+    # col8 = 1000
+
+    thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
+    # thick_edge = BorderPS( width=80, style=BorderPS.SINGLE )
+
+    def p(text, align_center=False):
+        return Paragraph(ParagraphPS(
+            alignment=ParagraphPS.CENTER
+                      if align_center
+                      else ParagraphPS.LEFT), text)
+
+    thin_frame  = FramePS( thin_edge,  thin_edge,  thin_edge,  thin_edge )
+    # thick_frame = FramePS( thick_edge, thick_edge, thick_edge, thick_edge )
+    # mixed_frame = FramePS( thin_edge,  thick_edge, thin_edge,  thick_edge )
+
+    # build base table (7 columns)
+    cols = [col_large]
+    for _ in indicator_table.periods:
+        cols.append(col_regular)
+        if indicator_table.add_percentage:
+            cols.append(col_regular)
+    if indicator_table.add_total:
+        cols.append(col_regular)
+    table = Table( *cols )
+
+    # first header row : title and period names
+    args = [Cell(p(text_type(period), True),
+                 thin_frame,
+                 span=2)
+            for period in indicator_table.periods]
+    args.append(Cell(p("TOTAL", True), thin_frame))
+
+    table.AddRow(Cell(indicator_table.title,
+                      thin_frame, start_vertical_merge=True),
+                 *args)
+
+    # second header row : Nbre/% sub header
+    args = []
+    for period in indicator_table.periods:
+        args.append(Cell(p("Nbre", True), thin_frame))
+        args.append(Cell(p("%", True), thin_frame))
+    args.append(Cell(p("Nbre", True), thin_frame))
+
+    table.AddRow(Cell(thin_frame, vertical_merge=True), *args)
+
+    # data rows
+    for line in indicator_table.render_with_labels_human(as_human=True):
+        args = []
+        for idx, cell_data in enumerate(line):
+            align_center = not idx == 0
+            args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
+
+        table.AddRow(*args)
+
+    return table

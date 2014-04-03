@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block content %}
+<h2>Tableau de bord SNISI.</h2>
+
+<p>Bonjour et bienvenue dans le <strong>{{ brand }}</strong> !</p>
+<p>Le {{ brand_short }} est un système d'information du Ministère de la Santé, né de la fusion du système de collecte PNLP et d'autres systèmes similaires.</p>
+<h3>Ce nouveau système n'est pas encore complet !</h3>
+<p>Vous vous en rendrez-compte en l'utilisant ; certaines fonctionnalités de l'ancien système ne sont pas accessibles : c'est temporaire. Nous travaillons d'arrache-pied à rétablir toutes les fonctionnalités et surtout, en ajouter de nouvelles !</p>
+{% include "parts/contact_hotline.html" %}
+
+<div id="expected_reports_chart"></div>
+{% endblock %}
+
+{% block onJQready__ %}
+
+$('#expected_reports_chart').highcharts({
+    type: 'spline',
+    title: {
+        text: 'Collecte mensuelle SNISI',
+        x: -20 //center
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: {
+        title: {
+            text: 'Complétude de la collecte (%)'
+        },
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+        }]
+    },
+    legend: false,
+    tooltip: {
+        formatter: function() {
+                        return '<b>'+ Highcharts.dateFormat('%B %Y', this.x) +'</b><br/>'+ this.y +'%';
+                },
+        valueSuffix: '%'
+    },
+    series: [{
+        name: 'Attendus',
+        data: [{% for period_data in graph_data %}[Date.UTC({{ period_data.period.middle.year }}, {{ period_data.period.middle.month }}, {{ period_data.period.middle.day }}), {{ period_data.percent_arrived|floatformat:2 }}],{% endfor %}]
+    },]
+});
+{% endblock %}

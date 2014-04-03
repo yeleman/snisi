@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="admin" model="snisi_core.provider">
+        <field type="CharField" name="password">pbkdf2_sha256$12000$IitFWorJOPpr$N7R7EHVP5t0rBW1DSyI4MNbfnJdlNVCO6VamJEngkDg=</field>
+        <field type="DateTimeField" name="last_login">2011-12-10T10:23:48+00:00</field>
+        <field type="BooleanField" name="is_superuser">True</field>
+        <field type="CharField" name="username">admin</field>
+        <field type="CharField" name="gender">male</field>
+        <field type="CharField" name="title">mister</field>
+        <field type="CharField" name="first_name"></field>
+        <field type="CharField" name="middle_name"><None></None></field>
+        <field type="CharField" name="last_name"></field>
+        <field type="CharField" name="maiden_name"><None></None></field>
+        <field type="CharField" name="position"><None></None></field>
+        <field to="snisi_core.role" name="role" rel="ManyToOneRel">snisi_tech</field>
+        <field to="snisi_core.entity" name="location" rel="ManyToOneRel">mali</field>
+        <field type="DateTimeField" name="access_since">2011-11-30T15:00:00+00:00</field>
+        <field type="CharField" name="email">admin@yeleman.com</field>
+        <field type="BooleanField" name="is_staff">True</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field type="DateTimeField" name="date_joined">2011-07-13T12:45:37+00:00</field>
+        <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
+        <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>
+    </object>
+ </django-objects>

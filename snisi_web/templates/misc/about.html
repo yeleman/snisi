@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_slug %}about{% endblock %}
+
+{% block title %}À propos de ce système{% endblock %}
+
+{% block content %}
+<aside>Le Système Numérique d’Information Sanitaire Intégré (SNISI) est un système électronique de remontée de l’information sanitaire par téléphonie mobile en temps réels, étendue à toutes les données du système d’information sanitaire du Mali.</aside>
+
+<h2>Contexte</h2>
+
+<p>La détection des cas de maladies, le lancement des interventions pour prévenir la transmission ou réduire la morbidité et la mortalité, l’identification de nouveaux problèmes de santé (des maladies émergentes et/ou négligées), la mesure des tendances sanitaires et la recherche, nécessitent des données en général produites par la surveillance épidémiologique et le recueil périodique des données des systèmes de santé. Cette surveillance épidémiologique et ce recueil périodique des données des systèmes de santé constituent un mécanisme systématique de collecte, d’analyse, d’interprétation et de dissémination des informations  sanitaires.</p>
+
+<p>Pour le renforcement des systèmes d’informations sanitaires deux impératifs sont à respecter :</p>
+
+<ul>
+    <li>Il convient de renforcer les systèmes d’information et de statistiques sanitaires dans leur ensemble plutôt que de s’intéresser à une maladie spécifique.</li>
+    <li>Il faut tout particulièrement renforcer le rôle directeur des acteurs dans la production et l’utilisation de l’information sanitaire.</li>
+</ul>
+
+<p>Il s’agit de produire des informations pertinentes dont les parties prenantes du système de santé peuvent se servir pour prendre des décisions transparentes qui reposent sur des bases factuelles concernant les interventions sanitaires.</p>
+
+<p>Les technologies de l’information et de la communication peuvent donc améliorer de manière spectaculaire la disponibilité, la qualité, la diffusion et l’utilisation des données liées à la santé. Si les TIC permettent d’accroître le nombre de données recueillies et d’en améliorer la qualité, elles permettent aussi de réduire les délais et d’améliorer l’analyse et l’utilisation de l’information. Une infrastructure de communication est donc nécessaire pour exploiter pleinement les informations qui sont disponibles.</p>
+
+<p>Au niveau central et local, les responsables de la santé doivent donc avoir accès à une infrastructure de l’information offrant notamment des ordinateurs, le courrier électronique et un accès Internet. Bien que l’accès à Internet soit de plus en plus important, les systèmes téléphoniques de base (fixes ou mobiles) restent toujours extrêmement utiles.</p>
+
+<p>Un renforcement cohérent des capacités portant sur les moyens électroniques et les ressources humaines dans l’ensemble du système de santé constitue une approche efficace.</p>
+
+<p>Lorsque des infrastructures de communication électronique sont disponibles, les données peuvent être saisies au niveau décentralisé pour pouvoir être immédiatement notifiées à tous les niveaux.</p>
+
+<p>L’ANTIM œuvre à rendre cela possible à tous les niveaux de la pyramide sanitaire du Mali et au niveau de tous les secteurs, qu’ils soient publics, communautaires, privés, confessionnels ou humanitaire. Elle a ainsi développé, accepté, hébergé, utilisé différents systèmes de collecte de données mobiles et électroniques pour les besoins de certains services du ministère et des ONG.</p>
+
+<p>Malheureusement, la plupart de ces systèmes ont été mis en place pour servir des activités spécifiques d’ONG dans le cadre de projets verticaux liés le plus souvent à une maladie. L’interopérabilité et la maintenance n’était pas une priorité pour ces projets (disparités des équipements, des logiciels, des bases de données etc.. .) et pourtant ils ont tendance à recueillir très souvent les mêmes types de données et surtout d’utiliser les mêmes acteurs sur le terrain.</p>
+
+<p>Parmi les systèmes les plus utiles et utilisés, l’on note :</p>
+
+<ul>
+    <li>La collecte des données de routine mensuelle sur le Paludisme (Bamako, Ségou).</li>
+    <li>La collecte des données communautaires sur la mortalité maternelle et infantile (Koulikoro et Ségou)</li>
+</ul>
+
+<p>Du fait du succès effectif et technique de ces systèmes, un certain nombre de projets d’extensions ont été planifiés pour collecter d’autres données essentielles :</p>
+
+<ul>
+    <li>Surveillance épidémiologique hebdomadaire (Mopti)</li>
+    <li>Utilisation des moustiquaires imprégnées (Tous les sites existants)</li>
+    <li>Extension géographique de la routine paludisme (Région de Mopti)</li>
+    <li>Routine hebdomadaire Paludisme durant la période à risque.</li>
+</ul>
+
+<p>Il reste maintenant à apprendre à réagir mieux face à toutes les données générées. À l’heure actuelle, le système en place est une grosse base de données sous exploitée, car les porteurs de projets (ONG) n’ont pas mis en place de mécanismes de réponse. C’est un point souvent discuté mais jamais adressé. Et cela constitue l’enjeu majeur car il affaibli tout le système.</p>
+
+<p>Mais la meilleure voie à suivre est-elle de continuer à travailler sur des projets isolés en silo ? L’ensemble des projets ne seraient-ils pas plus performant en étant intégré les uns aux autres ? d’où l’idée de mettre en place le « SNISI ».</p>
+
+<h2>Le concept « SNISI »</h2>
+
+<p>La multiplication des projets et leurs différences métiers (périodicité, réponses attendues, etc…) nécessitent toujours une importante mobilisation pour la surveillance et la bonne marche de la collecte. Les expériences pilotes ont permis d’apprendre à collecter des données de manière fiable et ponctuelle. Mais cela s’est fait de manières indépendantes les uns des autres. Avec le SNISI il s’agit désormais de rendre interopérable (d’intégrer) les processus et les outils des différents projets.</p>
+
+<p>Ceci afin de rendre tous ces systèmes maintenables sur le long-terme et de réduire les ressources nécessaires à leur utilisation, les améliorations suivantes ont été effectuées :</p>
+
+<ul>
+    <li>Création d’une base de données commune permettant d’enregistrer les données de tous les projets : routines mensuelles et hebdomadaires, données sanitaires (centres) et communautaires (agents)</li>
+    <li>Transmission des données unifiées ; réception des données SMS via Modem ou SMPP</li>
+    <li>Bases de données à jour des localités et centres de santé du Mali avec informations géographiques</li>
+    <li>Annuaire unique de tous les utilisateurs du système</li>
+    <li>Interface unifiée d’accès aux données de chaque projet</li>
+    <li>Interface unifiée de surveillance de la collecte des données</li>
+</ul>
+
+<p>Toutes ces améliorations vont dans le sens de l’efficience et de l’efficacité d’un système d’information sanitaire renforcé par l’utilisation des technologies de l’information et de la communication :</p>
+
+<ul>
+    <li>Une seule infrastructure matérielle à gérer</li>
+    <li>Un seul “logiciel” à maitriser</li>
+    <li>Une seule flotte mobile</li>
+    <li>Meilleure réactivité et coûts plus maîtrisés pour la mise en place de nouveaux projets.</li>
+</ul>
+
+<h2>Infrastructure de la flotte mobile pour la santé</h2>
+
+<p>Il s’agit à terme d’utiliser les terminaux de téléphonie mobile et de GSM Fixe comme centre de communication intégré des établissements de santé en vue de rendre plus efficients les applications de remontée des données sanitaire en temps réel.</p>
+
+<p>L’Agence Nationale de Télésanté et d’Informatique Médicale s’est appliquée à résoudre cette problématique dans un premier temps en introduisant pour la 1ère fois dans le Système de Santé « La flotte mobile pour la Santé ». Cette flotte mobile interconnecte les professionnels de santé et permet la collecte et le traitement de données en temps réel.</p>
+
+<p>Les terminaux mobiles déployés dans le cadre de ce projet sont aussi utilisés à tous les niveaux de la pyramide, ce qui est un atout pour aussi  passer de la communication vocale et SMS à l’Internet, d’autant plus que l’offre du partenaire Orange Mali inclue un forfait Internet pour les terminaux de la flotte.</p>
+
+<p>Les informations sont  collectées via un terminal mobile équipé d’un formulaire à cet effet et envoyé vers le serveur local du site. Ce serveur est accessible par les clients via un navigateur web. Il est par ailleurs synchronisé avec le Datacenter  qui sert de site Backup en cas d’incident sur le site local.</p>
+
+ <h2>Caractéristiques techniques et technologiques  des terminaux de la flotte mobile pour la santé</h2>
+
+<p>Le principe, consiste d’utiliser des terminaux mobiles tagués ANTIM pouvant partager leur connexion Internet avec les autres équipements du CSCom/SCRéf. Cette connexion est alors utilisée pour les communications de bases au niveaux des Centre de santé à savoir :</p>
+
+<ul>
+    <li>Envoi et réception de courriel</li>
+    <li>Envoi des données d’un SIH</li>
+    <li>Recherches et Consultation de page web</li>
+</ul>
+
+<p>Le terminal mobile devra avoir les spécifications suivantes :</p>
+
+<ul>
+    <li>Appel vocal</li>
+    <li>Messagerie textuelle SMS</li>
+    <li>GSM/GPRS/EDGE/3G/4G</li>
+    <li>WiFi 802.11 a/b/g/n/ac (HT80)</li>
+    <li>GPS / GLONASS</li>
+    <li>NFC, Bluetooth® 4.0 (LE)</li>
+    <li>Partage Wifi</li>
+    <li>Portée du signale : 150 m à la ronde</li>
+</ul>
+
+<p>Le terminal GSM Fixe devra avoir les spécifications suivantes :</p>
+
+<ul>
+    <li>Appel vocal</li>
+    <li>Messagerie textuelle SMS</li>
+    <li>GSM/GPRS/EDGE/3G/4G</li>
+    <li>WiFi 802.11 a/b/g/n/ac (HT80)</li>
+    <li>GPS / GLONASS</li>
+    <li>NFC, Bluetooth® 4.0 (LE)</li>
+    <li>IR LED (Remote Control), MHL 2.0</li>
+    <li>Partage Wifi</li>
+    <li>Portée du signale : 250 m à la ronde au minimum</li>
+    <li>Ecran intégré pour le terminal GSM fixe</li>
+    <li>Antenne outdoor pour les GSM Fixes dans les zones de faible couverture réseaux.</li>
+</ul>
+
+<p>Ces spécifications techniques sont présentes sur certains Smartphones. Il s’agit de les implémentés sur les terminaux de GSM fixe. Ce qui va permettre une implémentation rapide d’un centre de communication intégrée basée sur le mobile et le réseau 3G au niveau du CSCom/CSRéf (Etablissement de santé du district sanitaire et du village selon la pyramide sanitaire du mali).</p>
+
+<p>Aussi tous les terminaux déployés dans le cadre de cette flotte sont customisés pour l’agence nationale de télésanté et d’informatique médicale du ministère de la santé du Mali.</p>
+
+<h2>Conclusion</h2>
+<p>De la même manière qu’il a été appris à collecter, il va falloir désormais apprendre à utiliser ces données : ce nouveau système permet enfin (c’est en cela qu’il est unique) d’analyser les données inter-projets ; de mettre en corrélation les données de surveillance épidémiologique hebdomadaire et ceux du paludisme par exemple ; de confronter les données communautaires aux données sanitaires, etc.</p>
+
+<p>Ces informations devront être partagées ; bien au-delà de ce qui s’est fait jusqu’à présent ; mais elles seront surtout transformées en action concrètes sur le terrain ; pour que la collecte ne soit plus la finalité, mais le déclencheur de meilleurs soins pour les populations bénéficiaires.</p>
+
+<p>Dr Ly Ousmane,<br />Directeur Général</p>
+
+<h2>Crédits</h2>
+<p>Cet outil a été réalisé avec (entres autres) le concours des personnes suivantes:</p>
+<img style="float:right" title="Mention particulière au PNLP/Programme National de Lutte contre le Paludisme" src="{% static "img/logo_pnlp.png" %}" />
+<ul style="-moz-column-count: 2; -webkit-column-count: 2; column-count: 2;">
+<li>Dr Klénon TRAORE, Directeur PNLP</li>
+<li>Dr Madina KONATE, PNLP</li>
+<li>Dr Seydou Fomba, PNLP</li>
+<li>Mr Ignace Traore, PNLP</li>
+<li>Dr Abdoul Karim Doumbia, PNLP</li>
+<li>Mme Safiatou Diawara, PNLP</li>
+<li>Mr Amadou Diarra, PNLP</li>
+<li>Dr Barasson Diarra, PNLP</li>
+<li>Dr Halidou Sidibé, PNLP</li>
+<li>Mme Aissata Dossou, PNLP</li>
+<li>Mr Ousmane Pléa, PNLP</li>
+<li>Dr Jean Marie N’GBICHI, MEASURE Evaluation</li>
+<li>Dr Malick Yissibé KONE, MEASURE Evaluation</li>
+<li>Dr Ousmane Ly, Directeur ANTIM</li>
+<li>Mr Moussa Coulibaly, ANTIM</li>
+<li>Mr Ousmane Fomba, ANTIM</li>
+<li>Mr Karim Traoré, CPS/Secteur Santé</li>
+<li>Dr Mamoutou Diabaté, chef section SLIS, DNS</li>
+<li>Mme Goita Soula Fofana, DNS/SLIS</li>
+<li>Mme Hawoye Cissé, DNS</li>
+<li>Mr Renaud Gaudin, yɛlɛman</li>
+<li>Mr Alou Dolo, yɛlɛman</li>
+<li>Mr Ibrahima Fadiga, yɛlɛman</li>
+<li>Dr Makan Fofana, CSRéf Baroueli</li>
+</ul>
+
+<h2>Financements</h2>
+
+<p>Le {{ brand_short }} est issu de la réunion de plusieurs outils de collecte existants indépendamment. Tous ces outils ont été essentiels à la définition et à la réalisation du SNISI dont ils font désormais partie.</p>
+
+<ul>
+    <li><strong>Système de collecte Paludisme</strong> : <a href="http://usaid.gov">USAID</a>/<a href="     http://icfmacro.com">ICF MACRO</a>/<a href="http://www.unc.edu"><abbr title="University of North Carolina at Chapel Hill">UNC-CH</abbr></a>/<a href="http://www.cpc.unc.edu/measure">MEASURE Evaluation</a>.</li>
+    <li><strong>Système de collecte Santé de la reproduction</strong> : <a href="http://unfpa.org">UNFPA</a>/<a href="http://antim.sante.gov.ml">ANTIM</a>.</li>
+    <li><strong>Système de collecte Cécité</strong> : <a href="http://sightsavers.org">Sightsavers</a>.</li>
+    <li><strong>SNISI</strong> : <a href="http://antim.sante.gov.ml">ANTIM</a>/<a href="http://yeleman.com">YELEMAN</a>.</li>
+</ul>
+
+<ul class="logo-list">
+<li><a href="http://usaid.gov"><img title="USAID" src="{% static "img/logo_usaid.png" %}" /></a></li>
+<li><a href="http://www.unc.edu"><img title="University of North Carolina at Chapel Hill" src="{% static "img/logo_unc.png" %}" /></a></li>
+<li><a href="http://www.cpc.unc.edu/measure"><img title="MEASURE Evaluation" src="{% static "img/logo_measure.png" %}" /></a></li>
+<li><a href="http://unfpa.org"><img title="UNFPA" src="{% static "img/logo_unfpa.png" %}" /></a></li>
+<li><a href="http://sightsavers.org"><img title="Sightsavers" src="{% static "img/logo_sightsavers.png" %}" /></a></li>
+<li><a href="http://antim.sante.gov.ml"><img title="ANTIM" src="{% static "img/logo_antim.png" %}" /></a></li>
+<li><a href="http://yeleman.com"><img title="YELEMAN" src="{% static "img/logo_yeleman.png" %}" /></a></li>
+</ul>
+
+{% endblock %}

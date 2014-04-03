@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Missions TT Backlog à {{ entity }} pour {{ period }}{% endblock %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block content %}
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" selected_period=period all_periods=all_periods %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" selected_period=period all_periods=all_periods %}
+
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+<h2>Évolution du backlog TT à {{ entity }} entre {{ perioda }} et {{ periodb }}</h2>
+
+{% include "parts/indicator_widget.html" with table=missions_followup id=0 %}
+{% include "parts/indicator_widget.html" with table=cumulative_backlog id=1 %}
+
+{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    root: "{{ root.slug }}",
+    baseURL: '/api/entities/getclusterchildren/trachoma_backlog',
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d|default_if_none:"null" }}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'trachoma_dashboard' %}/<entity>/<period_str>"
+});
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}

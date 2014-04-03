@@ -1,0 +1,13 @@
+<label for="{{ selectID }}">{{ label }}</label>
+    <select id="{{ selectID }}">
+        {% for itemid, item in all_periods %}
+            {% if item.middle.month == 12 or forloop.first %}
+            <optgroup label=" {{ item.middle.year }} ">
+            {% endif %}
+        <option value="{{ itemid }}" {% if selected_period.strid = itemid %} selected="selected"{% endif %}>{{ item }}</option>
+            {% if item.middle.month == 1 or forloop.last %}
+            </optgroup>
+            {% endif %}
+        {% endfor %}
+        </optgroup>
+    </select>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="tt_opt" model="snisi_core.role">
+        <field type="CharField" name="slug">tt_opt</field>
+        <field type="CharField" name="name">OPT</field>
+    </object>
+    <object pk="tt_amo" model="snisi_core.role">
+        <field type="CharField" name="slug">tt_amo</field>
+        <field type="CharField" name="name">AMO</field>
+    </object>
+    <object pk="tt_tso" model="snisi_core.role">
+        <field type="CharField" name="slug">tt_tso</field>
+        <field type="CharField" name="name">TSO</field>
+    </object>
+</django-objects>

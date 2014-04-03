@@ -1,0 +1,221 @@
+/*html, body.map {
+    height: 100%;
+}
+.map #layout, .map #main, .map .content, .map .content-container {
+    height: 100%;
+}*/
+
+@mapheight: 470px;
+
+@media (max-height: 650px) {
+
+    body.map header {
+        display: none;
+    }
+
+    body.map .content {
+        padding-top: 0.2em;
+    }
+
+    body .titlecontainer h3 {
+        margin: .2em 0px;
+    }
+
+    body .titlecontainer {
+        font-size: 1em;
+        line-height: 1em;
+    }
+
+}
+
+#map {
+    width: 100%;
+    min-height: @mapheight;
+    max-width: 1024px;
+    max-height: 1024px;
+    background-color: transparent;
+    border: 1px solid #999;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.info abbr {
+	cursor: help;
+	border-bottom: dotted 1px black;
+}
+
+.legend {
+    text-align: left;
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 1;
+}
+
+.sidebarbtn {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+#sidebar {
+    overflow-x: hidden;
+}
+
+.map-tabs {
+    list-style-type: none;
+
+}
+
+.map-tabs li {
+    display: inline;
+}
+
+
+.tabs {
+	overflow: hidden;
+
+}
+.tabs a {
+	display: block;
+	float: left;
+	font: 15px/35px Arial, Helvetica, Sans-serif;
+	padding: 0 10px 0 10px;
+	color: #999;
+	text-shadow: 0 1px 0 #FFF;
+	border-left: solid 1px rgba(0,0,0,0.05);
+	border-right: solid 1px rgba(255,255,255,0.7);
+	position: relative;
+	overflow: hidden;
+}
+.tabs a:first-child {
+	border-left-width: 0;
+    -moz-border-radius: 4px 0px 0 0;
+    -webkit-border-radius: 4px 0px 0 0;
+    border-radius: 4px 0px 0 0;
+}
+.tabs a:last-child {
+	border-right-width: 0;
+    -moz-border-radius: 0px 4px 0 0;
+    -webkit-border-radius: 0px 4px 0 0;
+    border-radius: 0px 4px 0 0;
+}
+
+.tabs a:hover, .tabs a.active {
+	background: #FFF;
+	border-left-color: #CCC;
+}
+
+.tabs a.active {
+    font-weight: bold;
+    /*border-left: 0;*/
+}
+
+.tabs a.active:hover {
+    /*border-left: solid 1px #CCC;*/
+}
+
+
+.map-sidebar {
+    background-color: white;
+    padding: .3em;
+    min-height: @mapheight;
+
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    -moz-border-radius: 4px 0px 0 4px;
+    -webkit-border-radius: 4px 0px 0 4px;
+    border-radius: 4px 0px 0 4px;
+}
+
+
+body.map h3 {
+    text-align: center;
+}
+
+.map-sidebar select {
+    width: 100%;
+}
+
+
+#exported_map {
+	background-color: white;
+	width: 840px;
+	height: 630px;
+    position: absolute;
+    left: -840px;
+    top: -630px;
+}
+
+/*#exported_map .leaflet-control-container { display: none; }*/
+
+
+body .pure-g .titlecontainer {
+    text-align: center;
+    color: @green;
+    vertical-align: bottom;
+}
+
+body .pure-g .tabcontainer {
+    vertical-align: bottom;
+}
+
+.hc_line {
+    font-size: 9px;
+}
+
+body .hc_legend .hc_div * {
+    white-space: pre;
+}
+body .hc_legend .hc_div {
+    line-height: 9px;
+    font-size: 9px;
+    font-family: "droid_sans_monoregular";
+}
+
+@-moz-keyframes spin{
+    0%{-moz-transform:rotate(0deg)}
+    100%{-moz-transform:rotate(359deg)}
+}
+@-webkit-keyframes spin{
+    0%{-webkit-transform:rotate(0deg)}
+    100%{-webkit-transform:rotate(359deg)}
+}
+@-ms-keyframes spin{
+    0%{-ms-transform:rotate(0deg)}
+    100%{-ms-transform:rotate(359deg)}
+}
+@keyframes spin{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(359deg)}
+}
+.faa-spin.animated, .faa-spin.animated-hover:hover {
+    -moz-animation: spin 1.2s linear infinite;
+    -webkit-animation: spin 1.2s linear infinite;
+    -ms-animation: spin 1.2s linear infinite;
+    animation: spin 1.2s linear infinite;
+}

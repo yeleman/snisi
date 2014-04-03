@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% load l10n %}
+{% block title %}{{ entity.display_full_typed_name }}{% endblock %}
+
+{% block content %}
+
+<h2>
+    <i class="fa {% if 'health' in entity.type.slug %}fa-hospital-o{% elif entity.type.slug == 'country' %}fa-flag{% else %}fa-home{% endif %}"></i>
+    {% if entity.type.slug == 'country' %}{{ entity.display_full_name }} {% else %}{{ entity.display_full_typed_name }}{% endif %}
+</h2>
+
+<dl>
+    <dt>Code</dt>
+    <dd>{{ entity.slug }} <i class="fa fa-globe"></i> <a title="Voir sur la Carte Sanitaire Numérique: csn.sante.gov.ml" href="http://ident.sante.gov.ml/browse/{{ entity.slug }}">csn.sante.gov.ml</a></dd>
+    <dt>Type</dt>
+    <dd>{{ entity.type }}</dd>
+    {% if entity.get_health_center and entity.get_health_center != entity %}
+    <dt>Centre de santé</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_health_center %}</dd>
+    {% endif %}
+    {% if entity.get_health_area and entity.get_health_area != entity %}
+    <dt>Aire de santé</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_health_area %}</dd>
+    {% endif %}
+    {% if entity.get_health_district and entity.get_health_district != entity %}
+    <dt>District Sanitaire</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_health_district %}</dd>
+    {% endif %}
+    {% if entity.get_health_region and entity.get_health_region != entity %}
+    <dt>Région Sanitaire</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_health_region %}</dd>
+    {% endif %}
+    {% if entity.get_commune and entity.get_commune != entity %}
+    <dt>Commune</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_commune %}</dd>
+    {% endif %}
+    {% if entity.get_cercle and entity.get_cercle != entity %}
+    <dt>Cercle</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_cercle %}</dd>
+    {% endif %}
+    {% if entity.get_region and entity.get_region != entity %}
+    <dt>Région</dt>
+    <dd>{% include "parts/entity_link.html" with entity=entity.get_region %}</dd>
+    {% endif %}
+    {% if entity.gps %}
+    <dt>Coordonnées GPS</dt>
+    <dd>Lat: {{ entity.latitude }}. Lon: {{ entity.longitude }}. {% localize off %}<a title="Voir les coordonnées sur Open Street Map" href="http://www.openstreetmap.org/?mlat={{ entity.latitude }}&mlon={{ entity.longitude }}#map=13/{{ entity.latitude }}/{{ entity.longitude }}"><i class="fa fa-map-marker"></i> OSM</a>{% endlocalize %}</dd>
+    {% endif %}
+    <dt>Statut</dt>
+    <dd>{% if entity.active %}Actif{% else %}Non actif{% endif %} depuis le {{ entity.active_changed_on }}.</dd>
+</dl>
+
+{% if entity.participations.count %}
+<h3>Activités SNISI</h3>
+<ol>
+{% for participation in entity.participations.all %}
+<li>{{ participation.cluster }}</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% if entity.type.slug != 'country' and entity.contacts.count %}
+<h3>Contacts</h3>
+<ol>
+{% for contact in entity.contacts.all %}
+<li>{% include "parts/user_link.html" with provider=contact %}</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% if entity.type.slug != 'health_center' and entity.type.slug != 'vfq' %}
+<h3>Unités</h3>
+<ol>
+{% for child in entity.get_natural_children %}
+{% if child.active %}
+<li>{% include "parts/entity_link.html" with entity=child %}</li>
+{% endif %}
+{% empty %}
+<li>Aucune unités dépendant de {{ entity }}.
+{% endfor %}
+</ol>
+{% endif %}
+
+{% endblock %}

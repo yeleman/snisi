@@ -1,0 +1,31 @@
+MAILTO=""
+
+# m h  dom mon dow   command
+
+# create expected reportings on period starts
+# we launch them all everyday even though it's only need on the day
+# the period starts.
+# allows us to automaticaly recover from black-out day.
+# script is responsible for not creating duplicates.
+0 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t MonthPeriod
+30 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t DayPeriod
+40 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t FixedMonthFirstWeek
+45 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t FixedMonthSecondWeek
+50 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t FixedMonthThirdWeek
+55 4 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t FixedMonthFourthWeek
+0 5 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-expected-reporting -d previous -t FixedMonthFifthWeek
+
+# create aggegated reports
+30 5 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py create-aggregated-reports
+
+# daily check-ups
+# this script will call every projects's daily checkups.
+0 6 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py daily-checkups
+
+# Fire notifications for quickly
+0 8 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py fire-notifications -t quickly
+0 12 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py fire-notifications -t quickly
+0 17 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py fire-notifications -t today
+0 9 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py fire-notifications -t soon
+0 10 * * * /home/snisi/envs/snisi/bin/python /home/snisi/snisi/manage.py fire-notifications -t later
+

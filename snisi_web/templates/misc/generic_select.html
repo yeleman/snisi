@@ -1,0 +1,9 @@
+{% load snisi %}
+{% if label %}<label {% if id %} for="{{ id }}"{%endif%}>{{ label }}</label>{% endif %}
+<select {% if id %} id="{{ id }}"{%endif%} class="{{ class }}">
+    {% if caption %}<option disabled="disabled">{{ caption|safe }}</option>{% endif %}
+    {% if noneoption %}<option value="-1" label="{{ noneoption }}">{{ noneoption }}</option>{% endif %}
+    {% for itemid, item in items %}
+    <option value="{{ itemid }}" {% if selected = itemid %} selected="selected"{% endif %}>{% if filter %}{{ item|dynfilter:filter }}{% else %}{{ item }}{% endif %}</option>
+    {% endfor %}
+</select>

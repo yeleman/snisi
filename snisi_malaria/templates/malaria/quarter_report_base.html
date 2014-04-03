@@ -1,0 +1,24 @@
+{% load static %}<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{% block title %}Rapport trimestriel{% endblock %}</title>
+    <style type="text/css">
+    body {
+        width: 100%;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <img title="PMI" src="" />
+        <img title="PNLP" src="" />
+        <img title="MEASURE" src="" />
+        <img src="logo_measure.png" />
+    </header>
+<section id="content">
+{% block content %}{% endblock %}
+</section>
+</body>
+</html>

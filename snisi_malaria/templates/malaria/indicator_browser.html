@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block content %}
+
+<ul id="sections_list">
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="1" section="1" desc="Identification de la structure ayant notifié les données" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="2a/all" section="2A" section_short="2A*" age_desc="TOUT ÂGE CONFONDU" desc="Morbidité (Cas suspects, testés/confirmés)" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="2a/under_five" section="2A" section_short="2A-5" age_desc="MOINS DE 5 ANS" desc="Morbidité (Cas suspects, testés/confirmés)" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="2a/over_five" section="2A" section_short="2A+5" age_desc="5 ANS ET PLUS" desc="Morbidité (Cas suspects, testés/confirmés)" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="2a/pregnant_women" section="2A" section_short="2Afe" age_desc="FEMMES ENCEINTES" desc="Morbidité (Cas suspects, testés/confirmés)" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="2b" section="2B" desc="Traitement par CTA" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="3/all" section="3" section_short="3*" age_desc="TOUT ÂGE CONFONDU" desc="Hospitalisation" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="3/under_five" section="3" section_short="3-5" age_desc="MOINS DE 5 ANS" desc="Hospitalisation" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="3/all_over_five" section="3" section_short="3+5" age_desc="5 ANS ET PLUS (TOUS)" desc="Hospitalisation" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="3/pregnant_women" section="3" section_short="3fe" age_desc="FEMMES ENCEINTES" desc="Hospitalisation" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="4/all" section="4" section_short="4*" age_desc="TOUT ÂGE CONFONDU" desc="Décès" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="4/under_five" section="4" section_short="4-5" age_desc="MOINS DE 5 ANS" desc="Décès" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="4/over_five" section="4" section_short="4+5" age_desc="5 ANS ET PLUS" desc="Décès" %}
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="4/pregnant_women" section="4" section_short="4fe" age_desc="FEMMES ENCEINTES" desc="Décès" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="5" section="5" desc="Moustiquaires imprégnées  d’Insecticides de Longue Durée (MILD)" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="6" section="6" desc="Gestion de stock de CTA" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="7" section="7" desc="Gestion de stock de produits de PEC du paludisme grave" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="8" section="8" desc="Gestion de stock MILD, TDR, SP" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="9" section="9" desc="CPN et Traitement Préventif Intermittent (TPI)" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="10" section="10" desc="Données de surveillance" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="11" section="11" desc="Données sur les intrants" %}
+
+    {% include "malaria/section_list_item.html" with base_url=base_url slug="12" section="12" desc="Données sur la completude du rapportage" %}
+</ul>
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    <legend>Évolution des données de routine Paludisme</legend>
+    {{ root }}
+    {% for type_slug in lineage %}
+    <select class="entity_filter" data-level="{{ type_slug }}">
+        {% if forloop.counter0 == 0 %}
+        <option value="-1">AUCUN</option>
+        {% for child in children %}
+            <option value="{{ child.slug }}"{% if child.slug == entity.slug %} selected="selected"{% endif %}>{{ child.name }}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    {% endfor %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" label="À" selected_period=periodb all_periods=all_periods %}
+
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+<h2 class="sectiontitle">Section {{ section_index }} – {{ section_title }}</h2>
+
+{% for widget in widgets %}
+    {% include "parts/indicator_widget.html" with table=widget id=forloop.counter0 %}
+{% endfor %}
+
+{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'malaria_view' %}/<entity>/<period_str>/section{{ section_index }}{% if sub_section %}/{{ sub_section }}{% endif %}"
+});
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}

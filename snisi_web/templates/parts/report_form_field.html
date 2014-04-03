@@ -1,0 +1,12 @@
+{% load snisi %}
+<td {%if field.errors %} class="error"{% endif %}
+    {% if not field %} class="nodata"{% endif %}
+    {% if not dataonly %}
+    data-container="body"
+    data-original-value="{{ field.value }}"
+    data-toggle="popover"
+    data-content="{% if field.errors %}{% for error in field.errors %}{{ error }}{% endfor %}{% endif %}{{ field.value }}"
+    {% endif %}>
+
+{% if field %}{% if dataonly %}{{ field.value|reportvalue }}{% else %}&nbsp;{{ field }}{% endif %}{% endif %}
+</td>

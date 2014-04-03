@@ -1,0 +1,11 @@
+    {{ root }}
+    {% for type_slug in lineage %}
+    <select class="entity_filter" data-level="{{ type_slug }}">
+        {% if forloop.counter0 == 0 %}
+        <option value="-1">AUCUN</option>
+        {% for child in children %}
+            <option value="{{ child.slug }}"{% if child.slug == entity.slug %} selected="selected"{% endif %}>{{ child.name }}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    {% endfor %}

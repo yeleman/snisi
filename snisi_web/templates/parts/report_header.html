@@ -1,0 +1,15 @@
+{% with report_type=expected.report_class.report_type amount_expected=expected.amount_expected %}
+    {% if report_type == expected.PERIODICAL_SOURCE or report_type == expected.PERIODICAL_AGGREGATED %}
+        {% if amount_expected == expected.EXPECTED_SINGLE %}
+            {% include "parts/report_header_periodical_single.html" %}
+        {% else %}
+            {% include "parts/report_header_periodical_multiple.html" %}
+        {% endif %}
+    {% else %}
+        {% if amount_expected == expected.EXPECTED_SINGLE %}
+            {% include "parts/report_header_occasional_single.html" %}
+        {% else %}
+            {% include "parts/report_header_occasional_multiple.html" %}
+        {% endif %}
+    {% endif %}
+{% endwith %}

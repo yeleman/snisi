@@ -1,0 +1,135 @@
+{
+    "W6D2": [], 
+    "RN42": [], 
+    "mali": [
+        {
+            "active": true, 
+            "display_code_name": "KOULIKORO (4JN7)", 
+            "name": "KOULIKORO", 
+            "parent": "mali", 
+            "latitude": null, 
+            "display_full_name": "KOULIKORO/MALI", 
+            "type": "health_region", 
+            "slug": "4JN7", 
+            "longitude": null, 
+            "display_typed_name": "R\u00e9gion sanitaire de KOULIKORO"
+        }
+    ], 
+    "8P65": [], 
+    "ZWT5": [], 
+    "4JN7": [
+        {
+            "active": true, 
+            "display_code_name": "BANAMBA (4Z85)", 
+            "name": "BANAMBA", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "BANAMBA/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "4Z85", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de BANAMBA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "DIOILA (N696)", 
+            "name": "DIOILA", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "DIOILA/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "N696", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de DIOILA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "FANA (W6D2)", 
+            "name": "FANA", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "FANA/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "W6D2", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de FANA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "KANGABA (S9W6)", 
+            "name": "KANGABA", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "KANGABA/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "S9W6", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de KANGABA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "KATI (RN42)", 
+            "name": "KATI", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "KATI/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "RN42", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de KATI"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "KOLOKANI (8P65)", 
+            "name": "KOLOKANI", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "KOLOKANI/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "8P65", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de KOLOKANI"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "KOULIKORO (D2K8)", 
+            "name": "KOULIKORO", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "KOULIKORO/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "D2K8", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de KOULIKORO"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "NARA (G272)", 
+            "name": "NARA", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "NARA/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "G272", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de NARA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "OUELESSEBOUGOU (ZWT5)", 
+            "name": "OUELESSEBOUGOU", 
+            "parent": "4JN7", 
+            "latitude": null, 
+            "display_full_name": "OUELESSEBOUGOU/KOULIKORO", 
+            "type": "health_district", 
+            "slug": "ZWT5", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de OUELESSEBOUGOU"
+        }
+    ], 
+    "4Z85": [], 
+    "G272": [], 
+    "N696": [], 
+    "S9W6": [], 
+    "D2K8": []
+}

@@ -1,0 +1,72 @@
+{
+    "HFD9": [
+        {
+            "active": true, 
+            "display_code_name": "ASCOTAMB (ACE3)", 
+            "name": "ASCOTAMB", 
+            "parent": "ZACE3", 
+            "latitude": 14.5721, 
+            "display_full_name": "ASCOTAMB/MOPTI", 
+            "type": "health_center", 
+            "slug": "ACE3", 
+            "longitude": -4.2099, 
+            "display_typed_name": "Unit\u00e9 sanitaire de ASCOTAMB"
+        }
+    ], 
+    "MJ86": [
+        {
+            "active": true, 
+            "display_code_name": "BANDIAGARA CENTRAL (3ZF3)", 
+            "name": "BANDIAGARA CENTRAL", 
+            "parent": "Z3ZF3", 
+            "latitude": 14.3252, 
+            "display_full_name": "BANDIAGARA CENTRAL/BANDIAGARA", 
+            "type": "health_center", 
+            "slug": "3ZF3", 
+            "longitude": -3.7199, 
+            "display_typed_name": "Unit\u00e9 sanitaire de BANDIAGARA CENTRAL"
+        }
+    ], 
+    "SSH3": [
+        {
+            "active": true, 
+            "display_code_name": "BANDIAGARA (MJ86)", 
+            "name": "BANDIAGARA", 
+            "parent": "SSH3", 
+            "latitude": null, 
+            "display_full_name": "BANDIAGARA/MOPTI", 
+            "type": "health_district", 
+            "slug": "MJ86", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de BANDIAGARA"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "MOPTI (HFD9)", 
+            "name": "MOPTI", 
+            "parent": "SSH3", 
+            "latitude": null, 
+            "display_full_name": "MOPTI/MOPTI", 
+            "type": "health_district", 
+            "slug": "HFD9", 
+            "longitude": null, 
+            "display_typed_name": "District Sanitaire de MOPTI"
+        }
+    ], 
+    "mali": [
+        {
+            "active": true, 
+            "display_code_name": "MOPTI (SSH3)", 
+            "name": "MOPTI", 
+            "parent": "mali", 
+            "latitude": null, 
+            "display_full_name": "MOPTI/MALI", 
+            "type": "health_region", 
+            "slug": "SSH3", 
+            "longitude": null, 
+            "display_typed_name": "R\u00e9gion sanitaire de MOPTI"
+        }
+    ], 
+    "ACE3": [], 
+    "3ZF3": []
+}

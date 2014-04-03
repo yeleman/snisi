@@ -1,0 +1,19 @@
+<div class="indicatorwrapper">
+<h3 class="caption"><strong>{{ table.name }}.</strong> {{ table.caption }}</h3>
+<table class="pure-table indicator-table data-centered">
+<tr>
+    <th {% if table.has_sub_labels %}rowspan="2"{% endif %}>{{ table.title }}</th>
+    {% for label in table.main_labels %}<th {% if table.has_sub_labels %}colspan="2"{% endif %}>{{ label }}</th>{% endfor %}
+</tr>
+{% if table.has_sub_labels %}
+<tr>
+    {% for sub_label in table.sub_labels %}<th>{{ sub_label }}</th>{% endfor %}
+</tr>
+{% endif %}
+
+{% for row in table.render_with_labels_human %}
+<tr>{% for col in row %}{% if forloop.counter0 == 0 %}<th>{{ col }}</th>{% else %}<td>{{ col|default_if_none:"-" }}</td>{% endif %}{% endfor %}</tr>
+{% endfor %}
+
+</table>
+</div>

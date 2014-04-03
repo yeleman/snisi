@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="ttbacklog_mission" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">ttbacklog_mission</field>
+        <field type="CharField" name="name">Mission TT Backlog</field>
+        <field type="CharField" name="cls">snisi_trachoma.models.TTBacklogMissionR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">occasiosrc</field>
+    </object>
+    <object pk="ttbacklog_visit" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">ttbacklog_visit</field>
+        <field type="CharField" name="name">Visite Village TT Backlog</field>
+        <field type="CharField" name="cls">snisi_trachoma.models.TTBacklogVillageR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">occasiosrc</field>
+    </object>
+</django-objects>

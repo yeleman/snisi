@@ -1,0 +1,6 @@
+68d67
+<             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+76c75
+<             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
+---
+>             'username': ('django.db.models.fields.CharField', [], {'primary_key': 'True', 'max_length': '30'})

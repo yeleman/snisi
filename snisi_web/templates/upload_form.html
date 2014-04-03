@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block title %}Envoi d'un formulaire de saisie{% endblock %}
+
+
+{% block content %}
+<p>Cliquez sur <em>Parcourir…</em> et sélectionnez le formulaire de saisie (rempli) que vous souhaitez envoyer.</p>
+<p><strong>Attention</strong>: Il doit contenir le code établissement ainsi que la période concernée. Vérifier que ceux-ci sont correct avant l'envoi.</p>
+
+{% pure_form form submit_text="Envoyer le fichier" csrf_token=csrf_token legend="Envoi d'un rapport" with_file=True %}
+
+{% if form.is_bound %}
+<hr />
+
+{% if not form.is_valid %}
+
+<h2>Échec d'envoi du formulaire</h2>
+<p>Aucun fichier n'a été reçu. Vous devez cliquer sur <em>Parcourir…</em> et choisir un fichier Excel à envoyer.</p>
+
+{% else %}
+    {% if xlsform.is_valid and report %}
+
+        <h2>Félicitations, rapport accepté</h2>
+        <p>Votre rapport de routine Paludisme a bien été reçu et a été <strong class="bright">accepté</strong>.</p>
+        <p>Votre numéro de reçu est le <strong class="bright">#{{ report.receipt }}</strong>. Reportez le sur le formulaire papier et conservez le.</p>
+        <p>{{ text_message }}</p>
+
+    {% else %}
+
+        <h2>Échec, rapport refusé</h2>
+        <p>Votre rapport de routine Paludisme a bien été reçu mais a été <strong class="bright">refusé</strong>.</p>
+        <p>En effet, celui-ci contient {{ xlsform.feedbacks|length }} erreur{{ xlsform.feedbacks|length|pluralize }} détaillée{{ xlsform.feedbacks|length|pluralize }} ci-dessous. Corrigez-le{{ xlsform.feedbacks|length|pluralize }} et re-envoyez le fichier.</p>
+        <p>En cas de problème, consultez la page de <a href="{% url 'support' %}">support</a>.</p>
+        <h2>Liste des erreurs</h2>
+        <ol>
+            {% if text_message %}
+            <li class="alert alert-danger">{{ text_message }}</li>
+            {% endif %}
+            {% for feedback in xlsform.feedbacks %}
+            <li class="alert alert-{{ feedback.level|lvl2css }}">{{ feedback.render }}</li>
+            {% endfor %}
+        </ol>
+
+    {% endif %}
+
+{% endif %}
+
+{% endif %}
+{% endblock %}
