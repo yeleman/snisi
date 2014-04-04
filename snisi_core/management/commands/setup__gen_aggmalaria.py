@@ -91,5 +91,5 @@ class Command(BaseCommand):
                 exv.acknowledge_validation(validated=True,
                                            validated_by=autobot,
                                            validated_on=agg_date,
-                                           auto_validation=True)
+                                           auto_validated=True)
 

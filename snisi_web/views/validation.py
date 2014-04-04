@@ -131,7 +131,7 @@ def do_validation(request, report_receipt, **kwargs):
             validated=True,
             validated_by=request.user,
             validated_on=timezone.now(),
-            auto_validation=False)
+            auto_validated=False)
 
         # confirm validation
         messages.success(request, "Le rapport {cls} nº {receipt} pour {period} "

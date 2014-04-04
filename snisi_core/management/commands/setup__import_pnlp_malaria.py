@@ -89,7 +89,7 @@ def deserialize_malaria(report_data, report):
                     expval.acknowledge_validation(
                         validated_by=modified_by,
                         validated_on=validation_date,
-                        auto_validation=auto_validated)
+                        auto_validated=auto_validated)
                     report = report.__class__.objects.get(receipt=report.receipt)
 
             # datetimes
