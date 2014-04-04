@@ -21,7 +21,7 @@ def serve_protected_files(request, fpath=None):
 
     response = HttpResponse()
     del response['content-type']
-    response['X-Accel-Redirect'] = "/{protected_url}/{fpath}".format(
+    response['X-Accel-Redirect'] = "{protected_url}/{fpath}".format(
         protected_url=settings.FILES_REPOSITORY_URL_PATH,
         fpath=fpath)
     return response
