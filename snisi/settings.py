@@ -192,10 +192,9 @@ AUTH_USER_MODEL = 'snisi_core.Provider'
 
 ADMIN_PASSWORD = 'admin'
 
-ALLOWED_HOSTS = ['pnlp.sante.gov.ml',
-                 'snsi.sante.gov.ml',
-                 'pnlp.yeleman.com',
-                 'pnlp2.yeleman.com']
+ALLOWED_HOSTS = ['localhost',
+                 'snisi.sante.gov.ml',
+                 'snisi2.yeleman.com']
 
 
 ORANGE = 'orange'
