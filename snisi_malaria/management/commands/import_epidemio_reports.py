@@ -87,6 +87,8 @@ class Command(BaseCommand):
 
             periodcls = period_classes.get(week)
             period = periodcls.find_create_from(year=year, month=month)
+            if period is None:
+                continue
             reporting_date = period.end_on + datetime.timedelta(days=1, seconds=seconds)
 
             DEBUG_change_system_date(reporting_date)
