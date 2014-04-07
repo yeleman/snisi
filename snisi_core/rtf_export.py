@@ -78,12 +78,25 @@ def widgets_for_indicator(document, indicator_table, break_before=False):
     return widgets
 
 
+def error_widget(document, text):
+    p = Paragraph(document.StyleSheet.ParagraphStyles.Normal,
+                  text)
+    p.append(text)
+    return p
+
+
 def title_for_indicator(document, indicator_table, break_before=False):
     if indicator_table.name:
         text = "{} : {}".format(indicator_table.name,
                                 indicator_table.caption)
     else:
         text = indicator_table.caption
+    return title_for_text(document=document,
+                          text=text,
+                          break_before=break_before)
+
+
+def title_for_text(document, text, break_before=False):
     p = Paragraph(document.StyleSheet.ParagraphStyles.Heading2,
                   ParagraphPS().SetPageBreakBefore( break_before ))
     p.append(text)
@@ -100,7 +113,7 @@ def graph_for_indicator(document, indicator_table):
     # get the image from highcharts.com
     content = retrieve_chart_from_highcharts(highcharts)
     if content is None:
-        return None
+        return error_widget("Impossible de générer l'image")
 
     # write image to a temporary file
     f = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
@@ -126,16 +139,11 @@ def graph_for_indicator(document, indicator_table):
 
 def table_for_indicator(document, indicator_table):
 
+    if not indicator_table.nb_lines():
+        return error_widget("Aucune période")
+
     col_large = 3000
     col_regular = 1000
-    # col1 = 3000
-    # col2 = 1000
-    # col3 = 1000
-    # col4 = 1000
-    # col5 = 1000
-    # col6 = 1000
-    # col7 = 1000
-    # col8 = 1000
 
     thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
     # thick_edge = BorderPS( width=80, style=BorderPS.SINGLE )
@@ -187,6 +195,76 @@ def table_for_indicator(document, indicator_table):
             align_center = not idx == 0
             args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
 
+        table.AddRow(*args)
+
+    return table
+
+
+def generic_table(datamatrix, title=""):
+
+    """ Generic Table based on a strict input format:
+
+        datamatrix = [
+            ["Item Header", "Col1 header", "Col2 Header"],
+            ["Line 1 name", "Col1 Data", "Col2 Data"],
+            ["Line 2 name", "Col1 Data", "Col2 Data"],
+        ]
+    """
+
+    if not len(datamatrix):
+        return error_widget("Aucune ligne pour le tableau")
+
+    nb_col = len(datamatrix[-1])
+
+    # smart column sizes
+    if nb_col <= 3:
+        col_large = 6000
+        col_regular = 2000
+    elif nb_col <= 5:
+        col_large = 4000
+        col_regular = 1500
+    else:
+        col_large = 3000
+        col_regular = 1000
+
+    thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
+
+    def p(text, align_center=False):
+        return Paragraph(ParagraphPS(
+            alignment=ParagraphPS.CENTER
+                      if align_center
+                      else ParagraphPS.LEFT), text)
+
+    thin_frame  = FramePS( thin_edge,  thin_edge,  thin_edge,  thin_edge )
+
+    cols = [col_large]
+    for _ in range(1, nb_col):
+        cols.append(col_regular)
+    table = Table( *cols )
+
+    # first header row : title and period names
+    args = []
+    for header in datamatrix[0]:
+        print("header", header)
+        args.append(Cell(p(text_type(header), True), thin_frame))
+    table.AddRow(*args)
+
+    # second header row : Nbre/% sub header
+    # args = []
+    # for period in indicator_table.periods:
+    #     args.append(Cell(p("Nbre", True), thin_frame))
+    #     args.append(Cell(p("%", True), thin_frame))
+    # args.append(Cell(p("Nbre", True), thin_frame))
+
+    # table.AddRow(Cell(thin_frame, vertical_merge=True), *args)
+
+    # data rows
+    for line in datamatrix[1:]:
+        args = []
+        for idx, cell_data in enumerate(line):
+            print("cell_data", cell_data)
+            align_center = not idx == 0
+            args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
         table.AddRow(*args)
 
     return table

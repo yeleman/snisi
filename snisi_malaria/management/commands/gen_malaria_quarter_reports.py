@@ -13,10 +13,12 @@ from django.utils import timezone
 from django.conf import settings
 from rtfw import Renderer
 
+from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
 from snisi_malaria.rtf_export import (health_region_report,
-                                      health_district_report)
+                                      health_district_report,
+                                      health_center_report)
 from snisi_tools.path import mkdir_p
 
 logger = logging.getLogger(__name__)
@@ -65,7 +67,7 @@ def generate_report(year, quarter_num, entity):
     quarter = "T{}-{}".format(quarter_num, year)
 
     doc_creator = {
-        'health_center': None,
+        'health_center': health_center_report,
         'health_district': health_district_report,
         'health_region': health_region_report,
     }.get(entity.type.slug)
@@ -95,6 +97,11 @@ class Command(BaseCommand):
                     help='Quarter',
                     action='store',
                     dest='quarter_num'),
+        make_option('-e',
+                    help='Entity',
+                    action='store',
+                    dest='entity',
+                    default=None),
     )
 
 
@@ -115,7 +122,12 @@ class Command(BaseCommand):
 
         cluster = Cluster.get_or_none("malaria_monthly_routine")
 
-        for entity in cluster.members():
+        if options.get('entity'):
+            targets = [Entity.get_or_none(options.get('entity'))]
+        else:
+            targets = cluster.members()
+
+        for entity in targets:
             logger.info(entity)
 
             doc, filename = generate_report(year, quarter_num, entity)

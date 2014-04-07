@@ -7,11 +7,13 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import os
 
-from rtfw import Document, Section, Paragraph, ParagraphPS, Image, TextPS, TextStyle
-from rtfw.PropertySets import Font
-from rtfw.Elements import StandardFonts
+from rtfw import Document, Section, Paragraph, ParagraphPS, Image
 
-from snisi_core.rtf_export import widgets_for_indicator
+from snisi_malaria.models import MalariaR
+from snisi_core.models.Periods import MonthPeriod
+from snisi_core.models.Reporting import ExpectedReporting
+from snisi_core.rtf_export import (widgets_for_indicator, generic_table,
+                                   title_for_text, neutral_style)
 from snisi_tools.misc import import_path
 
 logger = logging.getLogger(__name__)
@@ -25,21 +27,6 @@ def get_malaria_template(entity, periods, quarter_num, year):
 
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
     h1 = ss.ParagraphStyles.Heading1
-
-    # header_bold = TextStyle(TextPS(bold=True)) #, size=18, font=ss.Fonts[26]))
-    # ps_header_bold = h1
-    # ps_header_bold.SetTextStyle(header_bold)
-    # ps_header_bold.SetParagraphPropertySet(pps_center)
-
-    # header_first = TextStyle(TextPS(bold=True, size=16, font=ss.Fonts[1]))
-    # ps_header_first = h1
-    # ps_header_first.SetTextStyle(header_first)
-    # ps_header_first.SetParagraphPropertySet(pps_center)
-
-    # header_times = TextStyle(TextPS(bold=True, size=24, font=ss.Fonts[26]))
-    # ps_header_times = h1
-    # ps_header_times.SetTextStyle(header_times)
-    # ps_header_times.SetParagraphPropertySet(pps_center)
 
     header_png = os.path.join('snisi_web', 'static', 'img', 'header_malaria_report.png')
     section.append(Paragraph(ss.ParagraphStyles.Normal, pps_center, Image(header_png)))
@@ -62,8 +49,8 @@ def get_malaria_template(entity, periods, quarter_num, year):
     return doc
 
 
-def get_section(document, text):
-    section = Section(break_type=Section.PAGE)
+def get_section(document, text, break_type=Section.PAGE):
+    section = Section(break_type=break_type)
     document.Sections.append(section)
     ps = ParagraphPS()
     p = Paragraph(document.StyleSheet.ParagraphStyles.Heading1, ps)
@@ -161,5 +148,149 @@ def health_district_report(entity, periods, quarter_num, year):
                            "E. COMPLÉTUDE ET PROMPTITUDE DU RAPPORTAGE")
     add_widget(sectione, 'Figure13')
     add_widget(sectione, 'Figure14')
+
+    return doc
+
+
+def health_center_report(entity, periods, quarter_num, year):
+
+    def get_widgets_for(document, text, widget,
+                        is_table=True, break_before=False):
+        widgets = [title_for_text(document=document,
+                                  text=text,
+                                  break_before=break_before)]
+        if is_table:
+            widgets.append(neutral_style(document, None))
+        widgets.append(widget)
+        return widgets
+
+    # special tables
+    slug = "malaria_monthly_routine"
+    last_period = periods[-1]
+    first_period = last_period
+    for _ in range(0, 11):
+        first_period = first_period.previous()
+    count_periods = MonthPeriod.all_from(first_period, last_period)
+
+    def _pc(num, denum):
+        try:
+            return num / denum * 100
+        except ZeroDivisionError:
+            return 0
+
+    def add_tableau2(document, section):
+
+        def count_value_for(field):
+            def _pc(num, denum):
+                try:
+                    return num / denum * 100
+                except ZeroDivisionError:
+                    return 0
+            count = 0
+            total = 0
+            for p in count_periods:
+                exp = ExpectedReporting.objects.filter(
+                    entity=entity, period=p, report_class__slug=slug)
+                if exp.count() == 0:
+                    continue
+                exp = exp.get()
+                total += 1
+                if not exp.satisfied:
+                    continue
+                if getattr(exp.arrived_report(), field, None) == MalariaR.NO:
+                    count += 1
+
+            return count, _pc(count, total)
+
+        act_children, pc_act_children = count_value_for('stockout_act_children')
+        act_youth, pc_act_youth = count_value_for('stockout_act_youth')
+        act_adult, pc_act_adult = count_value_for('stockout_act_adult')
+        datamatrix = [
+            ["", "Nb. mois", "%"],
+            ["CTA Enfant-nourisson", act_children, pc_act_children],
+            ["CTA Adolescent", act_youth, pc_act_youth],
+            ["CTA Adulte", act_adult, pc_act_adult],
+        ]
+        table = generic_table(datamatrix)
+        name = "Tableau 2"
+        caption = ("Mois de rapportage sans rupture de stock dans la structure "
+                   "au cours des 12 derniers mois")
+        text = "{} : {}".format(name, caption)
+        for widget in get_widgets_for(document, text, table, True):
+            section.append(widget)
+
+    def add_tableau3(document, section):
+
+        arrived = 0
+        on_time = 0
+        total = 0
+        for p in count_periods:
+            exp = ExpectedReporting.objects.filter(
+                entity=entity, period=p, report_class__slug=slug)
+            if exp.count() == 0:
+                continue
+            exp = exp.get()
+            total += 1
+            if not exp.satisfied:
+                continue
+            arrived += 1
+            if getattr(exp.arrived_report(), 'arrival_status', None) == MalariaR.ON_TIME:
+                on_time += 1
+
+        pc_on_time = _pc(on_time, total)
+        pc_arrived = _pc(arrived, total)
+        datamatrix = [
+            ["", "Nb. mois", "%"],
+            ["Promptitude", on_time, pc_on_time],
+            ["Complétude", arrived, pc_arrived],
+        ]
+        table = generic_table(datamatrix)
+        name = "Tableau 3"
+        caption = ("Taux de promptitude et complétude du rapportage de "
+                   "la structure au cours des 12 derniers mois")
+        text = "{} : {}".format(name, caption)
+        for widget in get_widgets_for(document, text, table, True):
+            section.append(widget)
+
+    # district report uses same widgets as region
+    WIDGET_DICT = import_path('snisi_malaria.indicators.'
+                              'quarter_report_region.WIDGET_DICT',
+                              failsafe=True)
+
+    doc = get_malaria_template(entity, periods, quarter_num, year)
+
+    def add_widget(section, widget_slug, break_before=False):
+        indicator_table = WIDGET_DICT.get(widget_slug)(
+            entity=entity, periods=periods)
+        widgets = widgets_for_indicator(doc,
+                                        indicator_table,
+                                        break_before=break_before)
+        for widget in widgets:
+            section.append( widget )
+
+    sectiona = get_section(doc, "A. MORBIDITÉ – MORTALITÉ")
+    add_widget(sectiona, 'Tableau1')
+    add_widget(sectiona, 'Figure1')
+    add_widget(sectiona, 'Figure2', break_before=True)
+    add_widget(sectiona, 'Figure3')
+    # add_widget(sectiona, 'Figure4')
+    add_widget(sectiona, 'Figure5', break_before=True)
+    add_widget(sectiona, 'Figure6')
+
+    sectionb = get_section(doc, "B. TRAITEMENT PAR CTA")
+    add_widget(sectionb, 'Figure7')
+    add_widget(sectionb, 'Figure8')
+
+    sectionc = get_section(doc, "C. CPN, MILD, TIP")
+    add_widget(sectionc, 'Figure9')
+    add_widget(sectionc, 'Figure10')
+
+    sectiond = get_section(doc, "D. GESTION DE STOCKS")
+    add_tableau2(doc, sectiond)
+
+    sectione = get_section(doc,
+                           "E. COMPLÉTUDE ET PROMPTITUDE DU RAPPORTAGE",
+                           None)
+    add_tableau3(doc, sectione)
 
     return doc

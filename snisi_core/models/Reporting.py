@@ -91,13 +91,6 @@ class ReportStatusMixin(object):
     def complete(self):
         return self.filter(completion_status=SNISIReport.COMPLETE)
 
-    # def within(self, period=None):
-    #     if not period:
-    #         return self
-    #     else:
-    #         return self.filter(dod__gte=period.start_on,
-    #                            dod__lte=period.end_on)
-
 
 class ReportStatusQuerySet(QuerySet, ReportStatusMixin):
     pass

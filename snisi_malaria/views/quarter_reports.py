@@ -17,6 +17,7 @@ from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_tools.path import modified_on
 from snisi_web.utils import entity_browser_context
+from snisi_tools.path import mkdir_p
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,8 @@ def display_report(request, entity_slug=None, **kwargs):
 
     relative_folder = os.path.join("malaria", "quarter_reports")
     report_folder = os.path.join(settings.FILES_REPOSITORY, relative_folder)
+
+    mkdir_p(report_folder)
 
     reports = []
     for fname in os.listdir(report_folder):
@@ -84,10 +87,10 @@ def display_report(request, entity_slug=None, **kwargs):
     context.update(entity_browser_context(
         root=root, selected_entity=entity,
         full_lineage=['country', 'health_region',
-                      'health_district', 'health_center'],
+                           'health_district', 'health_center'],
         cluster=cluster))
 
     return render(request,
                   kwargs.get('template_name',
-                             'malaria/quarter_reports_list.html'),
+                                   'malaria/quarter_reports_list.html'),
                   context)
