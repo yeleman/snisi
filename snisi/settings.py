@@ -211,6 +211,11 @@ FILES_REPOSITORY_URL_PATH = '/protected'
 FILES_REPOSITORY = os.path.join(BASE_DIR, 'protected')
 
 try:
+    SITE_ID = int(os.environ['SITE_ID'])
+except KeyError:
+    SITE_ID = 1
+
+try:
     from snisi.settings_local import *
 except ImportError:
     pass
