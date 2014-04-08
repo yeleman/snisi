@@ -99,7 +99,8 @@ def browser(request,
 
     context.update(entity_browser_context(root=root, selected_entity=entity,
         full_lineage=['country', 'health_region',
-                      'health_district', 'health_center']))
+                      'health_district', 'health_center'],
+        cluster=cluster))
 
     # get module from section/sub
     section_name = 'section{section_index}'.format(section_index=section_index)

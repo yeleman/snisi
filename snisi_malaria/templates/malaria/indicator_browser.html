@@ -74,6 +74,7 @@
 entities_browser = getEntitiesBrowser({
     parentID: 'entity_periods_filter',
     root: "{{ root.slug }}",
+    baseURL: '/api/entities/getclusterchildren/malaria_monthly_routine',
     lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
     lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
     auto_launch: true,
