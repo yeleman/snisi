@@ -7,9 +7,34 @@ from __future__ import (unicode_literals, absolute_import,
 
 from snisi_malaria.models import MalariaR
 from snisi_malaria.indicators.common import MalariaIndicator
-from snisi_core.indicators import IndicatorTable
-from snisi_malaria.indicators.common import gen_shortcut
 from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
+
+
+class NbSourceReportsExpected(MalariaIndicator):
+    name = "Nombre de rapports attendus"
+    def _compute(self):
+        if self.is_hc():
+            return 1 if self._expected else 0
+        return getattr(self.report, 'nb_source_reports_expected', 0)
+
+
+class NbSourceReportsArrived(MalariaIndicator):
+    name = "Nombre de rapports reçus"
+    def _compute(self):
+        if self.is_hc():
+            return 1 if self._expected.satisfied else 0
+        return getattr(self.report, 'nb_source_reports_arrived', 0)
+
+
+class NbSourceReportsArrivedOnTime(MalariaIndicator):
+    name = "Nombre de rapports reçus à temps"
+    def _compute(self):
+        if self.is_hc():
+            if self._expected.satisfied:
+                return 1 if self.report.arrival_status == MalariaR.ON_TIME else 0
+            else:
+                return 0
+        return getattr(self.report, 'nb_source_reports_arrived_on_time', 0)
 
 
 class TableauPromptitudeRapportage(IndicatorTable):
@@ -21,12 +46,9 @@ class TableauPromptitudeRapportage(IndicatorTable):
     rendering_type = 'table'
 
     INDICATORS = [
-        is_ref(gen_shortcut('nb_source_reports_expected',
-                            "Nombre de rapports attendus")),
-        ref_is(0)(gen_shortcut('nb_source_reports_arrived',
-                               "Nombre de rapports reçus")),
-        ref_is(0)(gen_shortcut('nb_source_reports_arrived_on_time',
-                               "Nombre de rapports reçus à temps")),
+        is_ref(NbSourceReportsExpected),
+        ref_is(0)(NbSourceReportsArrived),
+        ref_is(0)(NbSourceReportsArrivedOnTime),
     ]
 
 
@@ -40,12 +62,9 @@ class FigurePromptitudeRapportage(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('nb_source_reports_expected',
-                            "Nombre de rapports attendus"))),
-        ref_is(0)(gen_shortcut('nb_source_reports_arrived',
-                               "Nombre de rapports reçus")),
-        ref_is(0)(gen_shortcut('nb_source_reports_arrived_on_time',
-                               "Nombre de rapports reçus à temps")),
+        hide(is_ref(NbSourceReportsExpected)),
+        ref_is(0)(NbSourceReportsArrived),
+        ref_is(0)(NbSourceReportsArrivedOnTime),
     ]
 
 
