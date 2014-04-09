@@ -16,9 +16,10 @@ class HealthUnitsWithoutArthemeterStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_act_youth == self.report.YES
+            return self.report.stockout_artemether == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_artemether')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_artemether')])
         return nb_stockout
 
 
@@ -27,9 +28,10 @@ class HealthUnitsWithoutQuinineStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_act_youth == self.report.YES
+            return self.report.stockout_quinine == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_quinine')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_quinine')])
         return nb_stockout
 
 
@@ -38,9 +40,10 @@ class HealthUnitsWithoutSerumStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_act_youth == self.report.YES
+            return self.report.stockout_serum == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_serum')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_serum')])
         return nb_stockout
 
 
