@@ -12,7 +12,7 @@ from snisi_core.indicators import IndicatorTable, ref_is, is_ref, hide
 
 
 class HealthUnitsWithoutACTYouthStockout(MalariaIndicator):
-    name = "Structures avec rupture de stock en CTA Adolescent"
+    name = "Structures sans rupture de stock en CTA Adolescent"
 
     def _compute(self):
         if self.is_hc():
@@ -23,7 +23,7 @@ class HealthUnitsWithoutACTYouthStockout(MalariaIndicator):
 
 
 class HealthUnitsWithoutACTAdultStockout(MalariaIndicator):
-    name = "Structures avec rupture de stock en CTA Adulte"
+    name = "Structures sans rupture de stock en CTA Adulte"
 
     def _compute(self):
         if self.is_hc():
@@ -34,7 +34,7 @@ class HealthUnitsWithoutACTAdultStockout(MalariaIndicator):
 
 
 class HealthUnitsWithoutACTChildrenStockout(MalariaIndicator):
-    name = "Structures avec rupture de stock en CTA Nourisson-Enfant"
+    name = "Structures sans rupture de stock en CTA Nourisson-Enfant"
 
     def _compute(self):
         if self.is_hc():
@@ -45,7 +45,7 @@ class HealthUnitsWithoutACTChildrenStockout(MalariaIndicator):
 
 
 class PourcentageStructuresRuptureStockCTADistrict(IndicatorTable):
-    """ Tableau: Pourcentage de structures avec Rupture de stock de CTA s"""
+    """ Tableau: Pourcentage de structures sans Rupture de stock de CTA s"""
 
     name = "Tableau 17"
     title = " "
@@ -63,7 +63,7 @@ class PourcentageStructuresRuptureStockCTADistrict(IndicatorTable):
 
 
 class EvolutionPourcentageStructuresRuptureStockCTA(IndicatorTable):
-    """ Graphe: Evolution du pourcentage de Structures avec rupture de stock en
+    """ Graphe: Evolution du pourcentage de Structures sans rupture de stock en
 
         CTA """
 
