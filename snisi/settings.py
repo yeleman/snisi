@@ -100,6 +100,8 @@ INSTALLED_APPS = (
     # 'snisi_reprohealth',
     # 'snisi_bednets',
     # 'snisi_epidemiology',
+
+    'snisi_maint',
 )
 
 MIDDLEWARE_CLASSES = (

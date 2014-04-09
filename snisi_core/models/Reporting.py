@@ -807,6 +807,23 @@ class ExpectedReporting(models.Model):
                                              related_name='expected_reportings')
     updated_on = models.DateTimeField(default=timezone.now)
 
+    def clone(self, save=False, **kwargs):
+        fields = ['report_class', 'reporting_role',
+                  'period', 'within_period',
+                  'entity', 'within_entity',
+                  'reporting_period',
+                  'extended_reporting_period',
+                  'amount_expected',
+                  'completion_status']
+        exp = self.__class__()
+        for field in fields:
+            setattr(exp, field, getattr(self, field))
+        for field, value in kwargs.items():
+            setattr(exp, field, value)
+        if save:
+            exp.save()
+        return exp
+
     def __str__(self):
         return "{entity}{within_entity}-{period}{within_period}-{rclass}".format(
             entity=self.entity.slug,

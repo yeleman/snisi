@@ -42,12 +42,12 @@ class Command(BaseCommand):
         rclass = ReportClass.get_or_none(reportcls_slug)
         charge_sis = Role.get_or_none("charge_sis")
         first_period = MonthPeriod.from_url_str("09-2011")
-        last_period = MonthPeriod.from_url_str("02-2014")
+        last_period = MonthPeriod.from_url_str("03-2014")
         first_period_mopti_district = MonthPeriod.from_url_str("09-2013")
         first_period_mopti_region = MonthPeriod.from_url_str("01-2014")
         mali = Entity.get_or_none("mali")
 
-        def entity_expected_for(entity, period):
+        def entity_expected_for(entity, period, region_level=False):
             if period > last_period:
                 return False
 
@@ -59,6 +59,8 @@ class Command(BaseCommand):
             if region.slug in ('9GR8', '2732'):
                 return period >= first_period
             elif region.slug == 'SSH3':
+                if region_level:
+                    return period >= first_period_mopti_district
                 if entity.slug == 'HFD9':
                     return period >= first_period_mopti_district
                 else:
@@ -92,7 +94,7 @@ class Command(BaseCommand):
 
             # loop on all districts/region/country
             for entity in districts + regions + [mali]:
-                if not entity_expected_for(entity, period):
+                if not entity_expected_for(entity, period, entity.type.slug == 'health_region'):
                     continue
 
                 logger.info("\tCreating for {}".format(entity))
@@ -166,7 +168,7 @@ class Command(BaseCommand):
             # loop on all regions
             for region in regions:
 
-                if not entity_expected_for(region, period):
+                if not entity_expected_for(region, period, True):
                     continue
 
                 logger.info("\tAt region {}".format(region))
