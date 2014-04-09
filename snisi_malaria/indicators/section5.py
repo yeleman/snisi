@@ -16,8 +16,8 @@ class NombreMoustiquqiresImpregneesInsecticidesLongueDureeMILD(IndicatorTable):
 
     name = "Tableau 16"
     title = " "
-    caption = "Nombre de Moustiquaires imprégnées  d’Insecticides de" \
-                " Longue Durée (MILD) distribuées"
+    caption = ("Nombre de Moustiquaires imprégnées  d’Insecticides de "
+               "Longue Durée (MILD) distribuées")
     rendering_type = 'table'
 
     INDICATORS = [
