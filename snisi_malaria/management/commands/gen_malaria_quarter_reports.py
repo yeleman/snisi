@@ -54,6 +54,15 @@ def generate_report(year, quarter_num, entity):
         periods.append(periods[-1].following())
     end_period = periods[-1]
 
+    # graph periods (-12mo)
+    graph_periods = []
+    period = periods[-1]
+    graph_periods.append(period)
+    for _ in range(0, 11):
+        period = period.previous()
+        graph_periods.append(period)
+    graph_periods = sorted(graph_periods, reverse=True)
+
     if end_period.end_on > timezone.now():
         logger.error("Quarter in the future")
         return fail
@@ -80,6 +89,7 @@ def generate_report(year, quarter_num, entity):
 
     document = doc_creator(entity=entity,
                            periods=periods,
+                           graph_periods=graph_periods,
                            quarter_num=quarter_num,
                            year=year)
 

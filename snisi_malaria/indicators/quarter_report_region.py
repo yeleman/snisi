@@ -61,8 +61,11 @@ class Figure2(IndicatorTable):
     graph_type = 'spline'
 
     INDICATORS = [
-        CasSuspectsTestes,
-        CasTestesConfirmes
+        hide(is_ref(gen_shortcut('total_suspected_malaria_cases', "-"))),
+        ref_is(0)(gen_shortcut('total_tested_malaria_cases',
+                               "% de cas suspects testés")),
+        ref_is(1)(gen_shortcut('total_confirmed_malaria_cases',
+                               "% de cas testés confirmés")),
     ]
 
 
@@ -131,23 +134,20 @@ class Figure5(IndicatorTable):
     ]
 
 
-class U5DeathMalariaDeathAll(MalariaIndicator):
-    name = ("% décès pour paludisme chez les moins de 5 ans")
-    def _compute(self):
-        return self.divide(self.report.u5_total_malaria_death,
-                           self.report.u5_total_death_all_causes)
-
-
 class Figure6(IndicatorTable):
     name = "Figure 6"
     title = ""
-    caption = ("Proportion de décès pour paludisme parmi le total décès toutes"
-               " causes confondues chez les moins de 5 ans")
+    caption = ("Proportion de décès pour paludisme parmi le total décès "
+               "toutes causes confondues chez les moins de 5 ans")
     rendering_type = 'graph'
     graph_type = 'spline'
+    as_percentage = True
 
     INDICATORS = [
-        U5DeathMalariaDeathAll
+        hide(is_ref(gen_shortcut('u5_total_death_all_causes'))),
+        ref_is(0)(gen_shortcut('u5_total_malaria_death',
+                               "% décès pour paludisme chez "
+                               "les moins de 5 ans"))
     ]
 
 

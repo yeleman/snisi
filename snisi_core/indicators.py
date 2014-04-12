@@ -500,5 +500,5 @@ def gen_report_indicator(field,
 
     cls = copy.copy(GenericReportIndicator)
     cls.report_field = field
-    cls.name = name if name else report_cls.field_name(field) if report_cls is not None else None
+    cls.name = name if name is not None else report_cls.field_name(field) if report_cls is not None else None
     return cls

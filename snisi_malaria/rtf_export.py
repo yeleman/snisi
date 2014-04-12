@@ -19,7 +19,7 @@ from snisi_tools.misc import import_path
 logger = logging.getLogger(__name__)
 
 
-def get_malaria_template(entity, periods, quarter_num, year):
+def get_malaria_template(entity, periods, graph_periods, quarter_num, year):
     doc = Document()
     ss = doc.StyleSheet
     section = Section()
@@ -59,17 +59,22 @@ def get_section(document, text, break_type=Section.PAGE):
     return section
 
 
-def health_region_report(entity, periods, quarter_num, year):
+def health_region_report(entity, periods, graph_periods, quarter_num, year):
 
     WIDGET_DICT = import_path('snisi_malaria.indicators.'
                               'quarter_report_region.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
-        indicator_table = WIDGET_DICT.get(widget_slug)(
-            entity=entity, periods=periods)
+        indicator_cls = WIDGET_DICT.get(widget_slug)
+        if indicator_cls.rendering_type == 'graph':
+            indic_periods = graph_periods
+        else:
+            indic_periods = periods
+        indicator_table = indicator_cls(
+            entity=entity, periods=indic_periods)
         widgets = widgets_for_indicator(doc,
                                         indicator_table,
                                         break_before=break_before)
@@ -102,21 +107,30 @@ def health_region_report(entity, periods, quarter_num, year):
     add_widget(sectione, 'Figure13')
     add_widget(sectione, 'Figure14')
 
+    get_section(doc, "COMMENTAIRES D'ENSEMBLE")
+
+    get_section(doc, "RECOMMENDATIONS", None)
+
     return doc
 
 
-def health_district_report(entity, periods, quarter_num, year):
+def health_district_report(entity, periods, graph_periods, quarter_num, year):
 
     # district report uses same widgets as region
     WIDGET_DICT = import_path('snisi_malaria.indicators.'
                               'quarter_report_region.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
-        indicator_table = WIDGET_DICT.get(widget_slug)(
-            entity=entity, periods=periods)
+        indicator_cls = WIDGET_DICT.get(widget_slug)
+        if indicator_cls.rendering_type == 'graph':
+            indic_periods = graph_periods
+        else:
+            indic_periods = periods
+        indicator_table = indicator_cls(
+            entity=entity, periods=indic_periods)
         widgets = widgets_for_indicator(doc,
                                         indicator_table,
                                         break_before=break_before)
@@ -149,10 +163,14 @@ def health_district_report(entity, periods, quarter_num, year):
     add_widget(sectione, 'Figure13')
     add_widget(sectione, 'Figure14')
 
+    get_section(doc, "COMMENTAIRES D'ENSEMBLE")
+
+    get_section(doc, "RECOMMENDATIONS", None)
+
     return doc
 
 
-def health_center_report(entity, periods, quarter_num, year):
+def health_center_report(entity, periods, graph_periods, quarter_num, year):
 
     def get_widgets_for(document, text, widget,
                         is_table=True, break_before=False):
@@ -257,11 +275,16 @@ def health_center_report(entity, periods, quarter_num, year):
                               'quarter_report_region.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
-        indicator_table = WIDGET_DICT.get(widget_slug)(
-            entity=entity, periods=periods)
+        indicator_cls = WIDGET_DICT.get(widget_slug)
+        if indicator_cls.rendering_type == 'graph':
+            indic_periods = graph_periods
+        else:
+            indic_periods = periods
+        indicator_table = indicator_cls(
+            entity=entity, periods=indic_periods)
         widgets = widgets_for_indicator(doc,
                                         indicator_table,
                                         break_before=break_before)
@@ -292,5 +315,10 @@ def health_center_report(entity, periods, quarter_num, year):
                            "E. COMPLÉTUDE ET PROMPTITUDE DU RAPPORTAGE",
                            None)
     add_tableau3(doc, sectione)
+
+    get_section(doc, "COMMENTAIRES D'ENSEMBLE")
+
+    get_section(doc, "RECOMMENDATIONS", None)
+
 
     return doc
