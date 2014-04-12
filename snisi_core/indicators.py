@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 from functools import wraps
 import copy
+import numpy
 
 from py3compat import text_type, implements_to_string
 from snisi_core.models.Reporting import SNISIReport, ExpectedReporting
@@ -233,6 +234,7 @@ class IndicatorTable:
     add_total = False # add a total column
     as_percentage = False # only renders percentages
     multiple_axis = False
+    on_descendants = False
 
     graph_type = 'column'
     rendering_type = 'table'
@@ -244,21 +246,30 @@ class IndicatorTable:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
+        self._entities = self.get_descendants()
         self._data = {}
         self._computed = False
 
+    def get_descendants(self):
+        return [self.entity]
+
     def compute(self):
+        line_index = 0
         for indicator_idx, indicator_cls in enumerate(self.INDICATORS):
-            line_sum = 0
-            for period_idx, period in enumerate(self.periods):
-                indicator = indicator_cls(entity=self.entity,
-                                          period=period)
-                # indicator.data
-                try:
-                    line_sum += indicator.data
-                except:
-                    pass
-                self._data[(indicator_idx, period_idx)] = indicator
+
+            for entity in self._entities:
+                line_sum = 0
+                for period_idx, period in enumerate(self.periods):
+                    indicator = indicator_cls(entity=entity,
+                                              period=period)
+                    # indicator.data
+                    try:
+                        line_sum += indicator.data
+                    except:
+                        pass
+                    self._data[(line_index, period_idx)] = indicator
+
+                line_index += 1
 
         self._computed = True
         return self._data
@@ -274,6 +285,8 @@ class IndicatorTable:
         return self.compute()
 
     def nb_lines(self):
+        if self.on_descendants:
+            return len(self.INDICATORS) * len(self._entities)
         return len(self.INDICATORS)
 
     def nb_cols(self):
@@ -288,6 +301,7 @@ class IndicatorTable:
         return l
 
     def get_line(self, line_index):
+        line_index = self.fixed_line_index(line_index)
         return self.INDICATORS[line_index]
 
     def get_total_for(self, line_index):
@@ -303,9 +317,22 @@ class IndicatorTable:
         return self.data[(line_index, column_index)]
 
     def get_reference_line_for(self, line_index):
-        if getattr(self.get_line(line_index), '_is_reference', False):
+        if not self.on_descendants:
+            if getattr(self.get_line(line_index), '_is_reference', False):
+                return line_index
+            return getattr(self.get_line(line_index), '_reference_index', 0)
+
+        fixed = self.fixed_line_index(line_index)
+        indic = self.INDICATORS[fixed]
+        is_reference = getattr(indic, '_is_reference', False)
+        indic_ref_index = getattr(indic, '_reference_index', 0)
+        if is_reference:
             return line_index
-        return getattr(self.get_line(line_index), '_reference_index', 0)
+
+        ref_index = line_index - len(self._entities)
+        if ref_index < 0:
+            ref_index = 0
+        return ref_index
 
     def get_percentage_value_for(self, line_index, column_index, as_human=False):
         numerator = self.data_for(line_index, column_index).data
@@ -337,8 +364,22 @@ class IndicatorTable:
             l.append("Nbre")
         return l
 
+    def fixed_line_index(self, line_index):
+        if self.on_descendants:
+            try:
+                line_index = int(numpy.floor(line_index / len(self._entities)))
+            except:
+                line_index = 0
+        if line_index < 0:
+            line_index = 0
+        return line_index
+
     def get_line_label_for(self, line_index):
-        return getattr(self.INDICATORS[line_index], 'name')
+        if self.on_descendants:
+            data = self.data_for(line_index, 0)
+            return "{} - {}".format(data.name, data.entity)
+        else:
+            return getattr(self.INDICATORS[line_index], 'name')
 
     def get_period_for(self, column_index):
         return self.periods[column_index]
@@ -362,7 +403,9 @@ class IndicatorTable:
                 if indic.is_missing or not indic.is_expected:
                     data = None
                 else:
-                    data = self.get_percentage_value_for(line_index, column_index, as_human=as_human)
+                    data = self.get_percentage_value_for(line_index,
+                                                         column_index,
+                                                         as_human=as_human)
             else:
                 data = getattr(indic, 'human' if as_human else 'data')
 
@@ -378,14 +421,18 @@ class IndicatorTable:
                     if indic.is_missing or not indic.is_expected:
                         cols.append(None)
                     else:
-                        cols.append(self.get_percentage_value_for(line_index, column_index, as_human=as_human))
+                        cols.append(self.get_percentage_value_for(line_index,
+                                                                  column_index,
+                                                                  as_human=as_human))
 
         return cols
 
     def render(self, as_human=False, with_labels=False):
         lines = []
         for line_index in range(0, self.nb_lines()):
-            lines.append(self.render_line(line_index, as_human=as_human, with_labels=with_labels))
+            lines.append(self.render_line(line_index,
+                                          as_human=as_human,
+                                          with_labels=with_labels))
         return lines
 
     def render_with_labels(self, as_human=False):
@@ -405,7 +452,7 @@ class IndicatorTable:
             {'label': self.get_line_label_for(idx),
              'data': self.render_line(idx, as_period_tuple=True)}
                 for idx in range(0, self.nb_lines())
-                if not getattr(self.INDICATORS[idx], '_is_hidden', False)]
+                if not getattr(self.INDICATORS[self.fixed_line_index(idx)], '_is_hidden', False)]
 
 
 def ref_is(index=0):

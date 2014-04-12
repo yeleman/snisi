@@ -16,7 +16,7 @@ class HealthUnitsWithoutArthemeterStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_artemether == self.report.YES
+            return self.report.stockout_artemether == self.report.NO
 
         nb_stockout = sum([bool(v == MalariaR.NO)
                            for v in self.all_hc_values('stockout_artemether')])
@@ -28,7 +28,7 @@ class HealthUnitsWithoutQuinineStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_quinine == self.report.YES
+            return self.report.stockout_quinine == self.report.NO
 
         nb_stockout = sum([bool(v == MalariaR.NO)
                            for v in self.all_hc_values('stockout_quinine')])
@@ -40,7 +40,7 @@ class HealthUnitsWithoutSerumStockout(MalariaIndicator):
 
     def _compute(self):
         if self.is_hc():
-            return self.report.stockout_serum == self.report.YES
+            return self.report.stockout_serum == self.report.NO
 
         nb_stockout = sum([bool(v == MalariaR.NO)
                            for v in self.all_hc_values('stockout_serum')])

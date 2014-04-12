@@ -5,9 +5,13 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
+from snisi_core.models.Projects import Cluster
 from snisi_malaria.models import MalariaR
 from snisi_malaria.indicators.common import MalariaIndicator
 from snisi_core.models.Reporting import ExpectedReporting
+from snisi_tools.caching import descendants_slugs
+
+cluster = Cluster.get_or_none("malaria_monthly_routine")
 
 
 class NumberOfHealthUnitsWithin(MalariaIndicator):
@@ -16,7 +20,7 @@ class NumberOfHealthUnitsWithin(MalariaIndicator):
         return ExpectedReporting.objects.filter(
             entity__type__slug='health_center',
             period=self.period).filter(
-                entity__in=self.entity.get_health_descendants() + [self.entity]
+                entity__slug__in=descendants_slugs(cluster, self.entity.slug) + [self.entity.slug]
             ).count()
 
 
@@ -32,7 +36,7 @@ class NumberOfHealthUnitsInTime(MalariaIndicator):
         if self.expected and self.expected.satisfied:
             return sum([1 for r in MalariaR.objects.filter(
                 period=self.period,
-                entity__in=self.entity.get_health_descendants()) if r.ON_TIME])
+                entity__slug__in=descendants_slugs(cluster, self.entity.slug)) if r.ON_TIME])
             return self.report.nb_source_reports_arrived_on_time
         return None
 
@@ -50,7 +54,7 @@ class NumberOfHealthUnitsReporting(MalariaIndicator):
         if self.expected and self.expected.satisfied:
             return MalariaR.objects.filter(
                 period=self.period,
-                entity__in=self.entity.get_health_descendants()).count()
+                entity__slug__in=descendants_slugs(cluster, self.entity.slug)).count()
             return self.report.nb_source_reports_arrived
         return None
 

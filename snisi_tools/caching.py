@@ -44,7 +44,8 @@ def generate_json_cache_from_cluster_members(cluster, skip_slugs=[]):
 
     # merge the two into a unique list of entities
     # for each elem in that list, generate a list of n+1 children
-    entities_children = {slug: _list_of_children(slug, all_entities) for slug in all_entities}
+    entities_children = {slug: _list_of_children(slug, all_entities)
+                         for slug in all_entities}
     # dump that dict into JSON
 
     fname = get_json_cache_fname(cluster)
@@ -64,3 +65,19 @@ def json_cache_from_cluster(cluster):
         pass
 
     return cache
+
+
+def descendants_slugs(cluster, slug):
+    descendants = []
+    cache = json_cache_from_cluster(cluster)
+
+    def _add_children(aslug, dest):
+        for c in cache.get(aslug):
+            dest.append(c['slug'])
+            _add_children(c['slug'], dest)
+
+    _add_children(slug, descendants)
+
+    return list(set(descendants))
+
+

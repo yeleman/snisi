@@ -108,9 +108,10 @@ class NbreCasSimplesGravesOverFive(IndicatorTable):
                "et plus")
     graph_type = 'spline'
     rendering_type = 'graph'
+    as_percentage = True
 
     INDICATORS = [
-        gen_shortcut('o5_total_confirmed_malaria_cases', "Cas confirmés"),
+        hide(gen_shortcut('o5_total_confirmed_malaria_cases', "Cas confirmés")),
         ref_is(0)(gen_shortcut('o5_total_simple_malaria_cases', "Cas simples")),
         ref_is(0)(gen_shortcut('o5_total_severe_malaria_cases', "Cas graves")),
     ]

@@ -51,15 +51,17 @@ class EvolutionProportionCasPaludismeSimpleTraitesU5O5(IndicatorTable):
 
     name = "Figure 18"
     title = " "
-    caption = ("Évolution des proportions  de cas de paludisme "
+    caption = ("Évolution des cas de paludisme "
                "simple traités par CTA Chez les moins de 5 ans "
                "et les 5 ans et plus")
     rendering_type = 'graph'
     graph_type = 'column'
 
     INDICATORS = [
-        gen_shortcut('u5_total_treated_malaria_cases'),
-        gen_shortcut('o5_total_treated_malaria_cases'),
+        gen_shortcut('u5_total_treated_malaria_cases',
+                     "Nbre de cas traités par CTA chez les moins de 5 ans"),
+        gen_shortcut('o5_total_treated_malaria_cases',
+                     "Nbre de cas traités par CTA chez les 5 ans et plus")
     ]
 
 
@@ -70,15 +72,17 @@ class EvolutionProportionCasPaludismeSimpleTraitesu5O51(IndicatorTable):
 
     name = "Figure 19"
     title = " "
-    caption = ("Évolution des proportions  de cas de paludisme "
+    caption = ("Évolution des cas de paludisme "
                "simple traités par CTA Chez les moins de 5 ans "
                "et les 5 ans et plus")
     rendering_type = 'graph'
     graph_type = 'spline'
 
     INDICATORS = [
-        gen_shortcut('u5_total_treated_malaria_cases'),
-        gen_shortcut('o5_total_treated_malaria_cases'),
+        gen_shortcut('u5_total_treated_malaria_cases',
+                     "Nbre de cas traités par CTA chez les moins de 5 ans"),
+        gen_shortcut('o5_total_treated_malaria_cases',
+                     "Nbre de cas traités par CTA chez les 5 ans et plus")
     ]
 
 WIDGETS = [CasPaludismeSimpleTraitesCTA,
