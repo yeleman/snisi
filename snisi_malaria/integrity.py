@@ -553,9 +553,6 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
                 text = ("La période de collecte pour {period} "
                         "n'a pas encore commencée. Rapport refusé.")
             else:
-                print(self.get('submit_time'))
-                print(expected_reporting.reporting_period, expected_reporting.reporting_period.start_on, expected_reporting.reporting_period.end_on)
-                print(expected_reporting.extended_reporting_period, expected_reporting.extended_reporting_period.start_on, expected_reporting.extended_reporting_period.end_on)
                 # arrived too late. We can't accept the report.
                 text = ("La période de collecte pour {period} "
                         "est terminée. Rapport refusé.")

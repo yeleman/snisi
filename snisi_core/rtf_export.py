@@ -245,24 +245,13 @@ def generic_table(datamatrix, title=""):
     # first header row : title and period names
     args = []
     for header in datamatrix[0]:
-        print("header", header)
         args.append(Cell(p(text_type(header), True), thin_frame))
     table.AddRow(*args)
-
-    # second header row : Nbre/% sub header
-    # args = []
-    # for period in indicator_table.periods:
-    #     args.append(Cell(p("Nbre", True), thin_frame))
-    #     args.append(Cell(p("%", True), thin_frame))
-    # args.append(Cell(p("Nbre", True), thin_frame))
-
-    # table.AddRow(Cell(thin_frame, vertical_merge=True), *args)
 
     # data rows
     for line in datamatrix[1:]:
         args = []
         for idx, cell_data in enumerate(line):
-            print("cell_data", cell_data)
             align_center = not idx == 0
             args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
         table.AddRow(*args)

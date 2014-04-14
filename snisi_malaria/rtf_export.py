@@ -62,7 +62,7 @@ def get_section(document, text, break_type=Section.PAGE):
 def health_region_report(entity, periods, graph_periods, quarter_num, year):
 
     WIDGET_DICT = import_path('snisi_malaria.indicators.'
-                              'quarter_report_region.WIDGET_DICT',
+                              'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
     doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
@@ -118,7 +118,7 @@ def health_district_report(entity, periods, graph_periods, quarter_num, year):
 
     # district report uses same widgets as region
     WIDGET_DICT = import_path('snisi_malaria.indicators.'
-                              'quarter_report_region.WIDGET_DICT',
+                              'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
     doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
@@ -196,7 +196,7 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
         except ZeroDivisionError:
             return 0
 
-    def add_tableau2(document, section):
+    def add_tableau2(document, section, ref_periods, name, caption):
 
         def count_value_for(field):
             def _pc(num, denum):
@@ -206,7 +206,7 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
                     return 0
             count = 0
             total = 0
-            for p in count_periods:
+            for p in ref_periods:
                 exp = ExpectedReporting.objects.filter(
                     entity=entity, period=p, report_class__slug=slug)
                 if exp.count() == 0:
@@ -230,19 +230,16 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
             ["CTA Adulte", act_adult, pc_act_adult],
         ]
         table = generic_table(datamatrix)
-        name = "Tableau 2"
-        caption = ("Mois de rapportage sans rupture de stock dans la structure "
-                   "au cours des 12 derniers mois")
         text = "{} : {}".format(name, caption)
         for widget in get_widgets_for(document, text, table, True):
             section.append(widget)
 
-    def add_tableau3(document, section):
+    def add_tableau3(document, section, ref_periods, name, caption):
 
         arrived = 0
         on_time = 0
         total = 0
-        for p in count_periods:
+        for p in ref_periods:
             exp = ExpectedReporting.objects.filter(
                 entity=entity, period=p, report_class__slug=slug)
             if exp.count() == 0:
@@ -263,16 +260,13 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
             ["Complétude", arrived, pc_arrived],
         ]
         table = generic_table(datamatrix)
-        name = "Tableau 3"
-        caption = ("Taux de promptitude et complétude du rapportage de "
-                   "la structure au cours des 12 derniers mois")
         text = "{} : {}".format(name, caption)
         for widget in get_widgets_for(document, text, table, True):
             section.append(widget)
 
     # district report uses same widgets as region
     WIDGET_DICT = import_path('snisi_malaria.indicators.'
-                              'quarter_report_region.WIDGET_DICT',
+                              'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
     doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
@@ -309,12 +303,32 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
     add_widget(sectionc, 'Figure10')
 
     sectiond = get_section(doc, "D. GESTION DE STOCKS")
-    add_tableau2(doc, sectiond)
+    add_tableau2(doc, sectiond,
+                 ref_periods=count_periods,
+                 name="Tableau 2",
+                 caption=("Mois de rapportage sans rupture de stock "
+                          "dans la structure "
+                          "au cours des 12 derniers mois"))
+    add_tableau2(doc, sectiond,
+                 ref_periods=periods,
+                 name="Tableau 2b",
+                 caption=("Mois de rapportage sans rupture de stock "
+                          "dans la structure "
+                          "au cours des 3 derniers mois"))
 
     sectione = get_section(doc,
                            "E. COMPLÉTUDE ET PROMPTITUDE DU RAPPORTAGE",
                            None)
-    add_tableau3(doc, sectione)
+    add_tableau3(doc, sectione,
+                 ref_periods=count_periods,
+                 name="Tableau 3",
+                 caption=("Taux de promptitude et complétude du rapportage de "
+                          "la structure au cours des 12 derniers mois"))
+    add_tableau3(doc, sectione,
+                 ref_periods=periods,
+                 name="Tableau 3b",
+                 caption=("Taux de promptitude et complétude du rapportage de "
+                          "la structure au cours des 3 derniers mois"))
 
     get_section(doc, "COMMENTAIRES D'ENSEMBLE")
 
