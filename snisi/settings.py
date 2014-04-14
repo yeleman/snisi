@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'reversion',
     'south',
 
+    'snisi',
     'snisi_core',
     'snisi_web',
     'snisi_tools',
@@ -117,7 +118,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
+    # "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
@@ -144,16 +145,12 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-gettext = lambda s: s
-LANGUAGES = (('fr', gettext("French")),)
+LANGUAGES = (('fr', "French"),)
 LANGUAGE_CODE = 'fr-fr'
-
+LOCALE_PATHS = os.path.join(BASE_DIR, 'locale')
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -161,11 +158,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
-#
-#
-#
 
 # DEFAULT_LOCALE = 'fr_FR.UTF-8'
 

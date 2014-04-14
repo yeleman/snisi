@@ -76,18 +76,30 @@ class Provider(AbstractBaseUser, PermissionsMixin):
                 _("Enter a valid username."), "invalid")])
 
     gender = models.CharField(max_length=30,
-                              choices=GENDERS.items(), default=UNKNOWN)
-    title = models.CharField(max_length=50, choices=TITLES.items(),
-                             blank=True, null=True)
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    middle_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    maiden_name = models.CharField(max_length=100, blank=True, null=True)
-    position = models.CharField(max_length=250, blank=True, null=True)
+                              choices=GENDERS.items(),
+                              default=UNKNOWN,
+                              verbose_name=_("Gender"))
+    title = models.CharField(max_length=50,
+                             choices=TITLES.items(),
+                             blank=True, null=True,
+                             verbose_name=_("Title"))
+    first_name = models.CharField(max_length=100, blank=True, null=True,
+                                  verbose_name=_("First Name"))
+    middle_name = models.CharField(max_length=100, blank=True, null=True,
+                                   verbose_name=_("Middle Name"))
+    last_name = models.CharField(max_length=100, blank=True, null=True,
+                                 verbose_name=_("Last Name"))
+    maiden_name = models.CharField(max_length=100, blank=True, null=True,
+                                   verbose_name=_("Maiden Name"))
+    position = models.CharField(max_length=250, blank=True, null=True,
+                                verbose_name=_("Position"))
 
-    role = models.ForeignKey(Role, default='guest')
-    location = models.ForeignKey(Entity, default='mali', related_name='contacts')
-    access_since = models.DateTimeField(default=timezone.now)
+    role = models.ForeignKey(Role, default='guest', verbose_name=_("Role"))
+    location = models.ForeignKey(Entity, default='mali',
+                                 related_name='contacts',
+                                 verbose_name=_("Location"))
+    access_since = models.DateTimeField(default=timezone.now,
+                                        verbose_name=_("Access Since"))
 
     email = models.EmailField(_("email address"), blank=True, null=True)
     is_staff = models.BooleanField(_("staff status"), default=False,
