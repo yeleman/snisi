@@ -381,22 +381,6 @@ class Figure14(IndicatorTable):
         ref_is(2)(SMSSourceReportsArrived)
     ]
 
-class Tableau2(IndicatorTable):
-    name = "Tableau 2"
-    title = ""
-    caption = ("Mois de rapportage sans rupture de stock dans la structure "
-               "au cours des 12 derniers mois")
-    INDICATORS = []
-
-
-class Tableau3(IndicatorTable):
-    name = "Tableau 3"
-    title = ""
-    caption = ("Taux de promptitude et complétude du rapportage de "
-               "la structure au cours des 12 derniers mois")
-    INDICATORS = []
-
-
 WIDGET_DICT = OrderedDict([
     ('Tableau1', Tableau1),
     ('Figure1', Figure1),
@@ -412,6 +396,4 @@ WIDGET_DICT = OrderedDict([
     ('Figure12', Figure12),
     ('Figure13', Figure13),
     ('Figure14', Figure14),
-    ('Tableau2', Tableau2),
-    ('Tableau3', Tableau3),
 ])
