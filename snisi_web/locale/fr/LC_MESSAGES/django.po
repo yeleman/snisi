@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: snisi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-14 14:27+0000\n"
+"PO-Revision-Date: 2014-04-14 14:29-0000\n"
+"Last-Translator: \n"
+"Language-Team: french <snisi@sante.gov.ml>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: views/addressbook.py:44
+msgid "Cluster"
+msgstr "Cluster"
+
+#: views/addressbook.py:46
+msgid "Role"
+msgstr "Role"
+
+#: views/addressbook.py:55
+msgid "Recherche"
+msgstr "Recherche"
+
+#: views/misc.py:32
+msgid "Your Name"
+msgstr "Votre nom"
+
+#: views/misc.py:35
+msgid "Your e-mail address"
+msgstr "Votre adresse e-mail"
+
+#: views/misc.py:39
+msgid "Your phone number"
+msgstr "Votre numéro de téléphone"
+
+#: views/misc.py:43
+msgid "Subject"
+msgstr "Objet"
+
+#: views/misc.py:46
+msgid "Recipient"
+msgstr "Destinataire"
+
+#: views/misc.py:48
+msgid "Choose PNLP for operational requests and ANTIM for technical ones."
+msgstr ""
+"Choisissez le programme concerné ou ANTIM pour les questions techniques."
+
+#: views/misc.py:53
+msgid "Your request"
+msgstr "Votre demande"
+
+#: views/misc.py:55
+msgid "Your message here..."
+msgstr "Votre message ici…"
+
+#: views/misc.py:85
+msgid "Support request sent."
+msgstr "Demande de support envoyé."
+
+#: views/misc.py:88
+msgid "Unable to send request. Please try again later."
+msgstr "Impossible d'envoyer la demande. Merci de réessayer plus tard."
+
+#: views/providers.py:26
+msgid "If not a Mali number, use +indicator syntax."
+msgstr "En cas de numéro hors Mali, utilisez le symbole +."
+
+#: views/providers.py:30
+msgid "Phone number..."
+msgstr "Numéro…"
+
+#: views/providers.py:36
+#, python-format
+msgid "Invalid Phone Number: %(value)s"
+msgstr "Numéro de téléphone incorrect : %(value)s"
+
+#: views/providers.py:42
+#, python-format
+msgid "Phone Number already in use by %(value)s"
+msgstr "Ce numéro est déjà utilisé par %(value)s"
+
+#: views/providers.py:57
+msgid "New Password"
+msgstr "Nouveau mot de passe"
+
+#: views/providers.py:60
+msgid "Confirm New Password"
+msgstr "Confirmation mot de passe"
+
+#: views/providers.py:68
+msgid "You must confirm your password"
+msgstr "Vous devez confirmer votre mot de passe"
+
+#: views/providers.py:70
+msgid "Your passwords do not match"
+msgstr "Vos mots de passe ne correspondent pas"
+
+#: views/providers.py:102
+msgid "Profile details updated."
+msgstr "Profil mis à jour."
+
+#: views/providers.py:106
+msgid "Your request failed. See bellow."
+msgstr "Votre requête a échouée. Voir ci-dessous."
+
+#: views/providers.py:114
+msgid "Password updated."
+msgstr "Mot de passe changé."
+
+#: views/providers.py:118
+msgid "Your password change request failed. See bellow."
+msgstr "Impossible de changer votre mot de passe. Voir ci-dessous."
+
+#: views/providers.py:143
+msgid "Added new phone number: {}"
+msgstr "Le numéro {} a été ajouté"
+
+#: views/providers.py:147
+msgid ""
+"Error in creating phone number {}.\n"
+"{}"
+msgstr ""
+"Erreur lors de la création du numéro {}.\n"
+"{}"
+
+#: views/providers.py:152
+msgid "Your new phone request failed. See bellow."
+msgstr "Impossible d'ajouter le numéro de téléphone. Voir ci-dessous."
+
+#: views/providers.py:182
+msgid ""
+"Unable to remove phone number {} from your account.Either it doesn't exist "
+"or it's not yours."
+msgstr ""
+"Impossible de retirer le numéro {} de voter compte. Soit il n'existe plus "
+"soit il ne vous appartient pas."
+
+#: views/providers.py:189
+msgid "Removed phone number: {}"
+msgstr "Le numéro {} a été retiré"

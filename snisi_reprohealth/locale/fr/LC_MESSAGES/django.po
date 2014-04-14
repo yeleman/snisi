@@ -1,0 +1,343 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: snisi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-14 14:27+0000\n"
+"PO-Revision-Date: 2014-04-14 14:29-0000\n"
+"Last-Translator: \n"
+"Language-Team: french <snisi@sante.gov.ml>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: models/ChildrenMortality.py:157
+#: models/Commodities.py:284
+#: models/MaternalMortality.py:186
+msgid "Primary. Sources"
+msgstr "Sources primaires"
+
+#: models/Commodities.py:50
+msgid "Yes"
+msgstr "Oui"
+
+#: models/Commodities.py:51
+#: models/Commodities.py:60
+msgid "No"
+msgstr "Non"
+
+#: models/ChildrenMortality.py:28
+msgid "Health Center"
+msgstr "Centre de santé"
+
+#: models/ChildrenMortality.py:27
+msgid "Home"
+msgstr "Domicile"
+
+#: models/ChildrenMortality.py:29
+#: models/ChildrenMortality.py:61
+#: models/MaternalMortality.py:39
+msgid "Other"
+msgstr "Autre"
+
+#: models/ChildrenMortality.py:35
+msgid "Female"
+msgstr "Féminin"
+
+#: models/ChildrenMortality.py:36
+msgid "Male"
+msgstr "Masculin"
+
+#: models/ChildrenMortality.py:51
+#: models/MaternalMortality.py:33
+msgid "Fever"
+msgstr "Fièvre"
+
+#: models/ChildrenMortality.py:52
+#: models/MaternalMortality.py:35
+msgid "Diarrhea"
+msgstr "Diarrhée "
+
+#: models/ChildrenMortality.py:53
+msgid "Dyspnea"
+msgstr "Dyspnée (diff. respirer)"
+
+#: models/ChildrenMortality.py:54
+msgid "Anemia"
+msgstr "Anémie"
+
+#: models/ChildrenMortality.py:55
+msgid "Rash"
+msgstr "Rougeurs"
+
+#: models/ChildrenMortality.py:56
+msgid "Cough"
+msgstr "Toux"
+
+#: models/ChildrenMortality.py:57
+msgid "Vomiting"
+msgstr "Vomissements"
+
+#: models/ChildrenMortality.py:58
+msgid "Nuchal Rigidity"
+msgstr "Raideur de la nuque"
+
+#: models/ChildrenMortality.py:59
+msgid "Red Eye"
+msgstr "Yeux rouges"
+
+#: models/ChildrenMortality.py:60
+msgid "Eat Refusal"
+msgstr "Refus de s'alimenter"
+
+#: models/ChildrenMortality.py:69
+msgid "Children Mortality Report"
+msgstr "Rapport de décès infantile"
+
+#: models/ChildrenMortality.py:70
+msgid "Children Mortality Reports"
+msgstr "Rapports de décès infantiles"
+
+#: models/ChildrenMortality.py:74
+#: models/MaternalMortality.py:52
+msgid "Reporting location"
+msgstr "Lieu de rapportage/collecte"
+
+#: models/ChildrenMortality.py:76
+#: models/MaternalMortality.py:54
+msgid "Name of the deceased"
+msgstr "Nom du défunt"
+
+#: models/ChildrenMortality.py:79
+msgid "Sex"
+msgstr "Sexe"
+
+#: models/ChildrenMortality.py:80
+#: models/MaternalMortality.py:55
+msgid "Date of birth"
+msgstr "Date de naissance"
+
+#: models/ChildrenMortality.py:82
+#: models/MaternalMortality.py:57
+msgid "DOB is an estimation?"
+msgstr "DDN est une estimation ?"
+
+#: models/ChildrenMortality.py:83
+#: models/MaternalMortality.py:58
+msgid "Date of death"
+msgstr "Date du décès"
+
+#: models/ChildrenMortality.py:86
+msgid "Death Location"
+msgstr "Lieu du décès"
+
+#: models/ChildrenMortality.py:89
+#: models/MaternalMortality.py:61
+msgid "Place of death"
+msgstr "Lieu du décès"
+
+#: models/ChildrenMortality.py:105
+#: models/MaternalMortality.py:90
+#, python-brace-format
+msgid "{name}/{dod}"
+msgstr "{name}/{dod}"
+
+#: models/ChildrenMortality.py:122
+msgid "Aggregated Children Mortality Report"
+msgstr "Rapport de mortalité infantile"
+
+#: models/ChildrenMortality.py:123
+msgid "Aggregated Children Mortality Reports"
+msgstr "Rapports de mortalité infantile Aggrégés"
+
+#: models/Commodities.py:58
+msgid "Yes. Supplies available"
+msgstr "Oui et disponible"
+
+#: models/Commodities.py:59
+msgid "Yes. Supplies not available"
+msgstr "Oui mais indisponible."
+
+#: models/Commodities.py:69
+msgid "RH Commodities Report"
+msgstr "Rapport de produits SR"
+
+#: models/Commodities.py:70
+msgid "RH Commodities Reports"
+msgstr "Rapports de produits SR"
+
+#: models/Commodities.py:78
+msgid "Male condom. Quantity in hand (pieces) or -1."
+msgstr "Préservatif masculin. Quantité en main (pièces) ou -1."
+
+#: models/Commodities.py:80
+msgid "Female condom. Quantity in hand (pieces) or -1."
+msgstr "Préservatif féminin. Quantité en main (pièces) ou -1."
+
+#: models/Commodities.py:82
+msgid "Oral pills. Quantity in hand (cycles) or -1."
+msgstr "Pilule orale. Quantité en main (cycles) ou -1."
+
+#: models/Commodities.py:84
+msgid "Injectable. Quantity in hand (vials) or -1."
+msgstr "Injectable. Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:86
+msgid "IUD. Quantity in hand (unit) or -1."
+msgstr "DIU. Quantité en main (unité) ou -1."
+
+#: models/Commodities.py:88
+msgid "Implants. Quantity in hand (unit) or -1."
+msgstr "Implants. Quantité en main (unité) ou -1."
+
+#: models/Commodities.py:90
+msgid "Female sterilization"
+msgstr "Stérilisatiom féminine"
+
+#: models/Commodities.py:93
+msgid "Male sterilization"
+msgstr "Stérilisation masculine"
+
+#: models/Commodities.py:98
+msgid "Amoxicillin (Injectable). Quantity in hand (vials) or -1."
+msgstr "Amoxicillin (Injectable). Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:100
+msgid "Amoxicillin (capsule/gel). Quantity in hand (capsules) or -1."
+msgstr "Amoxicillin (capsule/gel). Quantité en main (capsules) ou -1."
+
+#: models/Commodities.py:102
+msgid "Amoxicillin (Suspension). Quantity in hand (vials) or -1."
+msgstr "Amoxicillin (Suspension). Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:104
+msgid "Azithromicine (tablet/gel). Quantity in hand (tablets) or -1."
+msgstr "Azithromicine (plaquette/gel). Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:106
+msgid "Azithromicine (Suspension). Quantity in hand (bottles) or -1."
+msgstr "Azithromicine (suspension). Quantité en main (flacons) ou -1."
+
+#: models/Commodities.py:108
+msgid "Benzatine penicillin. Quantity in hand (vials) or -1."
+msgstr "trioxifène pénicilline. Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:110
+msgid "Cefexime. Quantity in hand (tablets) or -1."
+msgstr "Cefexime. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:112
+msgid "Clotrimazole. Quantity in hand (tablets) or -1."
+msgstr "Clotrimazole. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:114
+msgid "Ergometrine (tablets). Quantity in hand (tablets) or -1."
+msgstr "Ergometrine (plaquettes). Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:116
+msgid "Ergometrine (vials). Quantity in hand (vials) or -1."
+msgstr "Ergometrine. Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:118
+msgid "Iron. Quantity in hand (tablets) or -1."
+msgstr "Fer. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:120
+msgid "Folate. Quantity in hand (tablets) or -1."
+msgstr "Folacine. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:122
+msgid "Iron/Folate. Quantity in hand (tablets) or -1."
+msgstr "Fer/Folacine. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:124
+msgid "Magnesium Sulfate. Quantity in hand (vials) or -1."
+msgstr "Sulfate de magnesium. Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:126
+msgid "Metronidazole (injectable). Quantity in hand (vials) or -1."
+msgstr "Metronidazole (injectable). Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:128
+msgid "Oxytocine. Quantity in hand (vials) or -1."
+msgstr "Oxytocine. Quantité en main (ampoules) ou -1."
+
+#: models/Commodities.py:130
+msgid "Ceftriaxone 500mg. Quantity in hand (tablets) or -1."
+msgstr "Ceftriaxone 500mg. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:132
+msgid "Ceftriaxone 1g. Quantity in hand (tablets) or -1."
+msgstr "Ceftriaxone 1g. Quantité en main (plaquettes) ou -1."
+
+#: models/Commodities.py:217
+msgid "Aggregated RH Commodities Report"
+msgstr "Rapport de produits SR Aggrégé"
+
+#: models/Commodities.py:218
+msgid "Aggregated RH Commodities Reports"
+msgstr "Rapports de produits SR Aggrégés"
+
+#: models/MaternalMortality.py:32
+msgid "Bleeding"
+msgstr "Saignements"
+
+#: models/MaternalMortality.py:34
+msgid "High Blood Pressure"
+msgstr "Haute préssion sanguin"
+
+#: models/MaternalMortality.py:36
+msgid "Crisis"
+msgstr "Crise"
+
+#: models/MaternalMortality.py:37
+msgid "Miscarriage"
+msgstr "Fausse-couche"
+
+#: models/MaternalMortality.py:38
+msgid "Abortion"
+msgstr "Avortement"
+
+#: models/MaternalMortality.py:47
+msgid "Maternal Mortality Report"
+msgstr "Rapport de mortalité maternelle"
+
+#: models/MaternalMortality.py:48
+msgid "Maternal Mortality Reports"
+msgstr "Rapports de mortalité maternelle"
+
+#: models/MaternalMortality.py:63
+msgid "Living children of the deceased"
+msgstr "Nb. d'enfants vivants de la défunte"
+
+#: models/MaternalMortality.py:65
+msgid "Dead children of the deceased"
+msgstr "Nb d'enfants morts de la défunte"
+
+#: models/MaternalMortality.py:66
+msgid "Pregnant?"
+msgstr "Enceinte ?"
+
+#: models/MaternalMortality.py:69
+msgid "Duration of the pregnancy (weeks)"
+msgstr "Durée de la grossesse (semaines)"
+
+#: models/MaternalMortality.py:71
+msgid "Pregnancy related death"
+msgstr "Décès lié à la grossesse"
+
+#: models/MaternalMortality.py:108
+msgid "Aggregated Maternal Mortality Report"
+msgstr "Rapport de mortalité maternelle Aggrégé"
+
+#: models/MaternalMortality.py:109
+msgid "Aggregated Maternal Mortality Reports"
+msgstr "Rapports de mortalité maternelle Aggrégés"

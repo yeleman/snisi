@@ -1,0 +1,33 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: snisi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-14 14:27+0000\n"
+"PO-Revision-Date: 2014-04-14 14:29-0000\n"
+"Last-Translator: \n"
+"Language-Team: french <snisi@sante.gov.ml>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: emails.py:44
+msgid "No Recipients for that message"
+msgstr "Aucun destinataire pour ce message"
+
+#: emails.py:48
+msgid "Unable to send empty email messages"
+msgstr "Impossible d'envoyer un message vide"
+
+#: emails.py:58
+#, python-format
+msgid "Message from %(site)s"
+msgstr "Message from %(site)s"
