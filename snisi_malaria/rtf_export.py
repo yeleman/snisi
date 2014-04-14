@@ -8,6 +8,8 @@ import logging
 import os
 
 from rtfw import Document, Section, Paragraph, ParagraphPS, Image
+from rtfw import Renderer
+from django.conf import settings
 
 from snisi_malaria.models import MalariaR
 from snisi_core.models.Periods import MonthPeriod
@@ -15,6 +17,7 @@ from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.rtf_export import (widgets_for_indicator, generic_table,
                                    title_for_text, neutral_style)
 from snisi_tools.misc import import_path
+from snisi_tools.path import mkdir_p
 
 logger = logging.getLogger(__name__)
 
@@ -336,3 +339,46 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
 
 
     return doc
+
+
+def generate_section_rtf(entity, periods,
+                         widget_dict, title,
+                         base_path, filename):
+
+    doc = Document()
+    ss = doc.StyleSheet
+    section = Section()
+    doc.Sections.append(section)
+
+    pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
+
+    header_png = os.path.join('snisi_web', 'static', 'img', 'header_malaria_report.png')
+    section.append(Paragraph(ss.ParagraphStyles.Normal, pps_center, Image(header_png)))
+
+    ps = ParagraphPS()
+    p = Paragraph(doc.StyleSheet.ParagraphStyles.Heading1, ps)
+    p.append(title)
+    section.append(p)
+
+    graph_periods = periods
+
+    for idx, indicator_cls in enumerate(widget_dict):
+        break_before = idx % 2 == 0
+        if indicator_cls.rendering_type == 'graph':
+            indic_periods = graph_periods
+        else:
+            indic_periods = periods
+        print(indicator_cls)
+        indicator_table = indicator_cls(entity=entity, periods=indic_periods)
+        widgets = widgets_for_indicator(doc, indicator_table,
+                                        break_before=break_before)
+        for widget in widgets:
+            section.append( widget )
+
+    report_folder = os.path.join(settings.FILES_REPOSITORY, base_path)
+    mkdir_p(report_folder)
+
+    if doc and filename:
+        filepath = os.path.join(report_folder, filename)
+        with open(filepath, 'w') as f:
+            Renderer().Write(doc, f)

@@ -62,6 +62,8 @@
     <button type="submit" class="pure-button pure-button-primary">Afficher</button>
 </div>
 
+<a style="float:right;" href="{% url 'malaria_section_rtf_export' entity_slug=entity.slug perioda_str=perioda.strid periodb_str=periodb.strid section_index=section_index sub_section=sub_section|default_if_none:"" %}" class="pure-button pure-button-primary"><i class="fa fa-windows"></i> Exporter pour Word</a>
+
 <h2 class="sectiontitle">Section {{ section_index }} – {{ section_title }}</h2>
 
 {% for widget in widgets %}

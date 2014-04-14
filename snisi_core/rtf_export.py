@@ -11,7 +11,7 @@ import tempfile
 import requests
 from py3compat import text_type
 from django.template import loader, Context
-from rtfw import Paragraph, Table, BorderPS, FramePS, Cell, Image, ParagraphPS
+from rtfw import Paragraph, Table, BorderPS, FramePS, Cell, Image, ParagraphPS, TEXT
 
 from snisi_web.templatetags.snisi import number_format
 
@@ -64,6 +64,11 @@ def retrieve_chart_from_highcharts(highcharts):
 
 def neutral_style(document, indicator_table):
     return Paragraph(document.StyleSheet.ParagraphStyles.Normal)
+
+
+def neutral_centered_style(document, indicator_table):
+    ps = ParagraphPS(alignment=ParagraphPS.CENTER)
+    return Paragraph(document.StyleSheet.ParagraphStyles.Normal, ps)
 
 
 def widgets_for_indicator(document, indicator_table, break_before=False):
@@ -142,38 +147,45 @@ def table_for_indicator(document, indicator_table):
     if not indicator_table.nb_lines():
         return error_widget("Aucune période")
 
+    minify = indicator_table.periods > 3
     col_large = 3000
     col_regular = 1000
+    col_intro_mini = 2600
+    col_mini = 670
+    col_mini_pc = 570
 
     thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
     # thick_edge = BorderPS( width=80, style=BorderPS.SINGLE )
 
     def p(text, align_center=False):
+        text_elem = TEXT(text, size=14) if minify else text
         return Paragraph(ParagraphPS(
             alignment=ParagraphPS.CENTER
                       if align_center
-                      else ParagraphPS.LEFT), text)
+                      else ParagraphPS.LEFT), text_elem)
 
     thin_frame  = FramePS( thin_edge,  thin_edge,  thin_edge,  thin_edge )
     # thick_frame = FramePS( thick_edge, thick_edge, thick_edge, thick_edge )
     # mixed_frame = FramePS( thin_edge,  thick_edge, thin_edge,  thick_edge )
 
     # build base table (7 columns)
-    cols = [col_large]
+    cols = [col_intro_mini] if minify else [col_large]
     for _ in indicator_table.periods:
-        cols.append(col_regular)
+        cols.append(col_mini if minify else col_regular)
         if indicator_table.add_percentage:
-            cols.append(col_regular)
+            cols.append(col_mini_pc if minify else col_regular)
     if indicator_table.add_total:
-        cols.append(col_regular)
-    table = Table( *cols )
+        cols.append(col_mini if minify else col_regular)
+    table = Table(*cols, alignment=Table.CENTER)
 
     # first header row : title and period names
-    args = [Cell(p(text_type(period), True),
-                 thin_frame,
-                 span=2)
-            for period in indicator_table.periods]
-    args.append(Cell(p("TOTAL", True), thin_frame))
+    args = []
+    for period in indicator_table.periods:
+        span = 2 if indicator_table.add_percentage else 1
+        args.append(Cell(p(text_type(period), True),
+                    thin_frame, span=span))
+    if indicator_table.add_total:
+        args.append(Cell(p("TOTAL", True), thin_frame))
 
     table.AddRow(Cell(indicator_table.title,
                       thin_frame, start_vertical_merge=True),
@@ -183,8 +195,10 @@ def table_for_indicator(document, indicator_table):
     args = []
     for period in indicator_table.periods:
         args.append(Cell(p("Nbre", True), thin_frame))
-        args.append(Cell(p("%", True), thin_frame))
-    args.append(Cell(p("Nbre", True), thin_frame))
+        if indicator_table.add_percentage:
+            args.append(Cell(p("%", True), thin_frame))
+    if indicator_table.add_total:
+        args.append(Cell(p("Nbre", True), thin_frame))
 
     table.AddRow(Cell(thin_frame, vertical_merge=True), *args)
 

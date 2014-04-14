@@ -16,7 +16,7 @@ RGXP_CLUSTER = r'(?P<cluster_slug>[a-zA-Z\_\-0-1\-]+)'
 RGXP_ENTITY = r'(?P<entity_slug>[a-zA-Z0-9]+)'
 RGXP_RECEIPT = r'(?P<report_receipt>[a-zA-Z\#\-\_\.0-9\/]+)'
 RGXP_SECTION = 'section(?P<section_index>[0-9]{1,2}[ab]{0,1})'
-RGXP_SUBSECTION = '(?P<sub_section>[a-z\_]+)'
+RGXP_SUBSECTION = '(?P<sub_section>[a-z\_]*)'
 
 """
 FORMATS:
@@ -108,6 +108,10 @@ urlpatterns = patterns('',
 
 
      # Malaria Indicator Browser
+    url(r'^malaria/rtf/{entity}/{periods}/{section}/{subsection}/?$'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS,
+                section=RGXP_SECTION, subsection=RGXP_SUBSECTION),
+        'snisi_malaria.views.indicators.export', name='malaria_section_rtf_export'),
     url(r'^malaria/view/{entity}/{periods}/{section}/{subsection}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS,
                 section=RGXP_SECTION, subsection=RGXP_SUBSECTION),
