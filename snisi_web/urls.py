@@ -150,7 +150,7 @@ urlpatterns = patterns('',
         name='malaria_quarter_report'),
 
 
-    url(r'download/{receipt}.xls'.format(receipt=RGXP_RECEIPT),
+    url(r'download-report/{receipt}.xls'.format(receipt=RGXP_RECEIPT),
         'snisi_web.views.raw_data.download_as_excel',
         name='download_report_xls'),
 
