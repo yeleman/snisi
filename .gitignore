@@ -7,3 +7,4 @@ settings_local.py
 *.sql
 *.db
 *.csv
+snisi_web/static/node_modules*

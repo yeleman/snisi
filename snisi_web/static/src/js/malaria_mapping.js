@@ -17,13 +17,14 @@ function getMalariaMapManager(options) {
     function MalariaMapManager(options) {
 
         this.symbols = "abcdefghijklmnopqrstuvwxyz0123456789";
-        this.color_is_missing = '#353f41';
-        this.color_not_expected = '#bfe1e6';
+        this.color_is_missing = '#1d3f61'; // '#353f41';
+        this.color_not_expected = '#737780'; //'#bfe1e6';
         this.color_regular_point = '#6f9bd1';
-        this.color_yes = '#28ff00';
-        this.color_no = '#ff1500';
+        this.color_yes = '#889f37'; //'#28ff00';
+        this.color_no = '#4d2c74'; //'#ff1500';
         this.colors = ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
         this.base_layer_url = 'http://tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
+        // this.base_layer_url = '/tiles/mali-base/{z}/{x}/{y}.png';
         this.initial_latitude = 13.448;
         this.initial_longitude = -5.471;
         this.initial_zoom = 7;
@@ -537,7 +538,7 @@ function getMalariaMapManager(options) {
     };
 
     MalariaMapManager.prototype.displayHCLayer = function(data) {
-        console.log("displayHCLayer");
+        console.log("displayHCLayer 2");
         this.removeHCLayer();
 
         var manager = this;
@@ -577,10 +578,12 @@ function getMalariaMapManager(options) {
         $.each(manager.getCurrentDistrict().properties.children.features, function (index) {
             var feature = manager.getCurrentDistrict().properties.children.features[index];
             var props = props_from_feature(feature);
-            feature.properties['marker-size'] = 'medium';
-            feature.properties['title'] = props.label;
-            feature.properties['marker-color'] = props.color;
             var symbol = (index >= manager.symbols.length) ? 'hospital' : manager.symbols[index];
+            feature.properties['title'] = props.label;
+            // var iconUrl = 'http://tiles.sante.gov.ml/markers/pin-m-'+symbol+'-'+props.color.replace('#','')+'.png';
+            // feature.properties['icon-url'] = iconUrl;
+            feature.properties['marker-size'] = 'medium';
+            feature.properties['marker-color'] = props.color;
             feature.properties['marker-symbol'] = symbol;
 
             var hc_legend_name = (symbol.length > 1) ? '+' : symbol.toUpperCase() + ". " + feature.properties.name;
@@ -594,7 +597,21 @@ function getMalariaMapManager(options) {
             feature.properties['hc_legend_name'] = hc_legend_name;
             manager.getCurrentDistrict().properties.children.features[index] = feature;
         });
+
         manager.hc_layer = L.mapbox.featureLayer(manager.getCurrentDistrict().properties.children);
+
+        // manager.hc_layer = L.mapbox.featureLayer();
+        // $.each(manager.getCurrentDistrict().properties.children.features, function (index) {
+        //     var feature = manager.getCurrentDistrict().properties.children.features[index];
+        //     var myIcon = L.icon({iconUrl: feature.properties['icon-url'],
+        //                          iconSize: [30, 70],
+        //                          popupAnchor: [0, -40]});
+        //     L.marker([feature.properties['latitude'],
+        //               feature.properties['longitude']],
+        //              {icon: myIcon})
+        //      .addTo(manager.hc_layer)
+        //      .bindPopup('<b>'+feature.properties['title']+'</b>');
+        // });
 
         if (!manager.static_map) {
             manager.hc_layer.on('mouseover', function(e) {
