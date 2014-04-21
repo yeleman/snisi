@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau personnalisé{% endblock %}
+
+{% block content %}
+
+<h2>Analyse personnalisée</h2>
+<p>Cette section vous permet de générer un tableau (et un graphique) comprenant des données arbitraires.</p>
+<p class="alert alert-warning">Cette section est une partie avancée du SNISI. Elle se destine à ceux qui ont l'habitude de manipuler les données, <strong>savent ce qu'ils cherchent</strong> et <strong>ne trouvent pas leur bonheur dans les section 1 à 12</strong> de la section <em>données analysées</em>.</p>
+
+<form class="pure-form pure-form-stacked" method="POST">
+
+         <div class="pure-g">
+            <div class="pure-u-1 pure-u-4-5">
+                <fieldset class="pure-form-aligned">
+                    <legend>Périodes (colonnes)</legend>
+                    {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
+                    <button id="add_period_btn" class="pure-button pure-button-primary">Ajouter</button>
+                    <div class="alert"><p class="alert alert-info">Ajoutez autant de périodes que souhaité. Elles n'ont pas besoin de se suivre. Chaque période donnera une colonne sur laquelle sera calculé tous les indicateurs.</p></div>
+                </fieldset>
+
+
+                <fieldset class="pure-form-aligned">
+                    <legend>Indicateurs (lignes)</legend>
+                    <label for="raw_indicator">Donnée brute</label>
+                    <select id="raw_indicator">{% for indic in raw_indicators %}<option value="{{ indic }}">{{ indic }}</option>{% endfor %}</select>
+                    <!-- <label for="calc_indicator">Donnée secondaire</label>
+                    <select id="calc_indicator"><option></option></select> -->
+                    <label for="entity">Unité sanitaire</label>
+                    <select id="entity">{% for entity in entities %}<option value="{{ entity.slug }}">{{ entity.display_full_typed_name }}</option>{% endfor %}</select>
+
+                    <button class="pure-button pure-button-primary">Ajouter</button>
+                    <div class="alert"><p class="alert alert-info">Un indicateur est une donnée calculée ou récupérée pour une unité (CSCom, CSRéf, District, Région, Pays) donnée à une période donnée.</p></div>
+                </fieldset>
+            </div>
+
+            <div class="pure-u-1 pure-u-1-5">
+                <legend>Affichage</legend>
+                <fieldset>
+                    <label class="pure-checkbox" for="display_table">
+                        <input id="display_table" type="checkbox"></input> Afficher tableau
+                    </label>
+                    <label class="pure-checkbox" for="display_raw_table">
+                        <input id="display_raw_table" type="checkbox"></input> Affichage brute (pour Excel)
+                    </label>
+                    <label class="pure-checkbox" for="display_graph">
+                        <input id="display_graph" type="checkbox"></input> Afficher graphique
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <label for="graph_type">Type de graphique
+                        <select id="graph_type" class="pure-input-1">
+                            <option>Bâtons verticaux</option>
+                            <option>Lignes</option>
+                            <option>Bares horizontales</option>
+                            <option>Camenbert</option>
+                        </select>
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <label for="title">Titre</label>
+                        <input id="title" class="pure-input-1" type="text" placeholder="Nbre de cas de … à …" />
+                    </label>
+                </fieldset>
+                <button type="submit" class="pure-button pure-button-primary">Générer</button>
+            </div>
+
+        </div>
+
+</form>
+
+
+{% endblock %}
