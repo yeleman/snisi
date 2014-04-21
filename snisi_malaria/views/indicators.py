@@ -22,6 +22,7 @@ from snisi_web.utils import entity_browser_context, get_base_url_for_periods
 from snisi_tools.misc import import_path
 from snisi_tools.path import mkdir_p
 from snisi_malaria.rtf_export import generate_section_rtf
+from snisi_malaria.models import MalariaR
 
 logger = logging.getLogger(__name__)
 
@@ -135,15 +136,7 @@ def export(request,
             periodb_str=None,
             section_index='1', sub_section=None, **kwargs):
 
-    # root = request.user.location
-
-    # cluster = Cluster.get_or_none('malaria_monthly_routine')
-    # report_classes = cluster.domain \
-    #                         .import_from('expected.report_classes_for')(cluster)
-
     entity = Entity.get_or_none(entity_slug)
-    # if entity is None:
-    #     entity = root
 
     if entity is None:
         raise Http404("Aucune entité pour le code {}".format(entity_slug))
@@ -214,3 +207,24 @@ def export(request,
                              filename=filename)
 
     return redirect('protected', os.path.join(base_path, filename))
+
+
+@login_required
+def custom_indicator(request, **kwargs):
+
+    context = {}
+
+    cluster = Cluster.get_or_none('malaria_monthly_routine')
+
+    speriod = ExpectedReporting.objects.order_by('period__start_on').first().period
+    all_periods = MonthPeriod.all_from(speriod)
+    context.update({
+        'all_periods': [(p.strid(), p) for p in reversed(all_periods)],
+        'raw_indicators': MalariaR.data_fields,
+        'entities': cluster.members(),
+    })
+
+
+    return render(request,
+                  kwargs.get('template_name', 'malaria/custom_indicator.html'),
+                  context)

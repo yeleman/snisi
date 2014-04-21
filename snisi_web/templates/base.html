@@ -32,31 +32,32 @@
             <div class="pure-menu pure-menu-open">
                 <!-- <a href="/" class="pure-menu-heading">SNISI</a> -->
                 <ul>
-                    <li class="home"><a class="" href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Tableau de bord {{ brand_short }}</a></li>
-                    <li><a class="" href="{% url 'addressbook' %}"><i class="fa fa-users"></i> Annuaire</a></li>
-                    <li><a class="" href="{% url 'upload' %}"><i class="fa fa-upload"></i> Envoi rapport</a></li>
-                    <li><a class="" href="{% url 'validation' %}"><i class="fa fa-check-square-o"></i> Validation rapports</a></li>
-                    <li><a class="" href="{% url 'entities_list' %}"><i class="fa fa-h-square"></i> Carte sanitaire SNISI</a></li>
+                    <li class="home"><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Tableau de bord {{ brand_short }}</a></li>
+                    <li><a href="{% url 'addressbook' %}"><i class="fa fa-users"></i> Annuaire</a></li>
+                    <li><a href="{% url 'upload' %}"><i class="fa fa-upload"></i> Envoi rapport</a></li>
+                    <li><a href="{% url 'validation' %}"><i class="fa fa-check-square-o"></i> Validation rapports</a></li>
+                    <li><a href="{% url 'entities_list' %}"><i class="fa fa-h-square"></i> Carte sanitaire SNISI</a></li>
                 </ul>
                 <a href="/" class="pure-menu-heading">Monitoring</a>
                 <ul>
-                    <li><a class="" href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
+                    <li><a href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte données occasionnelles</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte (par localité)</a></li>
                     <li><a class="pure-button-disabled" href="#">Gestion Utilisateurs</a></li>
                 </ul>
                 <a class="pure-menu-heading">PALUDISME</a>
                 <ul>
-                    <li><a class="" href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
-                    <li><a class="" href="{% url 'malaria_view' %}">Données analysées</a></li>
-                    <li><a class="" href="{% url 'malaria_epidemio' %}">Surveillance épi.</a></li>
-                    <li><a class="" href="{% url 'malaria_map' %}">Cartographie</a></li>
-                    <li><a class="" href="{% url 'malaria_quarter_report' %}">Rapports trimestriels</a></li>
+                    <li><a href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
+                    <li><a href="{% url 'malaria_view' %}">Données analysées</a></li>
+                    <li><a href="{% url 'malaria_epidemio' %}">Surveillance épi.</a></li>
+                    <li><a href="{% url 'malaria_map' %}">Cartographie</a></li>
+                    <li><a href="{% url 'malaria_quarter_report' %}">Rapports trimestriels</a></li>
+                    <li><a href="{% url 'malaria_custom' %}">Analyse personnalisée</a></li>
                 </ul>
                 <a class="pure-menu-heading">CÉCITÉ</a>
                 <ul>
-                    <li><a class="" href="{% url 'trachoma_missions' %}">Données brutes</a></li>
-                    <li><a class="" href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
+                    <li><a href="{% url 'trachoma_missions' %}">Données brutes</a></li>
+                    <li><a href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
                 </ul>
                 <a href="/" class="pure-menu-heading pure-button-disabled">SANTÉ REPRODUCTION</a>
                 <ul>

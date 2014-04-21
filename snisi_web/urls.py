@@ -106,6 +106,10 @@ urlpatterns = patterns('',
             cluster=RGXP_CLUSTER, entity=RGXP_ENTITY),
         'snisi_web.views.raw_data.browser', {'period_str': None}, name='report_browser_noperiod'),
 
+    # Custom indicator (section 13)
+    url(r'^malaria/view/custom?$',
+        'snisi_malaria.views.indicators.custom_indicator',
+        name='malaria_custom'),
 
      # Malaria Indicator Browser
     url(r'^malaria/rtf/{entity}/{periods}/{section}/{subsection}/?$'
