@@ -33,6 +33,14 @@ class Command(BaseCommand):
                     action='store_true',
                     default='',
                     dest='clear'),
+        make_option('-s',
+                    help='Start period (urlstr)',
+                    action='store',
+                    dest='start_period'),
+        make_option('-e',
+                    help='End period (urlstr)',
+                    action='store',
+                    dest='end_period'),
     )
 
     def handle(self, *args, **options):
@@ -41,8 +49,12 @@ class Command(BaseCommand):
         reportcls_slug = "malaria_monthly_routine_aggregated"
         rclass = ReportClass.get_or_none(reportcls_slug)
         charge_sis = Role.get_or_none("charge_sis")
-        first_period = MonthPeriod.from_url_str("09-2011")
-        last_period = MonthPeriod.from_url_str("03-2014")
+        first_period = MonthPeriod.from_url_str(
+            options.get('start_period') if options.get('start_period')
+            else "09-2011")
+        last_period = MonthPeriod.from_url_str(
+            options.get('end_period') if options.get('end_period')
+            else "03-2014")
         first_period_mopti_district = MonthPeriod.from_url_str("09-2013")
         first_period_mopti_region = MonthPeriod.from_url_str("01-2014")
         mali = Entity.get_or_none("mali")

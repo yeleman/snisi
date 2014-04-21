@@ -767,6 +767,24 @@ class AggEpidemioMalariaR(EpidemioMalariaRIFace,
             agg_sources=agg_sources)
 
     @classmethod
+    def start_aggreagted(cls, *args, **kwargs):
+        rfdict = {}
+        for field in ('completion_ok', 'integrity_ok',
+                      'arrival_ok', 'auto_validate'):
+            if field in kwargs:
+                rfdict.update({field: kwargs.get(field)})
+                del kwargs[field]
+        report = cls.start_report(*args, **kwargs)
+        report.fill_blank()
+
+        # only agg
+        if hasattr(report, 'set_reporting_status_fields'):
+            report.set_reporting_status_fields(**rfdict)
+        if hasattr(report, 'update_expected_reportings_number'):
+            report.update_expected_reportings_number()
+        return report
+
+    @classmethod
     def generate_receipt(cls, instance):
 
         fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)

@@ -9,7 +9,7 @@ import json
 import numpy
 
 from snisi_core.models.Periods import MonthPeriod
-from snisi_malaria.models import AggEpidemioMalariaR
+from snisi_malaria.models import MalariaR
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +29,8 @@ def get_threshold(entity, from_year, month):
     def _notified_cases_from_db(entity, year, month):
         period = MonthPeriod.find_create_from(year, month, dont_create=True)
         try:
-            report = AggEpidemioMalariaR.objects.get(entity=entity, period=period)
-        except AggEpidemioMalariaR.DoesNotExist:
+            report = MalariaR.objects.get(entity=entity, period=period)
+        except MalariaR.DoesNotExist:
             return None
 
         return getattr(report, 'total_confirmed_malaria_cases')
@@ -39,6 +39,7 @@ def get_threshold(entity, from_year, month):
         nc = _notified_cases_from_db(entity, year, month)
         if nc is None:
             return _notified_cases_from_matrix(entity, year, month)
+        return nc
 
     # list of the last 5 years
     years = range(from_year -5, from_year)
