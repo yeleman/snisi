@@ -11,6 +11,18 @@
             "slug": "ACE3", 
             "longitude": -4.2099, 
             "display_typed_name": "Unit\u00e9 sanitaire de ASCOTAMB"
+        }, 
+        {
+            "active": true, 
+            "display_code_name": "SEVARE II (KTE4)", 
+            "name": "SEVARE II", 
+            "parent": "ZKTE4", 
+            "latitude": 14.5111, 
+            "display_full_name": "SEVARE II/MOPTI", 
+            "type": "health_center", 
+            "slug": "KTE4", 
+            "longitude": -4.2914, 
+            "display_typed_name": "Unit\u00e9 sanitaire de SEVARE II"
         }
     ], 
     "MJ86": [
@@ -68,5 +80,6 @@
         }
     ], 
     "ACE3": [], 
-    "3ZF3": []
+    "3ZF3": [], 
+    "KTE4": []
 }
