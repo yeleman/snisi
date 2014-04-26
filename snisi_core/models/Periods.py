@@ -304,13 +304,14 @@ class Period(models.Model):
          * integer (year) '''
 
         date_obj = self.normalize_date(date_obj)
-        if isinstance(datetime.date, date_obj):
+        if isinstance(date_obj, datetime.date):
             date_obj = datetime.datetime(date_obj.year,
                                          date_obj.month,
-                                         date_obj.day, 12, 0)
-        if isinstance(datetime.datetime, date_obj):
-            return self.start_on < date_obj and self.end_on > date_obj
-        elif isinstance(int, date_obj):
+                                         date_obj.day, 12, 0).replace(tzinfo=timezone.utc)
+        if isinstance(date_obj, datetime.datetime):
+            return self.normalize_date(self.start_on) < self.normalize_date(date_obj) \
+                and self.normalize_date(self.end_on) > self.normalize_date(date_obj)
+        elif isinstance(date_obj, int):
             pass
         return False
         # not sure what to do??

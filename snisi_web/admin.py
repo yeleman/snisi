@@ -27,6 +27,7 @@ from snisi_core.models.Entities import (HealthEntity, EntityType,
                                         AdministrativeEntity, Entity)
 from snisi_core.models.Projects import Domain, Cluster, Participation
 from snisi_core.models.Groups import SNISIGroup
+from snisi_core.models.PeriodicTasks import PeriodicTask
 
 admin.site.register(Provider, ProviderAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
@@ -47,4 +48,4 @@ admin.site.register(Domain)
 admin.site.register(Cluster)
 admin.site.register(SNISIGroup)
 admin.site.register(Participation)
-# admin.site.register(Alert, AlertAdmin)
+admin.site.register(PeriodicTask)

@@ -7,6 +7,19 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from django.core.management.base import BaseCommand
+from django.utils import timezone
+
+from snisi_malaria import (ROUTINE_REPORTING_END_DAY,
+                           ROUTINE_EXTENDED_REPORTING_END_DAY,
+                           ROUTINE_DISTRICT_AGG_DAY,
+                           ROUTINE_REGION_AGG_DAY)
+from snisi_core.models.PeriodicTasks import PeriodicTask
+from snisi_malaria.aggregations import (generate_district_reports,
+                                        generate_region_country_reports)
+from snisi_malaria.notifications import (
+    end_of_reporting_period_notifications,
+    end_of_extended_reporting_period_notifications)
+from snisi_core.models.Periods import MonthPeriod
 
 logger = logging.getLogger(__name__)
 
@@ -17,19 +30,48 @@ class Command(BaseCommand):
 
         logger.info("snisi_malaria daily-checkups")
 
-        # create alerts
+        day = timezone.now().day
+        period = MonthPeriod.current().previous()
+        period_str = period.strid()
 
-        # on agg_report (Mali) ready
-        # end_of reporting period
-        # end_of extended_reporting period
-        # auto-validation ? maybe in create_agg
-        # end_of district validation period
-        # end_of period
+        category_matrix = {
+            'end_of_reporting_period': end_of_reporting_period_notifications,
+            'end_of_extended_reporting_period': end_of_extended_reporting_period_notifications,
+            'end_of_district_period': generate_district_reports,
+            'end_of_region_period': generate_region_country_reports,
+        }
 
-        # reminder / every day
-        #   1: HC
-        #   4: HC
-        #   10: district
-        #   20: region
+        def handle_category(category):
+            slug = "{period}_{category}".format(period=period_str,
+                                                category=category)
+            task, created = PeriodicTask.get_or_create(slug, category)
 
-        pass
+            if task.can_trigger():
+                category_matrix.get(category)(period)
+                task.trigger()
+
+        # On 6th
+        if day >= ROUTINE_REPORTING_END_DAY:
+            # send warning notice to non-satisfied HC person
+            handle_category("end_of_reporting_period")
+
+        # On 11th
+        if day >= ROUTINE_EXTENDED_REPORTING_END_DAY:
+            # send summary notification and validation invitatin to districts
+            handle_category("end_of_extended_reporting_period")
+
+        # On 16th
+        if day >= ROUTINE_DISTRICT_AGG_DAY:
+            # validate all HC reports
+            # create aggregated for district
+            # create expected-validation for district
+            # send notification to regions
+            handle_category("end_of_district_period")
+
+        # On 26th
+        if day >= ROUTINE_REGION_AGG_DAY:
+            # validate all district reports
+            # create aggregated for region
+            # create aggregated for country
+            # send notification to central/national
+            handle_category("end_of_region_period")

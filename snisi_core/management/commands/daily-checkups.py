@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+import traceback
 
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
@@ -31,6 +32,7 @@ class Command(BaseCommand):
                 except Exception as exp:
                     logger.error("Caught an exception while running daily command")
                     logger.error(exp)
+                    logger.debug("".join(traceback.format_exc()))
                     continue
 
         logger.info("End of daily checkups.")

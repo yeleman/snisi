@@ -48,6 +48,7 @@ from snisi_core.models.Notifications import Notification
 
 from snisi_core.models.Projects import Domain, Cluster, Participation
 from snisi_core.models.Groups import SNISIGroup
+from snisi_core.models.PeriodicTasks import PeriodicTask
 
 from snisi_core.models.ReportingPeriods import (DefaultMonthlyReportingPeriod,
                                                 DefaultMonthlyExtendedReportingPeriod)
