@@ -40,7 +40,7 @@ body
     <option value='2'>2 (AC)</option>
 </select></td></tr>
 <tr><th>Network Type</th><td><input id='network' value='WIFI' type='text' /></td></tr>
-<tr><th>Current Timestamp</th><td><input id='now' type='text' /></td></tr>
+<tr><th>Current Date</th><td><input id='now' type='text' /></td></tr>
 
 <tr><th>Action</th><td><select id='action' onchange='actionChanged()' onkeypress='actionChanged()'>
     <option value='incoming'>incoming</option>
@@ -63,7 +63,7 @@ body
     <option value='call'>call</option>
 </select></td></tr>
 <tr><th>Message</th><td><textarea id='message' style='width:250px'></textarea></td></tr>
-<tr><th>Timestamp</th><td><input id='timestamp' type='text' /></td></tr>
+<tr><th>Date</th><td><input id='datetime' type='text' /></td></tr>
 </table>
 </div>
 <div id='action_outgoing' style='display:none'>
@@ -140,7 +140,7 @@ function performAction() {
         battery: $('battery').value,
         power: $('power').value,
         network: $('network').value,
-        now: $('now').value
+        now: toTimestamp($('now').value)
     };
 
     if (action == 'incoming')
@@ -148,7 +148,7 @@ function performAction() {
         params.message_type = $('message_type').value;
         params.message = $('message').value;
         params.from = $('from').value;
-        params.timestamp = $('timestamp').value;
+        params.timestamp = toTimestamp($('datetime').value)
     }
     else if (action == 'send_status')
     {
@@ -220,9 +220,42 @@ function performAction() {
     xhr.send(paramStr);
 }
 
+Date.prototype.format = function(format) //author: meizz
+    {
+  var o = {
+    "M+" : this.getMonth()+1, //month
+    "d+" : this.getDate(),    //day
+    "h+" : this.getHours(),   //hour
+    "m+" : this.getMinutes(), //minute
+    "s+" : this.getSeconds(), //second
+    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+    "S" : this.getMilliseconds() //millisecond
+  }
+
+  if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+    (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+  for(var k in o)if(new RegExp("("+ k +")").test(format))
+    format = format.replace(RegExp.$1,
+      RegExp.$1.length==1 ? o[k] :
+        ("00"+ o[k]).substr((""+ o[k]).length));
+  return format;
+}
+var dateformat = "dd/MM/yyyy h:mm:ss"
+
+function toTimestamp(dateString) {
+    dateParts = dateString.split(' ');
+    datePart = dateParts[0].split('/');
+    timeParts = dateParts[1].split(':');
+    date = new Date(datePart[2], parseInt(datePart[1], 10) - 1,
+                datePart[0], timeParts[0], timeParts[1], timeParts[2]);
+    // console.log(date.getTime());
+    // console.log(date.format(dateformat));
+    return date.getTime();
+}
+
 $('server_url').value = "{% url 'fondasms' %}";
-$('timestamp').value = new Date().getTime();
-$('now').value = new Date().getTime();
+$('datetime').value = new Date().format(dateformat);
+$('now').value = new Date().format(dateformat);
 
 </script>
 
