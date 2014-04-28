@@ -29,7 +29,8 @@ class Command(BaseCommand):
             for entity in cluster.members():
                 qs = ExpectedReporting.objects.filter(
                     entity=entity, period=period,
-                    report_class__slug="malaria_monthly_routine")
+                    report_class__slug__in=["malaria_monthly_routine",
+                                            "malaria_monthly_routine_aggregated"])
 
                 if qs.count() == 2:
                     logger.info("Removing {}".format(qs[1]))
