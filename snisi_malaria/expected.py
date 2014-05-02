@@ -78,9 +78,6 @@ def create_expected_for(period):
 
         for entity in routine_cluster.members():
 
-            if getattr(entity.get_health_region(), 'slug', None) == 'SSH3':
-                continue
-
             # report class is based on indiv/agg
             reportcls = indiv_report_class \
                 if entity.type.slug == 'health_center' else agg_report_class
