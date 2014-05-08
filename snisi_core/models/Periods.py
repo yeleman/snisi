@@ -178,7 +178,7 @@ class Period(models.Model):
         return now < self.start_on
 
     def contains(self, obj):
-        if isinstance(obj, datetime.date):
+        if not isinstance(obj, datetime.datetime):
             obj = datetime.datetime(obj.year, obj.month, obj.day) \
                           .replace(tzinfo=timezone.utc)
         nobj = self.normalize_date(obj)
