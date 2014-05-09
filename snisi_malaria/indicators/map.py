@@ -93,7 +93,7 @@ class TotalInpatientMalaria(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.total_malaria_inpatient,
@@ -105,7 +105,7 @@ class TotalConfirmedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.total_confirmed_malaria_cases,
@@ -117,7 +117,7 @@ class TotalTestedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.total_tested_malaria_cases,
@@ -129,7 +129,7 @@ class TotalU5ConfirmedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.u5_total_tested_malaria_cases,
@@ -141,7 +141,7 @@ class TotalU5TestedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.u5_total_tested_malaria_cases,
@@ -153,7 +153,7 @@ class TotalPWConfirmedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.pw_total_confirmed_malaria_cases,
@@ -165,7 +165,7 @@ class TotalPWTestedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.pw_total_tested_malaria_cases,
@@ -177,7 +177,7 @@ class TotalO5ACTTreatedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.o5_total_treated_malaria_cases,
@@ -189,7 +189,7 @@ class TotalU5ACTTreatedMalariaCases(MalariaIndicator):
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
-    is_yesno = True
+    # is_yesno = True
 
     def _compute(self):
         return self.divide(self.report.u5_total_treated_malaria_cases,
