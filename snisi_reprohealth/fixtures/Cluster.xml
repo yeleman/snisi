@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="msi_reprohealth_routine" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">reprohealth</field>
+        <field type="CharField" name="name">Routine Mensuelle PF/MSI</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">mkonat1</field>
+    </object>
+    <object pk="msi_reprohealth_routine_sms" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">reprohealth</field>
+        <field type="CharField" name="name">Routine Mensuelle PF/MSI via SMS</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
+    </object>
+</django-objects>

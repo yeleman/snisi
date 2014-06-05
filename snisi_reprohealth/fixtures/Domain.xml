@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="reprohealth" model="snisi_core.domain">
+        <field type="CharField" name="name">Santé Reproduction</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="technical_contact" rel="ManyToOneRel">adolo</field>
+        <field to="snisi_core.provider" name="operational_contact" rel="ManyToOneRel">mkonat1</field>
+        <field type="CharField" name="short_description">Données de routine Santé Reproduction</field>
+        <field type="TextField" name="description"></field>
+        <field type="CharField" name="module_path">snisi_reprohealth</field>
+    </object>
+</django-objects>

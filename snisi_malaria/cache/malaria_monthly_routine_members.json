@@ -1761,6 +1761,18 @@
         }, 
         {
             "active": true, 
+            "display_code_name": "MADINA (FTK4)", 
+            "name": "MADINA", 
+            "parent": "ZFTK4", 
+            "latitude": null, 
+            "display_full_name": "MADINA/SAN", 
+            "type": "health_center", 
+            "slug": "FTK4", 
+            "longitude": null, 
+            "display_typed_name": "Unit\u00e9 sanitaire de MADINA"
+        }, 
+        {
+            "active": true, 
             "display_code_name": "MORIBILA (4780)", 
             "name": "MORIBILA", 
             "parent": "Z4780", 
@@ -2586,6 +2598,7 @@
     "YGH3": [], 
     "TNH7": [], 
     "DXP9": [], 
+    "FTK4": [], 
     "4MN4": [], 
     "S5D4": [], 
     "M5A5": [], 
@@ -2823,11 +2836,11 @@
             "display_code_name": "NARA (SAA2)", 
             "name": "NARA", 
             "parent": "ZSAA2", 
-            "latitude": null, 
+            "latitude": 14.5828, 
             "display_full_name": "NARA/NIONO", 
             "type": "health_center", 
             "slug": "SAA2", 
-            "longitude": null, 
+            "longitude": -5.8712, 
             "display_typed_name": "Unit\u00e9 sanitaire de NARA"
         }, 
         {

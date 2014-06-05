@@ -98,7 +98,7 @@ INSTALLED_APPS = (
     'snisi_malaria',
 
     'snisi_trachoma',
-    # 'snisi_reprohealth',
+    'snisi_reprohealth',
     # 'snisi_bednets',
     # 'snisi_epidemiology',
 
