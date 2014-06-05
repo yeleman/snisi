@@ -8,3 +8,7 @@ settings_local.py
 *.db
 *.csv
 snisi_web/static/node_modules*
+*.bz2
+circus.ini
+*.sqlite3
+protected/*
