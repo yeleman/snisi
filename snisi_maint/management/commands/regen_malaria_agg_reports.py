@@ -96,13 +96,14 @@ class Command(BaseCommand):
         # loop on periods
         for period in periods:
 
+            reporting_period = period.following()
             logger.info("Switching to {}".format(period))
 
             region_validation_period = DefaultRegionValidationPeriod \
-                                        .find_create_by_date(period.middle())
+                                        .find_create_by_date(reporting_period.middle())
 
             # change date to beginning
-            DEBUG_change_system_date(period.start_on, True)
+            DEBUG_change_system_date(reporting_period.start_on, True)
 
             # loop on all districts/region/country
             for entity in districts + regions + [mali]:
@@ -124,8 +125,8 @@ class Command(BaseCommand):
 
             # change date to 16
             district_date = datetime.datetime(
-                period.start_on.year,
-                period.start_on.month,
+                reporting_period.start_on.year,
+                reporting_period.start_on.month,
                 16, 8, 0).replace(tzinfo=timezone.utc)
             DEBUG_change_system_date(district_date, True)
 
@@ -172,8 +173,8 @@ class Command(BaseCommand):
 
             # change date to 26
             region_date = datetime.datetime(
-                period.start_on.year,
-                period.start_on.month,
+                reporting_period.start_on.year,
+                reporting_period.start_on.month,
                 26, 8, 0).replace(tzinfo=timezone.utc)
             DEBUG_change_system_date(region_date, True)
 
