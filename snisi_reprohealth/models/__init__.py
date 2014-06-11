@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
-from snisi_reprohealth.models.ProvidedServices import ProvidedServicesR
-from snisi_reprohealth.models.FinancialReport import FinancialR
-from snisi_reprohealth.models.ContraceptiveStocks import ContraceptiveStockR
+from snisi_reprohealth.models.PFActivities import (PFActivitiesR, AggPFActivitiesR)
+# from snisi_reprohealth.models.ChildrenMortality import (ChildrenDeathR, AggChildrenDeathR)
+# from snisi_reprohealth.models.MaternalMortality import (MaternalDeathR, AggMaternalDeathR)
+# from snisi_reprohealth.models.Commodities import (RHProductsR, AggRHProductsR)

@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ProvidedServicesR'
-        db.create_table(u'snisi_reprohealth_providedservicesr', (
+        # Adding model 'PFActivitiesR'
+        db.create_table(u'snisi_reprohealth_pfactivitiesr', (
             (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('tubal_ligations', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices', self.gf('django.db.models.fields.PositiveIntegerField')()),
@@ -29,87 +29,8 @@ class Migration(SchemaMigration):
             ('hiv_counseling_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_positive_results', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implant_removals', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implant_removal', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('iud_removal', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'snisi_reprohealth', ['ProvidedServicesR'])
-
-        # Adding model 'AggProvidedServicesR'
-        db.create_table(u'snisi_reprohealth_aggprovidedservicesr', (
-            (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
-            ('nb_source_reports_expected', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_on_time', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_correct', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_complete', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_altered', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_auto_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_altered', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_auto_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('tubal_ligations', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('intrauterine_devices', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('injections', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('pills', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('male_condoms', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('female_condoms', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('emergency_controls', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implants', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('new_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('previous_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('under25_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('over25_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('very_first_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('short_term_method_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('long_term_method_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_counseling_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_tests', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_positive_results', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implant_removals', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('iud_removal', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'snisi_reprohealth', ['AggProvidedServicesR'])
-
-        # Adding M2M table for field agg_sources on 'AggProvidedServicesR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_agg_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False)),
-            ('to_aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['from_aggprovidedservicesr_id', 'to_aggprovidedservicesr_id'])
-
-        # Adding M2M table for field direct_agg_sources on 'AggProvidedServicesR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_direct_agg_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False)),
-            ('to_aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['from_aggprovidedservicesr_id', 'to_aggprovidedservicesr_id'])
-
-        # Adding M2M table for field indiv_sources on 'AggProvidedServicesR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_indiv_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False)),
-            ('providedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.providedservicesr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['aggprovidedservicesr_id', 'providedservicesr_id'])
-
-        # Adding M2M table for field direct_indiv_sources on 'AggProvidedServicesR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_direct_indiv_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggprovidedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.aggprovidedservicesr'], null=False)),
-            ('providedservicesr', models.ForeignKey(orm[u'snisi_reprohealth.providedservicesr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['aggprovidedservicesr_id', 'providedservicesr_id'])
-
-        # Adding model 'FinancialR'
-        db.create_table(u'snisi_reprohealth_financialr', (
-            (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('intrauterine_devices_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
@@ -137,113 +58,38 @@ class Migration(SchemaMigration):
             ('implant_removal_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implant_removal_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implant_removal_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'snisi_reprohealth', ['FinancialR'])
-
-        # Adding model 'AggFinancialR'
-        db.create_table(u'snisi_reprohealth_aggfinancialr', (
-            (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
-            ('nb_source_reports_expected', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_on_time', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_correct', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_arrived_complete', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_altered', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_source_reports_auto_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_altered', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('nb_agg_reports_auto_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('intrauterine_devices_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('intrauterine_devices_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('intrauterine_devices_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implants_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implants_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implants_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('injections_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('injections_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('injections_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('pills_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('pills_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('pills_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('male_condoms_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('male_condoms_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('male_condoms_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('female_condoms_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('female_condoms_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('female_condoms_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_tests_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_tests_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('hiv_tests_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('iud_removal_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('iud_removal_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('iud_removal_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implant_removal_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implant_removal_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('implant_removal_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'snisi_reprohealth', ['AggFinancialR'])
-
-        # Adding M2M table for field agg_sources on 'AggFinancialR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggfinancialr_agg_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False)),
-            ('to_aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['from_aggfinancialr_id', 'to_aggfinancialr_id'])
-
-        # Adding M2M table for field direct_agg_sources on 'AggFinancialR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggfinancialr_direct_agg_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False)),
-            ('to_aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['from_aggfinancialr_id', 'to_aggfinancialr_id'])
-
-        # Adding M2M table for field indiv_sources on 'AggFinancialR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggfinancialr_indiv_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False)),
-            ('financialr', models.ForeignKey(orm[u'snisi_reprohealth.financialr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['aggfinancialr_id', 'financialr_id'])
-
-        # Adding M2M table for field direct_indiv_sources on 'AggFinancialR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggfinancialr_direct_indiv_sources')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggfinancialr', models.ForeignKey(orm[u'snisi_reprohealth.aggfinancialr'], null=False)),
-            ('financialr', models.ForeignKey(orm[u'snisi_reprohealth.financialr'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['aggfinancialr_id', 'financialr_id'])
-
-        # Adding model 'ContraceptiveStockR'
-        db.create_table(u'snisi_reprohealth_contraceptivestockr', (
-            (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('intrauterine_devices_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
             ('implants_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
             ('injections_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
@@ -251,11 +97,12 @@ class Migration(SchemaMigration):
             ('male_condoms_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
             ('female_condoms_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
             ('hiv_tests_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('pregnancy_tests_observation', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
         ))
-        db.send_create_signal(u'snisi_reprohealth', ['ContraceptiveStockR'])
+        db.send_create_signal(u'snisi_reprohealth', ['PFActivitiesR'])
 
-        # Adding model 'AggContraceptiveStockR'
-        db.create_table(u'snisi_reprohealth_aggcontraceptivestockr', (
+        # Adding model 'AggPFActivitiesR'
+        db.create_table(u'snisi_reprohealth_aggpfactivitiesr', (
             (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('nb_source_reports_expected', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('nb_source_reports_arrived', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
@@ -268,121 +115,143 @@ class Migration(SchemaMigration):
             ('nb_agg_reports_altered', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('nb_agg_reports_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('nb_agg_reports_auto_validated', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
+            ('tubal_ligations', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('emergency_controls', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('new_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('previous_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('under25_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('over25_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('very_first_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('short_term_method_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('long_term_method_visits', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_counseling_clients', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_positive_results', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implant_removal', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('iud_removal', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('iud_removal_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('iud_removal_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('iud_removal_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implant_removal_qty', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implant_removal_price', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implant_removal_revenue', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('intrauterine_devices_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('intrauterine_devices_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('implants_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('implants_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('injections_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('injections_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pills_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('pills_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('male_condoms_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('male_condoms_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('female_condoms_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('female_condoms_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('hiv_tests_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('hiv_tests_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_initial', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_used', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_lost', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pregnancy_tests_received', self.gf('django.db.models.fields.PositiveIntegerField')()),
         ))
-        db.send_create_signal(u'snisi_reprohealth', ['AggContraceptiveStockR'])
+        db.send_create_signal(u'snisi_reprohealth', ['AggPFActivitiesR'])
 
-        # Adding M2M table for field agg_sources on 'AggContraceptiveStockR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_agg_sources')
+        # Adding M2M table for field agg_sources on 'AggPFActivitiesR'
+        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_agg_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False)),
-            ('to_aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False))
+            ('from_aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False)),
+            ('to_aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['from_aggcontraceptivestockr_id', 'to_aggcontraceptivestockr_id'])
+        db.create_unique(m2m_table_name, ['from_aggpfactivitiesr_id', 'to_aggpfactivitiesr_id'])
 
-        # Adding M2M table for field direct_agg_sources on 'AggContraceptiveStockR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_direct_agg_sources')
+        # Adding M2M table for field direct_agg_sources on 'AggPFActivitiesR'
+        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_direct_agg_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False)),
-            ('to_aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False))
+            ('from_aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False)),
+            ('to_aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['from_aggcontraceptivestockr_id', 'to_aggcontraceptivestockr_id'])
+        db.create_unique(m2m_table_name, ['from_aggpfactivitiesr_id', 'to_aggpfactivitiesr_id'])
 
-        # Adding M2M table for field indiv_sources on 'AggContraceptiveStockR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_indiv_sources')
+        # Adding M2M table for field indiv_sources on 'AggPFActivitiesR'
+        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_indiv_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False)),
-            ('contraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.contraceptivestockr'], null=False))
+            ('aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False)),
+            ('pfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.pfactivitiesr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['aggcontraceptivestockr_id', 'contraceptivestockr_id'])
+        db.create_unique(m2m_table_name, ['aggpfactivitiesr_id', 'pfactivitiesr_id'])
 
-        # Adding M2M table for field direct_indiv_sources on 'AggContraceptiveStockR'
-        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_direct_indiv_sources')
+        # Adding M2M table for field direct_indiv_sources on 'AggPFActivitiesR'
+        m2m_table_name = db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_direct_indiv_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggcontraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.aggcontraceptivestockr'], null=False)),
-            ('contraceptivestockr', models.ForeignKey(orm[u'snisi_reprohealth.contraceptivestockr'], null=False))
+            ('aggpfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.aggpfactivitiesr'], null=False)),
+            ('pfactivitiesr', models.ForeignKey(orm[u'snisi_reprohealth.pfactivitiesr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['aggcontraceptivestockr_id', 'contraceptivestockr_id'])
+        db.create_unique(m2m_table_name, ['aggpfactivitiesr_id', 'pfactivitiesr_id'])
 
 
     def backwards(self, orm):
-        # Deleting model 'ProvidedServicesR'
-        db.delete_table(u'snisi_reprohealth_providedservicesr')
+        # Deleting model 'PFActivitiesR'
+        db.delete_table(u'snisi_reprohealth_pfactivitiesr')
 
-        # Deleting model 'AggProvidedServicesR'
-        db.delete_table(u'snisi_reprohealth_aggprovidedservicesr')
+        # Deleting model 'AggPFActivitiesR'
+        db.delete_table(u'snisi_reprohealth_aggpfactivitiesr')
 
-        # Removing M2M table for field agg_sources on 'AggProvidedServicesR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_agg_sources'))
+        # Removing M2M table for field agg_sources on 'AggPFActivitiesR'
+        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_agg_sources'))
 
-        # Removing M2M table for field direct_agg_sources on 'AggProvidedServicesR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_direct_agg_sources'))
+        # Removing M2M table for field direct_agg_sources on 'AggPFActivitiesR'
+        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_direct_agg_sources'))
 
-        # Removing M2M table for field indiv_sources on 'AggProvidedServicesR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_indiv_sources'))
+        # Removing M2M table for field indiv_sources on 'AggPFActivitiesR'
+        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_indiv_sources'))
 
-        # Removing M2M table for field direct_indiv_sources on 'AggProvidedServicesR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggprovidedservicesr_direct_indiv_sources'))
-
-        # Deleting model 'FinancialR'
-        db.delete_table(u'snisi_reprohealth_financialr')
-
-        # Deleting model 'AggFinancialR'
-        db.delete_table(u'snisi_reprohealth_aggfinancialr')
-
-        # Removing M2M table for field agg_sources on 'AggFinancialR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggfinancialr_agg_sources'))
-
-        # Removing M2M table for field direct_agg_sources on 'AggFinancialR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggfinancialr_direct_agg_sources'))
-
-        # Removing M2M table for field indiv_sources on 'AggFinancialR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggfinancialr_indiv_sources'))
-
-        # Removing M2M table for field direct_indiv_sources on 'AggFinancialR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggfinancialr_direct_indiv_sources'))
-
-        # Deleting model 'ContraceptiveStockR'
-        db.delete_table(u'snisi_reprohealth_contraceptivestockr')
-
-        # Deleting model 'AggContraceptiveStockR'
-        db.delete_table(u'snisi_reprohealth_aggcontraceptivestockr')
-
-        # Removing M2M table for field agg_sources on 'AggContraceptiveStockR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_agg_sources'))
-
-        # Removing M2M table for field direct_agg_sources on 'AggContraceptiveStockR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_direct_agg_sources'))
-
-        # Removing M2M table for field indiv_sources on 'AggContraceptiveStockR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_indiv_sources'))
-
-        # Removing M2M table for field direct_indiv_sources on 'AggContraceptiveStockR'
-        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggcontraceptivestockr_direct_indiv_sources'))
+        # Removing M2M table for field direct_indiv_sources on 'AggPFActivitiesR'
+        db.delete_table(db.shorten_name(u'snisi_reprohealth_aggpfactivitiesr_direct_indiv_sources'))
 
 
     models = {
@@ -477,115 +346,77 @@ class Migration(SchemaMigration):
             'period': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'snisi_core_snisireport_reports'", 'null': 'True', 'to': u"orm['snisi_core.Period']"}),
             'receipt': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'report_cls': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'default': "'6d17f22d-4f8f-4619-87c1-6448e04a778f'", 'max_length': '200', 'primary_key': 'True'}),
+            'uuid': ('django.db.models.fields.CharField', [], {'default': "'b7f1bdb0-8a4c-433d-9f54-7bc80a7b76ab'", 'max_length': '200', 'primary_key': 'True'}),
             'validated_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'own_validated_reports'", 'null': 'True', 'to': u"orm['snisi_core.Provider']"}),
             'validated_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'validation_status': ('django.db.models.fields.CharField', [], {'default': "u'not_applicable'", 'max_length': '40'})
         },
-        u'snisi_reprohealth.aggcontraceptivestockr': {
-            'Meta': {'object_name': 'AggContraceptiveStockR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggcontraceptivestockr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggContraceptiveStockR']"}),
-            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggcontraceptivestockr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggContraceptiveStockR']"}),
-            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggcontraceptivestockr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.ContraceptiveStockR']"}),
-            'female_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggcontraceptivestockr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.ContraceptiveStockR']"}),
-            'injections_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'nb_agg_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_agg_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_agg_reports_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_complete': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_correct': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_on_time': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_expected': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'pills_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'snisi_reprohealth.aggfinancialr': {
-            'Meta': {'object_name': 'AggFinancialR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggfinancialr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggFinancialR']"}),
-            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggfinancialr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggFinancialR']"}),
-            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggfinancialr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.FinancialR']"}),
-            'female_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggfinancialr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.FinancialR']"}),
-            'injections_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'nb_agg_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_agg_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_agg_reports_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_complete': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_correct': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_arrived_on_time': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_expected': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'nb_source_reports_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'pills_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'snisi_reprohealth.aggprovidedservicesr': {
-            'Meta': {'object_name': 'AggProvidedServicesR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggprovidedservicesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggProvidedServicesR']"}),
-            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggprovidedservicesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggProvidedServicesR']"}),
-            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggprovidedservicesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.ProvidedServicesR']"}),
+        u'snisi_reprohealth.aggpfactivitiesr': {
+            'Meta': {'object_name': 'AggPFActivitiesR', '_ormbases': [u'snisi_core.SNISIReport']},
+            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggpfactivitiesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggPFActivitiesR']"}),
+            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggpfactivitiesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.AggPFActivitiesR']"}),
+            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggpfactivitiesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.PFActivitiesR']"}),
             'emergency_controls': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'female_condoms': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_counseling_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_positive_results': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_tests': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removals': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'implants': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggprovidedservicesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.ProvidedServicesR']"}),
+            'implants_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggpfactivitiesr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_reprohealth.PFActivitiesR']"}),
             'injections': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'intrauterine_devices': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'iud_removal': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'long_term_method_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'male_condoms': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'nb_agg_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'nb_agg_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'nb_agg_reports_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
@@ -600,6 +431,17 @@ class Migration(SchemaMigration):
             'new_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'over25_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'pills': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'previous_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'short_term_method_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'}),
@@ -607,86 +449,90 @@ class Migration(SchemaMigration):
             'under25_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'very_first_visits': ('django.db.models.fields.PositiveIntegerField', [], {})
         },
-        u'snisi_reprohealth.contraceptivestockr': {
-            'Meta': {'object_name': 'ContraceptiveStockR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'female_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'female_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'hiv_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'implants_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'injections_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'intrauterine_devices_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'male_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'pills_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'snisi_reprohealth.financialr': {
-            'Meta': {'object_name': 'FinancialR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'female_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'female_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'hiv_tests_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implants_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'injections_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'intrauterine_devices_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'iud_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'male_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'pills_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'snisi_reprohealth.providedservicesr': {
-            'Meta': {'object_name': 'ProvidedServicesR', '_ormbases': [u'snisi_core.SNISIReport']},
+        u'snisi_reprohealth.pfactivitiesr': {
+            'Meta': {'object_name': 'PFActivitiesR', '_ormbases': [u'snisi_core.SNISIReport']},
             'emergency_controls': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'female_condoms': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'female_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'female_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_counseling_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_positive_results': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'hiv_tests': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'implant_removals': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'hiv_tests_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'hiv_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implant_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'implants': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'implants_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'implants_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'injections': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'injections_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'injections_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'intrauterine_devices': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'intrauterine_devices_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'intrauterine_devices_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'iud_removal': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'iud_removal_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'long_term_method_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'male_condoms': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'male_condoms_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'male_condoms_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'new_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'over25_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'pills': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'pills_price': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_qty': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_revenue': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pills_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_initial': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_lost': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_observation': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'pregnancy_tests_received': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'pregnancy_tests_used': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'previous_clients': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'short_term_method_visits': ('django.db.models.fields.PositiveIntegerField', [], {}),
             u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'}),

@@ -21,7 +21,7 @@ from snisi_web.utils import entity_browser_context
 
 @login_required
 def browser(request,
-            cluster_slug, entity_slug=None, period_str=None):
+            cluster_slug, entity_slug=None, period_str=None, **kwargs):
 
     context = {}
 
@@ -65,7 +65,8 @@ def browser(request,
     entity_period = {'entity': entity, 'period': period}
     expecteds = []
     for report_class in report_classes:
-        expecteds += list(ExpectedReporting.objects.filter(**entity_period))
+        expecteds += list(ExpectedReporting.objects.filter(
+            report_class__in=report_classes, **entity_period))
 
     # periods list a a list of all periods with a matching ReportClass
     all_periods = sorted(list(set(
@@ -93,7 +94,9 @@ def browser(request,
                       'health_district', 'health_center'],
         cluster=cluster))
 
-    return render(request, 'raw_data.html', context)
+    return render(request,
+                  kwargs.get('template_name', 'raw_data.html'),
+                  context)
 
 
 def download_as_excel(request, report_receipt):

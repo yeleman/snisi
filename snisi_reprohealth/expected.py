@@ -20,17 +20,8 @@ logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
 
 logger = logging.getLogger(__name__)
-reportcls_services = ReportClass.get_or_none(slug='msi_services_monthly_routine')
-reportcls_services_agg = ReportClass.get_or_none(slug='msi_services_monthly_routine_aggregated')
-reportcls_financial = ReportClass.get_or_none(slug='msi_financial_monthly_routine')
-reportcls_financial_agg = ReportClass.get_or_none(slug='msi_financial_monthly_routine_aggregated')
-reportcls_stocks = ReportClass.get_or_none(slug='msi_stocks_monthly_routine')
-reportcls_stocks_agg = ReportClass.get_or_none(slug='msi_stocks_monthly_routine_aggregated')
-all_report_classes = [
-    (reportcls_services, reportcls_services_agg),
-    (reportcls_financial, reportcls_financial_agg),
-    (reportcls_stocks, reportcls_stocks_agg)
-]
+reportcls_pf = ReportClass.get_or_none(slug='msi_pf_monthly_routine')
+reportcls_pf_agg = ReportClass.get_or_none(slug='msi_pf_monthly_routine_aggregated')
 
 
 def create_expected_for(period):
@@ -65,44 +56,40 @@ def create_expected_for(period):
 
         for entity in routine_cluster.members():
 
-            for rptcls_indiv, rptcls_agg in all_report_classes:
+            # report class is based on indiv/agg
+            reportcls = reportcls_pf \
+                if entity.type.slug == 'health_center' else reportcls_pf_agg
+            reporting_role = dtc if entity.type.slug == 'health_center' \
+                                 else charge_sis
 
-                # report class is based on indiv/agg
-                reportcls = rptcls_indiv \
-                    if entity.type.slug == 'health_center' else rptcls_agg
-                reporting_role = dtc if entity.type.slug == 'health_center' \
-                                     else charge_sis
+            edict = copy.copy(expected_dict)
+            edict.update({
+                'entity': entity,
+                'report_class': reportcls,
+                'reporting_role': reporting_role,
+                'reporting_period': reporting_period,
+                'extended_reporting_period': extended_reporting_period,
+            })
 
-                edict = copy.copy(expected_dict)
-                edict.update({
-                    'entity': entity,
-                    'report_class': reportcls,
-                    'reporting_role': reporting_role,
-                    'reporting_period': reporting_period,
-                    'extended_reporting_period': extended_reporting_period,
-                })
+            finddict = copy.copy(edict)
+            del(finddict['reporting_period'])
+            del(finddict['extended_reporting_period'])
 
-                finddict = copy.copy(edict)
-                del(finddict['reporting_period'])
-                del(finddict['extended_reporting_period'])
-
-                e, created = ExpectedReporting.objects.get_or_create(**finddict)
-                if created:
-                    logger.debug("Created {}".format(e))
-                    created_list.append(e)
-                else:
-                    logger.debug("Exists already: {}".format(e))
-                if e.reporting_period != edict['reporting_period']:
-                    e.reporting_period = edict['reporting_period']
-                    e.save()
-                if e.extended_reporting_period != edict['extended_reporting_period']:
-                    e.extended_reporting_period = edict['extended_reporting_period']
-                    e.save()
+            e, created = ExpectedReporting.objects.get_or_create(**finddict)
+            if created:
+                logger.debug("Created {}".format(e))
+                created_list.append(e)
+            else:
+                logger.debug("Exists already: {}".format(e))
+            if e.reporting_period != edict['reporting_period']:
+                e.reporting_period = edict['reporting_period']
+                e.save()
+            if e.extended_reporting_period != edict['extended_reporting_period']:
+                e.extended_reporting_period = edict['extended_reporting_period']
+                e.save()
 
     return created_list
 
 
 def report_classes_for(cluster):
-    return [reportcls_services, reportcls_services_agg,
-            reportcls_financial, reportcls_financial_agg,
-            reportcls_stocks, reportcls_stocks_agg]
+    return [reportcls_pf, reportcls_pf_agg]

@@ -96,6 +96,17 @@ urlpatterns = patterns('',
     url(r'^api/indicators/(?P<key>[a-zA-Z0-9\_]*)/?$',
         'snisi_web.views.indicators_api.list_all_indicators', name='api_indicators'),
 
+    # MSI/PF raw-data browser
+    url(r'msipf_data/{entity}/{period}/?'.format(
+            entity=RGXP_ENTITY, period=RGXP_PERIOD),
+        'snisi_reprohealth.views.raw_data.browser', name='msipf_raw_data'),
+    # Generic report browser without a period
+    url(r'msipf_data/{entity}/?'.format(
+            entity=RGXP_ENTITY),
+        'snisi_reprohealth.views.raw_data.browser', {'period_str': None}, name='msipf_raw_data'),
+    url(r'msipf_data/?',
+        'snisi_reprohealth.views.raw_data.browser', {'period_str': None, 'entity_slug': None}, name='msipf_raw_data'),
+
 
     # Generic raw-data browser
     url(r'data/{cluster}/{entity}/{period}/?'.format(

@@ -13,16 +13,12 @@ from snisi_reprohealth.models.MaternalMortality import (MaternalDeathR,
 from snisi_reprohealth.models.Commodities import RHProductsR, AggRHProductsR
 from snisi_reprohealth.models.ChildrenMortality import (ChildrenDeathR,
                                                        AggChildrenDeathR)
-from snisi_reprohealth.models.ProvidedServices import ProvidedServicesR
-from snisi_reprohealth.models.FinancialReport import FinancialR
-from snisi_reprohealth.models.ContraceptiveStocks import ContraceptiveStockR
+from snisi_reprohealth.models.PFActivities import PFActivitiesR
 
-admin.site.register(MaternalDeathR, ReportAdmin)
-admin.site.register(AggMaternalDeathR, ReportAdmin)
-admin.site.register(ChildrenDeathR, ReportAdmin)
-admin.site.register(AggChildrenDeathR, ReportAdmin)
-admin.site.register(RHProductsR, ReportAdmin)
-admin.site.register(AggRHProductsR, ReportAdmin)
-admin.site.register(ProvidedServicesR, ReportAdmin)
-admin.site.register(FinancialR, ReportAdmin)
-admin.site.register(ContraceptiveStockR, ReportAdmin)
+# admin.site.register(MaternalDeathR, ReportAdmin)
+# admin.site.register(AggMaternalDeathR, ReportAdmin)
+# admin.site.register(ChildrenDeathR, ReportAdmin)
+# admin.site.register(AggChildrenDeathR, ReportAdmin)
+# admin.site.register(RHProductsR, ReportAdmin)
+# admin.site.register(AggRHProductsR, ReportAdmin)
+admin.site.register(PFActivitiesR, ReportAdmin)
