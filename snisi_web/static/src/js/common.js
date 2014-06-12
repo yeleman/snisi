@@ -45,7 +45,11 @@ function registerNotificationsCloseButton() {
 }
 
 
-function registerReportBrowserFilter(entity_browser) {
+function registerReportBrowserFilter(entity_browser, new_path) {
+    if (new_path === null || new_path === undefined) {
+        new_path = "/data/<reportcls_slug>/<entity_slug>/<period_strid>";
+        // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+    }
 
     entity_browser.parentElem.find('button').on('click', function() {
         var reportcls_slug = $("#filter_reportcls").val();
@@ -54,7 +58,10 @@ function registerReportBrowserFilter(entity_browser) {
             period_strid = "";
         var entity_slug = entity_browser.getEntitySlug();
         console.log(entity_slug);
-        var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+        // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+        new_path = new_path.replace('<reportcls_slug>', reportcls_slug)
+                           .replace('<entity_slug>', entity_slug)
+                           .replace('<period_strid>', period_strid);
         window.location = new_path;
     });
 }

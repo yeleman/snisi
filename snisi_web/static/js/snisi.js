@@ -558,7 +558,11 @@ function registerNotificationsCloseButton() {
 }
 
 
-function registerReportBrowserFilter(entity_browser) {
+function registerReportBrowserFilter(entity_browser, new_path) {
+    if (new_path === null || new_path === undefined) {
+        new_path = "/data/<reportcls_slug>/<entity_slug>/<period_strid>";
+        // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+    }
 
     entity_browser.parentElem.find('button').on('click', function() {
         var reportcls_slug = $("#filter_reportcls").val();
@@ -567,7 +571,10 @@ function registerReportBrowserFilter(entity_browser) {
             period_strid = "";
         var entity_slug = entity_browser.getEntitySlug();
         console.log(entity_slug);
-        var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+        // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
+        new_path = new_path.replace('<reportcls_slug>', reportcls_slug)
+                           .replace('<entity_slug>', entity_slug)
+                           .replace('<period_strid>', period_strid);
         window.location = new_path;
     });
 }
@@ -615,107 +622,6 @@ function emulate_click_on(jQElem) {
         jQElem[0].dispatchEvent(e);
     } catch (exception) {}
 }
-
-// var EntityTypes = {
-//     'health_region': "RÉGIONS",
-//     'health_district': "DISTRICTS",
-//     'health_center': "UNITÉS SANITAIRES",
-//     'vfq': "VILLAGES",
-// };
-
-// var health_entities_types = ['health_region', 'health_district', 'health_center', 'vfq'];
-// var health_entities_names = [];
-
-// function getNextEntityTypeLevel(current_level) {
-//     var idx = health_entities_types.indexOf(current_level);
-//     try {
-//         return health_entities_types[idx + 1];
-//     } catch (e) {
-//         return null;
-//     }
-// }
-
-// function resetFilterSelect(selectElem) {
-//     selectElem.empty();
-//     var option = $('<option value="-1" />');
-//     option.text(":: " + EntityTypes[getEntityTypeFromSelect(selectElem)]);
-//     selectElem.append(option);
-// }
-
-// function getEntityTypeFromSelect(selectElem) {
-//     return selectElem.attr('id').replace('filter_', '');
-// }
-
-// function registerEntityFilter(launch) {
-//     console.log("registerEntityFilter");
-
-//     $("#entity_filter select, #report_entity_filter select[id!='filter_period']").on('change', function (e) {
-//         console.log($(this).attr('id'));
-//         var selected = $(this).val();
-//         console.log(selected);
-//         var next_level = getNextEntityTypeLevel(getEntityTypeFromSelect($(this)));
-//         console.log(next_level);
-//         if (next_level != null) {
-//             requestEntitiesForFilter(selected, next_level);
-//         }
-//     });
-
-//     if (launch === true) {
-//         requestEntitiesForFilter(null, 'health_region');
-//     }
-
-// }
-
-// function requestEntitiesForFilter(parent_slug, type_slug) {
-//     if (parent_slug == null || parent_slug == undefined)
-//         parent_slug = '___';
-
-//     if (type_slug == null || type_slug == undefined)
-//         type_slug = '__all__';
-
-//     function getTarget(entity) {
-//         if (entity.type == 'region')
-//             return filter_region;
-//     }
-
-//     $.get("/api/entities/getchildren/" + parent_slug + "/" + type_slug)
-//         .success(function (data) {
-//             var target_select = $('#filter_' + type_slug);
-//             resetFilterSelect(target_select);
-//             var next_level = getNextEntityTypeLevel(type_slug);
-//             requestEntitiesForFilter(null, next_level);
-//             if (data[0] === undefined) {
-//                 return;
-//             }
-//             $.each(data, function (index, entity) {
-//                 var option = $('<option />');
-//                 option.val(entity.slug);
-//                 option.text(entity.name);
-//                 target_select.append(option);
-//             });
-
-//     });
-// }
-
-// function getNextLevelFor(level, lineage) {
-//     var index = lineage.indexOf(level);
-//     // don't do anything if at last level
-//     if (index == lineage.length - 1) {
-//         return null;
-//     }
-//     return lineage[index + 1];
-// }
-
-
-// function getSelectedFor(level, lineage_data) {
-//     var index = lineage_data.indexOf(level);
-//     // don't do anything if at last level
-//     if (index == lineage_data.length - 1) {
-//         return null;
-//     }
-//     return lineage_data[index + 1];
-// }
-
 
 function getEntitiesBrowser (options) {
 

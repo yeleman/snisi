@@ -41,5 +41,5 @@ entities_browser = getEntitiesBrowser({
     add_default_option: true,
     default_option: {value: '-1', label: "AUCUN"}
 });
-registerReportBrowserFilter(entities_browser);
+registerReportBrowserFilter(entities_browser, "{% url 'msipf_raw_data' %}/<entity_slug>/<period_strid>");
 {% endblock %}

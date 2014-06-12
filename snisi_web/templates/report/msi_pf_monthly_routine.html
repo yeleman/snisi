@@ -1,9 +1,91 @@
 {% load snisi %}
 
 {% with form=report.as_form %}
+<h2>Rapport des Services Prestés</h2>
 <table class="pure-table center report-table">
-<tr><th rowspan="2" class="center">Classification</th><th colspan="3" class="center">Consultation</th></tr>
-
+<tr>
+    <th colspan="4" style="text-align: center;">SERVICES PRODUISANTS DES CAP</th>
+</tr>
+<tr>
+    <th>Désignation</th>
+    <th>Facteur</th>
+    <th>Quantité</th>
+    <th>CAP</th>
+</tr>
+{% for line in report.cap_data %}
+<tr>
+    <td align="left">{{ line.label }}</td>
+    <td>{{ line.cap_factor }}</td>
+    <td><strong>{{ line.quantity|numberformat }}</strong></td>
+    <td>{{ line.cap_value|numberformat }}</td>
+</tr>
+{% endfor %}
+<tr>
+    <th colspan="4" style="text-align: center;">INDICATEURS RELATIFS AUX CLIENTS</th>
+</tr>
+{% for line in report.clients_data %}
+<tr>
+    <td align="left" colspan="3">{{ line.label }}</td>
+    <td>{{ line.value }}</td>
+</tr>
+{% endfor %}
+<tr>
+    <th colspan="4" style="text-align: center;">SERVICES NE PRODUISANTS PAS DE CAP</th>
+</tr>
+{% for line in report.noncap_data %}
+<tr>
+    <td align="left" colspan="3">{{ line.label }}</td>
+    <td>{{ line.value }}</td>
+</tr>
+{% endfor %}
 </table>
 
+<h2>Rapport Financier</h2>
+<table class="pure-table center report-table">
+<tr>
+    <th>Produits/Services</th>
+    <th>Nombre</th>
+    <th>Prix Unitaire</th>
+    <th>Montant</th>
+    <th>Revenu net mensuel</th>
+</tr>
+{% for line in report.financial_data %}
+<tr>
+    <td align="left">{{ line.label }}</td>
+    <td>{{ line.qty }}</td>
+    <td>{{ line.price|numberformat }}</td>
+    <td>{{ line.amount|numberformat }}</td>
+    <td>{{ line.revenue|numberformat }}</td>
+</tr>
+{% endfor %}
+<tr>
+    <td colspan="3">TOTAL</td>
+    <td>{{ report.financial_amount_total|numberformat }}F</td>
+    <td>{{ report.financial_revenue_total|numberformat }}F</td>
+</tr>
+</table>
+
+<h2>Rapport de Stock des Produits Contraceptifs</h2>
+<table class="pure-table center report-table">
+<tr>
+    <th>Produits/Services</th>
+    <th>Stock Début de mois</th>
+    <th>Quantité reçue/achetée</th>
+    <th>Quantité consomée</th>
+    <th>Quantité perdue</th>
+    <th>Quantité restante</th>
+    <th>Observations</th>
+</tr>
+{% for line in report.stock_data %}
+<tr>
+    <td align="left">{{ line.label }}</td>
+    <td>{{ line.initial|numberformat }}</td>
+    <td>{{ line.received|numberformat }}</td>
+    <td>{{ line.used|numberformat }}</td>
+    <td>{{ line.lost|numberformat }}</td>
+    <td>{{ line.balance|numberformat }}</td>
+    <td align="left">{{ line.observation|default_if_none:"-" }}</td>
+</tr>
+{% endfor %}
+</table>
 {% endwith %}
