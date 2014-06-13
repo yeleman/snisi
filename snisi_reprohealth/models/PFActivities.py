@@ -17,6 +17,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
 from snisi_reprohealth.xls_export import pfa_activities_as_xls
 
+
 class PFActivitiesRIface(models.Model):
 
     class Meta:
@@ -44,6 +45,17 @@ class PFActivitiesRIface(models.Model):
         'hiv_counseling_clients': _("HIV Counseiling"),
         'hiv_positive_results': _("HIV+ results"),
         'pregnancy_tests': _("Pregnancy Tests"),
+    }
+
+    CAP_DATA = {
+        'tubal_ligations': ("10", 10),
+        'intrauterine_devices': ("4,6", 4.6),
+        'injections': ("1/4", 1/4),
+        'pills': ("1/5", 1/5),
+        'male_condoms': ("1/120", 1/120),
+        'female_condoms': ("1/120", 1/120),
+        'emergency_controls': ("1/120", 1/120),
+        'implants': ("3,8", 3.8),
     }
 
     # CAP-providing services
@@ -235,26 +247,7 @@ class PFActivitiesRIface(models.Model):
 
     @classmethod
     def provided_fields(cls, include_subs=True):
-        return ['tubal_ligations',
-                'intrauterine_devices',
-                'injections',
-                'pills',
-                'male_condoms',
-                'female_condoms',
-                'emergency_controls',
-                'implants',
-                'new_clients',
-                'previous_clients',
-                'under25_visits',
-                'over25_visits',
-                'very_first_visits',
-                'short_term_method_visits',
-                'long_term_method_visits',
-                'hiv_counseling_clients',
-                'hiv_tests',
-                'hiv_positive_results',
-                'implant_removal',
-                'iud_removal']
+        return cls.cap_fields() + cls.clients_fields() + cls.noncap_fields()
 
     @classmethod
     def financial_fields(cls, include_subs=True):
@@ -301,7 +294,116 @@ class PFActivitiesRIface(models.Model):
 
     @classmethod
     def label_for_field(cls, field):
-        return cls.LABEL.get(field)
+        return cls.LABELS.get(field)
+
+    @classmethod
+    def cap_fields(cls):
+        return ['tubal_ligations',
+                'intrauterine_devices',
+                'injections',
+                'pills',
+                'male_condoms',
+                'female_condoms',
+                'emergency_controls',
+                'implants']
+
+    def cap_for(self, field):
+        factor = self.CAP_DATA.get(field)[1]
+        if factor is None:
+            return None
+        return factor * self.get(field)
+
+    def cap_data(self):
+        def _fd(f):
+            return {
+                'slug': field,
+                'label': self.label_for_field(field),
+                'quantity': self.get(field),
+                'cap_factor': self.CAP_DATA.get(field)[0],
+                'cap_value': self.cap_for(field)
+            }
+        return [_fd(field) for field in self.cap_fields()]
+
+    def clients_fields(cls):
+        return ['new_clients',
+                'previous_clients',
+                'under25_visits',
+                'over25_visits',
+                'very_first_visits',
+                'short_term_method_visits',
+                'long_term_method_visits',
+                'hiv_counseling_clients',
+                'hiv_tests',
+                'hiv_positive_results']
+
+    def clients_data(self):
+        def _df(field):
+            return {
+                'slug': field,
+                'label': self.label_for_field(field),
+                'value': self.get(field)
+            }
+        return [_df(field) for field in self.clients_fields()]
+
+    def noncap_fields(cls):
+        return ['implant_removal',
+                'iud_removal']
+
+    def noncap_data(self):
+        def _df(field):
+            return {
+                'slug': field,
+                'label': self.label_for_field(field),
+                'value': self.get(field)
+            }
+        return [_df(field) for field in self.noncap_fields()]
+
+    def financial_amount_for(self, field):
+        return (self.get("{}_price".format(field))
+                * self.get("{}_qty".format(field)))
+
+    def financial_data(self):
+
+        def _df(field):
+            return {
+                'slug': field,
+                'label': self.label_for_field(field),
+                'qty': self.get("{}_qty".format(field)),
+                'price': self.get("{}_price".format(field)),
+                'amount': self.financial_amount_for(field),
+                'revenue': self.get("{}_revenue".format(field)),
+            }
+        return [_df(field) for field in self.financial_fields(include_subs=False)]
+
+    @property
+    def financial_amount_total(self):
+        return sum([self.financial_amount_for(field)
+                    for field in self.financial_fields(include_subs=False)])
+
+    @property
+    def financial_revenue_total(self):
+        return sum([self.get("{}_revenue".format(field))
+                    for field in self.financial_fields(include_subs=False)])
+
+    def stock_data(self):
+        def balance_for(field):
+            return (self.get("{}_initial".format(field))
+                    + self.get("{}_received".format(field))
+                    - self.get("{}_used".format(field))
+                    - self.get("{}_lost".format(field)))
+
+        def _df(field):
+            return {
+                'slug': field,
+                'label': self.label_for_field(field),
+                'initial': self.get("{}_initial".format(field)),
+                'received': self.get("{}_received".format(field)),
+                'used': self.get("{}_used".format(field)),
+                'lost': self.get("{}_lost".format(field)),
+                'balance': balance_for(field),
+                'observation': self.get("{}_observation".format(field)),
+            }
+        return [_df(field) for field in self.stocks_fields(include_subs=False)]
 
     def as_xls(self):
         file_name = "MSI_{entity}s.{month}.{year}.xls" \
