@@ -21,10 +21,12 @@ class ExcelFormField(object):
     """ A field in an Excel form represented by its coordinates """
 
     def __init__(self, coord, type=None, name=None,
+                 sheet=None,
                  cast_args=None, attr=None, *args, **kwargs):
         self.coord = coord
         self.type = type
         self.name = name
+        self.sheet = sheet
         self.attr = attr
         self.cast_args = cast_args
         self.args = args
@@ -61,6 +63,7 @@ class ExcelForm(ReportingDataHolder):
 
         self.filepath = filepath
         self.sheet = sheet
+        self.book = None
 
     def _read(self, sheet=None):
         """ parses all fields in mapping and stores converted data """
@@ -69,13 +72,13 @@ class ExcelForm(ReportingDataHolder):
             sheet = self.sheet
 
         try:
-            book = xlrd.open_workbook(self.filepath)
+            self.book = xlrd.open_workbook(self.filepath)
             if isinstance(sheet, text_type):
-                self.ws = book.sheet_by_name(sheet)
+                self.ws = self.book.sheet_by_name(sheet)
             elif isinstance(sheet, int):
-                self.ws = book.sheets()[sheet]
+                self.ws = self.book.sheets()[sheet]
             else:
-                self.ws = book.sheets()[0]
+                self.ws = self.book.sheets()[0]
         except Exception as e:
             logger.warning("Unable to read Excel Uploaded file {path}. "
                            "Raised {e}".format(path=self.filepath, e=e))
@@ -93,14 +96,18 @@ class ExcelForm(ReportingDataHolder):
         else:
             return self._mapping[self._mapping.keys()[0]]
 
-    def data_for_coord(self, coord):
+    def data_for_coord(self, coord, sheet=None):
         """ raw data from Excel coordinates """
+        if sheet is None:
+            ws = self.ws
+        else:
+            ws = self.book.sheet_by_name(sheet)
         XLS_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         letter, line = re.match(r'([a-zA-Z]+)([0-9]+)', coord).groups()
         try:
             row = int(line) - 1
             column = XLS_LETTERS.index(letter.upper())
-            return self.ws.row_values(row)[column]
+            return ws.row_values(row)[column]
         except:
             self.add_missing(
                 "Aucune donnée pour le champ “{coord}”".format(coord=coord),
@@ -114,7 +121,7 @@ class ExcelForm(ReportingDataHolder):
     def map_field(self, field, variable):
         """ retrieve and store data from excel to mapping for field+slug """
         # raw data
-        fdata = self.data_for_coord(field.coord)
+        fdata = self.data_for_coord(field.coord, field.sheet)
         try:
             self.set(variable, field.convert_data(fdata))
         except ValueError as e:
