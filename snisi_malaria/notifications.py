@@ -19,12 +19,14 @@ from snisi_malaria import (ROUTINE_EXTENDED_REPORTING_END_DAY,
 
 logger = logging.getLogger(__name__)
 
+
 def get_expected_source_reports(period):
     return ExpectedReporting.objects.filter(
         report_class__slug='malaria_monthly_routine',
         period=period,
         entity__type__slug='health_center',
         completion_status__in=('', ExpectedReporting.COMPLETION_MISSING))
+
 
 def end_of_reporting_period_notifications(period):
     """ Send notifications to DTC at end of reporting period """
