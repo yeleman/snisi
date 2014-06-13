@@ -6,15 +6,20 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import StringIO
+import os
 import xlwt
 
 from xlrd import open_workbook
 from xlutils.copy import copy
+
 from snisi_core.xls_export import xls_update_value_only
+from snisi_reprohealth import get_domain
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE = "snisi_reprohealth/fixtures/template-MSIPF.xls"
+TEMPLATE = os.path.join(get_domain().module_path, 'fixtures', 'template-MSIPF.xls')
+
+
 
 
 def pfa_activities_as_xls(report):
@@ -25,6 +30,7 @@ def pfa_activities_as_xls(report):
     sh_services = copy_week_b.get_sheet(0)
     sh_financial = copy_week_b.get_sheet(1)
     sh_stocks = copy_week_b.get_sheet(2)
+    del(template)
 
     xls_update_value_only(sh_services, 4, 1,  report.entity.name)
     xls_update_value_only(sh_services, 2, 1,  report.entity.slug)
@@ -167,10 +173,6 @@ def pfa_activities_as_xls(report):
     for cpt in range(3, 11):
         xls_update_value_only(sh_stocks, 5, cpt - 1,
                               xlwt.Formula("B{0}+C{0}-D{0}-E{0}".format(cpt)))
-
-    # Pour le teste
-    name_file = '{name_file}.xls'.format(name_file="test_export")
-    copy_week_b.save(name_file)
 
     stream = StringIO.StringIO()
     copy_week_b.save(stream)
