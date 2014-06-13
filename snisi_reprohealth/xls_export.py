@@ -13,7 +13,7 @@ import xlwt
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE= "snisi_reprohealth/fixtures/template-MSIPF.xls"
+TEMPLATE = "snisi_reprohealth/fixtures/template-MSIPF.xls"
 
 # Définition des bordures
 borders = xlwt.Borders()
@@ -30,15 +30,30 @@ balance_color = xlwt.Pattern()
 balance_color.pattern = xlwt.Pattern.SOLID_PATTERN
 balance_color.pattern_fore_colour = 23
 
+# On définit l'alignement
+alcenter = xlwt.Alignment()
+alcenter.horz = xlwt.Alignment.HORZ_CENTER
+alcenter.vert = xlwt.Alignment.VERT_CENTER
+
 # Styles
 style = xlwt.XFStyle()
 style.borders = borders
 style.pattern = color
+style.alignment = alcenter
+
 balance_style = xlwt.XFStyle()
 balance_style.borders = borders
 balance_style.pattern = balance_color
+balance_style.alignment = alcenter
+
 b_style = xlwt.XFStyle()
 b_style.borders = borders
+b_style.alignment = alcenter
+b_style.num_format_str = '0.0'
+
+observation_style = xlwt.XFStyle()
+observation_style.borders = borders
+observation_style.pattern = color
 
 
 def pfa_activities_as_xls(report):
@@ -65,7 +80,9 @@ def pfa_activities_as_xls(report):
     sh_services.write(11, 2, report.emergency_controls, style)
     sh_services.write(12, 2, report.implants, style)
 
-    for cp in range(6, 14): sh_services.write(cp - 1, 3, xlwt.Formula("B{} * C{}".format(cp, cp)), b_style)
+    for cpt in range(6, 14):
+        sh_services.write(cpt - 1, 3, xlwt.Formula("B{0} * C{0}".format(cpt)),
+                          b_style)
     sh_services.write(13, 3, xlwt.Formula("SUM($D$6:$D$13)"), b_style)
 
     # Clients related services
@@ -122,8 +139,9 @@ def pfa_activities_as_xls(report):
     sh_financial.write(row, 2, report.implant_removal_price, style)
     sh_financial.write(row, 4, report.implant_removal_revenue, style)
 
-    for cp in range(3, 12): sh_financial.write(cp - 1, 3,
-                     xlwt.Formula("B{} * C{}".format(cp, cp)), balance_style)
+    for cpt in range(3, 12):
+        sh_financial.write(cpt - 1, 3, xlwt.Formula("B{0}*C{0}".format(cpt)),
+                           balance_style)
 
     sh_financial.write(11, 3, xlwt.Formula("SUM($D$3:$D$11)"), balance_style)
     sh_financial.write(11, 4, xlwt.Formula("SUM($E$3:$E$11)"), balance_style)
@@ -134,59 +152,63 @@ def pfa_activities_as_xls(report):
     sh_stocks.write(row, 2, report.intrauterine_devices_received, style)
     sh_stocks.write(row, 3, report.intrauterine_devices_used, style)
     sh_stocks.write(row, 4, report.intrauterine_devices_lost, style)
-    sh_stocks.write(row, 6, report.intrauterine_devices_observation, style)
+    sh_stocks.write(row, 6, report.intrauterine_devices_observation,
+                    observation_style)
     row += 1
     sh_stocks.write(row, 1, report.implants_initial, style)
     sh_stocks.write(row, 2, report.implants_received, style)
     sh_stocks.write(row, 3, report.implants_used, style)
     sh_stocks.write(row, 4, report.implants_lost, style)
-    sh_stocks.write(row, 6, report.implants_observation, style)
+    sh_stocks.write(row, 6, report.implants_observation, observation_style)
     row += 1
     sh_stocks.write(row, 1, report.injections_initial, style)
     sh_stocks.write(row, 2, report.injections_received, style)
     sh_stocks.write(row, 3, report.injections_used, style)
     sh_stocks.write(row, 4, report.injections_lost, style)
-    sh_stocks.write(row, 6, report.injections_observation, style)
+    sh_stocks.write(row, 6, report.injections_observation, observation_style)
     row += 1
     sh_stocks.write(row, 1, report.pills_initial, style)
     sh_stocks.write(row, 2, report.pills_received, style)
     sh_stocks.write(row, 3, report.pills_used, style)
     sh_stocks.write(row, 4, report.pills_lost, style)
-    sh_stocks.write(row, 6, report.pills_observation, style)
+    sh_stocks.write(row, 6, report.pills_observation, observation_style)
     row += 1
     sh_stocks.write(row, 1, report.male_condoms_initial, style)
     sh_stocks.write(row, 2, report.male_condoms_received, style)
     sh_stocks.write(row, 3, report.male_condoms_used, style)
     sh_stocks.write(row, 4, report.male_condoms_lost, style)
-    sh_stocks.write(row, 6, report.male_condoms_observation, style)
+    sh_stocks.write(row, 6, report.male_condoms_observation, observation_style)
     row += 1
     sh_stocks.write(row, 1, report.female_condoms_initial, style)
     sh_stocks.write(row, 2, report.female_condoms_received, style)
     sh_stocks.write(row, 3, report.female_condoms_used, style)
     sh_stocks.write(row, 4, report.female_condoms_lost, style)
-    sh_stocks.write(row, 6, report.female_condoms_observation, style)
+    sh_stocks.write(row, 6, report.female_condoms_observation,
+                    observation_style)
     row += 1
     sh_stocks.write(row, 1, report.hiv_tests_initial, style)
     sh_stocks.write(row, 2, report.hiv_tests_received, style)
     sh_stocks.write(row, 3, report.hiv_tests_used, style)
     sh_stocks.write(row, 4, report.hiv_tests_lost, style)
-    sh_stocks.write(row, 6, report.hiv_tests_observation, style)
+    sh_stocks.write(row, 6, report.hiv_tests_observation, observation_style)
     row += 1
     sh_stocks.write(row, 1, report.pregnancy_tests_initial, style)
     sh_stocks.write(row, 2, report.pregnancy_tests_received, style)
     sh_stocks.write(row, 3, report.pregnancy_tests_used, style)
     sh_stocks.write(row, 4, report.pregnancy_tests_lost, style)
-    sh_stocks.write(row, 6, report.pregnancy_tests_observation, style)
+    sh_stocks.write(row, 6, report.pregnancy_tests_observation,
+                    observation_style)
 
-    for cp in range(3, 11): sh_stocks.write(cp - 1, 5,
-         xlwt.Formula("B{}+C{}-D{}-E{}".format(cp, cp, cp, cp)), balance_style)
+    for cpt in range(3, 11):
+        sh_stocks.write(cpt - 1, 5,
+                        xlwt.Formula("B{0}+C{0}-D{0}-E{0}".format(cpt)),
+                        balance_style)
 
     # Pour le teste
-    # name_file = '{name_file}.xls'.format(name_file="test_export")
-    # copy_week_b.save(name_file)
+    name_file = '{name_file}.xls'.format(name_file="test_export")
+    copy_week_b.save(name_file)
 
     stream = StringIO.StringIO()
     copy_week_b.save(stream)
-
 
     return stream
