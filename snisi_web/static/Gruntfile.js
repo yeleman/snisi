@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         },
         chartjs: {
             options: {stripBanners: false},
-            src: ['assets/highcharts.3.0.9.js'],
+            src: ['assets/highcharts.3.0.10.js', 'assets/exporting.3.0.10.js'],
             dest: 'js/chart.js'
         },
     },
