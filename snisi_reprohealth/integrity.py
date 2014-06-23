@@ -5,17 +5,14 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import datetime
 import traceback
-import json
 
 import reversion
 from django.utils.translation import ugettext as _
-from django.utils.timezone import utc
 
 from snisi_core.integrity import ReportIntegrityChecker
 from snisi_core.models.Providers import Provider
-from snisi_core.models.Entities import HealthEntity, Entity
+from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Roles import Role
