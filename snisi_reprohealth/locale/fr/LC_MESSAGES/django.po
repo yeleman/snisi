@@ -7,43 +7,97 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-14 14:27+0000\n"
-"PO-Revision-Date: 2014-04-14 14:29-0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2014-06-23 15:20+0000\n"
+"PO-Revision-Date: 2014-06-23 15:20-0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.6.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: models/ChildrenMortality.py:157
-#: models/Commodities.py:284
-#: models/MaternalMortality.py:186
-msgid "Primary. Sources"
-msgstr "Sources primaires"
+#: integrity.py:218
+#, python-brace-format
+msgid ""
+"Number of new + old clients ({noc}) must equals number of Under25 + Over25 "
+"({uo25})."
+msgstr ""
+"Nombre d'anciens et nouveaux clients ({noc}) doit être égal à la somme des "
+"moins et plus de 25ans ({uo25})."
 
-#: models/Commodities.py:50
-msgid "Yes"
-msgstr "Oui"
+#: integrity.py:232
+#, python-brace-format
+msgid ""
+"Number of new + old clients ({noc}) must equals sum of provided services "
+"({alls})."
+msgstr ""
+"Nombre d'anciens et nouveaux clients ({noc}) doit être égal à la somme des "
+"services prestés ({alls})."
 
-#: models/Commodities.py:51
-#: models/Commodities.py:60
-msgid "No"
-msgstr "Non"
+#: integrity.py:240
+#, python-brace-format
+msgid "Number of first visits ({fv}) can't be more than new clients ({nc})."
+msgstr ""
+"Nombre de premières visites ({fv}) ne peut être supérieure aux nouveaux "
+"clients ({nc})."
 
-#: models/ChildrenMortality.py:28
+#: integrity.py:249
+#, python-brace-format
+msgid ""
+"Number of long-term visits ({ltv}) must equals number of IDU + Implants "
+"({iudi})."
+msgstr ""
+"Nombre de visites long-terme ({ltv}) doit être égal à DIU + Implants "
+"({iudi})."
+
+#: integrity.py:262
+#, python-brace-format
+msgid "{f}: Amount ({a}) lower than Revenue ({r})."
+msgstr "{f}: Montant ({a}) supérieur aux revenus ({r})."
+
+#: integrity.py:276
+#, python-brace-format
+msgid "{f}: Used + Lost ({c}) higher than Initial + Received ({a})."
+msgstr "{f}: Utilisées + Perdues ({c}) supérieures à Initiales + Reçues ({a})."
+
+#: integrity.py:290
+#, python-brace-format
+msgid "{f}: Provided Quantity ({pq}) different from Financial Quantity ({fq})."
+msgstr ""
+"{f}: Quantités fournies ({pq}) différentes des quantité pour finances ({fq})."
+
+#: integrity.py:303
+#, python-brace-format
+msgid "{f}: Provided Quantity ({pq}) different from Stocks Quantity ({sq})."
+msgstr ""
+"{f}: Quantités fournies ({pq}) différentes des quantité consommées pour "
+"stocks ({sq})."
+
+#: integrity.py:313
+#, python-brace-format
+msgid "Missing data for {f}"
+msgstr "Donnée manquante pour {f}"
+
+#: xls_import.py:25 models/ChildrenMortality.py:28
 msgid "Health Center"
 msgstr "Centre de santé"
+
+#: xls_import.py:27
+msgid "Month"
+msgstr "Mois"
+
+#: xls_import.py:29
+msgid "Year"
+msgstr "Année"
 
 #: models/ChildrenMortality.py:27
 msgid "Home"
 msgstr "Domicile"
 
-#: models/ChildrenMortality.py:29
-#: models/ChildrenMortality.py:61
+#: models/ChildrenMortality.py:29 models/ChildrenMortality.py:61
 #: models/MaternalMortality.py:39
 msgid "Other"
 msgstr "Autre"
@@ -56,13 +110,11 @@ msgstr "Féminin"
 msgid "Male"
 msgstr "Masculin"
 
-#: models/ChildrenMortality.py:51
-#: models/MaternalMortality.py:33
+#: models/ChildrenMortality.py:51 models/MaternalMortality.py:33
 msgid "Fever"
 msgstr "Fièvre"
 
-#: models/ChildrenMortality.py:52
-#: models/MaternalMortality.py:35
+#: models/ChildrenMortality.py:52 models/MaternalMortality.py:35
 msgid "Diarrhea"
 msgstr "Diarrhée "
 
@@ -106,13 +158,11 @@ msgstr "Rapport de décès infantile"
 msgid "Children Mortality Reports"
 msgstr "Rapports de décès infantiles"
 
-#: models/ChildrenMortality.py:74
-#: models/MaternalMortality.py:52
+#: models/ChildrenMortality.py:74 models/MaternalMortality.py:52
 msgid "Reporting location"
 msgstr "Lieu de rapportage/collecte"
 
-#: models/ChildrenMortality.py:76
-#: models/MaternalMortality.py:54
+#: models/ChildrenMortality.py:76 models/MaternalMortality.py:54
 msgid "Name of the deceased"
 msgstr "Nom du défunt"
 
@@ -120,18 +170,15 @@ msgstr "Nom du défunt"
 msgid "Sex"
 msgstr "Sexe"
 
-#: models/ChildrenMortality.py:80
-#: models/MaternalMortality.py:55
+#: models/ChildrenMortality.py:80 models/MaternalMortality.py:55
 msgid "Date of birth"
 msgstr "Date de naissance"
 
-#: models/ChildrenMortality.py:82
-#: models/MaternalMortality.py:57
+#: models/ChildrenMortality.py:82 models/MaternalMortality.py:57
 msgid "DOB is an estimation?"
 msgstr "DDN est une estimation ?"
 
-#: models/ChildrenMortality.py:83
-#: models/MaternalMortality.py:58
+#: models/ChildrenMortality.py:83 models/MaternalMortality.py:58
 msgid "Date of death"
 msgstr "Date du décès"
 
@@ -139,13 +186,11 @@ msgstr "Date du décès"
 msgid "Death Location"
 msgstr "Lieu du décès"
 
-#: models/ChildrenMortality.py:89
-#: models/MaternalMortality.py:61
+#: models/ChildrenMortality.py:89 models/MaternalMortality.py:61
 msgid "Place of death"
 msgstr "Lieu du décès"
 
-#: models/ChildrenMortality.py:105
-#: models/MaternalMortality.py:90
+#: models/ChildrenMortality.py:105 models/MaternalMortality.py:90
 #, python-brace-format
 msgid "{name}/{dod}"
 msgstr "{name}/{dod}"
@@ -157,6 +202,19 @@ msgstr "Rapport de mortalité infantile"
 #: models/ChildrenMortality.py:123
 msgid "Aggregated Children Mortality Reports"
 msgstr "Rapports de mortalité infantile Aggrégés"
+
+#: models/ChildrenMortality.py:157 models/Commodities.py:284
+#: models/MaternalMortality.py:186
+msgid "Primary. Sources"
+msgstr "Sources primaires"
+
+#: models/Commodities.py:50
+msgid "Yes"
+msgstr "Oui"
+
+#: models/Commodities.py:51 models/Commodities.py:60
+msgid "No"
+msgstr "Non"
 
 #: models/Commodities.py:58
 msgid "Yes. Supplies available"
@@ -341,3 +399,379 @@ msgstr "Rapport de mortalité maternelle Aggrégé"
 #: models/MaternalMortality.py:109
 msgid "Aggregated Maternal Mortality Reports"
 msgstr "Rapports de mortalité maternelle Aggrégés"
+
+#: models/PFActivities.py:27 models/PFActivities.py:65
+msgid "IUD"
+msgstr "DIU"
+
+#: models/PFActivities.py:28 models/PFActivities.py:77
+msgid "Implants"
+msgstr "Implants"
+
+#: models/PFActivities.py:29 models/PFActivities.py:67
+msgid "Injections"
+msgstr "Injectables"
+
+#: models/PFActivities.py:30 models/PFActivities.py:69
+msgid "Pills"
+msgstr "Pilules"
+
+#: models/PFActivities.py:31 models/PFActivities.py:71
+msgid "Male condoms"
+msgstr "Préservatifs masculin"
+
+#: models/PFActivities.py:32 models/PFActivities.py:73
+msgid "Female condoms"
+msgstr "Préservatif féminin"
+
+#: models/PFActivities.py:33 models/PFActivities.py:97
+msgid "HIV Tests"
+msgstr "Détermine VIH"
+
+#: models/PFActivities.py:34 models/PFActivities.py:105
+msgid "IUD removals"
+msgstr "Retraits DIU"
+
+#: models/PFActivities.py:35 models/PFActivities.py:103
+msgid "Implant removals"
+msgstr "Retraits implants"
+
+#: models/PFActivities.py:36
+msgid "Tubal ligation"
+msgstr "Ligature des trompes"
+
+#: models/PFActivities.py:37 models/PFActivities.py:75
+msgid "Emergency controls"
+msgstr "Contraception d'urgence"
+
+#: models/PFActivities.py:38
+msgid "New clients"
+msgstr "Nouveaux clients"
+
+#: models/PFActivities.py:39
+msgid "Previous clients"
+msgstr "Anciens clients"
+
+#: models/PFActivities.py:40
+msgid "-25 visits"
+msgstr "Visites de clients âgés de 24ans ou moins"
+
+#: models/PFActivities.py:41
+msgid "25+ visits"
+msgstr "Visites de clients âgés de 25ans ou plus"
+
+#: models/PFActivities.py:42
+msgid "First Visits"
+msgstr "Clients utilisants une méthode de PF pour la première fois"
+
+#: models/PFActivities.py:43
+msgid "Short-term method visits"
+msgstr "Visites de clients pour méthode de PF à court terme"
+
+#: models/PFActivities.py:44
+msgid "Long-term method visits"
+msgstr "Visites de clients pour méthode de PF de longue durée"
+
+#: models/PFActivities.py:45 models/PFActivities.py:95
+msgid "HIV Counseiling"
+msgstr "Counseling VIH"
+
+#: models/PFActivities.py:46 models/PFActivities.py:99
+msgid "HIV+ results"
+msgstr "Clients dépistés séropositifs"
+
+#: models/PFActivities.py:47
+msgid "Pregnancy Tests"
+msgstr "Tests de grossesse"
+
+#: models/PFActivities.py:63
+msgid "Tubal Ligations"
+msgstr "Ligature des trompes"
+
+#: models/PFActivities.py:81
+msgid "New Clients"
+msgstr "Nouveaux clients"
+
+#: models/PFActivities.py:83
+msgid "Previous Clients"
+msgstr "Anciens clients"
+
+#: models/PFActivities.py:85
+msgid "Visits from under 25yo."
+msgstr "Visites de moins de 25 ans."
+
+#: models/PFActivities.py:87
+msgid "Visits from over 25yo."
+msgstr "Visites de plus de 25 ans."
+
+#: models/PFActivities.py:89
+msgid "Clients visiting for the first time."
+msgstr "Client venus pour la première fois"
+
+#: models/PFActivities.py:91
+msgid "Short-term methods related visits"
+msgstr "Visites pour méthodes courte durée"
+
+#: models/PFActivities.py:93
+msgid "Long-term methods related visits"
+msgstr "Visites pour méthodes longue durée"
+
+#: models/PFActivities.py:109
+msgid "IUD: Quantity"
+msgstr "DIU : Quantité"
+
+#: models/PFActivities.py:111
+msgid "IUD: Price"
+msgstr "DIU : Prix"
+
+#: models/PFActivities.py:113
+msgid "IUD: Revenue"
+msgstr "DIU : Revenus"
+
+#: models/PFActivities.py:116
+msgid "Implants: Quantity"
+msgstr "Implants : Quantité"
+
+#: models/PFActivities.py:118
+msgid "Implants: Price"
+msgstr "Implants : Prix"
+
+#: models/PFActivities.py:120
+msgid "Implants: Revenue"
+msgstr "Implants : Revenus"
+
+#: models/PFActivities.py:123
+msgid "Injections: Quantity"
+msgstr "Injectables : Quantité"
+
+#: models/PFActivities.py:125
+msgid "Injections: Price"
+msgstr "Injectables : Prix"
+
+#: models/PFActivities.py:127
+msgid "Injections: Revenue"
+msgstr "Injectables : Revenus"
+
+#: models/PFActivities.py:130
+msgid "Pills: Quantity"
+msgstr "Pilules : Quantité"
+
+#: models/PFActivities.py:132
+msgid "Pills: Price"
+msgstr "Pilules : Prix"
+
+#: models/PFActivities.py:134
+msgid "Pills: Revenue"
+msgstr "Pilules : Revenus"
+
+#: models/PFActivities.py:137
+msgid "Male Condoms: Quantity"
+msgstr "Préservatif masc. : Quantité"
+
+#: models/PFActivities.py:139
+msgid "Male Condoms: Price"
+msgstr "Préservatif masc. : Prix"
+
+#: models/PFActivities.py:141
+msgid "Male Condoms: Revenue"
+msgstr "Préservatif masc. : Revenus"
+
+#: models/PFActivities.py:144
+msgid "Female Condoms: Quantity"
+msgstr "Préservatif féminin : Quantité"
+
+#: models/PFActivities.py:146
+msgid "Female Condoms: Price"
+msgstr "Préservatif féminin : Prix"
+
+#: models/PFActivities.py:148
+msgid "Female Condoms: Revenue"
+msgstr "Préservatif féminin : Revenus"
+
+#: models/PFActivities.py:151
+msgid "HIV Tests: Quantity"
+msgstr "Tests VIH : Quantité"
+
+#: models/PFActivities.py:153
+msgid "HIV Tests: Price"
+msgstr "Tests VIH : Prix"
+
+#: models/PFActivities.py:155
+msgid "HIV Tests: Revenue"
+msgstr "Tests VIH : Revenus"
+
+#: models/PFActivities.py:158
+msgid "IUD Removals: Quantity"
+msgstr "Retraits DIU : Quantité"
+
+#: models/PFActivities.py:160
+msgid "IUD Removals: Price"
+msgstr "Retraits DIU : Prix"
+
+#: models/PFActivities.py:162
+msgid "IUD Removals: Revenue"
+msgstr "Retraits DIU : Revenus"
+
+#: models/PFActivities.py:165
+msgid "Implants Removals: Quantity"
+msgstr "Retraits implants : Quantité"
+
+#: models/PFActivities.py:167
+msgid "Implants Removals: Price"
+msgstr "Retraits implants : Prix"
+
+#: models/PFActivities.py:169
+msgid "Implants Removals"
+msgstr "Retraits implants"
+
+#: models/PFActivities.py:173
+msgid "IUD: Initial Quantity"
+msgstr "DIU : Quantité initiale"
+
+#: models/PFActivities.py:175
+msgid "IUD: Quantity Used"
+msgstr "DIU : Quantité utilisée"
+
+#: models/PFActivities.py:177
+msgid "IUD: Quantity Lost"
+msgstr "DIU : Quantité perdue"
+
+#: models/PFActivities.py:179
+msgid "IUD: Quantity Received"
+msgstr "DIU : Quantité reçus"
+
+#: models/PFActivities.py:182
+msgid "Implants: Initial Quantity"
+msgstr "Implants :  : Quantité initiale"
+
+#: models/PFActivities.py:184
+msgid "Implants: Quantity Used"
+msgstr "Implants: Quantité utilisée"
+
+#: models/PFActivities.py:186
+msgid "Implants: Quantity Lost"
+msgstr "Implants: Quantité perdue"
+
+#: models/PFActivities.py:188
+msgid "Implants: Quantity Received"
+msgstr "Implants : Quantité reçue"
+
+#: models/PFActivities.py:191
+msgid "Injections: Initial Quantity"
+msgstr "Injectables : Quantité initiale"
+
+#: models/PFActivities.py:193
+msgid "Injections: Quantity Used"
+msgstr "Injectables : Quantité utilisée"
+
+#: models/PFActivities.py:195
+msgid "Injections: Quantity Lost"
+msgstr "Injectables : Quantité perdue"
+
+#: models/PFActivities.py:197
+msgid "Injections: Quantity Received"
+msgstr "Injectable : Quantité reçue"
+
+#: models/PFActivities.py:200
+msgid "Pills: Initial Quantity"
+msgstr "Pilules : Quantité initiale"
+
+#: models/PFActivities.py:202
+msgid "Pills: Quantity Used"
+msgstr "Pilules : Quantité utilisée"
+
+#: models/PFActivities.py:204
+msgid "Pills: Quantity Lost"
+msgstr "Pilules : Quantité perdue"
+
+#: models/PFActivities.py:206
+msgid "Pills: Quantity Received"
+msgstr "Pilules : Quantité reçue"
+
+#: models/PFActivities.py:209
+msgid "Male Condoms: Initial Quantity"
+msgstr "Préservatif masc. : Quantité initiale"
+
+#: models/PFActivities.py:211
+msgid "Male Condoms: Quantity Used"
+msgstr "Préservatif masc. : Quantité utilisée"
+
+#: models/PFActivities.py:213
+msgid "Male Condoms: Quantity Lost"
+msgstr "Préservatif masc. : Quantité perdue"
+
+#: models/PFActivities.py:215
+msgid "Male Condoms: Quantity Received"
+msgstr "Préservatif masculin: Quantité reçue"
+
+#: models/PFActivities.py:218
+msgid "Female Condoms: Initial Quantity"
+msgstr "Préservatif féminin : Quantité initiale"
+
+#: models/PFActivities.py:220
+msgid "Female Condoms: Quantity Used"
+msgstr "Préservatif féminin: Quantité utilisée"
+
+#: models/PFActivities.py:222
+msgid "Female Condoms: Quantity Lost"
+msgstr "Préservatif féminin: Quantité perdue"
+
+#: models/PFActivities.py:224
+msgid "Female Condoms: Quantity Received"
+msgstr "Préservatif féminin: Quantité reçue"
+
+#: models/PFActivities.py:227
+msgid "HIV Tests: Initial Quantity"
+msgstr "Tests VIH : Quantité initiale"
+
+#: models/PFActivities.py:229
+msgid "HIV Tests: Quantity Used"
+msgstr "Tests VIH : Quantité utilisée"
+
+#: models/PFActivities.py:231
+msgid "HIV Tests: Quantity Lost"
+msgstr "Tests VIH : Quantité perdue"
+
+#: models/PFActivities.py:233
+msgid "HIV Tests: Quantity Received"
+msgstr "Tests VIH : Quantité reçue"
+
+#: models/PFActivities.py:235
+msgid "Pregnancy Tests: Initial Quantity"
+msgstr "Tests grossesses : Quantité initiale"
+
+#: models/PFActivities.py:237
+msgid "Pregnancy Tests: Quantity Used"
+msgstr "Tests grossesses : Quantité utilisée"
+
+#: models/PFActivities.py:239
+msgid "Pregnancy Tests: Quantity Lost"
+msgstr "Tests grossesses : Quantité perdue"
+
+#: models/PFActivities.py:241
+msgid "Pregnancy Tests: Quantity Received"
+msgstr "Tests grossessses : Quantité reçuee"
+
+#: models/PFActivities.py:425
+msgid "Provided Services Report"
+msgstr "Rapport des services prestés"
+
+#: models/PFActivities.py:426
+msgid "Provided Services Reports"
+msgstr "Rapports des services prestés"
+
+#: models/PFActivities.py:469
+msgid "Aggregated Provided Services Report"
+msgstr "Rapport des services prestés SR Aggrégé"
+
+#: models/PFActivities.py:470
+msgid "Aggregated Provided Services Reports"
+msgstr "Rapports des services prestés Aggrégés"
+
+#: models/PFActivities.py:474
+msgid "Primary. Sources (all)"
+msgstr "Sources primaires"
+
+#: models/PFActivities.py:480
+msgid "Primary. Sources (direct)"
+msgstr "Sources primaires"

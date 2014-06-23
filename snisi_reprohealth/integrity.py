@@ -310,7 +310,7 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
     def _check_completeness(self, **options):
         for field in PFActivitiesR.data_fields():
             if not self.has(field) and not field.endswith('_observation'):
-                self.add_missing(_("Données manquantes pour {f}").format(f=field),
+                self.add_missing(_("Missing data for {f}").format(f=field),
                                  blocking=True, field=field)
 
     def _check(self, **options):
