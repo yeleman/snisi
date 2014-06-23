@@ -102,6 +102,8 @@ INSTALLED_APPS = (
     # 'snisi_bednets',
     # 'snisi_epidemiology',
 
+    'snisi_vacc',
+
     'snisi_maint',
 )
 

@@ -3,14 +3,14 @@
     <object pk="major_vaccine_monthly" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">major_vaccine_monthly</field>
         <field type="CharField" name="name">Couverture Mensuelle Vaccination</field>
-        <field type="CharField" name="cls">snisi_vacc.models.MajorVaccineCoverageR</field>
+        <field type="CharField" name="cls">snisi_vacc.models.VaccineCoverageR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="major_vaccine_monthly_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">major_vaccine_monthly_aggregated</field>
         <field type="CharField" name="name">Couverture Mensuelle Vaccination (Aggrégé)</field>
-        <field type="CharField" name="cls">snisi_vacc.models.AggMajorVaccineCoverageR</field>
+        <field type="CharField" name="cls">snisi_vacc.models.AggVaccineCoverageR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>

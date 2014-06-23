@@ -8,8 +8,8 @@ from __future__ import (unicode_literals, absolute_import,
 from django.contrib import admin
 
 from snisi_core.admin import ReportAdmin
-from snisi_reprohealth.MajorVaccineCoverageR import (MajorVaccineCoverageR,
-                                                     AggMajorVaccineCoverageR)
+from snisi_reprohealth.models import (VaccineCoverageR,
+                                      AggVaccineCoverageR)
 
-admin.site.register(MajorVaccineCoverageR, ReportAdmin)
-admin.site.register(AggMajorVaccineCoverageR, ReportAdmin)
+admin.site.register(VaccineCoverageR, ReportAdmin)
+admin.site.register(AggVaccineCoverageR, ReportAdmin)
