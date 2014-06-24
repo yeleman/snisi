@@ -17,7 +17,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
 
 
-class VaccineCoverageRIface(models.Model):
+class VaccCovRIface(models.Model):
 
     class Meta:
         abstract = True
@@ -33,29 +33,29 @@ class VaccineCoverageRIface(models.Model):
             setattr(self, field, 0)
 
 
-class VaccineCoverageR(VaccineCoverageRIface, SNISIReport):
+class VaccCovR(VaccCovRIface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "MVC{id}/{entity__slug}-{day}"
     UNIQUE_TOGETHER = [('period', 'entity')]
-    INTEGRITY_CHECKER = 'snisi_vacc.integrity.VaccineCoverageRIntegrityChecker'
+    INTEGRITY_CHECKER = 'snisi_vacc.integrity.VaccCovRIntegrityChecker'
 
     class Meta:
         app_label = 'snisi_vacc'
         verbose_name = _("Provided Services Report")
         verbose_name_plural = _("Provided Services Reports")
 
-receiver(pre_save, sender=VaccineCoverageR)(pre_save_report)
-receiver(post_save, sender=VaccineCoverageR)(post_save_report)
+receiver(pre_save, sender=VaccCovR)(pre_save_report)
+receiver(post_save, sender=VaccCovR)(post_save_report)
 
-reversion.register(VaccineCoverageR, follow=['snisireport_ptr'])
+reversion.register(VaccCovR, follow=['snisireport_ptr'])
 
 
-class AggVaccineCoverageR(VaccineCoverageRIface,
+class AggVaccCovR(VaccCovRIface,
                        PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    INDIVIDUAL_CLS = VaccineCoverageR
+    INDIVIDUAL_CLS = VaccCovR
     RECEIPT_FORMAT = "AMVC{id}/{entity__slug}-{day}"
     UNIQUE_TOGETHER = [('period', 'entity'),]
 
@@ -77,7 +77,7 @@ class AggVaccineCoverageR(VaccineCoverageRIface,
         related_name='direct_source_agg_%(class)s_reports',
         symmetrical=False)
 
-receiver(pre_save, sender=AggVaccineCoverageR)(pre_save_report)
-receiver(post_save, sender=AggVaccineCoverageR)(post_save_report)
+receiver(pre_save, sender=AggVaccCovR)(pre_save_report)
+receiver(post_save, sender=AggVaccCovR)(post_save_report)
 
-reversion.register(AggVaccineCoverageR, follow=['snisireport_ptr'])
+reversion.register(AggVaccCovR, follow=['snisireport_ptr'])

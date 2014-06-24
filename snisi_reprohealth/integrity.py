@@ -13,16 +13,10 @@ from django.utils.translation import ugettext as _
 from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_monthly_routine_report,
                                   RoutineIntegrityInterface)
-from snisi_core.models.Providers import Provider
-from snisi_core.models.Entities import Entity
-from snisi_core.models.Periods import MonthPeriod
-from snisi_core.models.Notifications import Notification
 from snisi_core.models.Roles import Role
 from snisi_reprohealth import PROJECT_BRAND
 from snisi_reprohealth.models.PFActivities import PFActivitiesR
-from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
-                                         ExpectedValidation, SNISIReport)
-from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
+from snisi_core.models.Reporting import ReportClass
 
 logger = logging.getLogger(__name__)
 reportcls_pf = ReportClass.get_or_none(slug='msi_pf_monthly_routine')
@@ -44,6 +38,9 @@ def create_pf_report(provider, expected_reporting, completed_on,
 
 class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                     ReportIntegrityChecker):
+
+    report_class = reportcls_pf
+    validating_role = validating_role
 
     def check_pf_data(self):
         #### Provided Services

@@ -57,7 +57,7 @@ def DEBUG_change_system_date(new_date, I_KNOW=False):
 
     if new_date is None:
         if sys.platform == 'darwin':
-            cmd = "sudo ntpdate -u $(systemsetup -getnetworktimeserver|awk '{print $4}')"
+            cmd = "sudo ntpdate -u $(sudo systemsetup -getnetworktimeserver|awk '{print $4}')"
         else:
             cmd = "sudo ntpdate-debian"
     else:

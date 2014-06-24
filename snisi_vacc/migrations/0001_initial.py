@@ -8,18 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'VaccineCoverageR'
-        db.create_table(u'snisi_vacc_vaccinecoverager', (
+        # Adding model 'VaccCovR'
+        db.create_table(u'snisi_vacc_vacccovr', (
             (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('bcg_coverage', self.gf('django.db.models.fields.FloatField')()),
             ('polio3_coverage', self.gf('django.db.models.fields.FloatField')()),
             ('measles_coverage', self.gf('django.db.models.fields.FloatField')()),
             ('polio3_abandonment_rate', self.gf('django.db.models.fields.FloatField')()),
         ))
-        db.send_create_signal(u'snisi_vacc', ['VaccineCoverageR'])
+        db.send_create_signal(u'snisi_vacc', ['VaccCovR'])
 
-        # Adding model 'AggVaccineCoverageR'
-        db.create_table(u'snisi_vacc_aggvaccinecoverager', (
+        # Adding model 'AggVaccCovR'
+        db.create_table(u'snisi_vacc_aggvacccovr', (
             (u'snisireport_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['snisi_core.SNISIReport'], unique=True, primary_key=True)),
             ('nb_source_reports_expected', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('nb_source_reports_arrived', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
@@ -37,63 +37,63 @@ class Migration(SchemaMigration):
             ('measles_coverage', self.gf('django.db.models.fields.FloatField')()),
             ('polio3_abandonment_rate', self.gf('django.db.models.fields.FloatField')()),
         ))
-        db.send_create_signal(u'snisi_vacc', ['AggVaccineCoverageR'])
+        db.send_create_signal(u'snisi_vacc', ['AggVaccCovR'])
 
-        # Adding M2M table for field agg_sources on 'AggVaccineCoverageR'
-        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvaccinecoverager_agg_sources')
+        # Adding M2M table for field agg_sources on 'AggVaccCovR'
+        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvacccovr_agg_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False)),
-            ('to_aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False))
+            ('from_aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False)),
+            ('to_aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['from_aggvaccinecoverager_id', 'to_aggvaccinecoverager_id'])
+        db.create_unique(m2m_table_name, ['from_aggvacccovr_id', 'to_aggvacccovr_id'])
 
-        # Adding M2M table for field direct_agg_sources on 'AggVaccineCoverageR'
-        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvaccinecoverager_direct_agg_sources')
+        # Adding M2M table for field direct_agg_sources on 'AggVaccCovR'
+        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvacccovr_direct_agg_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False)),
-            ('to_aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False))
+            ('from_aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False)),
+            ('to_aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['from_aggvaccinecoverager_id', 'to_aggvaccinecoverager_id'])
+        db.create_unique(m2m_table_name, ['from_aggvacccovr_id', 'to_aggvacccovr_id'])
 
-        # Adding M2M table for field indiv_sources on 'AggVaccineCoverageR'
-        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvaccinecoverager_indiv_sources')
+        # Adding M2M table for field indiv_sources on 'AggVaccCovR'
+        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvacccovr_indiv_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False)),
-            ('vaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.vaccinecoverager'], null=False))
+            ('aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False)),
+            ('vacccovr', models.ForeignKey(orm[u'snisi_vacc.vacccovr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['aggvaccinecoverager_id', 'vaccinecoverager_id'])
+        db.create_unique(m2m_table_name, ['aggvacccovr_id', 'vacccovr_id'])
 
-        # Adding M2M table for field direct_indiv_sources on 'AggVaccineCoverageR'
-        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvaccinecoverager_direct_indiv_sources')
+        # Adding M2M table for field direct_indiv_sources on 'AggVaccCovR'
+        m2m_table_name = db.shorten_name(u'snisi_vacc_aggvacccovr_direct_indiv_sources')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('aggvaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.aggvaccinecoverager'], null=False)),
-            ('vaccinecoverager', models.ForeignKey(orm[u'snisi_vacc.vaccinecoverager'], null=False))
+            ('aggvacccovr', models.ForeignKey(orm[u'snisi_vacc.aggvacccovr'], null=False)),
+            ('vacccovr', models.ForeignKey(orm[u'snisi_vacc.vacccovr'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['aggvaccinecoverager_id', 'vaccinecoverager_id'])
+        db.create_unique(m2m_table_name, ['aggvacccovr_id', 'vacccovr_id'])
 
 
     def backwards(self, orm):
-        # Deleting model 'VaccineCoverageR'
-        db.delete_table(u'snisi_vacc_vaccinecoverager')
+        # Deleting model 'VaccCovR'
+        db.delete_table(u'snisi_vacc_vacccovr')
 
-        # Deleting model 'AggVaccineCoverageR'
-        db.delete_table(u'snisi_vacc_aggvaccinecoverager')
+        # Deleting model 'AggVaccCovR'
+        db.delete_table(u'snisi_vacc_aggvacccovr')
 
-        # Removing M2M table for field agg_sources on 'AggVaccineCoverageR'
-        db.delete_table(db.shorten_name(u'snisi_vacc_aggvaccinecoverager_agg_sources'))
+        # Removing M2M table for field agg_sources on 'AggVaccCovR'
+        db.delete_table(db.shorten_name(u'snisi_vacc_aggvacccovr_agg_sources'))
 
-        # Removing M2M table for field direct_agg_sources on 'AggVaccineCoverageR'
-        db.delete_table(db.shorten_name(u'snisi_vacc_aggvaccinecoverager_direct_agg_sources'))
+        # Removing M2M table for field direct_agg_sources on 'AggVaccCovR'
+        db.delete_table(db.shorten_name(u'snisi_vacc_aggvacccovr_direct_agg_sources'))
 
-        # Removing M2M table for field indiv_sources on 'AggVaccineCoverageR'
-        db.delete_table(db.shorten_name(u'snisi_vacc_aggvaccinecoverager_indiv_sources'))
+        # Removing M2M table for field indiv_sources on 'AggVaccCovR'
+        db.delete_table(db.shorten_name(u'snisi_vacc_aggvacccovr_indiv_sources'))
 
-        # Removing M2M table for field direct_indiv_sources on 'AggVaccineCoverageR'
-        db.delete_table(db.shorten_name(u'snisi_vacc_aggvaccinecoverager_direct_indiv_sources'))
+        # Removing M2M table for field direct_indiv_sources on 'AggVaccCovR'
+        db.delete_table(db.shorten_name(u'snisi_vacc_aggvacccovr_direct_indiv_sources'))
 
 
     models = {
@@ -188,18 +188,18 @@ class Migration(SchemaMigration):
             'period': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'snisi_core_snisireport_reports'", 'null': 'True', 'to': u"orm['snisi_core.Period']"}),
             'receipt': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'report_cls': ('django.db.models.fields.CharField', [], {'max_length': '512', 'null': 'True', 'blank': 'True'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'default': "'ba028d41-defc-4e51-805c-6564c3ebe163'", 'max_length': '200', 'primary_key': 'True'}),
+            'uuid': ('django.db.models.fields.CharField', [], {'default': "'b9c82a10-e676-4b63-8c4e-41397e4dc1a1'", 'max_length': '200', 'primary_key': 'True'}),
             'validated_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'own_validated_reports'", 'null': 'True', 'to': u"orm['snisi_core.Provider']"}),
             'validated_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'validation_status': ('django.db.models.fields.CharField', [], {'default': "u'not_applicable'", 'max_length': '40'})
         },
-        u'snisi_vacc.aggvaccinecoverager': {
-            'Meta': {'object_name': 'AggVaccineCoverageR', '_ormbases': [u'snisi_core.SNISIReport']},
-            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggvaccinecoverager_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.AggVaccineCoverageR']"}),
+        u'snisi_vacc.aggvacccovr': {
+            'Meta': {'object_name': 'AggVaccCovR', '_ormbases': [u'snisi_core.SNISIReport']},
+            'agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'aggregated_agg_aggvacccovr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.AggVaccCovR']"}),
             'bcg_coverage': ('django.db.models.fields.FloatField', [], {}),
-            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggvaccinecoverager_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.AggVaccineCoverageR']"}),
-            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggvaccinecoverager_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.VaccineCoverageR']"}),
-            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggvaccinecoverager_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.VaccineCoverageR']"}),
+            'direct_agg_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_aggregated_agg_aggvacccovr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.AggVaccCovR']"}),
+            'direct_indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'direct_source_agg_aggvacccovr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.VaccCovR']"}),
+            'indiv_sources': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "u'source_agg_aggvacccovr_reports'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['snisi_vacc.VaccCovR']"}),
             'measles_coverage': ('django.db.models.fields.FloatField', [], {}),
             'nb_agg_reports_altered': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'nb_agg_reports_auto_validated': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
@@ -216,8 +216,8 @@ class Migration(SchemaMigration):
             'polio3_coverage': ('django.db.models.fields.FloatField', [], {}),
             u'snisireport_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['snisi_core.SNISIReport']", 'unique': 'True', 'primary_key': 'True'})
         },
-        u'snisi_vacc.vaccinecoverager': {
-            'Meta': {'object_name': 'VaccineCoverageR', '_ormbases': [u'snisi_core.SNISIReport']},
+        u'snisi_vacc.vacccovr': {
+            'Meta': {'object_name': 'VaccCovR', '_ormbases': [u'snisi_core.SNISIReport']},
             'bcg_coverage': ('django.db.models.fields.FloatField', [], {}),
             'measles_coverage': ('django.db.models.fields.FloatField', [], {}),
             'polio3_abandonment_rate': ('django.db.models.fields.FloatField', [], {}),

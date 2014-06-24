@@ -28,7 +28,7 @@ def create_expected_for(period):
 
     created_list = []
 
-    coverage_cluster = Cluster.get_or_none("vacc_coverage_routine")
+    coverage_cluster = Cluster.objects.get(slug="vacc_coverage_routine")
 
     if not coverage_cluster.is_active:
         return created_list

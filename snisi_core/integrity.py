@@ -4,10 +4,21 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
+import traceback
 
 from py3compat import text_type
-
+import reversion
 from django.utils.translation import ugettext as _
+
+from snisi_core.models.Providers import Provider
+from snisi_core.models.Entities import Entity
+from snisi_core.models.Periods import MonthPeriod
+from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
+from snisi_core.models.Notifications import Notification
+from snisi_core.models.Reporting import SNISIReport, ExpectedReporting, ExpectedValidation
+
+logger = logging.getLogger(__name__)
 
 
 class ReportingDataException(Exception):
@@ -177,6 +188,9 @@ class ReportIntegrityChecker(ReportingDataHolder):
 
 class RoutineIntegrityInterface(object):
 
+    report_class = None
+    validating_role = None
+
     def chk_period_is_not_future(self):
         # Get period and Entity
         period = MonthPeriod.find_create_from(year=self.get('year'),
@@ -205,7 +219,7 @@ class RoutineIntegrityInterface(object):
 
         # expected reporting defines if report is expeted or not
         expected_reporting = ExpectedReporting.get_or_none(
-            report_class=reportcls_pf,
+            report_class=self.report_class,
             period=period,
             within_period=False,
             entity=entity,
@@ -248,6 +262,9 @@ class RoutineIntegrityInterface(object):
         # check permission to submit report.
         provider = self.get('submitter')
         entity = self.get('entity')
+
+        if provider.username == 'autobot':
+            return
 
         # provider must be DTC or Charge_SIS
         # if DTC, he must be from very same Entity
@@ -308,11 +325,12 @@ def create_monthly_routine_report(
         report=report,
         validation_period=validation_period,
         validating_entity=validating_entity,
-        validating_role=validating_role)
+        validating_role=integrity_checker.validating_role)
 
     # Add alert to validation Entity?
     for recipient in Provider.active.filter(
-        role=validating_role, location=validating_entity):
+        role=integrity_checker.validating_role,
+        location=validating_entity):
 
         if recipient == provider:
             continue

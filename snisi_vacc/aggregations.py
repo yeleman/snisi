@@ -15,11 +15,9 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_vacc.models import AggVaccineCoverageR, VaccineCoverageR
+from snisi_vacc.models import AggVaccCovR, VaccCovR
 from snisi_vacc import (ROUTINE_DISTRICT_AGG_DAY,
                         ROUTINE_REGION_AGG_DAY)
-from snisi_vacc.integrity import PROJECT_BRAND
-from snisi_core.models.Notifications import Notification
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +72,7 @@ def generate_district_reports(period,
         logger.info("\tAt district {}".format(district))
 
         # auto-validate non-validated reports
-        for report in VaccineCoverageR.objects.filter(
+        for report in VaccCovR.objects.filter(
             period=period,
             entity__in=district.get_health_centers()):
             if not report.validated:
@@ -86,8 +84,8 @@ def generate_district_reports(period,
                     validated_on=timezone.now(),
                     auto_validated=True)
 
-        # create AggVaccineCoverageR
-        agg = AggVaccineCoverageR.create_from(
+        # create AggVaccCovR
+        agg = AggVaccCovR.create_from(
             period=period,
             entity=district,
             created_by=autobot)
@@ -153,8 +151,8 @@ def generate_region_country_reports(period,
                 validated_on=timezone.now(),
                 auto_validated=True)
 
-        # create AggVaccineCoverageR/region
-        agg = AggVaccineCoverageR.create_from(
+        # create AggVaccCovR/region
+        agg = AggVaccCovR.create_from(
             period=period,
             entity=region,
             created_by=autobot)
@@ -177,8 +175,8 @@ def generate_region_country_reports(period,
     if exp is None:
         return
 
-    # create AggVaccineCoverageR/country
-    agg = AggVaccineCoverageR.create_from(
+    # create AggVaccCovR/country
+    agg = AggVaccCovR.create_from(
         period=period,
         entity=mali,
         created_by=autobot)

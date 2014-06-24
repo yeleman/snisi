@@ -10,7 +10,7 @@ import traceback
 import reversion
 from django.utils.translation import ugettext as _
 
-from snisi_core.integrity import (ReportIntegrityChecker
+from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_monthly_routine_report,
                                   RoutineIntegrityInterface)
 from snisi_core.models.Providers import Provider
@@ -19,18 +19,18 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Roles import Role
 from snisi_vacc import PROJECT_BRAND
-from snisi_vacc.models import VaccineCoverageR
+from snisi_vacc.models import VaccCovR
 from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation, SNISIReport)
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
 
 logger = logging.getLogger(__name__)
-reportcls_pf = ReportClass.get_or_none(slug='major_vaccine_monthly')
+reportcls_pev = ReportClass.get_or_none(slug='major_vaccine_monthly')
 validating_role = Role.get_or_none('charge_sis')
 
 
-def create_pf_report(provider, expected_reporting, completed_on,
-                     integrity_checker, data_source):
+def create_pev_report(provider, expected_reporting, completed_on,
+                      integrity_checker, data_source):
 
     return create_monthly_routine_report(
         provider=provider,
@@ -38,15 +38,18 @@ def create_pf_report(provider, expected_reporting, completed_on,
         completed_on=completed_on,
         integrity_checker=integrity_checker,
         data_source=data_source,
-        reportcls=VaccineCoverageR,
+        reportcls=VaccCovR,
         project_brand=PROJECT_BRAND)
 
 
-class VaccineCoverageRIntegrityChecker(RoutineIntegrityInterface,
+class VaccCovRIntegrityChecker(RoutineIntegrityInterface,
                                        ReportIntegrityChecker):
 
+    report_class = reportcls_pev
+    validating_role = validating_role
+
     def _check_completeness(self, **options):
-        for field in VaccineCoverageR.data_fields():
+        for field in VaccCovR.data_fields():
             if not self.has(field):
                 self.add_missing(_("Missing data for {f}").format(f=field),
                                  blocking=True, field=field)
