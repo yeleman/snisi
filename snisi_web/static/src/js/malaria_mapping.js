@@ -11,6 +11,96 @@ Array.prototype.getUnique = function(){
    return a;
 };
 
+function QuantizeIndicatorScale() {
+
+    QuantizeIndicatorScale.prototype.setup = function (manager, options) {
+
+        var nb_breaks = manager.colors.length;
+        if (manager.indicator_data_raw.length < nb_breaks) {
+            nb_breaks = manager.indicator_data_raw.length;
+        }
+
+        this.scale = d3.scale.quantize()
+            .domain([d3.min(manager.indicator_data_raw), d3.max(manager.indicator_data_raw)])
+            .range(d3.range(nb_breaks).map(function(i) { return manager.colors[i]; }));
+    };
+
+    QuantizeIndicatorScale.prototype.boundaries_for_color = function (color) {
+        return this.scale.invertExtent(color);
+    };
+
+    QuantizeIndicatorScale.prototype.color_for_value = function (data) {
+        return this.scale(data);
+    };
+
+    QuantizeIndicatorScale.prototype.available_colors = function () {
+        return this.scale.range();
+    };
+
+}
+
+function FixedBoundariesScale(options) {
+
+    this.options = options;
+
+    FixedBoundariesScale.prototype.setup = function (manager) {
+        this.colors = [];
+        this.min = d3.min(manager.indicator_data_raw);
+        this.max = d3.max(manager.indicator_data_raw);
+
+        if (this.options.steps) {
+            this.steps = this.options.steps;
+            for (var i=0; i < this.steps.length; i++) {
+                this.colors.push(manager.colors[i]);
+            }
+        } else {
+            var nb_breaks = manager.colors.length;
+            if (manager.indicator_data_raw.length < nb_breaks) {
+                nb_breaks = manager.indicator_data_raw.length;
+            }
+
+            var step = this.max / nb_breaks;
+            var steps = [];
+            var current = this.min;
+            steps.push(this.min);
+            for (var j=0; j< nb_breaks; j++) {
+                steps.push(current + step);
+                this.colors.push(manager.colors[j]);
+            }
+            this.steps = steps;
+        }
+    };
+
+    FixedBoundariesScale.prototype.boundaries_for_color = function (color) {
+        var index = this.colors.indexOf(color);
+        if (index + 1 >= this.steps.length && this.max > this.steps[index]) {
+            upper_bound = this.max;
+        } else {
+            upper_bound = this.steps[index + 1];
+        }
+
+        if (index === 0 && this.min < this.steps[index]) {
+            lower_bound = this.min;
+        } else {
+            lower_bound = this.steps[index];
+        }
+        return [lower_bound, upper_bound];
+    };
+
+    FixedBoundariesScale.prototype.color_for_value = function (data) {
+        for (var i=this.steps.length - 1; i>=0; i--) {
+            if (data >= this.steps[i]) {
+                return this.colors[i];
+            }
+        }
+        return this.colors[this.colors.length -1];
+    };
+
+    FixedBoundariesScale.prototype.available_colors = function () {
+        return this.colors;
+    };
+}
+
 
 function getMalariaMapManager(options) {
 
@@ -22,13 +112,15 @@ function getMalariaMapManager(options) {
         this.color_regular_point = '#6f9bd1';
         this.color_yes = '#889f37'; //'#28ff00';
         this.color_no = '#4d2c74'; //'#ff1500';
-        this.colors = ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
+        this.colors = options.colors || ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
         this.base_layer_url = 'http://tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
         // this.base_layer_url = '/tiles/mali-base/{z}/{x}/{y}.png';
         this.initial_latitude = 13.448;
         this.initial_longitude = -5.471;
         this.initial_zoom = 7;
         this.mapID = options.mapID || "map";
+        this.indicator_api_url = options.indicator_api_url || "/api/malaria/indicators";
+        this.geojson_api_url = options.geojson_api_url || "/api/malaria/geojson";
 
         this.map = null; // Mapbox map object
         this.scale = null; // Mapbox scale control
@@ -39,7 +131,7 @@ function getMalariaMapManager(options) {
         this.districts_layer = options.districts_layer || null; // Mapbox layer for districts
         this.hc_layer = options.hc_layer || null; // Mapbox layer for Health Centers
 
-        this.indicator_scale = options.indicator_scale || null;
+        this.indicator_scale = options.indicator_scale || new QuantizeIndicatorScale();
 
         this.title = options.title || null;
         this.subtitle = options.subtitle || null;
@@ -157,7 +249,8 @@ function getMalariaMapManager(options) {
             $.each(manager.colors, function(index) {
                 var color = manager.colors[index];
                 var label = null;
-                boundaries = manager.indicator_scale.invertExtent(color);
+                // boundaries = manager.indicator_scale.invertExtent(color);
+                boundaries = manager.indicator_scale.boundaries_for_color(color);
                 if (boundaries.length == 2 && !isNaN(boundaries[0]) && !isNaN(boundaries[1])) {
                     var from = boundaries[0];
                     var to = boundaries[1];
@@ -600,19 +693,6 @@ function getMalariaMapManager(options) {
 
         manager.hc_layer = L.mapbox.featureLayer(manager.getCurrentDistrict().properties.children);
 
-        // manager.hc_layer = L.mapbox.featureLayer();
-        // $.each(manager.getCurrentDistrict().properties.children.features, function (index) {
-        //     var feature = manager.getCurrentDistrict().properties.children.features[index];
-        //     var myIcon = L.icon({iconUrl: feature.properties['icon-url'],
-        //                          iconSize: [30, 70],
-        //                          popupAnchor: [0, -40]});
-        //     L.marker([feature.properties['latitude'],
-        //               feature.properties['longitude']],
-        //              {icon: myIcon})
-        //      .addTo(manager.hc_layer)
-        //      .bindPopup('<b>'+feature.properties['title']+'</b>');
-        // });
-
         if (!manager.static_map) {
             manager.hc_layer.on('mouseover', function(e) {
                 e.layer.openPopup();
@@ -665,15 +745,17 @@ function getMalariaMapManager(options) {
             }
         });
         manager.indicator_data_raw = manager.indicator_data_raw.getUnique();
-        var nb_breaks = manager.colors.length;
-        if (manager.indicator_data_raw.length < nb_breaks) {
-            nb_breaks = manager.indicator_data_raw.length;
-        }
 
-        manager.indicator_scale = d3.scale.quantize()
-            .domain([d3.min(manager.indicator_data_raw), d3.max(manager.indicator_data_raw)])
-            // .domain(manager.indicator_data_raw)
-            .range(d3.range(nb_breaks).map(function(i) { return manager.colors[i]; }));
+        manager.indicator_scale.setup(manager);
+        // var nb_breaks = manager.colors.length;
+        // if (manager.indicator_data_raw.length < nb_breaks) {
+        //     nb_breaks = manager.indicator_data_raw.length;
+        // }
+
+        // manager.indicator_scale = d3.scale.quantize()
+        //     .domain([d3.min(manager.indicator_data_raw), d3.max(manager.indicator_data_raw)])
+        //     // .domain(manager.indicator_data_raw)
+        //     .range(d3.range(nb_breaks).map(function(i) { return manager.colors[i]; }));
 
         manager.districts_layer = L.geoJson(manager.getCurrentRegion(), {
             style: function (feature) {
@@ -761,7 +843,7 @@ function getMalariaMapManager(options) {
 
         this.startLoadingUI();
         var manager = this;
-        $.post("/api/malaria/indicators", jsdata, function (data) {
+        $.post(this.indicator_api_url, jsdata, function (data) {
             console.log("received JSON");
 
             try {
@@ -890,7 +972,7 @@ function getMalariaMapManager(options) {
 
     MalariaMapManager.prototype.loadGeoData = function(callback) {
         var manager = this;
-        $.get("/api/malaria/geojson", {},
+        $.get(this.geojson_api_url, {},
             function (data) {
                 console.log("received region GeoJSON");
                 // saved geodata as it contains all our polygons & points
@@ -938,8 +1020,10 @@ function getMalariaMapManager(options) {
         if (data.is_missing) {
             return this.color_is_missing;
         }
-        var color = this.indicator_scale(data.data);
-        if (color === undefined && this.indicator_scale.range().length == 1) {
+        // var color = this.indicator_scale(data.data);
+        var color = this.indicator_scale.color_for_value(data.data);
+        // if (color === undefined && this.indicator_scale.range().length == 1) {
+        if (color === undefined && this.indicator_scale.available_colors().length == 1) {
             color = this.colors[0];
         }
         return color;

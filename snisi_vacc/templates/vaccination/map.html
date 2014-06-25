@@ -1,0 +1,73 @@
+{% extends "vaccination/base.html" %}
+{% load staticfiles %}
+
+{% block assets %}
+{% include "assets/mapbox.html" %}
+{% endblock %}
+
+{% block meta_assets %}
+<link href='{% static "css/map_alone_all.css" %}' rel='stylesheet' />
+{% endblock %}
+
+{% block content %}
+
+<h3 class="titlecontainer"><span id="map_title"></span><br /><span id="map_subtitle"></span></h3>
+<nav id="tab_bar" class="tabs"></nav>
+
+<div class="pure-g">
+<div class="pure-u-1-5">
+    <div class="map-sidebar" id="sidebar2">
+        <div  class="pure-form pure-form-stacked">
+            <fieldset>
+                <legend>Sélection indicateur</legend>
+                <select name="indicators" id="indicator_section_select"></select>
+                <select name="indicators" id="indicator_select"></select>
+
+            </fieldset>
+            <fieldset>
+                <legend>Sélection période</legend>
+                <select name="year" id="year_select">
+                    {% for year in years %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="month" id="month_select">
+                    {% for month_num, month_name in months.items %}
+                        <option value="{{ month_num }}">{{ month_name }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <fieldset>
+                <legend>Sélection district</legend>
+                <select name="health_district" id="health_district_select">
+                </select>
+
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<div class="map-holder pure-u-4-5">
+    <div id="map"></div>
+</div>
+</div>
+{% endblock %}
+
+{% block onJQready %}
+var all_indicators = {};
+{% for section, indicators in indicators.items %}
+all_indicators["{{ section}}"] = [{% for indicator in indicators %}{slug: "{{ indicator.slug }}", name: "{{ indicator.name }}"},{% endfor %}];
+{% endfor %}
+
+var scale = new FixedBoundariesScale({steps: [0, 50, 80, 90]});
+mapManager = getMalariaMapManager({
+    load: true,
+    indicator_scale: scale,
+    indicators: all_indicators,
+    indicator_api_url: "{% url 'domain_indicator' domain_slug='vaccination' %}",
+    geojson_api_url: "{% url 'api_geojson_data' cluster_slug='vacc_coverage_routine' %}",
+    colors: ["#f03b20", "#fec44f", "#99d8c9", "#2ca25f"]
+    });
+
+{% endblock %}

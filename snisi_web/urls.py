@@ -6,10 +6,12 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 from django.http import HttpResponse
+
+from snisi_vacc import urls as vacc_urls
 
 RGXP_REPORTCLS = r'(?P<reportcls_slug>[a-zA-Z\_\-0-1]+)'
 RGXP_CLUSTER = r'(?P<cluster_slug>[a-zA-Z\_\-0-1\-]+)'
@@ -40,6 +42,8 @@ RGXP_PERIODS = (r'(?P<period_str>'
 RGXP_PERIODS = r'(?P<perioda_str>[0-9]{4}|[0-9]{2}\-[0-9]{4}|Q[1-3]\-[0-9]{4}|W[0-9]{1,2}\-[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})_(?P<periodb_str>[0-9]{4}|[0-9]{2}\-[0-9]{4}|Q[1-3]\-[0-9]{4}|W[0-9]{1,2}\-[0-9]{4}|[0-9]{2}\-[0-9]{2}\-[0-9]{4})'
 
 urlpatterns = patterns('',
+
+    url(r'^vaccination/', include(vacc_urls)),
 
     url(r'^download/(?P<fpath>.*)$',
         'snisi_web.views.downloads.serve_protected_files', name='protected'),
@@ -85,9 +89,18 @@ urlpatterns = patterns('',
 
     # Malaria GeoJSON
     url(r'^api/malaria/geojson/(?P<parent_slug>[a-zA-Z0-9]+)?$',
-        'snisi_malaria.views.mapping.geojson_data', name='malaria_geojson_data'),
-     url(r'^api/malaria/indicators/?$',
+        'snisi_malaria.views.mapping.geojson_data',
+        {'cluster_slug': 'malaria_monthly_routine'}, name='malaria_geojson_data'),
+
+    url(r'^api/geojson/(?P<cluster_slug>[a-z0-9\-\_]+)/(?P<parent_slug>[a-zA-Z0-9]+)?$',
+        'snisi_malaria.views.mapping.geojson_data', name='api_geojson_data'),
+
+    url(r'^api/malaria/indicators/?$',
         'snisi_malaria.views.mapping.get_indicator_data', name='malaria_indicator'),
+
+
+    url(r'^api/(?P<domain_slug>[a-z\_]+)/indicators/?$',
+        'snisi_malaria.views.mapping.get_indicator_data', name='domain_indicator'),
 
     url(r'^api/indicators/geo/?$',
         'snisi_web.views.indicators_api.geojson_indicator', name='geojson_indicator'),

@@ -1,0 +1,33 @@
+{% load staticfiles %}<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ brand_short}} | {% block title %}{{ brand_full }}{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="fr-fr" />
+    {% block meta_assets %}{% endblock %}
+</head>
+<body class="pure-skin-snisi">
+    <div id="layout">
+        <div id="main">
+            <section class="content">
+                <div class="content-container">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+<script src="{% static "js/snisi.js" %}"></script>
+{% block assets %}{% endblock %}
+<script>
+$(document).ready(function(){
+main();
+{% block onJQready %}{% endblock %}
+});</script>
+</html>

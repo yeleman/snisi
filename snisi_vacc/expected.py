@@ -6,15 +6,14 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import copy
-import datetime
 
-from snisi_core.models.Periods import MonthPeriod, DayPeriod
+from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.ReportingPeriods import (DefaultMonthlyReportingPeriod,
                                                 DefaultMonthlyExtendedReportingPeriod)
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
-from snisi_reprohealth import get_domain
+from snisi_vacc import get_domain
 
 logger = logging.getLogger(__name__)
 DOMAIN = get_domain()

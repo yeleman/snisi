@@ -35,15 +35,15 @@ districts = {
 }
 
 sheets = {
-    'VAC1': 0,
-    'VAC2': 1,
+    'CV1': 2,
+    'CV2': 3,
     'AB1': 4
 }
 
 vaccin_matrix = {
-    'bcg': ('VAC1', 5, 6),
-    'penta3': ('VAC1', 70, 6),
-    'measles': ('VAC2', 5, 6),
+    'bcg': ('CV1', 5, 6),
+    'penta3': ('CV1', 70, 6),
+    'measles': ('CV2', 5, 6),
     'abandonment': ('AB1', 17, 5),
 }
 

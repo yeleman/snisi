@@ -3,7 +3,7 @@
     <object pk="vacc_coverage_routine" model="snisi_core.cluster">
         <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">vaccination</field>
         <field type="CharField" name="name">Couverture Mensuelle Vaccination</field>
-        <field type="BooleanField" name="is_active">True</field>
+        <field type="BooleanField" name="is_active">False</field>
         <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
     </object>
 </django-objects>

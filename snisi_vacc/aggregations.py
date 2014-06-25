@@ -18,6 +18,7 @@ from snisi_core.models.Providers import Provider
 from snisi_vacc.models import AggVaccCovR, VaccCovR
 from snisi_vacc import (ROUTINE_DISTRICT_AGG_DAY,
                         ROUTINE_REGION_AGG_DAY)
+from snisi_tools.misc import class_str
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +98,7 @@ def generate_district_reports(period,
             report=agg,
             validation_period=region_validation_period,
             validating_entity=district.get_health_region(),
-            validating_role=None)
+            validating_role=charge_sis)
 
 
 def generate_region_country_reports(period,
@@ -141,7 +142,8 @@ def generate_region_country_reports(period,
                 # ack validation (auto)
                 expv = ExpectedValidation.objects.get(
                     report__entity=district,
-                    report__period=period)
+                    report__period=period,
+                    report__report_cls=class_str(VaccCovR))
             except ExpectedValidation.DoesNotExist:
                 continue
 

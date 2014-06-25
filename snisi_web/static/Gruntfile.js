@@ -16,6 +16,18 @@ module.exports = function(grunt) {
                     ["assets/bootstrap.less",
                      "src/less/snisi.less", ]
             }
+        },
+        map_alone: {
+            options: {
+                paths: ["src/less"],
+                cleancss: true,
+                compress: true
+            },
+            files: {
+                "css/map_alone.css":
+                    ["assets/bootstrap.less",
+                     "src/less/map_alone.less", ]
+            }
         }
     },
     concat: {
@@ -32,6 +44,12 @@ module.exports = function(grunt) {
                   'assets/pure-min.css',
                   'css/<%= pkg.name %>.css'],
             dest: 'css/<%= pkg.name %>_all.css'
+        },
+        mapalonecss: {
+            src: ['assets/font-awesome-4.0.3/css/font-awesome.min.css',
+                  'assets/pure-min.css',
+                  'css/map_alone.css'],
+            dest: 'css/map_alone_all.css'
         },
         mapcss: {
             src: ['assets/mapbox.1.6.1.css', 'assets/leaflet.label.0.2.1.css'],

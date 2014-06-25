@@ -14,6 +14,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from snisi_core.models.Entities import Entity
+from snisi_core.models.Projects import Domain
 from snisi_core.models.Projects import Participation, Cluster
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import ExpectedReporting
@@ -49,20 +50,25 @@ def malaria_map(request, template_name='malaria/map.html'):
 
 @require_POST
 @csrf_exempt
-def get_indicator_data(request):
+def get_indicator_data(request, domain_slug='malaria'):
 
     try:
         json_request = json.loads(request.body)
     except Exception as e:
         return HttpResponse(json.dumps({"error": e}))
 
+    domain = Domain.get_or_none(domain_slug)
+
+    from pprint import pprint as pp ; pp(domain)
+
     indicator_slug = json_request.get('indicator_slug')
     year = json_request.get('year')
     month = json_request.get('month')
     period = MonthPeriod.find_create_from(year=int(year), month=int(month))
-    indicator = get_domain().import_from('indicators.{}'.format(indicator_slug))
+    indicator = import_path('{}.indicators.{}'.format(domain.module_path, indicator_slug))
     parent = Entity.get_or_none(json_request.get('entity_slug'))
-    targets = parent.get_health_centers() if parent.type.slug == 'health_district' else parent.get_health_districts()
+    targets = parent.get_health_centers() if parent.type.slug == 'health_district' \
+                                          else parent.get_health_districts()
     computed_values = {}
     for entity in targets:
         ind = indicator(period=period, entity=entity)
@@ -78,10 +84,10 @@ def get_indicator_data(request):
                         content_type='application/json')
 
 
-def geojson_data(request, parent_slug='mali'):
+def geojson_data(request, cluster_slug=None, parent_slug='mali'):
 
     mali = Entity.objects.get(slug='mali')
-    cluster = Cluster.get_or_none('malaria_monthly_routine')
+    cluster = Cluster.get_or_none(cluster_slug)
 
     featureColTemplate = {
         "type": "FeatureCollection",
