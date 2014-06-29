@@ -23,6 +23,13 @@ from snisi_tools.misc import import_path
 from snisi_malaria import get_domain
 from snisi_malaria.indicators import get_geo_indicators
 
+
+def withCORS(r):
+    r['Access-Control-Allow-Origin'] = "*"
+    r['Access-Control-Allow-Credentials'] = "false"
+    return r
+
+
 @login_required
 def malaria_map(request, template_name='malaria/map.html'):
 
@@ -80,8 +87,8 @@ def get_indicator_data(request, domain_slug='malaria'):
              'is_missing': ind.is_missing,
              'is_yesno': ind.is_yesno}})
 
-    return HttpResponse(json.dumps(computed_values),
-                        content_type='application/json')
+    return withCORS(HttpResponse(json.dumps(computed_values),
+                                 content_type='application/json'))
 
 
 def geojson_data(request, cluster_slug=None, parent_slug='mali'):
@@ -125,5 +132,5 @@ def geojson_data(request, cluster_slug=None, parent_slug='mali'):
     regions = {r.slug: _getChildCollection(Entity.get_or_none(r.slug))
                for r in _getChildren(mali)}
 
-    return HttpResponse(json.dumps(regions),
-                        content_type='application/json')
+    return withCORS(HttpResponse(json.dumps(regions),
+                    content_type='application/json'))
