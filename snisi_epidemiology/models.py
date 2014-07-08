@@ -26,6 +26,9 @@ class AbstractEpidemiologyR(SNISIReport):
         app_label = 'snisi_epidemiology'
         abstract = True
 
+    ebola_case = models.IntegerField(_("Ebola cases"))
+    ebola_death = models.IntegerField(_("Ebola death"))
+
     acute_flaccid_paralysis_case = models.IntegerField(_("AFP cases"))
     acute_flaccid_paralysis_death = models.IntegerField(_("AFP death"))
 
@@ -137,7 +140,7 @@ class AggEpidemiologyR(PeriodicAggregatedReportInterface,
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     INDIVIDUAL_CLS = EpidemiologyR
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity'), ]
 
     class Meta:
         app_label = 'snisi_epidemiology'

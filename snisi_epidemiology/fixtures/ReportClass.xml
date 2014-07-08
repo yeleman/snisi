@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="epidemio_weekly_routine" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">epidemio_weekly_routine</field>
+        <field type="CharField" name="name">Routine Hebdomadire MADOS</field>
+        <field type="CharField" name="cls">snisi_epidemiology.models.EpidemiologyR</field>
+        <!-- TODO:  changer la période en hebdomadaire -->
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">periosrc</field>
+    </object>
+    <object pk="epidemio_weekly_routine_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">epidemio_weekly_routine_aggregated</field>
+        <field type="CharField" name="name">Routine Hebdomadire MADOS (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_epidemiology.models.AggEpidemiologyR</field>
+        <!-- TODO:  changer la période en hebdomadaire -->
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+</django-objects>
