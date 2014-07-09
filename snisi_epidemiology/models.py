@@ -62,7 +62,9 @@ class AbstractEpidemiologyR(SNISIReport):
     other_notifiable_disease_case = models.IntegerField(_("Other Notifiable Diseases cases"))
     other_notifiable_disease_death = models.IntegerField(_("Other Notifiable Diseases death"))
 
-    def add_data(self, acute_flaccid_paralysis_case,
+    def add_data(self, ebola_case,
+                 ebola_death,
+                 acute_flaccid_paralysis_case,
                  acute_flaccid_paralysis_death,
                  influenza_a_h1n1_case,
                  influenza_a_h1n1_death,
@@ -84,6 +86,8 @@ class AbstractEpidemiologyR(SNISIReport):
                  acute_measles_diarrhea_death,
                  other_notifiable_disease_case,
                  other_notifiable_disease_death):
+        self.ebola_case = ebola_case
+        self.ebola_death = ebola_death
         self.acute_flaccid_paralysis_case = acute_flaccid_paralysis_case
         self.acute_flaccid_paralysis_death = acute_flaccid_paralysis_death
         self.influenza_a_h1n1_case = influenza_a_h1n1_case

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
-    <object pk="reprohealth" model="snisi_core.domain">
+    <object pk="epidemiology" model="snisi_core.domain">
         <field type="CharField" name="name">MADOS</field>
         <field type="BooleanField" name="is_active">True</field>
         <field to="snisi_core.provider" name="technical_contact" rel="ManyToOneRel">adolo</field>
