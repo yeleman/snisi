@@ -30,6 +30,7 @@ def create_epid_report(provider, expected_reporting, completed_on,
     return create_monthly_routine_report(
         provider=provider,
         expected_reporting=expected_reporting,
+        completed_on=completed_on,
         data_source=data_source,
         integrity_checker=integrity_checker,
         reportcls=EpidemiologyR,
@@ -42,31 +43,31 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
     validating_role = validating_role
 
     def check_epid_data(self):
-        dict_fields = {'ebola': _('Ebola'),
-                       'acute_flaccid_paralysis': _("AFP"),
-                       'influenza_a_h1n1': _("Influenza A H1N1"),
-                       'cholera': _("Cholera"),
-                       'red_diarrhea': _("Red Diarrhea"),
-                       'measles': _("Measles"),
-                       'yellow_fever': _("Yellow Fever"),
-                       'neonatal_tetanus': _("NNT"),
-                       'meningitis': _("Meningitis"),
-                       'rabies': _("Rabies"),
-                       'acute_measles_diarrhea': _("Acute Measles Diarrhea"),
-                       'other_notifiable_disease': _("Other Notifiable Diseases")}
+        list_fields = ['ebola',
+                       'acute_flaccid_paralysis',
+                       'influenza_a_h1n1',
+                       'cholera',
+                       'red_diarrhea',
+                       'measles',
+                       'yellow_fever',
+                       'neonatal_tetanus',
+                       'meningitis',
+                       'rabies',
+                       'acute_measles_diarrhea',
+                       'other_notifiable_disease']
 
         reporting_date = date(self.get('year'), self.get('month'), self.get('day'))
         if reporting_date.weekday() != 6:
-            self.add_error("{} n'est pas un dimanche".format(reporting_date.strftime("%X")),
-                            field="year")
+            self.add_error("Fin de semaine doit être un dimanche et non un {}."
+                           .format(reporting_date.strftime("%A")), field="year")
 
-        for field in dict_fields.keys():
+        for field in list_fields:
             nb_case = self.get("{}_case".format(field))
             nb_death = self.get("{}_death".format(field))
             if nb_case < nb_death:
-                self.add_error(_("{field}: ({case}) number case lower than ({death}) number death")
-                               .format(field=dict_fields.get(field), case=nb_case, death=nb_death),
-                               field="{}_case".format(field))
+                self.add_error(_("{field_name}: ({case}) number case lower than ({death}) number death")
+                               .format(field_name=field, case=nb_case, death=nb_death),
+                               field="{}".format(field))
 
 
 
