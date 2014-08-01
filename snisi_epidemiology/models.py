@@ -22,6 +22,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
+from snisi_epidemiology.xls_export import epid_activities_as_xls
 
 EPI_WEEK = 'epi_week'
 
@@ -227,6 +228,14 @@ class AbstractEpidemiologyR(SNISIReport):
     def fill_blank(self):
         for field in self.to_dict().keys():
             setattr(self, field, 0)
+
+    def as_xls(self):
+        file_name = "MADO_{entity}s.{day}.{month}.{year}.xls" \
+                    .format(entity=self.entity.slug,
+                            day=self.period.middle().day,
+                            month=self.period.middle().month,
+                            year=self.period.middle().year)
+        return file_name, epid_activities_as_xls(self)
 
 
 @implements_to_string
