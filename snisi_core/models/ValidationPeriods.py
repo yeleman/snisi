@@ -16,7 +16,8 @@ from snisi_tools.datetime import normalize_date
 class DistrictValidationManager(models.Manager):
     def get_query_set(self):
         return super(DistrictValidationManager, self) \
-            .get_query_set().filter(period_type=DefaultDistrictValidationPeriod.DVP)
+            .get_query_set().filter(
+                period_type=DefaultDistrictValidationPeriod.DVP)
 
 
 class DefaultDistrictValidationPeriod(MonthPeriod):
@@ -44,7 +45,7 @@ class DefaultDistrictValidationPeriod(MonthPeriod):
         return date_format(self.middle(), ugettext("1-15 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("1st to 15th F Y"))
 
     @classmethod
@@ -66,7 +67,8 @@ class DefaultDistrictValidationPeriod(MonthPeriod):
 class RegionValidationManager(models.Manager):
     def get_query_set(self):
         return super(RegionValidationManager, self) \
-            .get_query_set().filter(period_type=DefaultRegionValidationPeriod.RVP)
+            .get_query_set().filter(
+                period_type=DefaultRegionValidationPeriod.RVP)
 
 
 class DefaultRegionValidationPeriod(MonthPeriod):
@@ -94,7 +96,7 @@ class DefaultRegionValidationPeriod(MonthPeriod):
         return date_format(self.middle(), ugettext("15-25 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("15th to 25th F Y"))
 
     @classmethod
@@ -116,7 +118,8 @@ class DefaultRegionValidationPeriod(MonthPeriod):
 class NationalValidationManager(models.Manager):
     def get_query_set(self):
         return super(NationalValidationManager, self) \
-            .get_query_set().filter(period_type=DefaultNationalValidationPeriod.NVP)
+            .get_query_set().filter(
+                period_type=DefaultNationalValidationPeriod.NVP)
 
 
 class DefaultNationalValidationPeriod(MonthPeriod):
@@ -144,7 +147,7 @@ class DefaultNationalValidationPeriod(MonthPeriod):
         return date_format(self.middle(), ugettext("26-27 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("26th to 27th F Y"))
 
     @classmethod

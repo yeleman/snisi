@@ -10,7 +10,7 @@ from snisi_core.models.Projects import Domain
 
 logger = logging.getLogger(__name__)
 
-PROJECT_BRAND = "MADOS"
+PROJECT_BRAND = "MADO"
 DOMAIN_SLUG = 'epidomiology'
 ROUTINE_REPORTING_END_DAY = 6
 ROUTINE_EXTENDED_REPORTING_END_DAY = 11

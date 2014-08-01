@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import datetime
 
 import reversion
 from py3compat import implements_to_string
@@ -12,15 +13,117 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from django.utils.translation import ugettext_lazy as _, ugettext
 
+from snisi_core.models.Periods import (WeekPeriod, ONE_WEEK_DELTA,
+                                       ONE_MICROSECOND_DELTA,
+                                       SpecificTypeManager,
+                                       normalize_date)
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
+
+EPI_WEEK = 'epi_week'
+
+
+class EpiWeekManager(SpecificTypeManager):
+    SPECIFIC_TYPE = EPI_WEEK
+
+
+class EpiWeekPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Period")
+        verbose_name_plural = _("Week Periods")
+
+    objects = EpiWeekManager()
+
+    @classmethod
+    def type(cls):
+        return EPI_WEEK
+
+    @property
+    def pid(self):
+        return'eW{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        date_obj = normalize_date(date_obj, as_aware=True)
+
+        monday = date_obj - datetime.timedelta(date_obj.weekday())
+        monday = monday.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        friday_noon_dt = datetime.timedelta(days=4, minutes=720)
+        friday_noon = monday + friday_noon_dt
+        is_next_week = not date_obj < friday_noon
+
+        if not is_next_week:
+            start = friday_noon - ONE_WEEK_DELTA
+        else:
+            start = friday_noon
+        end = start + datetime.timedelta(cls.delta()) - ONE_MICROSECOND_DELTA
+        return (start, end)
+
+    def strid(self):
+        return self.middle().strftime('eW%W-%Y')
+
+
+class EpiWeekDistrictValidationPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week District Validation Period")
+        verbose_name_plural = _("Week District Validation Periods")
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_district_validation'
+
+    @property
+    def pid(self):
+        return'eWDVP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True, is_precise=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=3)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWVP%W-%Y')
+
+
+class EpiWeekRegionValidationPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Region Validation Period")
+        verbose_name_plural = _("Week Region Validation Periods")
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_region_validation'
+
+    @property
+    def pid(self):
+        return'eWRVP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True, is_precise=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=3)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWRVP%W-%Y')
 
 
 class AbstractEpidemiologyR(SNISIReport):
-
-    RECEIPT_FORMAT = 'dd'
 
     class Meta:
         app_label = 'snisi_epidemiology'
@@ -56,11 +159,15 @@ class AbstractEpidemiologyR(SNISIReport):
     rabies_case = models.IntegerField(_("Rabies cases"))
     rabies_death = models.IntegerField(_("Rabies death"))
 
-    acute_measles_diarrhea_case = models.IntegerField(_("Acute Measles Diarrhea cases"))
-    acute_measles_diarrhea_death = models.IntegerField(_("Acute Measles Diarrhea death"))
+    acute_measles_diarrhea_case = models.IntegerField(
+        _("Acute Measles Diarrhea cases"))
+    acute_measles_diarrhea_death = models.IntegerField(
+        _("Acute Measles Diarrhea death"))
 
-    other_notifiable_disease_case = models.IntegerField(_("Other Notifiable Diseases cases"))
-    other_notifiable_disease_death = models.IntegerField(_("Other Notifiable Diseases death"))
+    other_notifiable_disease_case = models.IntegerField(
+        _("Other Notifiable Diseases cases"))
+    other_notifiable_disease_death = models.IntegerField(
+        _("Other Notifiable Diseases death"))
 
     def add_data(self, ebola_case,
                  ebola_death,
@@ -125,7 +232,11 @@ class AbstractEpidemiologyR(SNISIReport):
 @implements_to_string
 class EpidemiologyR(AbstractEpidemiologyR):
 
+    RECEIPT_FORMAT = ("MDO-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}-{rand}")
     REPORTING_TYPE = PERIODICAL_SOURCE
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_epidemiology'
@@ -143,16 +254,17 @@ class AggEpidemiologyR(PeriodicAggregatedReportInterface,
                        AbstractEpidemiologyR):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
+    RECEIPT_FORMAT = None
     INDIVIDUAL_CLS = EpidemiologyR
-    UNIQUE_TOGETHER = [('period', 'entity'), ]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_epidemiology'
         verbose_name = _("Aggregated Epidemiology Report")
         verbose_name_plural = _("Aggregated Epidemiology Reports")
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
-        verbose_name=_(u"Primary. Sources"),
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS, verbose_name=_("Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
 

@@ -12,11 +12,13 @@ import reversion
 from django.utils.translation import ugettext as _
 
 from snisi_core.models.Providers import Provider
+from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
 from snisi_core.models.Notifications import Notification
-from snisi_core.models.Reporting import SNISIReport, ExpectedReporting, ExpectedValidation
+from snisi_core.models.Reporting import (SNISIReport,
+                                         ExpectedReporting, ExpectedValidation)
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +86,7 @@ class ReportingDataHolder(object):
         self._data.update({key: value})
 
     def get(self, key, default=None, silent=False):
-        if not key in self.data.keys():
+        if key not in self.data.keys():
             self.add_missing(_("Missing Data for {}").format(key),
                              blocking=not silent,
                              field=key)
@@ -134,7 +136,7 @@ class ReportingDataHolder(object):
             self._check_completeness(**options)
         except ReportingDataException as raised:
             self._raised = raised
-            if not raised in self._feedbacks:
+            if raised not in self._feedbacks:
                 self._feedbacks.append(raised)
 
     def check(self, **options):
@@ -144,7 +146,7 @@ class ReportingDataHolder(object):
             self._check(**options)
         except ReportingDataException as raised:
             self._raised = raised
-            if not raised in self._feedbacks:
+            if raised not in self._feedbacks:
                 self._feedbacks.append(raised)
 
     def is_valid(self):
@@ -166,12 +168,12 @@ class ReportingDataHolder(object):
     @property
     def warnings(self):
         return [error for error in self._feedbacks
-            if isinstance(error, ReportingDataWarning)]
+                if isinstance(error, ReportingDataWarning)]
 
     @property
     def missings(self):
         return [error for error in self._feedbacks
-            if isinstance(error, ReportingDataMissing)]
+                if isinstance(error, ReportingDataMissing)]
 
     @property
     def feedbacks(self):
@@ -207,7 +209,8 @@ class RoutineIntegrityInterface(object):
                                     type_slug='health_center')
 
         if entity is None:
-            self.add_error("Aucun CSCOM ne correspond au code {}".format(self.get('hc')),
+            self.add_error("Aucun CSCOM ne correspond au code {}"
+                           .format(self.get('hc')),
                            field='hc', blocking=True)
 
         self.set('entity', entity)
@@ -230,8 +233,8 @@ class RoutineIntegrityInterface(object):
 
         if expected_reporting is None:
             self.add_error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}".format(
-                                entity=entity, period=period),
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period),
                            blocking=True)
 
         if expected_reporting.satisfied:
@@ -241,21 +244,25 @@ class RoutineIntegrityInterface(object):
                            blocking=True)
 
         # check if the report arrived in time or not.
-        if expected_reporting.reporting_period.contains(self.get('submit_time')):
+        if expected_reporting.reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = SNISIReport.ON_TIME
-        elif expected_reporting.extended_reporting_period.contains(self.get('submit_time')):
+        elif expected_reporting.extended_reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = SNISIReport.LATE
         else:
             # arrived while not in a reporting period
-            if self.get('submit_time') < expected_reporting.reporting_period.start_on:
+            if self.get('submit_time') \
+                    < expected_reporting.reporting_period.start_on:
                 text = ("La période de collecte pour {period} "
                         "n'a pas encore commencée. Rapport refusé.")
             else:
                 # arrived too late. We can't accept the report.
                 text = ("La période de collecte pour {period} "
                         "est terminée. Rapport refusé.")
-            self.add_error(text.format(period=expected_reporting.period),
-                                       blocking=True, field='period')
+            self.add_error(text
+                           .format(period=expected_reporting.period),
+                           blocking=True, field='period')
         self.set('arrival_status', arrival_status)
 
     def chk_provider_permission(self):
@@ -270,11 +277,11 @@ class RoutineIntegrityInterface(object):
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district
         # and the district have the Entity as child HC
-        if not provider.role.slug in ('dtc', 'charge_sis') \
+        if provider.role.slug not in ('dtc', 'charge_sis') \
             or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
             or (provider.role.slug == 'charge_sis' and
                 (not provider.location.type.slug == 'health_district'
-                 or not entity in provider.location.get_health_centers())):
+                 or entity not in provider.location.get_health_centers())):
                 self.add_error("Vous ne pouvez pas envoyer de rapport "
                                "de routine pour {entity}."
                                .format(entity=entity),
@@ -282,9 +289,39 @@ class RoutineIntegrityInterface(object):
 
 
 def create_monthly_routine_report(
-    provider, expected_reporting, completed_on,
-    integrity_checker, data_source,
-    reportcls, project_brand):
+        provider, expected_reporting, completed_on,
+        integrity_checker, data_source,
+        reportcls, project_brand):
+
+    # VP is District VP of next month
+    validation_period = DefaultDistrictValidationPeriod.find_create_by_date(
+        expected_reporting.period.casted().following().middle())
+
+    # VE is the district (CSCOM's parent)
+    validating_entity = expected_reporting.entity.get_health_district()
+
+    # VR is Chargé SIS
+    validating_role = Role.get_or_none('charge_sis')
+
+    return create_period_routine_report(
+        provider=provider,
+        expected_reporting=expected_reporting,
+        completed_on=completed_on,
+        integrity_checker=integrity_checker,
+        data_source=data_source,
+        reportcls=reportcls,
+        project_brand=project_brand,
+        validation_period=validation_period,
+        validating_entity=validating_entity,
+        validating_role=validating_role)
+
+
+def create_period_routine_report(
+        provider, expected_reporting, completed_on,
+        integrity_checker, data_source,
+        reportcls, project_brand,
+        validation_period, validating_entity,
+        validating_role=Role.get_or_none('charge_sis')):
 
     report = reportcls.start(
         period=expected_reporting.period,
@@ -313,24 +350,19 @@ def create_monthly_routine_report(
     else:
         expected_reporting.acknowledge_report(report)
 
-    # VP is District VP of next month
-    validation_period = DefaultDistrictValidationPeriod.find_create_by_date(
-        report.period.casted().following().middle())
-
-    # VE is the district (CSCOM's parent)
-    validating_entity = report.entity.get_health_district()
-
     # created expected validation for district charge_sis
-    ExpectedValidation.objects.create(
-        report=report,
-        validation_period=validation_period,
-        validating_entity=validating_entity,
-        validating_role=integrity_checker.validating_role)
+    if validation_period is not None and validating_entity is not None \
+            and validating_role is not None:
+        ExpectedValidation.objects.create(
+            report=report,
+            validation_period=validation_period,
+            validating_entity=validating_entity,
+            validating_role=validating_role)
 
     # Add alert to validation Entity?
     for recipient in Provider.active.filter(
-        role=integrity_checker.validating_role,
-        location=validating_entity):
+            role=integrity_checker.validating_role,
+            location=validating_entity):
 
         if recipient == provider:
             continue
@@ -340,18 +372,17 @@ def create_monthly_routine_report(
             deliver=Notification.TODAY,
             expirate_on=validation_period.end_on,
             category=project_brand,
-            text="L'Unité Sanitaire {hc} vient d'envoyer son rapport "
-                 "{report_name} pour {period}. "
-                 "No reçu: #{receipt}.".format(
-                    report_name=reportcls._meta.verbose_name,
-                    hc=report.entity.display_full_name(),
-                    period=report.period,
-                    receipt=report.receipt)
-            )
+            text=("L'Unité Sanitaire {hc} vient d'envoyer son rapport "
+                  "{report_name} pour {period}. "
+                  "No reçu: #{receipt}.").format(
+                report_name=reportcls._meta.verbose_name,
+                hc=report.entity.display_full_name(),
+                period=report.period,
+                receipt=report.receipt))
 
     return report, ("Le rapport de {cscom} pour {period} "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     cscom=report.entity.display_full_name(),
-                     period=report.period,
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(cscom=report.entity.display_full_name(),
+                            period=report.period,
+                            receipt=report.receipt))

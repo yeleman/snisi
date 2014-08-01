@@ -10,26 +10,25 @@ import logging
 from django.utils import timezone
 
 from snisi_core.models.Providers import Provider
-from snisi_core.models.Entities import Entity
-from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_epidemiology import PROJECT_BRAND
+from snisi_epidemiology.models import EpiWeekPeriod
 from snisi_epidemiology.integrity import (EpidemiologyRIntegrityChecker,
                                           create_epid_report)
-
 from snisi_sms.reply import SMSReply
 
 logger = logging.getLogger(__name__)
 reportcls_epi = ReportClass.get_or_none(slug='epidemio_weekly_routine')
 
+
 def epidemiology_handler(message):
-    if message.content.lower().startswith('epi '):
+    if message.content.lower().startswith('mado '):
         return epidemio(message)
 
     return False
 
 KEYWORDS = {
-    'epi': epidemiology_handler,
+    'mado': epidemiology_handler,
 }
 
 
@@ -93,6 +92,7 @@ def epidemio(message):
                        .format(message.content))
         # failure to convert means non-numeric value which we can't process.
         return reply.error("Les données sont malformées.")
+
     # check credentials
     try:
         provider = Provider.active.get(username=arguments['username'])
@@ -114,10 +114,6 @@ def epidemio(message):
 
     checker.set('entity', hc)
     checker.set('hc', getattr(hc, 'slug', None))
-    # today = datetime.date.today()
-    # checker.set('fillin_day', today.day)
-    # checker.set('fillin_month', today.month)
-    # checker.set('fillin_year', today.year)
     checker.set('submit_time', message.event_on)
     checker.set('author', provider.name())
     checker.set('submitter', provider)
@@ -128,10 +124,8 @@ def epidemio(message):
         return reply.error(checker.errors.pop().render(short=True))
 
     # build requirements for report
-    # TODO WeekPeriod doit etre utilisée à la du MonthPeriod
-    period = MonthPeriod.find_create_from(year=checker.get('year'),
-                                          month=checker.get('month'))
-    entity = Entity.get_or_none(checker.get('hc'))
+    period = EpiWeekPeriod.find_create_by_date(checker.get('submit_time'))
+    entity = checker.get('entity')
 
     # expected reporting defines if report is expeted or not
     expected_reporting = ExpectedReporting.get_or_none(
