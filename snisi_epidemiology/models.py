@@ -87,7 +87,7 @@ class EpiWeekDistrictValidationPeriod(WeekPeriod):
     @classmethod
     def boundaries(cls, date_obj):
         epi_week = EpiWeekPeriod.find_create_by_date(
-            date_obj, dont_create=True, is_precise=True)
+            date_obj, dont_create=True)
         start = epi_week.end_on + ONE_MICROSECOND_DELTA
         end = start + datetime.timedelta(days=3)
         return start, end
@@ -114,9 +114,9 @@ class EpiWeekRegionValidationPeriod(WeekPeriod):
     @classmethod
     def boundaries(cls, date_obj):
         epi_week = EpiWeekPeriod.find_create_by_date(
-            date_obj, dont_create=True, is_precise=True)
+            date_obj, dont_create=True)
         start = epi_week.end_on + ONE_MICROSECOND_DELTA
-        end = start + datetime.timedelta(days=3)
+        end = start + datetime.timedelta(days=4)
         return start, end
 
     def strid(self):
