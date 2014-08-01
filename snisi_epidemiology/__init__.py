@@ -12,10 +12,14 @@ logger = logging.getLogger(__name__)
 
 PROJECT_BRAND = "MADO"
 DOMAIN_SLUG = 'epidomiology'
-ROUTINE_REPORTING_END_DAY = 6
-ROUTINE_EXTENDED_REPORTING_END_DAY = 11
-ROUTINE_DISTRICT_AGG_DAY = 11
-ROUTINE_REGION_AGG_DAY = 11
+
+# epidemio is based on traditional weeks
+# period ends on Friday noon and collect ends on Sunday noon.
+# District validation by Monday noon
+# Region validation by Tuesday noon
+ROUTINE_REPORTING_END_WEEKDAY = 4  # Friday
+ROUTINE_DISTRICT_AGG_DAYS_DELTA = 3
+ROUTINE_REGION_AGG_DAYS_DELTA = 4
 
 
 def get_domain():

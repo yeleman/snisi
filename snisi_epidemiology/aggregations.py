@@ -5,32 +5,32 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+import datetime
 
 from django.utils import timezone
 
 from snisi_core.models.Reporting import (ExpectedReporting,
                                          ExpectedValidation, ReportClass)
-from snisi_core.models.ValidationPeriods import DefaultRegionValidationPeriod
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_reprohealth.models.PFActivities import (AggPFActivitiesR,
-                                                   PFActivitiesR)
-from snisi_reprohealth import (ROUTINE_DISTRICT_AGG_DAY,
-                               ROUTINE_REGION_AGG_DAY)
-from snisi_reprohealth.integrity import PROJECT_BRAND
+from snisi_epidemiology import (ROUTINE_DISTRICT_AGG_DAYS_DELTA,
+                                ROUTINE_REGION_AGG_DAYS_DELTA)
+from snisi_epidemiology.models import (EpiWeekRegionValidationPeriod,
+                                       EpidemiologyR, AggEpidemiologyR)
+from snisi_epidemiology.integrity import PROJECT_BRAND
 from snisi_core.models.Notifications import Notification
 
 logger = logging.getLogger(__name__)
 
 autobot = Provider.get_or_none('autobot')
-reportcls_slug = "msi_pf_monthly_routine_aggregated"
+reportcls_slug = "epidemio_weekly_routine"
 rclass = ReportClass.get_or_none(reportcls_slug)
 charge_sis = Role.get_or_none("charge_sis")
 
 mali = Entity.get_or_none("mali")
-cluster = Cluster.get_or_none("msi_reprohealth_routine")
+cluster = Cluster.get_or_none("epidemiology_routine")
 
 get_districts = lambda: [e for e in cluster.members()
                          if e.type.slug == 'health_district']
@@ -43,15 +43,16 @@ def generate_district_reports(period,
 
     logger.info("Switching to {}".format(period))
 
-    region_validation_period = DefaultRegionValidationPeriod \
+    region_validation_period = EpiWeekRegionValidationPeriod \
         .find_create_by_date(period.middle())
 
     if ensure_correct_date:
         now = timezone.now()
-        if not period.following().includes(now) \
-                or not now.day == ROUTINE_DISTRICT_AGG_DAY:
+        district_agg_day = period.end_on + datetime.timedelta(
+            days=ROUTINE_DISTRICT_AGG_DAYS_DELTA)
+        if not now.date() == district_agg_day.date():
             logger.error("Not allowed to generate district agg "
-                         "outside the 11th of the following period")
+                         "outside the next Monday")
             return
 
     districts = get_districts()
@@ -75,7 +76,7 @@ def generate_district_reports(period,
         logger.info("\tAt district {}".format(district))
 
         # auto-validate non-validated reports
-        for report in PFActivitiesR.objects.filter(
+        for report in EpidemiologyR.objects.filter(
                 period=period, entity__in=district.get_health_centers()):
             if not report.validated:
                 expv = ExpectedValidation.objects.get(report=report)
@@ -86,8 +87,8 @@ def generate_district_reports(period,
                     validated_on=timezone.now(),
                     auto_validated=True)
 
-        # create AggPFActivitiesR
-        agg = AggPFActivitiesR.create_from(
+        # create AggEpidemiologyR
+        agg = AggEpidemiologyR.create_from(
             period=period,
             entity=district,
             created_by=autobot)
@@ -101,24 +102,6 @@ def generate_district_reports(period,
             validating_entity=district.get_health_region(),
             validating_role=None)
 
-        # send notification to Region
-        # for recipient in Provider.active.filter(
-        #     role=charge_sis, location=agg.entity.get_health_region()):
-
-        #     Notification.create(
-        #         provider=recipient,
-        #         deliver=Notification.TODAY,
-        #         expirate_on=region_validation_period.end_on,
-        #         category=PROJECT_BRAND,
-        #         text="Le rapport (aggrégé) de routine PF/MSI mensuel "
-        #              "de {period} pour {entity} est prêt. "
-        #              "No reçu: #{receipt}. "
-        #              "Vous devez le valider avant le 25.".format(
-        #                 entity=agg.entity.display_full_name(),
-        #                 period=agg.period,
-        #                 receipt=agg.receipt)
-        #         )
-
 
 def generate_region_country_reports(period,
                                     ensure_correct_date=True):
@@ -127,8 +110,9 @@ def generate_region_country_reports(period,
 
     if ensure_correct_date:
         now = timezone.now()
-        if not period.following().includes(now) \
-                or not now.day == ROUTINE_REGION_AGG_DAY:
+        region_agg_day = period.end_on + datetime.timedelta(
+            days=ROUTINE_REGION_AGG_DAYS_DELTA)
+        if not now.date() == region_agg_day.date():
             logger.error("Not allowed to generate district agg "
                          "outside the 11th of the following period")
             return
@@ -171,8 +155,8 @@ def generate_region_country_reports(period,
                 validated_on=timezone.now(),
                 auto_validated=True)
 
-        # create AggPFActivitiesR/region
-        agg = AggPFActivitiesR.create_from(
+        # create AggEpidemiologyR/region
+        agg = AggEpidemiologyR.create_from(
             period=period,
             entity=region,
             created_by=autobot)
@@ -195,8 +179,8 @@ def generate_region_country_reports(period,
     if exp is None:
         return
 
-    # create AggPFActivitiesR/country
-    agg = AggPFActivitiesR.create_from(
+    # create AggEpidemiologyR/country
+    agg = AggEpidemiologyR.create_from(
         period=period,
         entity=mali,
         created_by=autobot)
@@ -218,6 +202,6 @@ def generate_region_country_reports(period,
             deliver=Notification.TODAY,
             expirate_on=agg.period.following().following().start_on,
             category=PROJECT_BRAND,
-            text="Le rapport national (aggrégé) de routine PF/MSI mensuel "
-                 "pour {period} est disponible. No reçu: #{receipt}."
+            text="Le rapport national (aggrégé) de routine hebdomadaire "
+                 "MADO pour {period} est disponible. No reçu: #{receipt}."
                  .format(period=agg.period, receipt=agg.receipt))
