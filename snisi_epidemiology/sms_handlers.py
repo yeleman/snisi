@@ -5,7 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-# import datetime
+import datetime
 
 from django.utils import timezone
 
@@ -102,6 +102,13 @@ def epidemio(message):
     if not provider.check_password(arguments['password']):
         return reply.error("Votre mot de passe est incorrect.")
 
+    # try:
+    #     arguments['reporting_date'] = datetime.date(arguments.get('year'),
+    #                                                 arguments.get('month'),
+    #                                                 arguments.get('day'))
+    # except:
+    #     return reply.error("Les données sont malformées (date).")
+
     checker = EpidemiologyRIntegrityChecker()
 
     for key, value in arguments.items():
@@ -111,6 +118,8 @@ def epidemio(message):
         hc = provider.location
     except:
         hc = None
+
+    logger.debug("HC: {}".format(hc))
 
     checker.set('entity', hc)
     checker.set('hc', getattr(hc, 'slug', None))
@@ -124,7 +133,8 @@ def epidemio(message):
         return reply.error(checker.errors.pop().render(short=True))
 
     # build requirements for report
-    period = EpiWeekPeriod.find_create_by_date(checker.get('submit_time'))
+    # period = EpiWeekPeriod.find_create_by_date(checker.get('submit_time'))
+    period = checker.get('period')
     entity = checker.get('entity')
 
     # expected reporting defines if report is expeted or not

@@ -69,12 +69,55 @@ class EpiWeekPeriod(WeekPeriod):
         return self.middle().strftime('eW%W-%Y')
 
 
+class EpiWeekReportingManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekReportingManager, self) \
+            .get_query_set().filter(period_type='epi_week_reporting_period')
+
+
+class EpiWeekReportingPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Reporting Period")
+        verbose_name_plural = _("Week Reporting Periods")
+
+    objects = EpiWeekReportingManager()
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_reporting_period'
+
+    @property
+    def pid(self):
+        return'eWRP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=2)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWRP%W-%Y')
+
+
+class EpiWeekDistrictValidationManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekDistrictValidationManager, self) \
+            .get_query_set().filter(period_type='epi_week_district_validation')
+
+
 class EpiWeekDistrictValidationPeriod(WeekPeriod):
 
     class Meta:
         proxy = True
         verbose_name = _("Week District Validation Period")
         verbose_name_plural = _("Week District Validation Periods")
+
+    objects = EpiWeekDistrictValidationManager()
 
     @classmethod
     def type(cls):
@@ -96,12 +139,20 @@ class EpiWeekDistrictValidationPeriod(WeekPeriod):
         return self.middle().strftime('eWVP%W-%Y')
 
 
+class EpiWeekRegionValidationManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekRegionValidationManager, self) \
+            .get_query_set().filter(period_type='epi_week_region_validation')
+
+
 class EpiWeekRegionValidationPeriod(WeekPeriod):
 
     class Meta:
         proxy = True
         verbose_name = _("Week Region Validation Period")
         verbose_name_plural = _("Week Region Validation Periods")
+
+    objects = EpiWeekRegionValidationManager()
 
     @classmethod
     def type(cls):
@@ -225,7 +276,7 @@ class AbstractEpidemiologyR(SNISIReport):
             receipt=self.receipt)
 
     def fill_blank(self):
-        for field in self.to_dict().keys():
+        for field in self.data_fields():
             setattr(self, field, 0)
 
 
@@ -254,7 +305,9 @@ class AggEpidemiologyR(PeriodicAggregatedReportInterface,
                        AbstractEpidemiologyR):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = None
+    RECEIPT_FORMAT = ("AMDO-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}-{rand}")
     INDIVIDUAL_CLS = EpidemiologyR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

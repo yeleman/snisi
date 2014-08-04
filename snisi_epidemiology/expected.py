@@ -15,7 +15,7 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_epidemiology import get_domain
-from snisi_epidemiology.models import EpiWeekPeriod
+from snisi_epidemiology.models import EpiWeekPeriod, EpiWeekReportingPeriod
 
 logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
@@ -38,7 +38,7 @@ def create_expected_for(period):
     charge_sis = Role.get_or_none("charge_sis")
 
     expected_dict = {
-        'period': period,
+        'period': None,
         'within_period': False,
         'within_entity': False,
         'reporting_role': dtc,
@@ -53,11 +53,17 @@ def create_expected_for(period):
         return created_list
     else:
 
-        reporting_periods = [EpiWeekPeriod.find_create_by_date(
+        wperiods = list(set([EpiWeekPeriod.find_create_by_date(
             period.start_on + datetime.timedelta(days=d))
-            for d in (1, 7, 14, 21, 28)]
+            for d in (1, 7, 14, 21, 28)]))
 
-        for reporting_period in reporting_periods:
+        for wperiod in wperiods:
+
+            logger.info("wperiod")
+            logger.info(wperiod)
+
+            reporting_period = EpiWeekReportingPeriod.find_create_by_date(
+                wperiod.middle())
 
             for entity in routine_cluster.members():
 
@@ -71,6 +77,7 @@ def create_expected_for(period):
                 edict = copy.copy(expected_dict)
                 edict.update({
                     'entity': entity,
+                    'period': wperiod,
                     'report_class': reportcls,
                     'reporting_role': reporting_role,
                     'reporting_period': reporting_period
@@ -87,6 +94,9 @@ def create_expected_for(period):
                     created_list.append(e)
                 else:
                     logger.debug("Exists already: {}".format(e))
+                if e.period != edict['period']:
+                    e.period = edict['period']
+                    e.save()
                 if e.reporting_period != edict['reporting_period']:
                     e.reporting_period = edict['reporting_period']
                     e.save()

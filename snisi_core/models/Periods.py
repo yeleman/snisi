@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 import datetime
 
 from py3compat import implements_to_string
@@ -15,6 +16,7 @@ from django.utils.dateformat import format as date_format
 
 from snisi_tools.misc import class_str, import_path
 
+logger = logging.getLogger(__name__)
 ONE_SECOND_DELTA = datetime.timedelta(days=0, seconds=1)
 ONE_MINUTE_DELTA = datetime.timedelta(days=0, minutes=1)
 ONE_MICROSECOND_DELTA = datetime.timedelta(microseconds=1)
@@ -375,14 +377,24 @@ class Period(models.Model):
                       if period.start_on <= date_obj
                       and period.end_on >= date_obj][0]
         except IndexError:
+            logger.debug("IndexError")
 
             try:
+                logger.debug("boundaries")
+                logger.debug(cls.boundaries(date_obj))
                 period = cls.find_create_with(*cls.boundaries(date_obj))
+                logger.debug("find_create_with")
+                logger.debug(period)
             except:
+                logger.debug("find_create_with raised an exception")
                 return None
             if dont_create:
+                logger.debug("do not save period")
                 return period
+            logger.debug(period)
             period.save()
+            logger.debug("period saved")
+            logger.debug(period)
         return period
 
     @classmethod

@@ -194,15 +194,17 @@ class RoutineIntegrityInterface(object):
     validating_role = None
 
     def chk_period_is_not_future(self):
-        # Get period and Entity
-        period = MonthPeriod.find_create_from(year=self.get('year'),
-                                              month=self.get('month'))
-        if period.is_ahead():
+        # default period is MonthPeriod from year/month
+        if not self.get('period'):
+            period = MonthPeriod.find_create_from(year=self.get('year'),
+                                                  month=self.get('month'))
+            self.set('period', period)
+
+        # check period
+        if self.get('period').is_ahead():
             self.add_error("La période indiquée ({period}) est dans "
                            "le futur".format(period=period),
                            blocking=True, field='month')
-
-        self.set('period', period)
 
     def chk_entity_exists(self):
         entity = Entity.get_or_none(self.get('hc', '').upper(),
@@ -229,6 +231,12 @@ class RoutineIntegrityInterface(object):
             within_entity=False,
             amount_expected=ExpectedReporting.EXPECTED_SINGLE)
 
+        logger.debug(period)
+        logger.debug(entity)
+        logger.debug(entity.slug)
+        logger.debug(self.report_class)
+        logger.debug(expected_reporting)
+
         self.set('expected_reporting', expected_reporting)
 
         if expected_reporting is None:
@@ -247,7 +255,8 @@ class RoutineIntegrityInterface(object):
         if expected_reporting.reporting_period.contains(
                 self.get('submit_time')):
             arrival_status = SNISIReport.ON_TIME
-        elif expected_reporting.extended_reporting_period.contains(
+        elif expected_reporting.extended_reporting_period and \
+            expected_reporting.extended_reporting_period.contains(
                 self.get('submit_time')):
             arrival_status = SNISIReport.LATE
         else:

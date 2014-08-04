@@ -5,8 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-
-from datetime import date
+import datetime
 
 from django.utils.translation import ugettext as _
 
@@ -16,11 +15,11 @@ from snisi_core.integrity import (ReportIntegrityChecker,
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ReportClass
 from snisi_epidemiology import PROJECT_BRAND
-from snisi_epidemiology.models import (EpidemiologyR,
+from snisi_epidemiology.models import (EpidemiologyR, EpiWeekPeriod,
                                        EpiWeekDistrictValidationPeriod)
 
 logger = logging.getLogger(__name__)
-reportcls_epidemio = ReportClass.get_or_none(slug='')
+reportcls_epidemio = ReportClass.get_or_none('epidemio_weekly_routine')
 validating_role = Role.get_or_none('charge_sis')
 
 
@@ -62,12 +61,9 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
                        'acute_measles_diarrhea',
                        'other_notifiable_disease']
 
-        reporting_date = date(self.get('year'),
-                              self.get('month'),
-                              self.get('day'))
-        if reporting_date.weekday() != 6:
-            self.add_error("Fin de semaine doit être un dimanche et non un {}."
-                           .format(reporting_date.strftime("%A")),
+        if self.get('reporting_date').weekday() != 4:
+            self.add_error("Fin de semaine doit être un vendredi et non un {}."
+                           .format(self.get('reporting_date').strftime("%A")),
                            field="year")
 
         for field in list_fields:
@@ -90,6 +86,22 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
                                  blocking=True, field=field)
 
     def _check(self, **options):
+        try:
+            reporting_date = datetime.datetime(self.get('year'),
+                                               self.get('month'),
+                                               self.get('day'),
+                                               14, 0, 0)
+        except:
+            self.add_error("Date incorrecte.", blocking=True)
+        else:
+            self.set('reporting_date', reporting_date)
+
+        period = EpiWeekPeriod.find_create_by_date(
+            reporting_date - datetime.timedelta(days=3))
+        logger.debug(period)
+        logger.debug(period.start_on)
+        self.set('period', period)
+
         self.check_epid_data()
         self.chk_period_is_not_future()
         self.chk_entity_exists()

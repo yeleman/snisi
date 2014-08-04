@@ -28,7 +28,7 @@ class Command(BaseCommand):
                     default='',
                     dest='date'),
         make_option('-t',
-                    help='Period Type: DayPeriod, WeekPeriod, MonthPeriod, etc.',
+                    help='Period Type: DayPeriod, WeekPeriod, MonthPeriod..',
                     action='store',
                     dest='period_type'),
     )
@@ -36,7 +36,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         period_type = options.get('period_type')
-        period_cls = import_path('snisi_core.models.{}'.format(period_type), failsafe=True)
+        period_cls = import_path('snisi_core.models.{}'
+                                 .format(period_type), failsafe=True)
         if period_cls is None:
             logger.error("Invalid period-type {}".format(period_type))
             return
@@ -65,15 +66,15 @@ class Command(BaseCommand):
         for domain in Domain.active.all():
             logger.info(domain)
 
-            create_expected_for = domain.import_from('expected.create_expected_for')
+            create_expected_for = domain.import_from(
+                'expected.create_expected_for')
             if create_expected_for is None:
                 logger.info("\t Skipping domain {}".format(domain))
                 continue
 
-            logger.info("Creating expected reportings for {}/{}".format(domain, period))
+            logger.info("Creating expected reportings for {}/{}"
+                        .format(domain, period))
 
             created_list = create_expected_for(period)
             logger.info("Created {} expected reportings for {}/{}"
                         .format(len(created_list), domain, period))
-
-

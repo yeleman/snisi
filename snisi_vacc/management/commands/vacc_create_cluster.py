@@ -28,7 +28,8 @@ class Command(BaseCommand):
 
         coverage_cluster = Cluster.objects.get(slug="vacc_coverage_routine")
         DEBUG_change_system_date(
-            MonthPeriod.from_url_str("12-2012").end_on - datetime.timedelta(days=5), True)
+            MonthPeriod.from_url_str("12-2012").end_on
+            - datetime.timedelta(days=5), True)
 
         mali = Entity.get_or_none("mali")
 

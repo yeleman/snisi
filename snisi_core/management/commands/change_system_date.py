@@ -24,7 +24,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         date_str = options.get('input_date').lower()
         if not date_str == 'auto':
-            new_date = datetime.datetime(*[int(e) for e in date_str.split('-')])
+            new_date = datetime.datetime(*[int(e)
+                                           for e in date_str.split('-')])
         else:
             new_date = None
 
