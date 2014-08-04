@@ -19,6 +19,10 @@ logger = logging.getLogger(__name__)
 def vacc_map(request, **kwargs):
     context = {'page_slug': 'map'}
 
+    base = "vaccination/base.html" if kwargs.get('map_alone') else "base.html"
+
+    context.update({'base': base})
+
     periods = [MonthPeriod.objects.get(identifier=p['period'])
                for p in ExpectedReporting.objects.filter(
                report_class__slug='major_vaccine_monthly')

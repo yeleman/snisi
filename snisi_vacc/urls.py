@@ -14,4 +14,9 @@ urlpatterns = patterns(
         'snisi_vacc.views.vacc_map',
         {'template_name': 'vaccination/map.html'},
         name='vacc_map'),
+    url(r'^/map_alone/?$',
+        'snisi_vacc.views.vacc_map',
+        {'template_name': 'vaccination/map.html',
+         'map_alone': True},
+        name='vacc_map_alone'),
 )
