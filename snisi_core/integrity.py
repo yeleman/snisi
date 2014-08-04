@@ -203,7 +203,7 @@ class RoutineIntegrityInterface(object):
         # check period
         if self.get('period').is_ahead():
             self.add_error("La période indiquée ({period}) est dans "
-                           "le futur".format(period=period),
+                           "le futur".format(period=self.get('period')),
                            blocking=True, field='month')
 
     def chk_entity_exists(self):
@@ -230,12 +230,6 @@ class RoutineIntegrityInterface(object):
             entity=entity,
             within_entity=False,
             amount_expected=ExpectedReporting.EXPECTED_SINGLE)
-
-        logger.debug(period)
-        logger.debug(entity)
-        logger.debug(entity.slug)
-        logger.debug(self.report_class)
-        logger.debug(expected_reporting)
 
         self.set('expected_reporting', expected_reporting)
 

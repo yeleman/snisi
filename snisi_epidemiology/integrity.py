@@ -98,8 +98,6 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
 
         period = EpiWeekPeriod.find_create_by_date(
             reporting_date - datetime.timedelta(days=3))
-        logger.debug(period)
-        logger.debug(period.start_on)
         self.set('period', period)
 
         self.check_epid_data()
