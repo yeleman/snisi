@@ -25,6 +25,6 @@ def default_context():
         level = 'danger' \
             if nb_cases_for(periods, EpidemiologyR, 'deaths') else 'warning'
     else:
-        level = 'info'
+        level = 'success'
 
     return {'mado_nb_cases': mado_nb_cases, 'mado_level': level}
