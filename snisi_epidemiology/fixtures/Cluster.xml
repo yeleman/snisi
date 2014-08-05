@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="epidemiology_routine" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">epidemiology</field>
+        <field type="CharField" name="name">Routine Hebdomadaire MADO</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
+    </object>
+    <object pk="epidemiology_routine_sms" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">epidemiology</field>
+        <field type="CharField" name="name">Routine Hebdomadaire MADO via SMS</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
+    </object>
+</django-objects>

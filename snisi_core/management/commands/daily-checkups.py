@@ -30,10 +30,10 @@ class Command(BaseCommand):
                     logger.info("Running {}".format(cmd))
                     call_command(cmd)
                 except Exception as exp:
-                    logger.error("Caught an exception while running daily command")
+                    logger.error(
+                        "Caught an exception while running daily command")
                     logger.error(exp)
                     logger.debug("".join(traceback.format_exc()))
                     continue
 
         logger.info("End of daily checkups.")
-

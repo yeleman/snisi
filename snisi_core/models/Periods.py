@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 import datetime
 
 from py3compat import implements_to_string
@@ -15,9 +16,11 @@ from django.utils.dateformat import format as date_format
 
 from snisi_tools.misc import class_str, import_path
 
+logger = logging.getLogger(__name__)
 ONE_SECOND_DELTA = datetime.timedelta(days=0, seconds=1)
 ONE_MINUTE_DELTA = datetime.timedelta(days=0, minutes=1)
 ONE_MICROSECOND_DELTA = datetime.timedelta(microseconds=1)
+ONE_WEEK_DELTA = datetime.timedelta(days=7)
 
 
 def normalize_date(target, as_aware=True):
@@ -307,10 +310,13 @@ class Period(models.Model):
         if isinstance(date_obj, datetime.date):
             date_obj = datetime.datetime(date_obj.year,
                                          date_obj.month,
-                                         date_obj.day, 12, 0).replace(tzinfo=timezone.utc)
+                                         date_obj.day, 12, 0) \
+                .replace(tzinfo=timezone.utc)
         if isinstance(date_obj, datetime.datetime):
-            return self.normalize_date(self.start_on) < self.normalize_date(date_obj) \
-                and self.normalize_date(self.end_on) > self.normalize_date(date_obj)
+            return self.normalize_date(self.start_on) \
+                < self.normalize_date(date_obj) \
+                and self.normalize_date(self.end_on) \
+                > self.normalize_date(date_obj)
         elif isinstance(date_obj, int):
             pass
         return False
@@ -320,7 +326,8 @@ class Period(models.Model):
     @classmethod
     def find_create_from(cls, year, month=None, day=None,
                          week=None, hour=None, minute=None, second=None,
-                         dont_create=False, is_iso=False):
+                         dont_create=False,
+                         is_iso=False, is_precise=False):
 
         if not week and not month:
             # assume year search
@@ -344,7 +351,9 @@ class Period(models.Model):
         second = second if second else 0
 
         date_obj = datetime.datetime(year, month, day, hour, minute, second,
-                                     tzinfo=timezone.utc) + datetime.timedelta(days=cls.delta() // 2)
+                                     tzinfo=timezone.utc)
+        if not is_precise:
+            date_obj += datetime.timedelta(days=cls.delta() // 2)
 
         period = cls.find_create_by_date(date_obj, dont_create)
 
@@ -354,11 +363,13 @@ class Period(models.Model):
     def find_create_by_date(cls, date_obj, dont_create=False):
         ''' creates a period to fit the provided date in '''
         if not isinstance(date_obj, datetime.datetime):
-            date_obj = datetime.datetime.fromtimestamp(float(date_obj.strftime('%s')))
+            date_obj = datetime.datetime.fromtimestamp(
+                float(date_obj.strftime('%s')))
             date_obj = datetime.datetime(date_obj.year, date_obj.month,
-                                date_obj.day, date_obj.hour,
-                                date_obj.minute, 1,
-                                tzinfo=timezone.utc)
+                                         date_obj.day,
+                                         date_obj.hour,
+                                         date_obj.minute, 1,
+                                         tzinfo=timezone.utc)
 
         date_obj = normalize_date(date_obj, as_aware=True)
         try:
@@ -366,14 +377,24 @@ class Period(models.Model):
                       if period.start_on <= date_obj
                       and period.end_on >= date_obj][0]
         except IndexError:
+            logger.debug("IndexError")
 
             try:
+                logger.debug("boundaries")
+                logger.debug(cls.boundaries(date_obj))
                 period = cls.find_create_with(*cls.boundaries(date_obj))
+                logger.debug("find_create_with")
+                logger.debug(period)
             except:
+                logger.debug("find_create_with raised an exception")
                 return None
             if dont_create:
+                logger.debug("do not save period")
                 return period
+            logger.debug(period)
             period.save()
+            logger.debug("period saved")
+            logger.debug(period)
         return period
 
     @classmethod
@@ -424,7 +445,8 @@ class Period(models.Model):
         else:
             weeknum -= 1  # cause we've set start as first real week
             start_week = sy + datetime.timedelta(ONE_WEEK * weeknum)
-            end_week = start_week + datetime.timedelta(ONE_WEEK) - ONE_SECOND_DELTA
+            end_week = start_week + datetime.timedelta(ONE_WEEK) \
+                - ONE_SECOND_DELTA
 
         period = cls.find_create_with(start_week, end_week)
         return period
@@ -472,11 +494,11 @@ class Period(models.Model):
         """
         FORMATS:
 
-        YEAR:       2013                                [0-9]{4}
-        MONTH:      01-2013                             [0-9]{2}-[0-9]{4}
-        QUARTER:    Q1-2013                             Q[1-3]-[0-9]{4}
-        WEEK:       W1-2013                             W[0-9]{1,2}-[0-9]{4}
-        DAY:        01-01-2013                          [0-9]{2}-[0-9]{2}-[0-9]{4}
+        YEAR:       2013                            [0-9]{4}
+        MONTH:      01-2013                         [0-9]{2}-[0-9]{4}
+        QUARTER:    Q1-2013                         Q[1-3]-[0-9]{4}
+        WEEK:       W1-2013                         W[0-9]{1,2}-[0-9]{4}
+        DAY:        01-01-2013                      [0-9]{2}-[0-9]{2}-[0-9]{4}
         """
 
         if sub_indice is not None:
@@ -513,13 +535,13 @@ class Period(models.Model):
         return cls.objects.get(identifier=self.identifier)
 
 
-
 class SpecificTypeManager(models.Manager):
     SPECIFIC_TYPE = Period.CUSTOM
 
     def get_query_set(self):
         return super(SpecificTypeManager, self) \
             .get_query_set().filter(period_type=self.SPECIFIC_TYPE)
+
 
 class DayManager(SpecificTypeManager):
     SPECIFIC_TYPE = Period.DAY
@@ -652,7 +674,7 @@ class MonthPeriod(Period):
         return date_format(self.middle(), ugettext("F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("F Y"))
 
     @classmethod
@@ -706,7 +728,7 @@ class QuarterPeriod(Period):
         return 'Q{:d}.{}'.format((self.quarter, self.middle().strftime('%Y')))
 
     def name(self):
-        # Translators: django date format for accompagning Quarter in Quarter.name()
+        # Translators: django date format for accomp Quarter in Quarter.name()
         drepr = date_format(self.middle(), ugettext("Y"))
         # Translators: Quarter.name() repr using Quarter number and other
         return ugettext("Q%(quarter)s.%(year)s").format(
@@ -740,7 +762,8 @@ class QuarterPeriod(Period):
             return ordval
 
         # Translators: Django's date format for QuarterPeriod.full_name()
-        return "%(ordinal_quarter)s Quarter %(year)s (%(start)s to %(end)s)".format(
+        return ("%(ordinal_quarter)s Quarter %(year)s "
+                "(%(start)s to %(end)s)").format(
             ordinal_quarter=ordinal(self.quarter),
             year=date_format(self.middle(), ugettext("Y")),
             start=date_format(self.start_on, ugettext("F")),
@@ -835,7 +858,7 @@ class FixedDaysPeriod(Period):
             sd=self.start_on.day, ed=self.end_on.day))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("{sd} to {ed} F Y").format(
             sd=self.start_on.day, ed=self.end_on.day))
 

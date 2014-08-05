@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import datetime
 
 import reversion
 from py3compat import implements_to_string
@@ -12,19 +13,191 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from django.utils.translation import ugettext_lazy as _, ugettext
 
+from snisi_core.models.Periods import (WeekPeriod, ONE_WEEK_DELTA,
+                                       ONE_MICROSECOND_DELTA,
+                                       SpecificTypeManager,
+                                       normalize_date)
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
+from snisi_epidemiology.xls_export import epid_activities_as_xls
+
+EPI_WEEK = 'epi_week'
+
+
+class EpiWeekManager(SpecificTypeManager):
+    SPECIFIC_TYPE = EPI_WEEK
+
+
+class EpiWeekPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Period")
+        verbose_name_plural = _("Week Periods")
+
+    objects = EpiWeekManager()
+
+    @classmethod
+    def type(cls):
+        return EPI_WEEK
+
+    @property
+    def pid(self):
+        return'eW{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        date_obj = normalize_date(date_obj, as_aware=True)
+
+        monday = date_obj - datetime.timedelta(date_obj.weekday())
+        monday = monday.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        friday_noon_dt = datetime.timedelta(days=4, minutes=720)
+        friday_noon = monday + friday_noon_dt
+        is_next_week = not date_obj < friday_noon
+
+        if not is_next_week:
+            start = friday_noon - ONE_WEEK_DELTA
+        else:
+            start = friday_noon
+        end = start + datetime.timedelta(cls.delta()) - ONE_MICROSECOND_DELTA
+        return (start, end)
+
+    def strid(self):
+        return self.middle().strftime('eW%W-%Y')
+
+
+class EpiWeekReportingManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekReportingManager, self) \
+            .get_query_set().filter(period_type='epi_week_reporting_period')
+
+
+class EpiWeekReportingPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Reporting Period")
+        verbose_name_plural = _("Week Reporting Periods")
+
+    objects = EpiWeekReportingManager()
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_reporting_period'
+
+    @property
+    def pid(self):
+        return'eWRP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=2)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWRP%W-%Y')
+
+
+class EpiWeekDistrictValidationManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekDistrictValidationManager, self) \
+            .get_query_set().filter(period_type='epi_week_district_validation')
+
+
+class EpiWeekDistrictValidationPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week District Validation Period")
+        verbose_name_plural = _("Week District Validation Periods")
+
+    objects = EpiWeekDistrictValidationManager()
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_district_validation'
+
+    @property
+    def pid(self):
+        return'eWDVP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=3)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWVP%W-%Y')
+
+
+class EpiWeekRegionValidationManager(models.Manager):
+    def get_query_set(self):
+        return super(EpiWeekRegionValidationManager, self) \
+            .get_query_set().filter(period_type='epi_week_region_validation')
+
+
+class EpiWeekRegionValidationPeriod(WeekPeriod):
+
+    class Meta:
+        proxy = True
+        verbose_name = _("Week Region Validation Period")
+        verbose_name_plural = _("Week Region Validation Periods")
+
+    objects = EpiWeekRegionValidationManager()
+
+    @classmethod
+    def type(cls):
+        return 'epi_week_region_validation'
+
+    @property
+    def pid(self):
+        return'eWRVP{}'.format(self.middle().strftime('%W-%Y'))
+
+    @classmethod
+    def boundaries(cls, date_obj):
+        epi_week = EpiWeekPeriod.find_create_by_date(
+            date_obj, dont_create=True)
+        start = epi_week.end_on + ONE_MICROSECOND_DELTA
+        end = start + datetime.timedelta(days=4)
+        return start, end
+
+    def strid(self):
+        return self.middle().strftime('eWRVP%W-%Y')
 
 
 class AbstractEpidemiologyR(SNISIReport):
 
-    RECEIPT_FORMAT = 'dd'
-
     class Meta:
         app_label = 'snisi_epidemiology'
         abstract = True
+
+    DISEASE_NAMES = {
+        'ebola': _("Ebola"),
+        'acute_flaccid_paralysis': _("AFP"),
+        'influenza_a_h1n1': _("Influenza A H1N1"),
+        'cholera': _("Cholera"),
+        'red_diarrhea': _("Red Diarrhea"),
+        'measles': _("Measles"),
+        'yellow_fever': _("Yellow Fever"),
+        'neonatal_tetanus': _("NNT"),
+        'meningitis': _("Meningitis"),
+        'rabies': _("Rabies"),
+        'acute_measles_diarrhea': _("Acute Measles Diarrhea"),
+        'other_notifiable_disease': _("Other Notifiable Diseases")
+    }
+
+    ebola_case = models.IntegerField(_("Ebola cases"))
+    ebola_death = models.IntegerField(_("Ebola death"))
 
     acute_flaccid_paralysis_case = models.IntegerField(_("AFP cases"))
     acute_flaccid_paralysis_death = models.IntegerField(_("AFP death"))
@@ -53,13 +226,19 @@ class AbstractEpidemiologyR(SNISIReport):
     rabies_case = models.IntegerField(_("Rabies cases"))
     rabies_death = models.IntegerField(_("Rabies death"))
 
-    acute_measles_diarrhea_case = models.IntegerField(_("Acute Measles Diarrhea cases"))
-    acute_measles_diarrhea_death = models.IntegerField(_("Acute Measles Diarrhea death"))
+    acute_measles_diarrhea_case = models.IntegerField(
+        _("Acute Measles Diarrhea cases"))
+    acute_measles_diarrhea_death = models.IntegerField(
+        _("Acute Measles Diarrhea death"))
 
-    other_notifiable_disease_case = models.IntegerField(_("Other Notifiable Diseases cases"))
-    other_notifiable_disease_death = models.IntegerField(_("Other Notifiable Diseases death"))
+    other_notifiable_disease_case = models.IntegerField(
+        _("Other Notifiable Diseases cases"))
+    other_notifiable_disease_death = models.IntegerField(
+        _("Other Notifiable Diseases death"))
 
-    def add_data(self, acute_flaccid_paralysis_case,
+    def add_data(self, ebola_case,
+                 ebola_death,
+                 acute_flaccid_paralysis_case,
                  acute_flaccid_paralysis_death,
                  influenza_a_h1n1_case,
                  influenza_a_h1n1_death,
@@ -81,6 +260,8 @@ class AbstractEpidemiologyR(SNISIReport):
                  acute_measles_diarrhea_death,
                  other_notifiable_disease_case,
                  other_notifiable_disease_death):
+        self.ebola_case = ebola_case
+        self.ebola_death = ebola_death
         self.acute_flaccid_paralysis_case = acute_flaccid_paralysis_case
         self.acute_flaccid_paralysis_death = acute_flaccid_paralysis_death
         self.influenza_a_h1n1_case = influenza_a_h1n1_case
@@ -111,14 +292,53 @@ class AbstractEpidemiologyR(SNISIReport):
             receipt=self.receipt)
 
     def fill_blank(self):
-        for field in self.to_dict().keys():
+        for field in self.data_fields():
             setattr(self, field, 0)
+
+    def as_xls(self):
+        file_name = "MADO_{entity}s.{day}.{month}.{year}.xls" \
+                    .format(entity=self.entity.slug,
+                            day=self.period.middle().day,
+                            month=self.period.middle().month,
+                            year=self.period.middle().year)
+        return file_name, epid_activities_as_xls(self)
+
+    def nb_cases_total(self):
+        return sum([getattr(self, field, 0)
+                    for field in self.case_fields()])
+
+    def nb_deaths_total(self):
+        return sum([getattr(self, field, 0)
+                    for field in self.death_fields()])
+
+    @classmethod
+    def case_fields(cls):
+        return [field for field in cls.data_fields()
+                if field.endswith('_case')]
+
+    @classmethod
+    def death_fields(cls):
+        return [field for field in cls.data_fields()
+                if field.endswith('_death')]
+
+    @classmethod
+    def disease_fields(cls):
+        return [field.rsplit('_', 1)[0] for field in cls.data_fields()
+                if field.endswith('_case')]
+
+    @classmethod
+    def disease_name(cls, disease):
+        return cls.DISEASE_NAMES.get(disease)
 
 
 @implements_to_string
 class EpidemiologyR(AbstractEpidemiologyR):
 
+    RECEIPT_FORMAT = ("MDO-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}-{rand}")
     REPORTING_TYPE = PERIODICAL_SOURCE
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_epidemiology'
@@ -136,16 +356,19 @@ class AggEpidemiologyR(PeriodicAggregatedReportInterface,
                        AbstractEpidemiologyR):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
+    RECEIPT_FORMAT = ("AMDO-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}-{rand}")
     INDIVIDUAL_CLS = EpidemiologyR
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_epidemiology'
         verbose_name = _("Aggregated Epidemiology Report")
         verbose_name_plural = _("Aggregated Epidemiology Reports")
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
-        verbose_name=_(u"Primary. Sources"),
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS, verbose_name=_("Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
 

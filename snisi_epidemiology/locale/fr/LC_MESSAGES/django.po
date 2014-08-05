@@ -7,127 +7,242 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-14 14:27+0000\n"
-"PO-Revision-Date: 2014-04-14 14:29-0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2014-08-05 15:30+0000\n"
+"PO-Revision-Date: 2014-08-05 15:36-0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: snisi_epidemiology/models.py:108
+#: integrity.py:74
+#, python-brace-format
+msgid "{field_name}: ({case}) number case lower than ({death}) number death"
+msgstr ""
+"{field_name}: Nombre de cas ({case}) inférieur au nombre de décès ({death})."
+
+#: integrity.py:85
+#, python-brace-format
+msgid "Missing data for {f}"
+msgstr "Données manquantes pour {f}"
+
+#: models.py:38
+msgid "Week Period"
+msgstr "Période semaine"
+
+#: models.py:39
+msgid "Week Periods"
+msgstr "Périodes semaine"
+
+#: models.py:83
+msgid "Week Reporting Period"
+msgstr "Période rapportage semaine"
+
+#: models.py:84
+msgid "Week Reporting Periods"
+msgstr "Périodes rapportage semaine"
+
+#: models.py:118
+msgid "Week District Validation Period"
+msgstr "Période validation district semaine"
+
+#: models.py:119
+msgid "Week District Validation Periods"
+msgstr "Périodes validation district semaine"
+
+#: models.py:153
+msgid "Week Region Validation Period"
+msgstr "Période validation région semaine"
+
+#: models.py:154
+msgid "Week Region Validation Periods"
+msgstr "Périodes validation région semaine"
+
+#: models.py:185
+msgid "Ebola"
+msgstr "Ébola"
+
+#: models.py:186
+msgid "AFP"
+msgstr "Paralysie flasque aiguë"
+
+#: models.py:187
+msgid "Influenza A H1N1"
+msgstr "Grippe A H1N1"
+
+#: models.py:188
+msgid "Cholera"
+msgstr "Choléra"
+
+#: models.py:189
+msgid "Red Diarrhea"
+msgstr "Diarrhée rouge"
+
+#: models.py:190
+msgid "Measles"
+msgstr "Rougeole"
+
+#: models.py:191
+msgid "Yellow Fever"
+msgstr "Fièvre jaune"
+
+#: models.py:192
+msgid "NNT"
+msgstr "TNN"
+
+#: models.py:193
+msgid "Meningitis"
+msgstr "Méningite"
+
+#: models.py:194
+msgid "Rabies"
+msgstr "Rage"
+
+#: models.py:195
+msgid "Acute Measles Diarrhea"
+msgstr "Rougeole aiguë et diarrhée"
+
+#: models.py:196
+msgid "Other Notifiable Diseases"
+msgstr "Maladie à déclaration obligatoire"
+
+#: models.py:199
+msgid "Ebola cases"
+msgstr "Choléra"
+
+#: models.py:200
+msgid "Ebola death"
+msgstr "Choléra"
+
+#: models.py:202
+msgid "AFP cases"
+msgstr "Cas de paralysie flasque aiguë"
+
+#: models.py:203
+msgid "AFP death"
+msgstr "Décès par paralysie flasque aiguë"
+
+#: models.py:205
+msgid "Influenza A H1N1 cases"
+msgstr "Cas de grippe A H1N1"
+
+#: models.py:206
+msgid "Influenza A H1N1 death"
+msgstr "Décès par grippe A H1N1"
+
+#: models.py:208
+msgid "Cholera cases"
+msgstr "Cas de choléra"
+
+#: models.py:209
+msgid "Cholera death"
+msgstr "Décès par choléra"
+
+#: models.py:211
+msgid "Red Diarrhea cases"
+msgstr "Cas de diarrhée rouge"
+
+#: models.py:212
+msgid "Red Diarrhea death"
+msgstr "Décès par diarrhée rouge"
+
+#: models.py:214
+msgid "Measles cases"
+msgstr "Cas de rougeole"
+
+#: models.py:215
+msgid "Measles death"
+msgstr "Décès par rougeole"
+
+#: models.py:217
+msgid "Yellow Fever cases"
+msgstr "Cas de fièvre jaune"
+
+#: models.py:218
+msgid "Yellow Fever death"
+msgstr "Décès par fièvre jaune"
+
+#: models.py:220
+msgid "NNT cases"
+msgstr "Cas de TNN"
+
+#: models.py:221
+msgid "NNT death"
+msgstr "Décès par TNN"
+
+#: models.py:223
+msgid "Meningitis cases"
+msgstr "Cas de méningite"
+
+#: models.py:224
+msgid "Meningitis death"
+msgstr "Décès par méningite"
+
+#: models.py:226
+msgid "Rabies cases"
+msgstr "Cas de rage"
+
+#: models.py:227
+msgid "Rabies death"
+msgstr "Décès par rage"
+
+#: models.py:230
+msgid "Acute Measles Diarrhea cases"
+msgstr "Cas de rougeole aiguë et diarrhée"
+
+#: models.py:232
+msgid "Acute Measles Diarrhea death"
+msgstr "Décès par rougeole aiguë et diarrhée"
+
+#: models.py:235
+msgid "Other Notifiable Diseases cases"
+msgstr "Autres cas de maladie à déclaration obligatoire"
+
+#: models.py:237
+msgid "Other Notifiable Diseases death"
+msgstr "Autres décès de maladie à déclaration obligatoire"
+
+#: models.py:289
 #, python-brace-format
 msgid "{cscom} / {period} / {receipt}"
 msgstr "{cscom} / {period} / {receipt}"
 
-#: snisi_epidemiology/models.py:148
-msgid "Primary. Sources"
-msgstr "Sources primaires"
-
-#: snisi_epidemiology/models.py:29
-msgid "AFP cases"
-msgstr "Cas de paralysie flasque aiguë"
-
-#: snisi_epidemiology/models.py:30
-msgid "AFP death"
-msgstr "Décès par paralysie flasque aiguë"
-
-#: snisi_epidemiology/models.py:32
-msgid "Influenza A H1N1 cases"
-msgstr "Cas de grippe A H1N1"
-
-#: snisi_epidemiology/models.py:33
-msgid "Influenza A H1N1 death"
-msgstr "Décès par grippe A H1N1"
-
-#: snisi_epidemiology/models.py:35
-msgid "Cholera cases"
-msgstr "Cas de choléra"
-
-#: snisi_epidemiology/models.py:36
-msgid "Cholera death"
-msgstr "Décès par choléra"
-
-#: snisi_epidemiology/models.py:38
-msgid "Red Diarrhea cases"
-msgstr "Cas de diarrhée rouge"
-
-#: snisi_epidemiology/models.py:39
-msgid "Red Diarrhea death"
-msgstr "Décès par diarrhée rouge"
-
-#: snisi_epidemiology/models.py:41
-msgid "Measles cases"
-msgstr "Cas de rougeole"
-
-#: snisi_epidemiology/models.py:42
-msgid "Measles death"
-msgstr "Décès par rougeole"
-
-#: snisi_epidemiology/models.py:44
-msgid "Yellow Fever cases"
-msgstr "Cas de fièvre jaune"
-
-#: snisi_epidemiology/models.py:45
-msgid "Yellow Fever death"
-msgstr "Décès par fièvre jaune"
-
-#: snisi_epidemiology/models.py:47
-msgid "NNT cases"
-msgstr "Cas de TNN"
-
-#: snisi_epidemiology/models.py:48
-msgid "NNT death"
-msgstr "Décès par TNN"
-
-#: snisi_epidemiology/models.py:50
-msgid "Meningitis cases"
-msgstr "Cas de méningite"
-
-#: snisi_epidemiology/models.py:51
-msgid "Meningitis death"
-msgstr "Décès par méningite"
-
-#: snisi_epidemiology/models.py:53
-msgid "Rabies cases"
-msgstr "Cas de rage"
-
-#: snisi_epidemiology/models.py:54
-msgid "Rabies death"
-msgstr "Décès par rage"
-
-#: snisi_epidemiology/models.py:56
-msgid "Acute Measles Diarrhea cases"
-msgstr "Cas de rougeole aiguë et diarrhée"
-
-#: snisi_epidemiology/models.py:57
-msgid "Acute Measles Diarrhea death"
-msgstr "Décès par rougeole aiguë et diarrhée"
-
-#: snisi_epidemiology/models.py:59
-msgid "Other Notifiable Diseases cases"
-msgstr "Autres cas de maladie à déclaration obligatoire"
-
-#: snisi_epidemiology/models.py:60
-msgid "Other Notifiable Diseases death"
-msgstr "Autres décès de maladie à déclaration obligatoire"
-
-#: snisi_epidemiology/models.py:125
+#: models.py:345
 msgid "Epidemiology Report"
 msgstr "Rapport épidémiologie"
 
-#: snisi_epidemiology/models.py:126
+#: models.py:346
 msgid "Epidemiology Reports"
 msgstr "Rapports épidémiologie"
 
-#: snisi_epidemiology/models.py:144
+#: models.py:367
 msgid "Aggregated Epidemiology Report"
 msgstr "Rapport épidémiologie agrégé"
 
-#: snisi_epidemiology/models.py:145
+#: models.py:368
 msgid "Aggregated Epidemiology Reports"
 msgstr "Rapports épidémiologie agrégés"
+
+#: models.py:371
+msgid "Primary. Sources"
+msgstr "Sources primaires"
+
+#: xls_import.py:30
+msgid "Health Center"
+msgstr "Centre de santé"
+
+#: xls_import.py:32
+msgid "Day"
+msgstr "Jour"
+
+#: xls_import.py:34
+msgid "Month"
+msgstr "Mois"
+
+#: xls_import.py:36
+msgid "Year"
+msgstr "Année"

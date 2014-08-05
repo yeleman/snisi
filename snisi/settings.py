@@ -42,7 +42,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.NullHandler',
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         },
@@ -76,9 +76,7 @@ LOGGING = {
 }
 
 
-
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -100,7 +98,7 @@ INSTALLED_APPS = (
     'snisi_trachoma',
     'snisi_reprohealth',
     # 'snisi_bednets',
-    # 'snisi_epidemiology',
+    'snisi_epidemiology',
 
     'snisi_vacc',
 
@@ -126,6 +124,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "snisi_web.processors.branding",
+    "snisi_web.processors.default_context",
 )
 
 

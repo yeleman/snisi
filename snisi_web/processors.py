@@ -4,9 +4,26 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 
 from snisi_core import branding as branding_dict
+from snisi_core.models.Projects import Domain
+
+logger = logging.getLogger(__name__)
 
 
 def branding(*args, **kwargs):
     return branding_dict
+
+
+def default_context(*args, **kwargs):
+    context = {}
+
+    # loop through all projects and update context
+    for domain in Domain.active.all():
+        dflt_ctx = domain.import_from('processors.default_context'
+                                      .format(domain.module_path))
+        if dflt_ctx is not None:
+            context.update(dflt_ctx())
+
+    return context

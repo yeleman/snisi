@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 
 import reversion
 from py3compat import implements_to_string, string_types, text_type
@@ -15,7 +16,8 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-from snisi_core.models.common import pre_save_report_incomplete, post_save_report
+from snisi_core.models.common import (pre_save_report_incomplete,
+                                      post_save_report)
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import Period
@@ -25,6 +27,8 @@ from snisi_core.models.Roles import Role
 from snisi_tools.misc import (import_path, DictDiffer, class_str,
                               get_uuid, short_class_str)
 from snisi_core.xls_export import default_xls_export
+
+logger = logging.getLogger(__name__)
 
 PERIODICAL_SOURCE = 'periosrc'
 PERIODICAL_AGGREGATED = 'perioagg'
@@ -46,7 +50,6 @@ class SuperMixin(object):
             return getattr(cls.__mro__[cls.index(cls.__mro__)], method, fail)
         except:
             return fail
-
 
 
 def get_autobot():
@@ -197,9 +200,9 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
                                          default=NOT_APPLICABLE)
     validated_on = models.DateTimeField(null=True, blank=True)
     validated_by = models.ForeignKey(Provider,
-                                    null=True, blank=True,
-                                    verbose_name=_("Validated By"),
-                                    related_name='own_validated_reports')
+                                     null=True, blank=True,
+                                     verbose_name=_("Validated By"),
+                                     related_name='own_validated_reports')
     auto_validated = models.BooleanField(default=False)
 
     # Related Location
@@ -245,7 +248,9 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
             unique_togethers = [(self.__class__, self.UNIQUE_TOGETHER)]
             for parent_class in self._meta.parents.keys():
                 if parent_class._meta.unique_together:
-                    unique_togethers.append((parent_class, parent_class._meta.unique_together))
+                    unique_togethers.append((
+                        parent_class,
+                        parent_class._meta.unique_together))
 
             for model_class, unique_together in unique_togethers:
                 for check in unique_together:
@@ -255,13 +260,13 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
                 raise ValidationError(errors)
         return super(SNISIReport, self).save(*args, **kwargs)
 
-
     @classmethod
     def create(cls, *args, **kwargs):
         return cls.django.create(*args, **args)
 
     def as_form(self, cls_only=False):
         from django import forms
+
         class SNISIReportForm(forms.ModelForm):
             class Meta:
                 model = self.casted().__class__
@@ -280,14 +285,15 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
         return cls.start_report(*args, **kwargs)
 
     def to_dict(self):
-        return {field: self.get(field) for field in self.data_fields()
-            + self.meta_fields() + self.meta_agg_fields()}
+        return {field: self.get(field)
+                for field in self.data_fields()
+                + self.meta_fields() + self.meta_agg_fields()}
 
     @classmethod
     def version_dict(cls, version):
         return {field: version.field_dict.get(field, None)
                 for field in cls.data_fields()
-                             + cls.meta_fields() + cls.meta_agg_fields()}
+                + cls.meta_fields() + cls.meta_agg_fields()}
 
     def get(self, slug):
         return getattr(self, slug)
@@ -297,7 +303,7 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
         field = cls._meta.get_field(slug)
         vn = field.verbose_name
         if not isinstance(vn, string_types):
-            vn = vn.decode()
+            vn = vn.encode('utf-8')
         if vn:
             return vn
         return field.name
@@ -306,14 +312,16 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
     def data_fields(cls):
         metas = cls.meta_fields() + cls.meta_agg_fields()
         return [field for field in cls.interesting_fields()
-                      if not field in metas]
+                if field not in metas]
 
     def data_dict(self):
-        return {field: getattr(self, field, None) for field in self.data_fields()}
+        return {field: getattr(self, field, None)
+                for field in self.data_fields()}
 
     @classmethod
     def version_data_dict(cls, version):
-        return {field: version.field_dict.get(field, None) for field in cls.data_fields()}
+        return {field: version.field_dict.get(field, None)
+                for field in cls.data_fields()}
 
     @classmethod
     def meta_fields(cls):
@@ -345,8 +353,10 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
                           validated_by=None,
                           validated_on=None,
                           auto_validated=True):
-        self.validation_status = self.VALIDATED if validated else self.NOT_VALIDATED
-        self.validated_on = validated_on if validated_on is not None else timezone.now()
+        self.validation_status = self.VALIDATED \
+            if validated else self.NOT_VALIDATED
+        self.validated_on = validated_on \
+            if validated_on is not None else timezone.now()
         self.validated_by = validated_by
         self.auto_validated = auto_validated
         with reversion.create_revision():
@@ -400,7 +410,8 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
                 new_version = self.version_dict(version)
             version_update = {field: new_version.get(field)
                               for field
-                              in DictDiffer(new_version, report_data).changed()}
+                              in DictDiffer(new_version,
+                                            report_data).changed()}
             if len(version_update):
                 updates.append(version_update)
         return updates
@@ -423,7 +434,8 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
     def difflog(self, only_data=True):
         return {field: {'original': original_value,
                         'current': getattr(self, field)}
-                for field, original_value in self.diff(only_data=only_data).items()}
+                for field, original_value
+                in self.diff(only_data=only_data).items()}
 
     def altered(self, only_data=True):
         return len(self.history(only_data=only_data))
@@ -446,8 +458,9 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
             erl += ExpectedReporting.objects.filter(
                 report_class=self.report_class(for_source=True),
                 period=self.period,
-                entity__slug__in=[e.slug for e in
-                                  self.entity.get_descendants_of(include_self=True)])
+                entity__slug__in=[
+                    e.slug for e in self.entity.get_descendants_of(
+                        include_self=True)])
         if with_agg:
             erl += ExpectedReporting.objects.filter(
                 report_class=self.report_class(for_source=False),
@@ -472,10 +485,6 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
 
     def as_xls(self):
         return default_xls_export(self)
-
-    def is_aggregated(self):
-        return self.REPORTING_TYPE in (PERIODICAL_AGGREGATED,
-                                       OCCASIONAL_AGGREGATED)
 
     @classmethod
     def is_aggregated(cls):
@@ -509,32 +518,45 @@ class PeriodicAggregatedReportInterface(models.Model):
                                  'nb_agg_reports_auto_validated']
 
     # all agg reports engaged (district, region)
-    agg_sources = models.ManyToManyField('self',
+    agg_sources = models.ManyToManyField(
+        'self',
         verbose_name=_("Aggr. Sources (all)"),
         blank=True, null=True,
         related_name='aggregated_agg_%(class)s_reports',
         symmetrical=False)
 
     # only those who were used to build this numbers (region)
-    direct_agg_sources = models.ManyToManyField('self',
+    direct_agg_sources = models.ManyToManyField(
+        'self',
         verbose_name=_("Aggr. Sources (direct)"),
         blank=True, null=True,
         related_name='direct_aggregated_agg_%(class)s_reports',
         symmetrical=False)
 
-    nb_source_reports_expected = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_arrived = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_arrived_on_time = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_arrived_correct = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_arrived_complete = models.PositiveIntegerField(blank=True, null=True)
+    nb_source_reports_expected = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_arrived = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_arrived_on_time = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_arrived_correct = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_arrived_complete = models.PositiveIntegerField(
+        blank=True, null=True)
 
-    nb_source_reports_altered = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_validated = models.PositiveIntegerField(blank=True, null=True)
-    nb_source_reports_auto_validated = models.PositiveIntegerField(blank=True, null=True)
+    nb_source_reports_altered = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_validated = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_source_reports_auto_validated = models.PositiveIntegerField(
+        blank=True, null=True)
 
-    nb_agg_reports_altered = models.PositiveIntegerField(blank=True, null=True)
-    nb_agg_reports_validated = models.PositiveIntegerField(blank=True, null=True)
-    nb_agg_reports_auto_validated = models.PositiveIntegerField(blank=True, null=True)
+    nb_agg_reports_altered = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_agg_reports_validated = models.PositiveIntegerField(
+        blank=True, null=True)
+    nb_agg_reports_auto_validated = models.PositiveIntegerField(
+        blank=True, null=True)
 
     def sources(self):
         return self.indiv_sources.all() + self.agg_sources.all()
@@ -543,7 +565,8 @@ class PeriodicAggregatedReportInterface(models.Model):
         return self.direct_indiv_sources.all() + self.direct_agg_sources.all()
 
     @classmethod
-    def update_sources_lists_from(cls, report, instance, instance_is_agg=False):
+    def update_sources_lists_from(cls, report, instance,
+                                  instance_is_agg=False):
         report = report.casted()
         instance = instance.casted()
 
@@ -561,11 +584,11 @@ class PeriodicAggregatedReportInterface(models.Model):
 
             # instance's sources need to be fetch
             for indirect_instance in instance.indiv_sources.all():
-                if not indirect_instance in report.indiv_sources.all():
+                if indirect_instance not in report.indiv_sources.all():
                     report.indiv_sources.add(indirect_instance)
 
             for indirect_instance in instance.agg_sources.all():
-                if not indirect_instance in report.agg_sources.all():
+                if indirect_instance not in report.agg_sources.all():
                     report.agg_sources.add(indirect_instance)
 
     @classmethod
@@ -601,7 +624,6 @@ class PeriodicAggregatedReportInterface(models.Model):
         cls.update_sources_lists_from(report=report, instance=instance,
                                       instance_is_agg=False)
 
-
     @classmethod
     def update_instance_with_agg_meta(cls, report, instance):
 
@@ -610,7 +632,8 @@ class PeriodicAggregatedReportInterface(models.Model):
 
         for field in cls.meta_agg_fields():
             setattr(report, field,
-                    (getattr(report, field, 0) or 0) + (getattr(instance, field, 0) or 0))
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
 
         if instance.altered():
             _update('nb_agg_reports_altered')
@@ -633,19 +656,21 @@ class PeriodicAggregatedReportInterface(models.Model):
     def update_instance_with_indiv(cls, report, instance):
         for field in instance.data_fields():
                 setattr(report, field,
-                        (getattr(report, field, 0) or 0) + (getattr(instance, field, 0) or 0))
+                        (getattr(report, field, 0) or 0)
+                        + (getattr(instance, field, 0) or 0))
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
         for field in cls.data_fields():
             setattr(report, field,
-                    (getattr(report, field, 0) or 0) + (getattr(instance, field, 0) or 0))
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
 
     @classmethod
     def create_from(cls, period, entity, created_by,
                     indiv_sources=None, agg_sources=None):
-        return create_periodic_agg_report_from(cls,
-            period=period, entity=entity,
+        return create_periodic_agg_report_from(
+            cls, period=period, entity=entity,
             created_by=created_by, indiv_cls=cls.INDIVIDUAL_CLS,
             indiv_sources=indiv_sources,
             agg_sources=agg_sources)
@@ -677,10 +702,10 @@ class PeriodicAggregatedReportInterface(models.Model):
             len(self.get_expected_reportings(with_source=True, with_agg=False))
 
     def set_reporting_status_fields(self,
-                             completion_ok=True,
-                             integrity_ok=True,
-                             arrival_ok=True,
-                             auto_validate=False):
+                                    completion_ok=True,
+                                    integrity_ok=True,
+                                    arrival_ok=True,
+                                    auto_validate=False):
         autobot = get_autobot()
         self.created_by = autobot
         self.created_on = timezone.now()
@@ -728,7 +753,7 @@ class ReportClass(models.Model):
 
     @property
     def period_class(self):
-        if not '.' in self.period_cls:
+        if '.' not in self.period_cls:
             period_cls = 'snisi_core.models.Periods.{}'.format(self.period_cls)
         else:
             period_cls = self.period_cls
@@ -736,7 +761,7 @@ class ReportClass(models.Model):
 
     @property
     def report_class(self):
-        if not '.' in self.cls:
+        if '.' not in self.cls:
             cls = 'snisi_core.models.{}'.format(self.cls)
         else:
             cls = self.cls
@@ -777,10 +802,10 @@ class ExpectedReporting(models.Model):
     COMPLETION_MISSING = 'missing'
 
     REPORTING_NUMBERS = {
-        EXPECTED_SINGLE: _("Single"), # 0: missing, 1: complete
-        EXPECTED_ONEPLUS: _("1+"), # 0: missing, 1: matching, 2: matching
-        EXPECTED_ZEROPLUS: _("0+"), # 0: matching, 1: matching
-        EXPECTED_MULTIPLE: _("Multiple") # 0: missing, 1: missing, 2: matching
+        EXPECTED_SINGLE: _("Single"),  # 0: missing, 1: complete
+        EXPECTED_ONEPLUS: _("1+"),  # 0: missing, 1: matching, 2: matching
+        EXPECTED_ZEROPLUS: _("0+"),  # 0: matching, 1: matching
+        EXPECTED_MULTIPLE: _("Multiple")  # 0: missing, 1: missing, 2: matching
     }
 
     REPORTING_COMPLETION = {
@@ -796,15 +821,18 @@ class ExpectedReporting(models.Model):
     entity = models.ForeignKey(Entity)
     within_entity = models.BooleanField(default=False)
     reporting_period = models.ForeignKey(
-        Period, related_name='expr_for_reporting_period', blank=True, null=True)
+        Period, related_name='expr_for_reporting_period',
+        blank=True, null=True)
     extended_reporting_period = models.ForeignKey(
-        Period, related_name='expr_for_ext_reporting_period', blank=True, null=True)
+        Period, related_name='expr_for_ext_reporting_period',
+        blank=True, null=True)
     amount_expected = models.CharField(max_length=30,
                                        choices=REPORTING_NUMBERS.items())
     completion_status = models.CharField(max_length=30,
                                          choices=REPORTING_COMPLETION.items())
-    arrived_reports = models.ManyToManyField('SNISIReport', blank=True, null=True,
-                                             related_name='expected_reportings')
+    arrived_reports = models.ManyToManyField(
+        'SNISIReport', blank=True, null=True,
+        related_name='expected_reportings')
     updated_on = models.DateTimeField(default=timezone.now)
 
     def clone(self, save=False, **kwargs):
@@ -825,12 +853,12 @@ class ExpectedReporting(models.Model):
         return exp
 
     def __str__(self):
-        return "{entity}{within_entity}-{period}{within_period}-{rclass}".format(
-            entity=self.entity.slug,
-            within_entity="*" if self.within_entity else "",
-            period=self.report_class.casted_period(self.period),
-            within_period="*" if self.within_period else "",
-            rclass=self.report_class)
+        return ("{entity}{within_entity}-{period}{within_period}-{rclass}"
+                .format(entity=self.entity.slug,
+                        within_entity="*" if self.within_entity else "",
+                        period=self.report_class.casted_period(self.period),
+                        within_period="*" if self.within_period else "",
+                        rclass=self.report_class))
 
     @property
     def satisfied(self):
@@ -908,10 +936,12 @@ class ExpectedReporting(models.Model):
                  or report.period.end_on > self.period.end_on):
             return False
         # check entity
-        if not self.within_entity and report.entity.casted() != self.entity.casted():
+        if not self.within_entity and report.entity.casted() \
+                != self.entity.casted():
             return False
         # check entity if a within
-        if self.within_entity and not report.entity.casted() in self.entity.get_descendants_of(include_self=True):
+        if self.within_entity and report.entity.casted() \
+                not in self.entity.get_descendants_of(include_self=True):
             return False
 
         return True
@@ -936,9 +966,9 @@ class ExpectedValidation(models.Model):
 
     report = models.ForeignKey(SNISIReport, primary_key=True,
                                related_name='expected_validations')
-    validation_period = models.ForeignKey(Period) # from 1st to 5th.
-    validating_entity = models.ForeignKey(Entity) # CSCOM, District, Region
-    validating_role = models.ForeignKey(Role) # charge SIS, DTC,
+    validation_period = models.ForeignKey(Period)  # from 1st to 5th.
+    validating_entity = models.ForeignKey(Entity)  # CSCOM, District, Region
+    validating_role = models.ForeignKey(Role)  # charge SIS, DTC,
     validated_on = models.DateTimeField(blank=True, null=True)
     satisfied = models.BooleanField(default=False)
 

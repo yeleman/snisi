@@ -15,7 +15,8 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_reprohealth.models.PFActivities import AggPFActivitiesR, PFActivitiesR
+from snisi_reprohealth.models.PFActivities import (AggPFActivitiesR,
+                                                   PFActivitiesR)
 from snisi_reprohealth import (ROUTINE_DISTRICT_AGG_DAY,
                                ROUTINE_REGION_AGG_DAY)
 from snisi_reprohealth.integrity import PROJECT_BRAND
@@ -43,12 +44,12 @@ def generate_district_reports(period,
     logger.info("Switching to {}".format(period))
 
     region_validation_period = DefaultRegionValidationPeriod \
-                                .find_create_by_date(period.middle())
+        .find_create_by_date(period.middle())
 
     if ensure_correct_date:
         now = timezone.now()
         if not period.following().includes(now) \
-         or not now.day == ROUTINE_DISTRICT_AGG_DAY:
+                or not now.day == ROUTINE_DISTRICT_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 11th of the following period")
             return
@@ -75,8 +76,7 @@ def generate_district_reports(period,
 
         # auto-validate non-validated reports
         for report in PFActivitiesR.objects.filter(
-            period=period,
-            entity__in=district.get_health_centers()):
+                period=period, entity__in=district.get_health_centers()):
             if not report.validated:
                 expv = ExpectedValidation.objects.get(report=report)
 
@@ -111,7 +111,8 @@ def generate_district_reports(period,
         #         expirate_on=region_validation_period.end_on,
         #         category=PROJECT_BRAND,
         #         text="Le rapport (aggrégé) de routine PF/MSI mensuel "
-        #              "de {period} pour {entity} est prêt. No reçu: #{receipt}. "
+        #              "de {period} pour {entity} est prêt. "
+        #              "No reçu: #{receipt}. "
         #              "Vous devez le valider avant le 25.".format(
         #                 entity=agg.entity.display_full_name(),
         #                 period=agg.period,
@@ -127,7 +128,7 @@ def generate_region_country_reports(period,
     if ensure_correct_date:
         now = timezone.now()
         if not period.following().includes(now) \
-         or not now.day == ROUTINE_REGION_AGG_DAY:
+                or not now.day == ROUTINE_REGION_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 11th of the following period")
             return
@@ -218,7 +219,5 @@ def generate_region_country_reports(period,
             expirate_on=agg.period.following().following().start_on,
             category=PROJECT_BRAND,
             text="Le rapport national (aggrégé) de routine PF/MSI mensuel "
-                 "pour {period} est disponible. No reçu: #{receipt}.".format(
-                    period=agg.period,
-                    receipt=agg.receipt)
-            )
+                 "pour {period} est disponible. No reçu: #{receipt}."
+                 .format(period=agg.period, receipt=agg.receipt))

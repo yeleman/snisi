@@ -27,7 +27,8 @@ def parse_date_string(adatestr, as_date=False):
             return d if as_date else d.replace(tzinfo=timezone.utc)
         if as_date:
             return d.date()
-        return datetime.datetime(*d.timetuple()[:3]).replace(tzinfo=timezone.utc)
+        return datetime.datetime(
+            *d.timetuple()[:3]).replace(tzinfo=timezone.utc)
     if isinstance(adatestr, (datetime.date, datetime.datetime)):
         return _cast(adatestr, as_date)
     try:
@@ -57,7 +58,8 @@ def DEBUG_change_system_date(new_date, I_KNOW=False):
 
     if new_date is None:
         if sys.platform == 'darwin':
-            cmd = "sudo ntpdate -u $(sudo systemsetup -getnetworktimeserver|awk '{print $4}')"
+            cmd = ("sudo ntpdate -u $(sudo systemsetup "
+                   "-getnetworktimeserver|awk '{print $4}')")
         else:
             cmd = "sudo ntpdate-debian"
     else:
@@ -69,10 +71,11 @@ def to_timestamp(dt):
     """
     Return a timestamp for the given datetime object.
     """
-    if not dt is None:
-        return (dt - datetime.datetime(1970, 1, 1).replace(tzinfo=timezone.utc)).total_seconds()
+    if dt is not None:
+        return (dt - datetime.datetime(1970, 1, 1)
+                .replace(tzinfo=timezone.utc)).total_seconds()
 
 
 def to_jstimestamp(adate):
-    if not adate is None:
+    if adate is not None:
         return int(to_timestamp(adate)) * 1000

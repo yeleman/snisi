@@ -59,6 +59,12 @@
                     <li><a href="{% url 'trachoma_missions' %}">Données brutes</a></li>
                     <li><a href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
                 </ul>
+                <a class="pure-menu-heading"><abbr title="Maladies À Déclaration Obligatoire">MADO</abbr> <span class="label label-{{ mado_level }}">{{ mado_nb_cases }}</span></a>
+                <ul>
+                    <li><a href="{% url 'epidemio_dashboard' %}">Suivi temps-réel</a></li>
+                    <li><a href="{% url 'epidemio_raw_data' %}">Données brutes</a></li>
+                    <li><a href="{% url 'epidemio_indicators' %}">Données analysées</a></li>
+                </ul>
                 <a href="/" class="pure-menu-heading">SANTÉ REPRODUCTION</a>
                 <ul>
                     <li><a class="" href="{% url 'msipf_raw_data' %}">Données brutes MSI/PF</a></li>
@@ -66,11 +72,6 @@
                     <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
                 </ul>
                 <a href="/" class="pure-menu-heading pure-button-disabled">MOUSTIQUAIRES</a>
-                <ul>
-                    <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
-                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
-                </ul>
-                <a href="/" class="pure-menu-heading pure-button-disabled">ÉPIDÉMIO. HEBDO.</a>
                 <ul>
                     <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
                     <li><a class="pure-button-disabled" href="#">Données analysées</a></li>

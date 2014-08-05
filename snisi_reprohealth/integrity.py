@@ -5,9 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import traceback
 
-import reversion
 from django.utils.translation import ugettext as _
 
 from snisi_core.integrity import (ReportIntegrityChecker,
@@ -43,18 +41,22 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
     validating_role = validating_role
 
     def check_pf_data(self):
-        #### Provided Services
+        # ### Provided Services
         # (new_clients + previous_clients) = (under25_visits + over25_visits)
-        new_and_old_clients = self.get('new_clients') + self.get('previous_clients')
-        under_and_over_25 = self.get('under25_visits') + self.get('over25_visits')
+        new_and_old_clients = self.get('new_clients') \
+            + self.get('previous_clients')
+        under_and_over_25 = self.get('under25_visits') \
+            + self.get('over25_visits')
         if new_and_old_clients != under_and_over_25:
-            self.add_error(_("Number of new + old clients ({noc}) must equals number "
+            self.add_error(_("Number of new + old clients ({noc}) "
+                             "must equals number "
                              "of Under25 + Over25 ({uo25}).")
                            .format(noc=new_and_old_clients,
                                    uo25=under_and_over_25),
                            field='under25_visits')
 
-        # = (tubal_ligations + short_term_method_visits + long_term_method_visits
+        # = (tubal_ligations + short_term_method_visits
+        #   + long_term_method_visits
         #    + implant_removal + iud_removal)
         all_services = sum([self.get(f) for f in ('tubal_ligations',
                                                   'short_term_method_visits',
@@ -62,7 +64,8 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                                   'implant_removal',
                                                   'iud_removal')])
         if new_and_old_clients != all_services:
-            self.add_error(_("Number of new + old clients ({noc}) must equals sum "
+            self.add_error(_("Number of new + old clients ({noc}) "
+                             "must equals sum "
                              "of provided services ({alls}).")
                            .format(noc=new_and_old_clients,
                                    alls=all_services),
@@ -79,13 +82,14 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
         # long_term_method_visits = (intrauterine_devices + implants)
         iud_implants = self.get('intrauterine_devices') + self.get('implants')
         if self.get('long_term_method_visits') != iud_implants:
-            self.add_error(_("Number of long-term visits ({ltv}) must equals number "
+            self.add_error(_("Number of long-term visits ({ltv}) "
+                             "must equals number "
                              "of IDU + Implants ({iudi}).")
                            .format(ltv=self.get('intrauterine_devices'),
                                    iudi=iud_implants),
                            field='long_term_method_visits')
 
-        #### Financial
+        # ### Financial
         for field in PFActivitiesR.financial_fields(False):
             qty = self.get("{}_qty".format(field))
             price = self.get("{}_price".format(field))
@@ -99,11 +103,13 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                        r=revenue),
                                field="{}_revenue".format(field))
 
-        #### Stocks
+        # ### Stocks
         for field in PFActivitiesR.stocks_fields(False):
 
-            consumed = self.get("{}_used".format(field)) + self.get("{}_lost".format(field))
-            available = self.get("{}_initial".format(field)) + self.get("{}_received".format(field))
+            consumed = self.get("{}_used".format(field)) \
+                + self.get("{}_lost".format(field))
+            available = self.get("{}_initial".format(field)) \
+                + self.get("{}_received".format(field))
 
             if consumed > available:
                 self.add_error(_("{f}: Used + Lost ({c}) higher than "
@@ -113,7 +119,7 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                        a=available),
                                field="{}_used".format(field))
 
-        #### Cross-form checks
+        # ### Cross-form checks
         # quantities from financial and stocks equals provided
         for field in PFActivitiesR.financial_fields(False):
             provided_qty = self.get(field)
@@ -128,7 +134,7 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                field="{}_qty".format(field))
 
             # stocks don't have all fields
-            if not field in PFActivitiesR.stocks_fields(False):
+            if field not in PFActivitiesR.stocks_fields(False):
                 continue
 
             stock_qty = self.get("{}_used".format(field))
