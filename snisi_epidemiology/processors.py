@@ -20,9 +20,11 @@ def default_context():
         EpiWeekPeriod.find_create_by_date(
             timezone.now() - datetime.timedelta(days=15)))
 
-    return {
-        'mado_nb_cases': nb_cases_for(periods, EpidemiologyR),
-        'mado_level': 'danger'
-        if nb_cases_for(periods, EpidemiologyR, 'deaths')
-        else 'warning'
-    }
+    mado_nb_cases = nb_cases_for(periods, EpidemiologyR)
+    if mado_nb_cases:
+        level = 'danger' \
+            if nb_cases_for(periods, EpidemiologyR, 'deaths') else 'warning'
+    else:
+        level = 'info'
+
+    return {'mado_nb_cases': mado_nb_cases, 'mado_level': level}
