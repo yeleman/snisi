@@ -4,13 +4,17 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
-from functools import wraps
+import logging
 import copy
 import numpy
+from functools import wraps
 
 from py3compat import text_type, implements_to_string
 from snisi_core.models.Reporting import SNISIReport, ExpectedReporting
 from snisi_tools.misc import class_str
+
+logger = logging.getLogger(__name__)
+
 
 def humanize_value(data, is_expected=True, is_missing=False,
                    is_ratio=False, is_yesno=False, should_yesno=False):
@@ -226,13 +230,12 @@ class FakeIndicator(dict):
         return self['human']
 
 
-
 class IndicatorTable:
 
     INDICATORS = []
-    add_percentage = False # add % columns for each period
-    add_total = False # add a total column
-    as_percentage = False # only renders percentages
+    add_percentage = False  # add % columns for each period
+    add_total = False  # add a total column
+    as_percentage = False  # only renders percentages
     multiple_axis = False
     on_descendants = False
 
@@ -305,7 +308,10 @@ class IndicatorTable:
         return self.INDICATORS[line_index]
 
     def get_total_for(self, line_index):
-        d = sum([self.data_for(line_index, col).data for col in range(0, self.nb_cols() -1) if not self.data_for(line_index, col).is_missing and self.data_for(line_index, col).is_expected])
+        d = sum([self.data_for(line_index, col).data
+                 for col in range(0, self.nb_cols() - 1)
+                 if not self.data_for(line_index, col).is_missing
+                 and self.data_for(line_index, col).is_expected])
         return FakeIndicator({
             'human': humanize_value(d),
             'data': d
@@ -325,7 +331,7 @@ class IndicatorTable:
         fixed = self.fixed_line_index(line_index)
         indic = self.INDICATORS[fixed]
         is_reference = getattr(indic, '_is_reference', False)
-        indic_ref_index = getattr(indic, '_reference_index', 0)
+        # indic_ref_index = getattr(indic, '_reference_index', 0)
         if is_reference:
             return line_index
 
@@ -334,9 +340,11 @@ class IndicatorTable:
             ref_index = 0
         return ref_index
 
-    def get_percentage_value_for(self, line_index, column_index, as_human=False):
+    def get_percentage_value_for(self, line_index, column_index,
+                                 as_human=False):
         numerator = self.data_for(line_index, column_index).data
-        denominator = self.data_for(self.get_reference_line_for(line_index), column_index).data
+        denominator = self.data_for(
+            self.get_reference_line_for(line_index), column_index).data
         try:
             d = (numerator / denominator) * 100
         except:
@@ -409,7 +417,8 @@ class IndicatorTable:
             else:
                 data = getattr(indic, 'human' if as_human else 'data')
 
-            # period_tuple is used for graphs so we can loop on series with dated values
+            # period_tuple is used for graphs so we can loop
+            # on series with dated values
             if as_period_tuple:
                 cols.append((self.get_period_for(column_index), data))
             else:
@@ -417,13 +426,14 @@ class IndicatorTable:
 
             # add percentage columns is requested
             if self.add_percentage:
-                if not self.add_total or not column_index == self.total_col_index():
+                if not self.add_total or \
+                        not column_index == self.total_col_index():
                     if indic.is_missing or not indic.is_expected:
                         cols.append(None)
                     else:
-                        cols.append(self.get_percentage_value_for(line_index,
-                                                                  column_index,
-                                                                  as_human=as_human))
+                        cols.append(
+                            self.get_percentage_value_for(
+                                line_index, column_index, as_human=as_human))
 
         return cols
 
@@ -451,8 +461,10 @@ class IndicatorTable:
         return [
             {'label': self.get_line_label_for(idx),
              'data': self.render_line(idx, as_period_tuple=True)}
-                for idx in range(0, self.nb_lines())
-                if not getattr(self.INDICATORS[self.fixed_line_index(idx)], '_is_hidden', False)]
+            for idx in range(0, self.nb_lines())
+            if not getattr(
+                self.INDICATORS[self.fixed_line_index(idx)],
+                '_is_hidden', False)]
 
 
 def ref_is(index=0):
@@ -468,6 +480,7 @@ def ref_is(index=0):
             return func(*args, **kwargs)
         return func
     return outer_wrapper
+
 
 def is_ref(func):
     """ decorator marking indicator a reference (percent will always be 1) """
@@ -497,8 +510,8 @@ def gen_report_indicator(field,
     class GenericReportIndicator(ReportDataMixin, base_indicator_cls):
         pass
 
-
     cls = copy.copy(GenericReportIndicator)
     cls.report_field = field
-    cls.name = name if name is not None else report_cls.field_name(field) if report_cls is not None else None
+    cls.name = name if name is not None else report_cls.field_name(field) \
+        if report_cls is not None else None
     return cls

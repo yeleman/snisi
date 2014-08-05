@@ -94,9 +94,6 @@ def create_expected_for(period):
                     created_list.append(e)
                 else:
                     logger.debug("Exists already: {}".format(e))
-                if e.period != edict['period']:
-                    e.period = edict['period']
-                    e.save()
                 if e.reporting_period != edict['reporting_period']:
                     e.reporting_period = edict['reporting_period']
                     e.save()

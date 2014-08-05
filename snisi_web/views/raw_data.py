@@ -31,11 +31,10 @@ def browser(request,
 
     cluster = Cluster.get_or_none(cluster_slug)
     report_classes = cluster.domain \
-                            .import_from('expected.report_classes_for')(cluster)
+        .import_from('expected.report_classes_for')(cluster)
 
     if not report_classes:
         raise Http404("Pas de ReportClass correspondant.")
-
 
     def period_from_strid(period_str, reportcls=None):
         period = None
@@ -68,15 +67,18 @@ def browser(request,
         expecteds += list(ExpectedReporting.objects.filter(
             report_class__in=report_classes, **entity_period))
 
+    expecteds = list(set(expecteds))
+
     # periods list a a list of all periods with a matching ReportClass
     all_periods = sorted(list(set(
-            [e.period.casted()
-             for e in ExpectedReporting.objects.filter(entity=entity,
-                report_class__in=report_classes)
-             ])), key=lambda x: x.start_on)
+        [e.period.casted()
+         for e in ExpectedReporting.objects.filter(
+            entity=entity,
+            report_class__in=report_classes)
+         ])), key=lambda x: x.start_on)
 
     # if request period is outside of all_periods, just take last of those
-    if len(all_periods) and (period is None or not period in all_periods):
+    if len(all_periods) and (period is None or period not in all_periods):
         period = all_periods[-1]
 
     context.update({
@@ -89,7 +91,8 @@ def browser(request,
     })
 
     # JS entities browser
-    context.update(entity_browser_context(root=root, selected_entity=entity,
+    context.update(entity_browser_context(
+        root=root, selected_entity=entity,
         full_lineage=['country', 'health_region',
                       'health_district', 'health_center'],
         cluster=cluster))
@@ -102,7 +105,8 @@ def browser(request,
 def download_as_excel(request, report_receipt):
     report = SNISIReport.get_or_none(report_receipt)
     if report is None:
-        raise Http404("Pas de rapport correspondant au reçu {}".format(report_receipt))
+        raise Http404("Pas de rapport correspondant au reçu {}"
+                      .format(report_receipt))
 
     if not report.validated:
         raise PermissionDenied("Impossible d'exporter un rapport non validé.")

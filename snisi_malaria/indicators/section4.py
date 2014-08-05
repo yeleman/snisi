@@ -23,7 +23,7 @@ class DecesToutesTranchesAge(IndicatorTable):
 
     INDICATORS = [
         hide(is_ref(gen_shortcut('total_death_all_causes',
-                            "Total des décès toutes causes confondues"))),
+                                 "Total des décès toutes causes confondues"))),
         ref_is(0)(gen_shortcut('o5_total_malaria_death',
                                "Personnes de 5 ans et plus")),
         ref_is(0)(gen_shortcut('u5_total_malaria_death',

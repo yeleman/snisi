@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    baseURL: '/api/entities/getclusterchildren/epidemiology_routine',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'epidemio_indicators' %}/<entity>/<period_str>"
+});
+
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}
+
+{% block content %}
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    <legend>Suivi épidémiologique des MADO</legend>
+    {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" label="À" selected_period=periodb all_periods=all_periods %}
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+{% include "parts/indicator_widget.html" with table=summary_widget id=0 %}
+
+{% endblock %}

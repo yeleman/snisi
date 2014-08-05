@@ -124,6 +124,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "snisi_web.processors.branding",
+    "snisi_web.processors.default_context",
 )
 
 

@@ -81,7 +81,8 @@ def display_epidemio(request,
     try:
         first_period = MonthPeriod.find_create_by_date(
             AggEpidemioMalariaR.objects.all()
-                               .order_by('period__start_on')[0].period.middle())
+                               .order_by('period__start_on')[0]
+                               .period.middle())
     except IndexError:
         first_period = MonthPeriod.current()
     all_periods = MonthPeriod.all_from(first_period)
@@ -93,9 +94,10 @@ def display_epidemio(request,
         'periodb': periodb,
         'periods': periods,
         'cluster': cluster,
-        'base_url': get_base_url_for_periods(view_name='malaria_epidemio', entity=entity,
-                                             perioda_str=perioda_str or perioda.strid(),
-                                             periodb_str=periodb_str or periodb.strid())
+        'base_url': get_base_url_for_periods(
+            view_name='malaria_epidemio', entity=entity,
+            perioda_str=perioda_str or perioda.strid(),
+            periodb_str=periodb_str or periodb.strid())
     })
 
     context.update(entity_browser_context(
@@ -103,7 +105,6 @@ def display_epidemio(request,
         full_lineage=['country', 'health_region',
                       'health_district', 'health_center'],
         cluster=cluster))
-
 
     period_classes = [
         FixedMonthFirstWeek,
@@ -127,17 +128,20 @@ def display_epidemio(request,
 
         # loop on fixed weeks and try to find a period and report
         for periodcls in period_classes:
-            week_period = periodcls.find_create_from(month_period.middle().year, month_period.middle().month)
+            week_period = periodcls.find_create_from(
+                month_period.middle().year, month_period.middle().month)
 
             if week_period is not None:
                 # retrieve weekly report
                 try:
-                    report = AggEpidemioMalariaR.objects.get(entity=entity, period=week_period)
+                    report = AggEpidemioMalariaR.objects.get(
+                        entity=entity, period=week_period)
                 except AggEpidemioMalariaR.DoesNotExist:
                     continue
 
                 # update data-dict
-                month_data.update({'week{}'.format(week_period.FIXED_WEEK_NUM): report})
+                month_data.update({'week{}'.format(
+                    week_period.FIXED_WEEK_NUM): report})
         epidemio_data.append(month_data)
 
     context.update({'epidemio_data': epidemio_data})

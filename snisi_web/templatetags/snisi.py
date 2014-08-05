@@ -8,12 +8,13 @@ import locale
 
 from py3compat import text_type
 from django import template
-from django.template.defaultfilters import stringfilter #  , date
+from django.template.defaultfilters import stringfilter
 from django.template.defaulttags import CsrfTokenNode
 from django.utils.safestring import mark_safe
 
 from snisi_tools.numbers import phonenumber_repr
 from snisi_tools.datetime import to_jstimestamp
+from snisi_core.models.Reporting import SNISIReport
 
 register = template.Library()
 locale.setlocale(locale.LC_ALL, '')
@@ -55,8 +56,8 @@ def non_field_errors(form):
     output += '<div class="pure-help-inline" name="__errors__">\n'
     for error in form.non_field_errors():
         output += '<p class="alert alert-danger">{}</p>\n'.format(error)
-    output +='</div>\n'
-    output +='</div>\n'
+    output += '</div>\n'
+    output += '</div>\n'
     return mark_safe(output)
 
 
@@ -64,7 +65,7 @@ def non_field_errors(form):
 def pure_field_group(field):
 
     # default size with CSS class
-    if not 'class' in field.field.widget.attrs:
+    if 'class' not in field.field.widget.attrs:
         field.field.widget.attrs.update({'class': 'pure-input-1-2'})
 
     # field group wrapper with danger
@@ -76,16 +77,17 @@ def pure_field_group(field):
 
     # help_text is an info icon with title-tooltip
     if field.help_text:
-        output += ' <i class="fa fa-info-circle help-text" title="{}"></i>'.format(
-            field.help_text)
+        output += ' <i class="fa fa-info-circle help-text" title="{}"></i>' \
+                  .format(field.help_text)
     output += '\n</div>\n'
     return mark_safe(output)
 
 
 @register.filter(name='purefieldlabel')
 def pure_field_label(field):
-    error_marker = ' <i class="fa fa-exclamation alert-danger" title="{}"></i>'.format(
-        "\n".join(field.errors)) if field.errors else ''
+    error_marker = (' <i class="fa fa-exclamation '
+                    'alert-danger" title="{}"></i>'
+                    .format("\n".join(field.errors)) if field.errors else '')
 
     output = '<label for="{name}">{label}{errors}</label>'.format(
         name=field.name,
@@ -133,7 +135,8 @@ def pure_form(form, method='POST',
 
     output += ('<form method="{method}" action="{action}" '
                'class="pure-form pure-form-{pure_class}"{file_support}>\n'
-               '<input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}"/>\n'
+               '<input type="hidden" name="csrfmiddlewaretoken" '
+               'value="{csrf_token}"/>\n'
                '{legend_tag}'
                '<fieldset>\n'
                '{form_content}\n'
@@ -149,6 +152,7 @@ def pure_form(form, method='POST',
         submit_block=submit_block,
         form_content=form_content)
     return mark_safe(output)
+
 
 @register.filter(name='dynfilter')
 def dynfilter(obj, params):
@@ -189,7 +193,7 @@ def report_field_name(report, fname):
 @register.filter(name='reportstatus')
 @stringfilter
 def report_status_verbose(value):
-    for v, name in Report.STATUSES:
+    for v, name in SNISIReport.STATUSES:
         if v.__str__() == value:
             return name
     return value
@@ -255,6 +259,7 @@ def provider_additional_numbers(provider):
         return len(provider.all_numbers()) - 1
     except:
         return 0
+
 
 @register.filter(name='to_jstimestamp')
 def convert_to_jstimestamp(adate):

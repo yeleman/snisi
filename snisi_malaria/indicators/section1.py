@@ -12,6 +12,7 @@ from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
 
 class NbSourceReportsExpected(MalariaIndicator):
     name = "Nombre de rapports attendus"
+
     def _compute(self):
         if self.is_hc():
             return 1 if self._expected else 0

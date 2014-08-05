@@ -181,6 +181,21 @@ class AbstractEpidemiologyR(SNISIReport):
         app_label = 'snisi_epidemiology'
         abstract = True
 
+    DISEASE_NAMES = {
+        'ebola': _("Ebola"),
+        'acute_flaccid_paralysis': _("AFP"),
+        'influenza_a_h1n1': _("Influenza A H1N1"),
+        'cholera': _("Cholera"),
+        'red_diarrhea': _("Red Diarrhea"),
+        'measles': _("Measles"),
+        'yellow_fever': _("Yellow Fever"),
+        'neonatal_tetanus': _("NNT"),
+        'meningitis': _("Meningitis"),
+        'rabies': _("Rabies"),
+        'acute_measles_diarrhea': _("Acute Measles Diarrhea"),
+        'other_notifiable_disease': _("Other Notifiable Diseases")
+    }
+
     ebola_case = models.IntegerField(_("Ebola cases"))
     ebola_death = models.IntegerField(_("Ebola death"))
 
@@ -287,6 +302,33 @@ class AbstractEpidemiologyR(SNISIReport):
                             month=self.period.middle().month,
                             year=self.period.middle().year)
         return file_name, epid_activities_as_xls(self)
+
+    def nb_cases_total(self):
+        return sum([getattr(self, field, 0)
+                    for field in self.case_fields()])
+
+    def nb_deaths_total(self):
+        return sum([getattr(self, field, 0)
+                    for field in self.death_fields()])
+
+    @classmethod
+    def case_fields(cls):
+        return [field for field in cls.data_fields()
+                if field.endswith('_case')]
+
+    @classmethod
+    def death_fields(cls):
+        return [field for field in cls.data_fields()
+                if field.endswith('_death')]
+
+    @classmethod
+    def disease_fields(cls):
+        return [field.rsplit('_', 1)[0] for field in cls.data_fields()
+                if field.endswith('_case')]
+
+    @classmethod
+    def disease_name(cls, disease):
+        return cls.DISEASE_NAMES.get(disease)
 
 
 @implements_to_string
