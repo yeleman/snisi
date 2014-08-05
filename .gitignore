@@ -12,3 +12,4 @@ snisi_web/static/node_modules*
 circus.ini
 *.sqlite3
 protected/*
+*/cache/*.json
