@@ -39,7 +39,6 @@ class Command(BaseCommand):
                     dest='username'),
     )
 
-
     def handle(self, *args, **options):
 
         cluster = Cluster.get_or_none("malaria_weekly_epidemiology")
@@ -48,7 +47,6 @@ class Command(BaseCommand):
             for entity_slug in ("ACE3", "3ZF3"):
                 entity = Entity.get_or_none(entity_slug)
                 Participation.objects.create(cluster=cluster, entity=entity)
-
 
         provider = Provider.get_or_none(options.get('username'))
         if provider is None:
@@ -89,25 +87,28 @@ class Command(BaseCommand):
             period = periodcls.find_create_from(year=year, month=month)
             if period is None:
                 continue
-            reporting_date = period.end_on + datetime.timedelta(days=1, seconds=seconds)
+            reporting_date = period.end_on + datetime.timedelta(
+                days=1, seconds=seconds)
 
             DEBUG_change_system_date(reporting_date)
 
             logger.debug(reporting_date)
-
 
             excel_form = EpidemioMalariaRForm(filepath)
             excel_form.set('submit_time', reporting_date)
             excel_form.set('submitter', provider)
             excel_form.check()
             if excel_form.is_valid():
-                report, text_message = excel_form.create_report(provider=provider)
+                report, text_message = excel_form.create_report(
+                    provider=provider)
                 if report:
                     logger.info(text_message)
                     continue
             else:
                 report = None
                 logger.error("Unable to save report to DB")
-                logger.error("ERR: {} - {}".format(filename, excel_form.errors.pop().render()))
+                logger.error("ERR: {} - {}"
+                             .format(filename,
+                                     excel_form.errors.pop().render()))
 
         logger.info("All done.")

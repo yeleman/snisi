@@ -5,24 +5,17 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import traceback
 
-import reversion
 from django.utils.translation import ugettext as _
 
 from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_monthly_routine_report,
                                   RoutineIntegrityInterface)
-from snisi_core.models.Providers import Provider
-from snisi_core.models.Entities import Entity
-from snisi_core.models.Periods import MonthPeriod
-from snisi_core.models.Notifications import Notification
+
 from snisi_core.models.Roles import Role
 from snisi_vacc import PROJECT_BRAND
 from snisi_vacc.models import VaccCovR
-from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
-                                         ExpectedValidation, SNISIReport)
-from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
+from snisi_core.models.Reporting import ReportClass
 
 logger = logging.getLogger(__name__)
 reportcls_pev = ReportClass.get_or_none(slug='major_vaccine_monthly')
@@ -43,7 +36,7 @@ def create_pev_report(provider, expected_reporting, completed_on,
 
 
 class VaccCovRIntegrityChecker(RoutineIntegrityInterface,
-                                       ReportIntegrityChecker):
+                               ReportIntegrityChecker):
 
     report_class = reportcls_pev
     validating_role = validating_role

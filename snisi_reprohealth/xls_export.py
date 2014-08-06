@@ -17,9 +17,8 @@ from snisi_reprohealth import get_domain
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE = os.path.join(get_domain().module_path, 'fixtures', 'template-MSIPF.xls')
-
-
+TEMPLATE = os.path.join(get_domain().module_path,
+                        'fixtures', 'template-MSIPF.xls')
 
 
 def pfa_activities_as_xls(report):

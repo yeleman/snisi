@@ -69,7 +69,7 @@ class FixedMonthFirstWeek(MonthPeriod):
         return date_format(self.middle(), ugettext("1-7 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("1st to 7th F Y"))
 
     @classmethod
@@ -114,7 +114,7 @@ class FixedMonthSecondWeek(MonthPeriod):
         return date_format(self.middle(), ugettext("8-14 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("8th to 14th F Y"))
 
     @classmethod
@@ -159,7 +159,7 @@ class FixedMonthThirdWeek(MonthPeriod):
         return date_format(self.middle(), ugettext("15-21 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("15th to 21th F Y"))
 
     @classmethod
@@ -204,7 +204,7 @@ class FixedMonthFourthWeek(MonthPeriod):
         return date_format(self.middle(), ugettext("22-28 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("22th to 28th F Y"))
 
     @classmethod
@@ -217,7 +217,7 @@ class FixedMonthFourthWeek(MonthPeriod):
         start = date_obj.replace(day=22, hour=0, minute=0,
                                  second=0, microsecond=0)
         end = start.replace(day=28, hour=23, minute=59,
-                                 second=59, microsecond=59)
+                            second=59, microsecond=59)
         return (start, end)
 
     def strid(self):
@@ -250,7 +250,7 @@ class FixedMonthFifthWeek(MonthPeriod):
         return date_format(self.middle(), ugettext("29+ F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("29th + F Y"))
 
     @classmethod

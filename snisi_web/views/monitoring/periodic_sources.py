@@ -40,9 +40,8 @@ def periodic_source_dashboard(request, **kwargs):
     if entity:
         expected_reports = expected_reports.filter(entity=entity)
 
-
     context.update({'expected_reports': expected_reports})
 
-
-    return render(request, kwargs.get('template_name',
-                                      "monitoring/periodic_source.html"), context)
+    return render(request,
+                  kwargs.get('template_name',
+                             "monitoring/periodic_source.html"), context)

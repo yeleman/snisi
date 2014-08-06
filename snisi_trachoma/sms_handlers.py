@@ -46,7 +46,7 @@ def check_create_provider(username, password, reply):
         reply.error("Ce nom d'utilisateur ({}) n'existe pas.".format(username))
         return None
 
-    if not provider.role.slug in ('tt_tso', 'tt_opt', 'tt_amo'):
+    if provider.role.slug not in ('tt_tso', 'tt_opt', 'tt_amo'):
         reply.error("Votre rôle ne vous permet pas de créer "
                     "des rapports BacklogTT")
         return None

@@ -22,18 +22,20 @@ def get_temp_receipt(instance):
 def pre_save_report(sender, instance, **kwargs):
     ''' create a temporary Receipt for Report '''
     # this will allow us to detect failure in registration
-    logger.debug("pre_save_report [{}: {}]".format(instance.receipt, instance.completion_status))
-    if not instance.receipt and instance.completion_status == instance.COMPLETE:
+    logger.debug("pre_save_report [{}: {}]"
+                 .format(instance.receipt, instance.completion_status))
+    if not instance.receipt and instance.completion_status \
+            == instance.COMPLETE:
         instance.receipt = get_temp_receipt(instance)
 
 
 def pre_save_report_incomplete(sender, instance, **kwargs):
     ''' create a temporary Receipt for Report '''
     # this will allow us to detect failure in registration
-    logger.debug("pre_save_report_incomplete [{}: {}]".format(instance.receipt, instance.completion_status))
+    logger.debug("pre_save_report_incomplete [{}: {}]"
+                 .format(instance.receipt, instance.completion_status))
     if not instance.receipt:
         instance.receipt = get_temp_receipt(instance)
-
 
 
 def post_save_report(sender, instance, **kwargs):
@@ -97,15 +99,14 @@ def create_periodic_agg_report_from(cls, period, entity,
 
     # find list of sources
     if indiv_cls is not None and indiv_sources is None:
-        indiv_sources = indiv_cls.objects \
-                                 .filter(period=period,
-                                         entity__in=entity.get_health_children())
+        indiv_sources = indiv_cls.objects.filter(
+            period=period, entity__in=entity.get_health_children())
     else:
         indiv_sources = indiv_sources or []
 
     if agg_sources is None:
-        agg_sources = cls.objects.filter(period=period,
-                                         entity__in=entity.get_health_children())
+        agg_sources = cls.objects.filter(
+            period=period, entity__in=entity.get_health_children())
     else:
         agg_sources = agg_sources or []
 

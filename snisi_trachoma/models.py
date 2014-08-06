@@ -18,7 +18,8 @@ from snisi_core.models.Providers import Provider
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         OCCASIONAL_SOURCE, OCCASIONAL_AGGREGATED)
+                                         OCCASIONAL_SOURCE,
+                                         OCCASIONAL_AGGREGATED)
 
 
 class TTBacklogVillageR(SNISIReport):
@@ -98,12 +99,15 @@ class TTBacklogMissionR(SNISIReport):
     ended_on = models.DateField(verbose_name="Date de fin",
                                 blank=True, null=True)
     operator = models.ForeignKey(Provider, verbose_name="Opérateur")
-    operator_type = models.CharField(max_length=75,
+    operator_type = models.CharField(
+        max_length=75,
         choices=OPERATOR_TYPES.items(), verbose_name="Profil opérateur")
-    strategy = models.CharField(max_length=75, choices=STRATEGIES.items(),
+    strategy = models.CharField(
+        max_length=75, choices=STRATEGIES.items(),
         verbose_name="Stratégie")
 
-    village_reports = models.ManyToManyField(TTBacklogVillageR,
+    village_reports = models.ManyToManyField(
+        TTBacklogVillageR,
         verbose_name=_("Rapports Villages"),
         blank=True, null=True)
 
@@ -146,7 +150,6 @@ class TTBacklogMissionR(SNISIReport):
     nb_days_mean = models.FloatField(default=0)
     nb_days_median = models.FloatField(default=0)
 
-
     def total_for_field(self, field):
         values = []
         for cat in ('male', 'female'):
@@ -171,7 +174,6 @@ class TTBacklogMissionR(SNISIReport):
     def recidivism(self):
         return self.total_for_field(inspect.stack()[0][3])
 
-
     def add_village(self, report):
 
         # no duplicates
@@ -186,13 +188,16 @@ class TTBacklogMissionR(SNISIReport):
         for field_part in ('consultation', 'surgery', 'refusal', 'recidivism'):
             for gender in ('male', 'female'):
                 field = '{}_{}'.format(field_part, gender)
-                setattr(self, field, getattr(self, field, 0) + getattr(report, field, 0))
+                setattr(self,
+                        field,
+                        getattr(self, field, 0) + getattr(report, field, 0))
 
         # add calculated fields
         if report.community_assistance:
             self.nb_community_assistance += 1
 
-        durations = [r.visit_duration().days for r in self.village_reports.all()]
+        durations = [r.visit_duration().days
+                     for r in self.village_reports.all()]
         self.nb_days_min = numpy.min(durations)
         self.nb_days_max = numpy.max(durations)
         self.nb_days_mean = numpy.mean(durations)
@@ -235,7 +240,8 @@ class AggTTBacklogMissionR(PeriodicAggregatedReportInterface, SNISIReport):
     community_assistance = models.BooleanField(
         verbose_name="Assistance relais")
 
-    village_reports = models.ManyToManyField(TTBacklogVillageR,
+    village_reports = models.ManyToManyField(
+        TTBacklogVillageR,
         verbose_name=_("Rapports Villages"),
         blank=True, null=True)
 

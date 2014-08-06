@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
 
 
-def send_email(recipients, message=None, template=None, context={}, \
+def send_email(recipients, message=None, template=None, context={},
                title=None, title_template=None, sender=None):
     """ forge and send an email message
 
@@ -54,15 +54,15 @@ def send_email(recipients, message=None, template=None, context={}, \
         email_msg = message
 
     # if no title provided, use default one. empty title allowed
-    if title == None and not title_template:
-        email_subject = _("Message from %(site)s") \
-                        % {'site': Site.objects.get_current().name}
+    if title is None and not title_template:
+        email_subject = _("Message from {site}").format(
+            site=Site.objects.get_current().name)
 
     # build email subject. rendered template has priority
     if title_template:
         email_subject = loader.get_template(title_template) \
                               .render(Context(context))
-    elif title != None:
+    elif title is not None:
         email_subject = title
 
     # title can't contain new line

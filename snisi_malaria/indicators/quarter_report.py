@@ -6,21 +6,19 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 from collections import OrderedDict
 
-from snisi_malaria.indicators.common import MalariaIndicator, gen_shortcut, gen_shortcut_agg
+from snisi_malaria.indicators.common import (MalariaIndicator, gen_shortcut,
+                                             gen_shortcut_agg)
 from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
 from snisi_core.models.Reporting import ExpectedReporting
 from snisi_malaria.indicators.section2a_all import (
     TousCasPaludismeNotifies,
     ProportionsPaludismeConsultationsTTC)
 from snisi_core.models.Projects import Cluster
-from snisi_malaria.indicators.map import (TotalTestedMalariaCases,
-                                          TotalConfirmedMalariaCases,
-                                          HealthUnitsWithoutACTChildrenStockout,
-                                          HealthUnitsWithoutACTYouthStockout,
-                                          HealthUnitsWithoutACTAdultStockout,
-                                          HealthUnitsWithoutBednetStockout,
-                                          HealthUnitsWithoutRDTStockout,
-                                          HealthUnitsWithoutSPStockout)
+from snisi_malaria.indicators.map import (
+    TotalTestedMalariaCases, TotalConfirmedMalariaCases,
+    HealthUnitsWithoutACTChildrenStockout, HealthUnitsWithoutACTYouthStockout,
+    HealthUnitsWithoutACTAdultStockout, HealthUnitsWithoutBednetStockout,
+    HealthUnitsWithoutRDTStockout, HealthUnitsWithoutSPStockout)
 
 
 class Tableau1(TousCasPaludismeNotifies):
@@ -28,7 +26,6 @@ class Tableau1(TousCasPaludismeNotifies):
     title = "Tout âge confondu"
     caption = ("Total consultation, cas suspects, cas testés, cas confirmés, "
                "paludisme grave et paludisme simple")
-
 
 
 class Figure1(ProportionsPaludismeConsultationsTTC):
@@ -86,31 +83,11 @@ class Figure3(IndicatorTable):
 
     INDICATORS = [
         gen_shortcut('u5_total_inpatient_all_causes',
-                     "Nbre hospitalisations toutes causes contondues (TCC) (<5ans)"),
+                     "Nbre hospitalisations toutes causes contondues "
+                     "(TCC) (<5ans)"),
         gen_shortcut('u5_total_malaria_inpatient',
                      "Nbre hospitalisations pour paludisme grave (<5ans)"),
     ]
-
-
-# class Figure4(IndicatorTable):
-#     name = "Figure 4"
-#     title = ""
-#     caption = ("Nombre de cas de paludisme grave et nombre de décès pour"
-#                "paludisme chez les moins de 5 ans")
-#     rendering_type = 'graph'
-#     graph_type = 'spline'
-
-#     dual_axis = {
-#         'default': {'label': "Nbre hospitalisations TCC"},
-#         'opposite': {'label': "Nbre hospitalisations pour paludisme"}
-#         }
-
-#     INDICATORS = [
-#         gen_shortcut('u5_total_severe_malaria_cases',
-#                      "Cas de paludisme grave"),
-#         gen_shortcut('u5_total_malaria_death',
-#                      "Cas de décès"),
-#     ]
 
 
 class Figure5(IndicatorTable):
@@ -185,6 +162,7 @@ class Figure8(IndicatorTable):
 
 class FECPNMILD(MalariaIndicator):
     name = ("% MILD")
+
     def _compute(self):
         return self.divide(self.report.pw_total_distributed_bednets,
                            self.report.pw_total_anc1)
@@ -209,15 +187,19 @@ class Figure9(IndicatorTable):
 
 class PercentTPI2(MalariaIndicator):
     name = ("% TPI2")
+
     def _compute(self):
         return self.divide(self.report.pw_total_sp2,
                            self.report.pw_total_anc1)
 
+
 class PercentTPI3(MalariaIndicator):
     name = ("% TPI3")
+
     def _compute(self):
         return self.divide(self.report.pw_total_sp3,
                            self.report.pw_total_anc1)
+
 
 class Figure10(IndicatorTable):
     """ TPI2 :
@@ -260,10 +242,6 @@ class StockoutActYouth(HealthUnitsWithoutACTYouthStockout):
 
 
 class Figure11(IndicatorTable):
-    """ structures sans rupture (par type de CTA)
-            Numérateur : Nombre de centres sans ruptures de stocks (pour le type de CTA)
-            Dénominateur : Nombre total de centres couverts
-    """
     name = "Figure 11"
     title = ""
     caption = ("Pourcentage de structures sans rupture de stock en CTA")
@@ -290,13 +268,10 @@ class HealthUnitsWithoutSP(HealthUnitsWithoutSPStockout):
 
 
 class Figure12(IndicatorTable):
-    """ structures sans rupture (par type de produit)
-            Numérateur : Nombre de centres sans ruptures de stocks (pour le produit)
-            Dénominateur : Nombre total de centres couverts
-    """
     name = "Figure 12"
     title = ""
-    caption = ("Pourcentage de structures sans rupture de stock en SP, TDR et MILD")
+    caption = ("Pourcentage de structures sans rupture de stock "
+               "en SP, TDR et MILD")
     rendering_type = 'graph'
     graph_type = 'spline'
 
@@ -309,28 +284,36 @@ class Figure12(IndicatorTable):
 
 class SMSSourceReportsExpected(MalariaIndicator):
     name = "Nb. de rapports attendus (SMS)"
+
     def _compute(self):
         descendants = [e.slug for e in self.entity.casted().get_descendants()]
-        sms_members = Cluster.get_or_none("malaria_monthly_routine_sms").members()
+        sms_members = Cluster.get_or_none(
+            "malaria_monthly_routine_sms").members()
         all_exp = ExpectedReporting.objects.filter(
             report_class__slug='malaria_monthly_routine', period=self.period)
 
         return len([1 for e in all_exp
-                    if e.entity.casted() in sms_members and e.entity.slug in descendants])
+                    if e.entity.casted() in sms_members and e.entity.slug
+                    in descendants])
 
 
 class SMSSourceReportsArrivedInTime(MalariaIndicator):
     name = "Nb. de rapports reçus à temps (SMS)"
+
     def _compute(self):
-        sms_members = Cluster.get_or_none("malaria_monthly_routine_sms").members()
+        sms_members = Cluster.get_or_none(
+            "malaria_monthly_routine_sms").members()
         return len([1 for r in self.report.indiv_sources.all()
-                    if r.entity.casted() in sms_members and r.arrival_status == r.ON_TIME])
+                    if r.entity.casted() in sms_members
+                    and r.arrival_status == r.ON_TIME])
 
 
 class SMSSourceReportsArrived(MalariaIndicator):
     name = "Nb. de rapports reçus (SMS)"
+
     def _compute(self):
-        sms_members = Cluster.get_or_none("malaria_monthly_routine_sms").members()
+        sms_members = Cluster.get_or_none(
+            "malaria_monthly_routine_sms").members()
         return len([1 for r in self.report.indiv_sources.all()
                     if r.entity.casted() in sms_members])
 

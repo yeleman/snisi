@@ -12,6 +12,7 @@ from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
 
 class AllOverFiveInpatientAllCauses(MalariaIndicator):
     name = "Total des hospitalisations (toutes causes confondues)"
+
     def _compute(self):
         return sum([self.report.o5_total_inpatient_all_causes,
                     self.report.pw_total_inpatient_all_causes])
@@ -19,6 +20,7 @@ class AllOverFiveInpatientAllCauses(MalariaIndicator):
 
 class AllOverFiveMalariaInpatient(MalariaIndicator):
     name = "Total des hospitalisations pour paludisme grave"
+
     def _compute(self):
         return sum([self.report.o5_total_malaria_inpatient,
                     self.report.pw_total_malaria_inpatient])
@@ -37,7 +39,6 @@ class HospitalisationPlusde5ansTous(IndicatorTable):
         is_ref(AllOverFiveInpatientAllCauses),
         ref_is(0)(AllOverFiveMalariaInpatient),
     ]
-
 
 
 class ProportionHospitalisations(IndicatorTable):

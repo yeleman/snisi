@@ -21,14 +21,18 @@ class CasConfirmes(IndicatorTable):
     add_percentage = True
 
     INDICATORS = [
-        is_ref(gen_shortcut('u5_total_tested_malaria_cases',
-                            "Total des cas suspects testés chez les moins de 5 ans")),
-        ref_is(0)(gen_shortcut('u5_total_confirmed_malaria_cases',
-                               "Total des cas confirmés chez les moins de 5 ans")),
-        is_ref(gen_shortcut('total_tested_malaria_cases',
-                            "Total des cas suspects testés chez Tout âge confond")),
-        ref_is(2)(gen_shortcut('total_confirmed_malaria_cases',
-                            "Total des cas confirmés chez Tout âge confond")),
+        is_ref(gen_shortcut(
+            'u5_total_tested_malaria_cases',
+            "Total des cas suspects testés chez les moins de 5 ans")),
+        ref_is(0)(gen_shortcut(
+            'u5_total_confirmed_malaria_cases',
+            "Total des cas confirmés chez les moins de 5 ans")),
+        is_ref(gen_shortcut(
+            'total_tested_malaria_cases',
+            "Total des cas suspects testés chez Tout âge confond")),
+        ref_is(2)(gen_shortcut(
+            'total_confirmed_malaria_cases',
+            "Total des cas confirmés chez Tout âge confond")),
     ]
 
 
@@ -45,14 +49,18 @@ class GrapheConfirmes(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('u5_total_tested_malaria_cases',
-                            "Total des cas suspects testés chez les moins de 5 ans"))),
-        ref_is(0)(gen_shortcut('u5_total_confirmed_malaria_cases',
-                               "Total des cas confirmés chez les moins de 5 ans")),
-        hide(is_ref(gen_shortcut('total_tested_malaria_cases',
-                            "Total des cas suspects testés chez Tout âge confond"))),
-        ref_is(2)(gen_shortcut('total_confirmed_malaria_cases',
-                            "Total des cas confirmés chez Tout âge confond")),
+        hide(is_ref(gen_shortcut(
+            'u5_total_tested_malaria_cases',
+            "Total des cas suspects testés chez les moins de 5 ans"))),
+        ref_is(0)(gen_shortcut(
+            'u5_total_confirmed_malaria_cases',
+            "Total des cas confirmés chez les moins de 5 ans")),
+        hide(is_ref(gen_shortcut(
+            'total_tested_malaria_cases',
+            "Total des cas suspects testés chez Tout âge confond"))),
+        ref_is(2)(gen_shortcut(
+            'total_confirmed_malaria_cases',
+            "Total des cas confirmés chez Tout âge confond")),
     ]
 
 
@@ -103,18 +111,24 @@ class DecesPaluToutCauses(IndicatorTable):
     add_percentage = True
 
     INDICATORS = [
-        is_ref(gen_shortcut('u5_total_consultation_all_causes',
-                            "Total consultation chez les moins de 5 ans")),
-        ref_is(0)(gen_shortcut('u5_total_death_all_causes',
-                               "Décès toutes causes confondues chez les moins de 5 ans")),
-        ref_is(1)(gen_shortcut('u5_total_malaria_death',
-                               "Décès pour paludisme chez les moins de 5 ans")),
-        is_ref(gen_shortcut('o5_total_consultation_all_causes',
-                               "Total consultation chez les 5 ans et plus")),
-        ref_is(3)(gen_shortcut('o5_total_death_all_causes',
-                               "Décès toutes causes confondues chez les 5 ans et plus")),
-        ref_is(4)(gen_shortcut('o5_total_malaria_death',
-                               "Décès pour paludisme chez les 5 ans et plus")),
+        is_ref(gen_shortcut(
+            'u5_total_consultation_all_causes',
+            "Total consultation chez les moins de 5 ans")),
+        ref_is(0)(gen_shortcut(
+            'u5_total_death_all_causes',
+            "Décès toutes causes confondues chez les moins de 5 ans")),
+        ref_is(1)(gen_shortcut(
+            'u5_total_malaria_death',
+            "Décès pour paludisme chez les moins de 5 ans")),
+        is_ref(gen_shortcut(
+            'o5_total_consultation_all_causes',
+            "Total consultation chez les 5 ans et plus")),
+        ref_is(3)(gen_shortcut(
+            'o5_total_death_all_causes',
+            "Décès toutes causes confondues chez les 5 ans et plus")),
+        ref_is(4)(gen_shortcut(
+            'o5_total_malaria_death',
+            "Décès pour paludisme chez les 5 ans et plus")),
     ]
 
 
@@ -133,117 +147,19 @@ class GrapheDecesPaluToutCauses(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('u5_total_death_all_causes',
-                               "Décès toutes causes confondues chez les moins de 5 ans"))),
-        ref_is(0)(gen_shortcut('u5_total_malaria_death',
-                               "Pourcentage décès pour paludisme chez les moins de 5 ans")),
-        hide(is_ref(gen_shortcut('o5_total_death_all_causes',
-                               "Décès toutes causes confondues chez les 5 ans et plus"))),
-        ref_is(2)(gen_shortcut('o5_total_malaria_death',
-                               "Pourcentage décès pour paludisme chez les 5 ans et plus")),
+        hide(is_ref(gen_shortcut(
+            'u5_total_death_all_causes',
+            "Décès toutes causes confondues chez les moins de 5 ans"))),
+        ref_is(0)(gen_shortcut(
+            'u5_total_malaria_death',
+            "Pourcentage décès pour paludisme chez les moins de 5 ans")),
+        hide(is_ref(gen_shortcut(
+            'o5_total_death_all_causes',
+            "Décès toutes causes confondues chez les 5 ans et plus"))),
+        ref_is(2)(gen_shortcut(
+            'o5_total_malaria_death',
+            "Pourcentage décès pour paludisme chez les 5 ans et plus")),
     ]
-
-
-# class DecesPalu(IndicatorTable):
-#     """ Tableau: Pourcentage de decès pour paludisme chez les moins de
-
-#         5 ans """
-
-#     name = "Tableau 24"
-#     title = " "
-#     caption = "Pourcentage de decès pour paludisme chez les moins de 5 ans" \
-#               " Bamako/Sego"
-#     rendering_type = 'table'
-
-#     default_options = {'with_percentage': True, \
-#                        'with_total': False, \
-#                        'with_reference': True}
-
-#     def period_is_valid(self, period):
-#         return True
-
-#     @reference
-#     @indicator(0, 'bamako_total_malaria_death')
-#     @label("Total décès pour paludisme à Bamako")
-#     def bamako_total_malaria_death(self, period):
-#         if self.entity.type.slug == 'cscom' or \
-#            self.entity.type.slug == 'district':
-#             report = get_report_for_element(get_report_national(period) \
-#                                             .sources.validated(), 1)
-#             print report
-#             return report.total_malaria_death
-#         else:
-#             report = get_report_for_element(get_report_for_slug(self.entity,
-#                                             period).sources.validated(), 1)
-#             return report.total_malaria_death
-
-#     @indicator(1, 'bamako_total_malaria_death')
-#     @label("Décès pour paludisme chez les 5 ans à Bamako")
-#     def bamako_u5_total_malaria_death(self, period):
-
-#         if self.entity.type.slug == 'cscom' or \
-#            self.entity.type.slug == 'district':
-#             report = get_report_for_element(get_report_national(period) \
-#                                             .sources.validated(), 1)
-#             return report.u5_total_malaria_death
-#         else:
-#             report = get_report_for_element(get_report_for_slug(self.entity,
-#                                             period).sources.validated(), 1)
-#             return report.u5_total_malaria_death
-
-#     @reference
-#     @indicator(2, 'segou_total_malaria_death')
-#     @label("Total décès pour paludisme à Ségo")
-#     def segou_total_malaria_death(self, period):
-#         if self.entity.type.slug == 'cscom' or \
-#            self.entity.type.slug == 'district':
-#             report = get_report_for_element(get_report_national(period) \
-#                                             .sources.validated(), 0)
-#             return report.total_malaria_death
-#         else:
-#             report = get_report_for_element(get_report_for_slug(self.entity,
-#                                             period).sources.validated(), 0)
-#             return report.total_malaria_death
-
-#     @indicator(3, 'segou_total_malaria_death')
-#     @label("Décès pour paludisme chez les 5 ans à Ségo")
-#     def segou_u5_total_malaria_death(self, period):
-#         if self.entity.type.slug == 'cscom' \
-#             or self.entity.type.slug == 'district':
-#             report = get_report_for_element(get_report_national(period) \
-#                                             .sources.validated(), 0)
-#             return report.u5_total_malaria_death
-#         else:
-#             report = get_report_for_element(get_report_for_slug(self.entity,
-#                                             period).sources.validated(), 0)
-#             return report.u5_total_malaria_death
-
-
-# class GrapheDecesPalu(DecesPalu):
-#     """ Graphe: Pourcentage de decès pour paludisme chez les moins de 5 ans """
-
-#     name = "Figure 34"
-#     title = " "
-#     caption = "Pourcentage de decès pour paludisme chez les moins de 5 ans"
-#     graph_type = 'spline'
-#     rendering_type = 'graph'
-
-#     default_options = {'with_percentage': True, \
-#                        'with_reference': False, \
-#                        'with_data': True,
-#                        'only_percent': True}
-
-#     @indicator(0, 'bamako_total_malaria_death')
-#     @label("% décès pour paludisme chez les 5 ans à Bamako")
-#     def bamako_u5_total_malaria_death(self, period):
-#         return super(GrapheDecesPalu, self).bamako_u5_total_malaria_death(period)
-
-#     @indicator(1, 'segou_total_malaria_death')
-#     @label("% décès pour paludisme chez les 5 ans à Ségo")
-#     def segou_u5_total_malaria_death(self, period):
-#         return super(GrapheDecesPalu, self).segou_u5_total_malaria_death(period)
-
-
 
 
 class CasTestesConfirmes(IndicatorTable):
@@ -284,7 +200,7 @@ class GrapheCasTestesConfirmes(IndicatorTable):
 
     INDICATORS = [
         hide(is_ref(gen_shortcut('total_suspected_malaria_cases',
-                            "Total des cas suspects"))),
+                                 "Total des cas suspects"))),
         ref_is(0)(gen_shortcut('total_tested_malaria_cases',
                                "Total des cas suspects testés")),
         ref_is(1)(gen_shortcut('total_confirmed_malaria_cases',

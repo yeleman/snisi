@@ -13,7 +13,6 @@ from django.views.decorators.csrf import csrf_exempt
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Domain
 from snisi_core.models.Entities import HealthEntity
-from snisi_tools.misc import import_path
 from snisi_malaria.indicators import get_indicators
 
 
@@ -32,7 +31,7 @@ def geojson_data(request, project_slug):
     domain = Domain.get_or_none(project_slug)
 
     get_geoindicators = domain.import_from('indicators.get_geoindicators')
-    indicators = get_geoindicators()
+    get_geoindicators()
 
 
 @require_POST
@@ -55,9 +54,9 @@ def geojson_indicator(request):
 
     project_slug = json_request.get('project_slug')
     target_level = json_request.get('level')
-    display_hc = json_request.get('display_hc')
+    # display_hc = json_request.get('display_hc')
     indicator_slug = json_request.get('indicator_slug')
-    timing = json_request.get('timing') # single_period | evolution
+    timing = json_request.get('timing')  # single_period | evolution
 
     period_slug_a = json_request.get('period_a')
     period_a = MonthPeriod.from_url_str(period_slug_a)

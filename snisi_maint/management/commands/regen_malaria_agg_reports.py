@@ -82,16 +82,20 @@ class Command(BaseCommand):
 
         # remove old ones if requested
         if options.get('clear'):
-            ExpectedReporting.objects.filter(report_class__slug=reportcls_slug).delete()
+            ExpectedReporting.objects.filter(
+                report_class__slug=reportcls_slug).delete()
             receipts = [r.receipt for r in AggMalariaR.objects.all()]
             AggMalariaR.objects.filter(receipt__in=receipts)
             SNISIReport.objects.filter(receipt__in=receipts).delete()
-            ExpectedValidation.objects.filter(report__receipt__in=receipts).delete()
+            ExpectedValidation.objects.filter(
+                report__receipt__in=receipts).delete()
 
         cluster = Cluster.get_or_none("malaria_monthly_routine")
         periods = MonthPeriod.all_from(first_period, last_period)
-        districts = [e for e in cluster.members() if e.type.slug == 'health_district']
-        regions = [e for e in cluster.members() if e.type.slug == 'health_region']
+        districts = [e for e in cluster.members()
+                     if e.type.slug == 'health_district']
+        regions = [e for e in cluster.members()
+                   if e.type.slug == 'health_region']
 
         # loop on periods
         for period in periods:
@@ -100,14 +104,15 @@ class Command(BaseCommand):
             logger.info("Switching to {}".format(period))
 
             region_validation_period = DefaultRegionValidationPeriod \
-                                        .find_create_by_date(reporting_period.middle())
+                .find_create_by_date(reporting_period.middle())
 
             # change date to beginning
             DEBUG_change_system_date(reporting_period.start_on, True)
 
             # loop on all districts/region/country
             for entity in districts + regions + [mali]:
-                if not entity_expected_for(entity, period, entity.type.slug == 'health_region'):
+                if not entity_expected_for(
+                        entity, period, entity.type.slug == 'health_region'):
                     continue
 
                 logger.info("\tCreating for {}".format(entity))
@@ -139,8 +144,8 @@ class Command(BaseCommand):
 
                 # auto-validate non-validated reports
                 for report in MalariaR.objects.filter(
-                    period=period,
-                    entity__in=district.get_health_centers()):
+                        period=period,
+                        entity__in=district.get_health_centers()):
                     if not report.validated:
                         expv = ExpectedValidation.objects.get(report=report)
 
@@ -187,7 +192,8 @@ class Command(BaseCommand):
                 logger.info("\tAt region {}".format(region))
 
                 # loop on districts
-                for district in [d for d in region.get_health_districts() if d in cluster.members()]:
+                for district in [d for d in region.get_health_districts()
+                                 if d in cluster.members()]:
                     if not entity_expected_for(district, period):
                         continue
 
@@ -210,7 +216,7 @@ class Command(BaseCommand):
                     entity=region,
                     created_by=autobot)
 
-                 # ack expected
+                # ack expected
                 exp = ExpectedReporting.objects.get(
                     report_class=rclass,
                     entity__slug=region.slug,
@@ -231,7 +237,7 @@ class Command(BaseCommand):
                 entity=mali,
                 created_by=autobot)
 
-             # ack expected
+            # ack expected
             exp = ExpectedReporting.objects.get(
                 report_class=rclass,
                 entity__slug=mali.slug,

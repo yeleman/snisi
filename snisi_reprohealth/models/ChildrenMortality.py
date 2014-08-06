@@ -15,7 +15,8 @@ from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Entities import AdministrativeEntity
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         OCCASIONAL_SOURCE, OCCASIONAL_AGGREGATED)
+                                         OCCASIONAL_SOURCE,
+                                         OCCASIONAL_AGGREGATED)
 
 
 class ChildrenDeathR(SNISIReport):
@@ -69,9 +70,10 @@ class ChildrenDeathR(SNISIReport):
         verbose_name = _("Children Mortality Report")
         verbose_name_plural = _("Children Mortality Reports")
 
-    reporting_location = models.ForeignKey(AdministrativeEntity,
-                                           related_name='children_reported_in',
-                                           verbose_name=_("Reporting location"))
+    reporting_location = models.ForeignKey(
+        AdministrativeEntity,
+        related_name='children_reported_in',
+        verbose_name=_("Reporting location"))
     name = models.CharField(max_length=100,
                             verbose_name=_("Name of the deceased"))
     sex = models.CharField(max_length=45,
@@ -102,8 +104,8 @@ class ChildrenDeathR(SNISIReport):
         self.cause_of_death = cause_of_death
 
     def __str__(self):
-        return ugettext("{name}/{dod}").format(name=self.name.title(),
-                                               dod=self.dod.strftime('%d-%m-%Y'))
+        return ugettext("{name}/{dod}").format(
+            name=self.name.title(), dod=self.dod.strftime('%d-%m-%Y'))
 
 receiver(pre_save, sender=ChildrenDeathR)(pre_save_report)
 receiver(post_save, sender=ChildrenDeathR)(post_save_report)
@@ -153,7 +155,8 @@ class AggChildrenDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     cause_death_eat_refusal = models.PositiveIntegerField()
     cause_death_other = models.PositiveIntegerField()
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
@@ -194,9 +197,10 @@ class AggChildrenDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     def create_from(cls, period, entity, author):
 
         # find list of sources
-        indiv_sources = ChildrenDeathR.objects.filter(dod__gte=period.start_on,
-                                                      dod__lte=period.end_on,
-                                                      death_location__in=entity.get_children())
+        indiv_sources = ChildrenDeathR.objects.filter(
+            dod__gte=period.start_on,
+            dod__lte=period.end_on,
+            death_location__in=entity.get_children())
         agg_sources = cls.objects.filter(period=period,
                                          entity__in=entity.get_children())
 
@@ -299,7 +303,8 @@ class AggChildrenDeathR(PeriodicAggregatedReportInterface, SNISIReport):
         report.cause_death_rash += instance.cause_death_rash
         report.cause_death_cough += instance.cause_death_cough
         report.cause_death_vomiting += instance.cause_death_vomiting
-        report.cause_death_nuchal_rigidity += instance.cause_death_nuchal_rigidity
+        report.cause_death_nuchal_rigidity += \
+            instance.cause_death_nuchal_rigidity
         report.cause_death_red_eye += instance.cause_death_red_eye
         report.cause_death_eat_refusal += instance.cause_death_eat_refusal
         report.cause_death_other += instance.cause_death_other

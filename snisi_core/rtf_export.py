@@ -11,7 +11,8 @@ import tempfile
 import requests
 from py3compat import text_type
 from django.template import loader, Context
-from rtfw import Paragraph, Table, BorderPS, FramePS, Cell, Image, ParagraphPS, TEXT
+from rtfw import (Paragraph, Table, BorderPS, FramePS, Cell,
+                  Image, ParagraphPS, TEXT)
 
 from snisi_web.templatetags.snisi import number_format
 
@@ -75,8 +76,8 @@ def widgets_for_indicator(document, indicator_table, break_before=False):
     constructor = graph_for_indicator \
         if indicator_table.rendering_type == 'graph' \
         else table_for_indicator
-    widgets =  [title_for_indicator(document, indicator_table,
-                                    break_before=break_before)]
+    widgets = [title_for_indicator(document, indicator_table,
+                                   break_before=break_before)]
     if indicator_table.rendering_type == 'table':
         widgets.append(neutral_style(document, indicator_table))
     widgets.append(constructor(document, indicator_table))
@@ -103,7 +104,7 @@ def title_for_indicator(document, indicator_table, break_before=False):
 
 def title_for_text(document, text, break_before=False):
     p = Paragraph(document.StyleSheet.ParagraphStyles.Heading2,
-                  ParagraphPS().SetPageBreakBefore( break_before ))
+                  ParagraphPS().SetPageBreakBefore(break_before))
     p.append(text)
     return p
 
@@ -154,17 +155,16 @@ def table_for_indicator(document, indicator_table):
     col_mini = 670
     col_mini_pc = 570
 
-    thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
+    thin_edge = BorderPS(width=20, style=BorderPS.SINGLE)
     # thick_edge = BorderPS( width=80, style=BorderPS.SINGLE )
 
     def p(text, align_center=False):
         text_elem = TEXT(text, size=14) if minify else text
         return Paragraph(ParagraphPS(
-            alignment=ParagraphPS.CENTER
-                      if align_center
-                      else ParagraphPS.LEFT), text_elem)
+            alignment=ParagraphPS.CENTER if align_center
+            else ParagraphPS.LEFT), text_elem)
 
-    thin_frame  = FramePS( thin_edge,  thin_edge,  thin_edge,  thin_edge )
+    thin_frame = FramePS(thin_edge,  thin_edge,  thin_edge,  thin_edge)
     # thick_frame = FramePS( thick_edge, thick_edge, thick_edge, thick_edge )
     # mixed_frame = FramePS( thin_edge,  thick_edge, thin_edge,  thick_edge )
 
@@ -207,7 +207,8 @@ def table_for_indicator(document, indicator_table):
         args = []
         for idx, cell_data in enumerate(line):
             align_center = not idx == 0
-            args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
+            args.append(Cell(p(number_format(cell_data), align_center),
+                        thin_frame))
 
         table.AddRow(*args)
 
@@ -241,20 +242,19 @@ def generic_table(datamatrix, title=""):
         col_large = 3000
         col_regular = 1000
 
-    thin_edge  = BorderPS( width=20, style=BorderPS.SINGLE )
+    thin_edge = BorderPS(width=20, style=BorderPS.SINGLE)
 
     def p(text, align_center=False):
         return Paragraph(ParagraphPS(
-            alignment=ParagraphPS.CENTER
-                      if align_center
-                      else ParagraphPS.LEFT), text)
+            alignment=ParagraphPS.CENTER if align_center
+            else ParagraphPS.LEFT), text)
 
-    thin_frame  = FramePS( thin_edge,  thin_edge,  thin_edge,  thin_edge )
+    thin_frame = FramePS(thin_edge,  thin_edge,  thin_edge,  thin_edge)
 
     cols = [col_large]
     for _ in range(1, nb_col):
         cols.append(col_regular)
-    table = Table( *cols )
+    table = Table(*cols)
 
     # first header row : title and period names
     args = []
@@ -267,7 +267,8 @@ def generic_table(datamatrix, title=""):
         args = []
         for idx, cell_data in enumerate(line):
             align_center = not idx == 0
-            args.append(Cell(p(number_format(cell_data), align_center), thin_frame))
+            args.append(Cell(p(number_format(cell_data), align_center),
+                        thin_frame))
         table.AddRow(*args)
 
     return table

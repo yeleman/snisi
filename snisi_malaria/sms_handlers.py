@@ -16,7 +16,8 @@ from snisi_core.models.Entities import HealthEntity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_malaria.models import MalariaR
-from snisi_malaria.integrity import MalariaRSourceReportChecker, create_report, PROJECT_BRAND
+from snisi_malaria.integrity import (MalariaRSourceReportChecker,
+                                     create_report, PROJECT_BRAND)
 from snisi_tools.sms import send_sms
 from snisi_sms.reply import SMSReply
 
@@ -71,7 +72,8 @@ def malaria_help(message, nousername=False):
         provider = Provider.from_phone_number(identity=message.identity)
 
     if not provider:
-        text_message = "[DEMANDE AIDE] Non identifié: {}".format(message.identity)
+        text_message = ("[DEMANDE AIDE] Non identifié: {}"
+                        .format(message.identity))
     else:
         text_message = "[DEMANDE AIDE] {provider}".format(
             provider=provider.name())
@@ -83,7 +85,8 @@ def malaria_help(message, nousername=False):
 def malaria_passwd(message):
     error_start = "Impossible de changer votre mot de passe. "
     try:
-        kw1, kw2, username, old_password, new_password = message.content.strip().lower().split()
+        kw1, kw2, username, old_password, new_password = \
+            message.content.strip().lower().split()
     except ValueError:
         message.respond(error_start + "Le format du SMS est incorrect.")
         return True
@@ -158,8 +161,10 @@ def malaria_report(message):
                       'pw_total_anc1',
                       'pw_total_sp1',
                       'pw_total_sp2',
-                      'stockout_act_children', 'stockout_act_youth', 'stockout_act_adult',
-                      'stockout_artemether', 'stockout_quinine', 'stockout_serum',
+                      'stockout_act_children',
+                      'stockout_act_youth', 'stockout_act_adult',
+                      'stockout_artemether', 'stockout_quinine',
+                      'stockout_serum',
                       'stockout_bednet', 'stockout_rdt', 'stockout_sp']
         args_values = message.content.strip().lower().split()
         arguments = dict(zip(args_names, args_values))
@@ -174,9 +179,11 @@ def malaria_report(message):
             if key.split('_')[0] in ('u5', 'o5', 'pw', 'month', 'year'):
                 arguments[key] = int(value)
             if key.split('_')[0] == 'stockout':
-                arguments[key] = MalariaR.YES if bool(int(value)) else MalariaR.NO
+                arguments[key] = MalariaR.YES if bool(int(value)) \
+                    else MalariaR.NO
     except:
-        logger.warning("Unable to convert SMS data to int: {}".format(message.content))
+        logger.warning("Unable to convert SMS data to int: {}"
+                       .format(message.content))
         # failure to convert means non-numeric value which we can't process.
         return reply.error("Les données sont malformées.")
 
@@ -239,22 +246,11 @@ def malaria_report(message):
     # should have already been checked in checker.
     if expected_reporting is None:
         logger.error("Expected reporting not found: "
-                     "cls:{cls} - period:{period} - entity:{entity}".format(
-                        cls=reportcls, period=period, entity=entity))
+                     "cls:{cls} - period:{period} - entity:{entity}"
+                     .format(cls=reportcls, period=period, entity=entity))
         return reply.error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}".format(
-                                entity=entity, period=period))
-
-    # # check if the report arrived in time or not.
-    # if expected_reporting.period.contains(message.event_on):
-    #     arrival_status = MalariaR.ON_TIME
-    # elif expected_reporting.extended_reporting_period.contains(message.event_on):
-    #     arrival_status = MalariaR.LATE
-    # else:
-    #     # arrived too late. We can't accept the report.
-    #     return reply.error("La période de collecte pour {period} est terminée. "
-    #                        "Rapport refusé."
-    #                        .format(period=expected_reporting.period))
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period))
 
     report, text_message = create_report(provider=provider,
                                          expected_reporting=expected_reporting,

@@ -7,9 +7,8 @@ from __future__ import (unicode_literals, absolute_import,
 
 from snisi_core import branding
 
+
 def default_context(*args, **kwargs):
     context = {}
     context.update(branding)
     return context
-
-

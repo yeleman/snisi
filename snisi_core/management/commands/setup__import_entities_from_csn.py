@@ -15,7 +15,9 @@ if PY2:
 else:
     import csv
 
-from snisi_core.models.Entities import Entity, AdministrativeEntity, HealthEntity, EntityType
+from snisi_core.models.Entities import (Entity, AdministrativeEntity,
+                                        HealthEntity, EntityType)
+
 
 class Command(BaseCommand):
 
@@ -36,24 +38,30 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        admin_headers = ['IDENT_Code', 'IDENT_Name', 'IDENT_Type', 'IDENT_ParentCode',
-                         'IDENT_ModifiedOn', 'IDENT_RegionName', 'IDENT_CercleName',
+        admin_headers = ['IDENT_Code', 'IDENT_Name',
+                         'IDENT_Type', 'IDENT_ParentCode',
+                         'IDENT_ModifiedOn', 'IDENT_RegionName',
+                         'IDENT_CercleName',
                          'IDENT_CommuneName',
                          'IDENT_HealthAreaCode', 'IDENT_HealthAreaName',
                          'IDENT_HealthAreaCenterDistance',
                          'IDENT_Latitude', 'IDENT_Longitude', 'IDENT_Geometry']
 
-        health_headers = ['IDENT_Code', 'IDENT_Name', 'IDENT_Type', 'IDENT_ParentCode',
+        health_headers = ['IDENT_Code', 'IDENT_Name', 'IDENT_Type',
+                          'IDENT_ParentCode',
                           'IDENT_ModifiedOn',
                           'IDENT_HealthRegionCode', 'IDENT_HealthDistrictCode',
                           'IDENT_HealthAreaCode', 'IDENT_MainEntityCode',
-                          'IDENT_Latitude', 'IDENT_Longitude', 'IDENT_Geometry']
+                          'IDENT_Latitude', 'IDENT_Longitude',
+                          'IDENT_Geometry']
 
         input_admin_file = open(options.get('input_admin_file'), 'r')
-        admin_csv_reader = csv.DictReader(input_admin_file, fieldnames=admin_headers)
+        admin_csv_reader = csv.DictReader(input_admin_file,
+                                          fieldnames=admin_headers)
 
         input_health_file = open(options.get('input_health_file'), 'r')
-        health_csv_reader = csv.DictReader(input_health_file, fieldnames=health_headers)
+        health_csv_reader = csv.DictReader(input_health_file,
+                                           fieldnames=health_headers)
 
         if options.get('clear'):
             print("Removing all entities...")
@@ -76,7 +84,8 @@ class Command(BaseCommand):
             geometry = entry.get('IDENT_Geometry')
             health_area_slug = entry.get('IDENT_HealthAreaCode')
             try:
-                health_area_center_distance = float(entry.get('IDENT_HealthAreaCenterDistance'))
+                health_area_center_distance = float(
+                    entry.get('IDENT_HealthAreaCenterDistance'))
             except:
                 health_area_center_distance = None
             if health_area_slug:
@@ -119,7 +128,8 @@ class Command(BaseCommand):
 
         print("Updating Health Entities with main center")
         input_health_file.seek(0)
-        health_csv_reader = csv.DictReader(input_health_file, fieldnames=health_headers)
+        health_csv_reader = csv.DictReader(input_health_file,
+                                           fieldnames=health_headers)
         for entry in health_csv_reader:
             if health_csv_reader.line_num == 1:
                 continue
@@ -128,5 +138,6 @@ class Command(BaseCommand):
                 continue
 
             entity = HealthEntity.objects.get(slug=entry.get('IDENT_Code'))
-            entity.main_entity = HealthEntity.objects.get(slug=entry.get('IDENT_MainEntityCode'))
+            entity.main_entity = HealthEntity.objects.get(
+                slug=entry.get('IDENT_MainEntityCode'))
             entity.save()

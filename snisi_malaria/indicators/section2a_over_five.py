@@ -10,7 +10,6 @@ from snisi_malaria.indicators.section2a import TITLE as TITLE_2A
 from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
 
 
-
 class CasPaludismeEnfantsPlusDe5ans(IndicatorTable):
     """ Tableau: Nombre de cas de paludisme chez les personnes de 5 ans et
 
@@ -27,12 +26,16 @@ class CasPaludismeEnfantsPlusDe5ans(IndicatorTable):
     INDICATORS = [
         is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
                             "Nombre de cas de paludisme (tous suspectés)")),
-        ref_is(0)(gen_shortcut('o5_total_tested_malaria_cases',
-                               "Total des cas suspects testés (GE et/ou TDR)")),
-        ref_is(1)(gen_shortcut('o5_total_confirmed_malaria_cases',
-                               "Nombre de cas suspects testés qui sont confirmés par  GE ou TDR")),
-        ref_is(2)(gen_shortcut('o5_total_simple_malaria_cases', ". Cas simples")),
-        ref_is(2)(gen_shortcut('o5_total_severe_malaria_cases', ". Cas graves")),
+        ref_is(0)(gen_shortcut(
+            'o5_total_tested_malaria_cases',
+            "Total des cas suspects testés (GE et/ou TDR)")),
+        ref_is(1)(gen_shortcut(
+            'o5_total_confirmed_malaria_cases',
+            "Nombre de cas suspects testés qui sont confirmés par GE ou TDR")),
+        ref_is(2)(gen_shortcut('o5_total_simple_malaria_cases',
+                               ". Cas simples")),
+        ref_is(2)(gen_shortcut('o5_total_severe_malaria_cases',
+                               ". Cas graves")),
 
     ]
 
@@ -51,9 +54,11 @@ class NbreTestesConfirmesOverFive(IndicatorTable):
     graph_type = 'column'
 
     INDICATORS = [
-        is_ref(gen_shortcut('o5_total_suspected_malaria_cases', "Cas suspects")),
+        is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
+                            "Cas suspects")),
         ref_is(0)(gen_shortcut('o5_total_tested_malaria_cases', "Cas testés")),
-        ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases', "Cas confirmés")),
+        ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases',
+                               "Cas confirmés")),
     ]
 
 
@@ -71,10 +76,11 @@ class NbreTestesOverFive(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases', "Cas suspects"))),
-        ref_is(0)(gen_shortcut('o5_total_tested_malaria_cases', "Cas testés")),
+        hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
+                                 "Cas suspects"))),
+        ref_is(0)(gen_shortcut('o5_total_tested_malaria_cases',
+                               "Cas testés")),
     ]
-
 
 
 class NbreConfirmesOverFive(IndicatorTable):
@@ -90,8 +96,10 @@ class NbreConfirmesOverFive(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases', "Cas suspects"))),
-        ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases', "Cas confirmés")),
+        hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
+                                 "Cas suspects"))),
+        ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases',
+                               "Cas confirmés")),
     ]
 
 
@@ -111,9 +119,12 @@ class NbreCasSimplesGravesOverFive(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(gen_shortcut('o5_total_confirmed_malaria_cases', "Cas confirmés")),
-        ref_is(0)(gen_shortcut('o5_total_simple_malaria_cases', "Cas simples")),
-        ref_is(0)(gen_shortcut('o5_total_severe_malaria_cases', "Cas graves")),
+        hide(gen_shortcut('o5_total_confirmed_malaria_cases',
+                          "Cas confirmés")),
+        ref_is(0)(gen_shortcut('o5_total_simple_malaria_cases',
+                               "Cas simples")),
+        ref_is(0)(gen_shortcut('o5_total_severe_malaria_cases',
+                               "Cas graves")),
     ]
 
 

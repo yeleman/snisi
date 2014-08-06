@@ -20,11 +20,13 @@ def server_error(request, template_name='errors/500.html'):
 
     return render(request, template_name, context)
 
+
 def bad_request(request, template_name='errors/500.html'):
     context = {'error_num': 400}
     context.update({'traceback': "".join(traceback.format_exc())})
 
     return render(request, template_name, context)
+
 
 def not_found(request, template_name='errors/404.html'):
     context = {'error_num': 404}

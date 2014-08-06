@@ -28,7 +28,6 @@ class NombreMoustiquqiresImpregneesInsecticidesLongueDureeMILD(IndicatorTable):
     ]
 
 
-
 class EvolutionNbreMILDMoins5ansFemmesenceintes(IndicatorTable):
     """Graphe: Evolution du nombre de MILD distribuées aux moins
 

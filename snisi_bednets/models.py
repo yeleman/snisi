@@ -15,7 +15,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
 
 
 class AbstractBednetR(SNISIReport):
@@ -77,14 +78,15 @@ class AggBednetR(PeriodicAggregatedReportInterface, AbstractBednetR):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     INDIVIDUAL_CLS = BednetR
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_bednets'
         verbose_name = _("Aggregated MILD Report")
         verbose_name_plural = _("Aggregated MILD Reports")
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')

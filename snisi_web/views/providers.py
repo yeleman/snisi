@@ -21,13 +21,12 @@ from snisi_tools.numbers import (phonenumber_repr, normalized_phonenumber,
 
 class PhoneNumberForm(forms.Form):
 
-    identity = forms.CharField(max_length=75,
-                               label='',
-                               help_text=_("If not a Mali number, "
-                                           "use +indicator syntax."),
-                               widget=forms.TextInput(
-                                attrs={'class': 'pure-input-1-3',
-                                       'placeholder': _("Phone number...")}))
+    identity = forms.CharField(
+        max_length=75, label='',
+        help_text=_("If not a Mali number, use +indicator syntax."),
+        widget=forms.TextInput(
+            attrs={'class': 'pure-input-1-3',
+                   'placeholder': _("Phone number...")}))
 
     def clean_identity(self):
         numbersent = self.cleaned_data.get('identity')
@@ -51,6 +50,7 @@ class ProviderForm(forms.ModelForm):
         model = Provider
         fields = ['gender', 'title', 'maiden_name', 'first_name',
                   'middle_name', 'last_name', 'email', 'position']
+
 
 class ProviderPasswordForm(forms.Form):
     password1 = forms.CharField(max_length=100,
@@ -109,13 +109,15 @@ def edit_profile(request, **kwargs):
     if request.method == 'POST' and is_password:
         passwd_form = ProviderPasswordForm(request.POST)
         if passwd_form.is_valid() and is_password:
-            request.user.set_password(passwd_form.cleaned_data.get('password1'))
+            request.user.set_password(
+                passwd_form.cleaned_data.get('password1'))
             request.user.save()
             messages.success(request, _("Password updated."))
             return redirect('logout')
         else:
             messages.warning(request,
-                             _("Your password change request failed. See bellow."))
+                             _("Your password change request failed. "
+                               " See bellow."))
 
     # new phone number form
     if request.method == 'POST' and is_newphone:
@@ -127,7 +129,8 @@ def edit_profile(request, **kwargs):
             if number.startswith('7229'):
                 type_slug = 'flotte'
             else:
-                if PhoneNumberType.objects.filter(slug='perso_{}'.format(operator)).count():
+                if PhoneNumberType.objects.filter(
+                        slug='perso_{}'.format(operator)).count():
                     type_slug = 'perso_{}'.format(operator)
                 else:
                     type_slug = 'perso_other'
@@ -140,12 +143,12 @@ def edit_profile(request, **kwargs):
                     priority=category.priority,
                     provider=request.user)
                 messages.success(request,
-                                 _("Added new phone number: {}").format(
-                                    phonenumber_repr(identity)))
+                                 _("Added new phone number: {}")
+                                 .format(phonenumber_repr(identity)))
             except Exception as e:
                 messages.error(request,
-                               _("Error in creating phone number {}.\n{}").format(
-                                phonenumber_repr(identity), e))
+                               _("Error in creating phone number {}.\n{}")
+                               .format(phonenumber_repr(identity), e))
             return redirect('profile')
         else:
             messages.warning(request,
@@ -165,7 +168,8 @@ def edit_profile(request, **kwargs):
 def public_profile(request, username, **kwargs):
     context = {}
 
-    context.update({'provider': Provider.get_or_none(username, with_inactive=True)})
+    context.update({'provider': Provider.get_or_none(username,
+                                                     with_inactive=True)})
 
     return render(request,
                   kwargs.get('template_name', "misc/public_profile.html"),
@@ -180,12 +184,12 @@ def remove_number_from_profile(request, identity):
     except:
         messages.error(request,
                        _("Unable to remove phone number {} from your account."
-                         "Either it doesn't exist or it's not yours.").format(
-                                phonenumber_repr(identity)))
+                         "Either it doesn't exist or it's not yours.")
+                       .format(phonenumber_repr(identity)))
         return redirect('profile')
 
     pn.delete()
     messages.success(request,
-                     _("Removed phone number: {}").format(
-                        phonenumber_repr(identity)))
+                     _("Removed phone number: {}")
+                     .format(phonenumber_repr(identity)))
     return redirect('profile')

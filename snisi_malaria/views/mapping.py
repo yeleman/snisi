@@ -20,7 +20,6 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import ExpectedReporting
 from snisi_tools.misc import import_path
 
-from snisi_malaria import get_domain
 from snisi_malaria.indicators import get_geo_indicators
 
 
@@ -36,17 +35,19 @@ def malaria_map(request, template_name='malaria/map.html'):
     context = {'page_slug': 'map'}
 
     periods = [MonthPeriod.objects.get(identifier=p['period'])
-               for p in ExpectedReporting.objects \
-                        .filter(report_class__slug='malaria_monthly_routine') \
-                        .order_by('period').values('period').distinct()]
+               for p
+               in ExpectedReporting.objects.filter(
+        report_class__slug='malaria_monthly_routine')
+        .order_by('period').values('period').distinct()]
 
     years = []
     months = {}
     for period in periods:
-        if not period.start_on.year in years:
+        if period.start_on.year not in years:
             years.append(period.start_on.year)
-        if not period.start_on.month in months.keys():
-            months.update({period.start_on.month: period.start_on.strftime("%B")})
+        if period.start_on.month not in months.keys():
+            months.update({period.start_on.month:
+                           period.start_on.strftime("%B")})
 
     context.update({'years': sorted(years),
                     'months': months,
@@ -66,26 +67,26 @@ def get_indicator_data(request, domain_slug='malaria'):
 
     domain = Domain.get_or_none(domain_slug)
 
-    from pprint import pprint as pp ; pp(domain)
-
     indicator_slug = json_request.get('indicator_slug')
     year = json_request.get('year')
     month = json_request.get('month')
     period = MonthPeriod.find_create_from(year=int(year), month=int(month))
-    indicator = import_path('{}.indicators.{}'.format(domain.module_path, indicator_slug))
+    indicator = import_path('{}.indicators.{}'
+                            .format(domain.module_path, indicator_slug))
     parent = Entity.get_or_none(json_request.get('entity_slug'))
-    targets = parent.get_health_centers() if parent.type.slug == 'health_district' \
-                                          else parent.get_health_districts()
+    targets = parent.get_health_centers() \
+        if parent.type.slug == 'health_district' \
+        else parent.get_health_districts()
     computed_values = {}
     for entity in targets:
         ind = indicator(period=period, entity=entity)
-        computed_values.update({entity.slug:
-            {'slug': entity.slug,
-             'data': ind.data,
-             'hdata': ind.human,
-             'is_not_expected': not ind.is_expected,
-             'is_missing': ind.is_missing,
-             'is_yesno': ind.is_yesno}})
+        computed_values.update({entity.slug: {
+            'slug': entity.slug,
+            'data': ind.data,
+            'hdata': ind.human,
+            'is_not_expected': not ind.is_expected,
+            'is_missing': ind.is_missing,
+            'is_yesno': ind.is_yesno}})
 
     return withCORS(HttpResponse(json.dumps(computed_values),
                                  content_type='application/json'))
@@ -112,20 +113,22 @@ def geojson_data(request, cluster_slug=None, parent_slug='mali'):
         else:
             qs = qs.filter(entity__parent=parent)
         return [Entity.get_or_none(v['entity'])
-                for v in qs.order_by('entity__name').values('entity').distinct()]
+                for v in qs.order_by('entity__name')
+                .values('entity').distinct()]
 
     def _getChildCollection(parent):
         data = copy.deepcopy(featureColTemplate)
         data['properties'].update(parent.to_dict())
         if parent.type.slug == 'health_center':
-            children_qs =[]
+            children_qs = []
         else:
             children_qs = _getChildren(parent)
 
         for child in children_qs:
             cgj = child.geojson_feature
-            if not child.type.slug in ('health_center', 'vfq'):
-                cgj['properties'].update({'children': _getChildCollection(parent=child)})
+            if child.type.slug not in ('health_center', 'vfq'):
+                cgj['properties'].update({'children':
+                                          _getChildCollection(parent=child)})
             data['features'].append(cgj)
         return data
 

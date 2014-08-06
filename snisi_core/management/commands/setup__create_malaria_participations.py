@@ -35,7 +35,8 @@ class Command(BaseCommand):
 
         # malaria_proj = get_domain()
         routine_cluster = Cluster.get_or_none("malaria_monthly_routine")
-        routine_cluster_sms = Cluster.get_or_none("malaria_monthly_routine_sms")
+        routine_cluster_sms = Cluster.get_or_none(
+            "malaria_monthly_routine_sms")
         mopti = Entity.get_or_none("SSH3")
         moptid = Entity.get_or_none("HFD9")
         segou_start = datetime.datetime(2011, 6, 20).replace(tzinfo=utc)
@@ -69,7 +70,8 @@ class Command(BaseCommand):
 
             # NIONO, MACINA, MOPTI
             if entity.type.slug == 'health_center' and \
-                entity.get_health_district().slug in ('X952', 'TY60', 'HFD9'):
+                    entity.get_health_district().slug \
+                    in ('X952', 'TY60', 'HFD9'):
 
                 Participation.objects.create(
                     cluster=routine_cluster_sms,

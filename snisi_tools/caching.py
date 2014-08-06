@@ -76,5 +76,3 @@ def descendants_slugs(cluster, slug):
     _add_children(slug, descendants)
 
     return list(set(descendants))
-
-

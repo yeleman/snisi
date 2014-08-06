@@ -63,79 +63,6 @@ class TraitesCTA(IndicatorTable):
     caption = "Pourcentage de cas traités par CTA"
     rendering_type = 'table'
 
-    # default_options = {'with_percentage': True,
-    #                    'with_total': False,
-    #                    'with_reference': True}
-
-    # @reference
-    # @indicator(0, 'bamako_total_simple_malaria_cases')
-    # @label("cas paludisme à Bamako")
-    # def bamako_total_simple_malaria_cases(self, period):
-
-    #     if self.entity.type.slug == 'cscom' or \
-    #        self.entity.type.slug == 'district':
-    #         report = get_report_for_element(get_report_national(period)
-    #                                         .sources.validated(), 1)
-    #         return report.total_simple_malaria_cases
-    #     else:
-    #         report = get_report_for_element(get_report_for(self.entity,
-    #                                         period).sources.validated(), 1)
-    #         return report.total_simple_malaria_cases
-
-    # @indicator(1, 'bamako_total_simple_malaria_cases')
-    # @label("% cas paludisme traités par CTA à Bamako")
-    # def bamako_total_treated_malaria_cases(self, period):
-    #     if self.entity.type.slug == 'cscom' or \
-    #        self.entity.type.slug == 'district':
-    #         report = get_report_for_element(get_report_national(period)
-    #                                         .sources.validated(), 1)
-    #         print report
-    #         return report.total_treated_malaria_cases
-    #     else:
-    #         report = get_report_for_element(get_report_for(self.entity,
-    #                                         period).sources.validated(), 1)
-    #         return report.total_treated_malaria_cases
-
-    # @reference
-    # @indicator(2, 'segou_total_simple_malaria_cases')
-    # @label("cas paludisme à Ségo")
-    # def segou_total_simple_malaria_cases(self, period):
-    #     if self.entity.type.slug == 'cscom' or \
-    #        self.entity.type.slug == 'district':
-    #         report = get_report_for_element(get_report_national(period)
-    #                                         .sources.validated(), 0)
-    #         return report.total_simple_malaria_cases
-    #     else:
-    #         report = get_report_for_element(get_report_for(self.entity,
-    #                                         period).sources.validated(), 0)
-    #         return report.total_simple_malaria_cases
-
-    # @indicator(3, 'segou_total_simple_malaria_cases')
-    # @label("% cas paludisme traités par CTA à Ségo")
-    # def segou_total_treated_malaria_cases(self, period):
-    #     if self.entity.type.slug == 'cscom' or \
-    #        self.entity.type.slug == 'district':
-    #         report = get_report_for_element(get_report_national(period)
-    #                                         .sources.validated(), 0)
-    #         return report.total_treated_malaria_cases
-    #     else:
-    #         report = get_report_for_element(get_report_for(self.entity,
-    #                                         period).sources.validated(), 0)
-    #         return report.total_treated_malaria_cases
-
-
-# class GrapheTraitesCTA(TraitesCTA):
-#     """ Graphe: Nombre de femmes enceintes reçues en CPN1 et Nombre de
-
-#         MILD distribuées aux femmes enceintes"""
-
-#     name = "Figure 38"
-#     title = " "
-#     caption = "Pourcentage de cas traités par CTA"
-#     graph_type = 'spline'
-#     rendering_type = 'graph'
-#     as_percentage = True
-
 
 class HealthUnitsWithoutBednetStockout(MalariaIndicator):
     name = "Structures sans rupture de stock de MILD"
@@ -173,11 +100,10 @@ class HealthUnitsWithoutACTStockout(MalariaIndicator):
         nb_stockout = 0
         for r in self.report.indiv_sources.all():
             if (getattr(r, 'stockout_act_children') == MalariaR.NO
-                or getattr(r, 'stockout_act_youth') == MalariaR.NO
-                or getattr(r, 'stockout_act_adult') == MalariaR.NO):
+                    or getattr(r, 'stockout_act_youth') == MalariaR.NO
+                    or getattr(r, 'stockout_act_adult') == MalariaR.NO):
                 nb_stockout += 1
         return nb_stockout
-
 
 
 class PourcentageCTATDRMILD(IndicatorTable):

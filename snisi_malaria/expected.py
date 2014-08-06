@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import copy
 import datetime
+from collections import OrderedDict
 
 from snisi_core.models.Periods import MonthPeriod, DayPeriod
 from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
@@ -14,18 +15,16 @@ from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthThirdWeek,
                                                 FixedMonthFourthWeek,
                                                 FixedMonthFifthWeek)
-from snisi_core.models.ReportingPeriods import (DefaultMonthlyReportingPeriod,
-                                                DefaultMonthlyExtendedReportingPeriod,
-                                                FixedMonthFirstWeekReportingPeriod,
-                                                FixedMonthSecondWeekReportingPeriod,
-                                                FixedMonthThirdWeekReportingPeriod,
-                                                FixedMonthFourthWeekReportingPeriod,
-                                                FixedMonthFifthWeekReportingPeriod,
-                                                FixedMonthFirstWeekExtendedReportingPeriod,
-                                                FixedMonthSecondWeekExtendedReportingPeriod,
-                                                FixedMonthThirdWeekExtendedReportingPeriod,
-                                                FixedMonthFourthWeekExtendedReportingPeriod,
-                                                FixedMonthFifthWeekExtendedReportingPeriod)
+from snisi_core.models.ReportingPeriods import (
+    DefaultMonthlyReportingPeriod, DefaultMonthlyExtendedReportingPeriod,
+    FixedMonthFirstWeekReportingPeriod, FixedMonthSecondWeekReportingPeriod,
+    FixedMonthThirdWeekReportingPeriod, FixedMonthFourthWeekReportingPeriod,
+    FixedMonthFifthWeekReportingPeriod,
+    FixedMonthFirstWeekExtendedReportingPeriod,
+    FixedMonthSecondWeekExtendedReportingPeriod,
+    FixedMonthThirdWeekExtendedReportingPeriod,
+    FixedMonthFourthWeekExtendedReportingPeriod,
+    FixedMonthFifthWeekExtendedReportingPeriod)
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
@@ -35,13 +34,15 @@ logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
 
 indiv_report_class = ReportClass.get_or_none("malaria_monthly_routine")
-agg_report_class = ReportClass.get_or_none("malaria_monthly_routine_aggregated")
+agg_report_class = ReportClass.get_or_none(
+    "malaria_monthly_routine_aggregated")
 episrc_report_class = ReportClass.get_or_none("malaria_weekly_epidemio")
 
 
 def create_expected_for(period):
 
-    logger.info("Creating ExpectedReporting for {} at {}".format(DOMAIN, period))
+    logger.info("Creating ExpectedReporting for {} at {}"
+                .format(DOMAIN, period))
 
     created_list = []
 
@@ -81,7 +82,8 @@ def create_expected_for(period):
             # report class is based on indiv/agg
             reportcls = indiv_report_class \
                 if entity.type.slug == 'health_center' else agg_report_class
-            reporting_role = dtc if entity.type.slug == 'health_center' else charge_sis
+            reporting_role = dtc if entity.type.slug == 'health_center' \
+                else charge_sis
 
             edict = copy.copy(expected_dict)
             edict.update({
@@ -105,18 +107,22 @@ def create_expected_for(period):
             if e.reporting_period != edict['reporting_period']:
                 e.reporting_period = edict['reporting_period']
                 e.save()
-            if e.extended_reporting_period != edict['extended_reporting_period']:
-                e.extended_reporting_period = edict['extended_reporting_period']
+            if e.extended_reporting_period \
+                    != edict['extended_reporting_period']:
+                e.extended_reporting_period = \
+                    edict['extended_reporting_period']
                 e.save()
 
         # create DayPeriod for Epidemiology for each day of the month
-        nb_day_in_month = ((period.end_on - period.start_on) + datetime.timedelta(seconds=1)).days
+        nb_day_in_month = ((period.end_on - period.start_on)
+                           + datetime.timedelta(seconds=1)).days
         for day in range(1, nb_day_in_month + 1):
-            day_period = DayPeriod.find_create_from(year=period.start_on.year,
-                                                    month=period.start_on.month,
-                                                    day=day)
+            day_period = DayPeriod.find_create_from(
+                year=period.start_on.year,
+                month=period.start_on.month, day=day)
 
-            logger.debug("Generating DayPeriod Expecteds for {}".format(day_period))
+            logger.debug("Generating DayPeriod Expecteds for {}"
+                         .format(day_period))
 
             for entity in epidemio_cluster.members():
 
@@ -135,10 +141,8 @@ def create_expected_for(period):
                 else:
                     logger.debug("Exists already: {}".format(e))
 
-        from collections import  OrderedDict
-
         # create FixedWeekPeriods for Epidemiology for the month
-        week_repperiod_matrix =  OrderedDict([
+        week_repperiod_matrix = OrderedDict([
             (FixedMonthFirstWeek, FixedMonthFirstWeekReportingPeriod),
             (FixedMonthSecondWeek, FixedMonthSecondWeekReportingPeriod),
             (FixedMonthThirdWeek, FixedMonthThirdWeekReportingPeriod),
@@ -147,19 +151,25 @@ def create_expected_for(period):
         ])
         week_extrepperiod_matrix = OrderedDict([
             (FixedMonthFirstWeek, FixedMonthFirstWeekExtendedReportingPeriod),
-            (FixedMonthSecondWeek, FixedMonthSecondWeekExtendedReportingPeriod),
+            (FixedMonthSecondWeek,
+             FixedMonthSecondWeekExtendedReportingPeriod),
             (FixedMonthThirdWeek, FixedMonthThirdWeekExtendedReportingPeriod),
-            (FixedMonthFourthWeek, FixedMonthFourthWeekExtendedReportingPeriod),
+            (FixedMonthFourthWeek,
+             FixedMonthFourthWeekExtendedReportingPeriod),
             (FixedMonthFifthWeek, FixedMonthFifthWeekExtendedReportingPeriod)
         ])
 
-
         week_slug_matrix = OrderedDict([
-            (FixedMonthFirstWeek, 'malaria_weekly_epidemio_firstweek_aggregated'),
-            (FixedMonthSecondWeek, 'malaria_weekly_epidemio_secondweek_aggregated'),
-            (FixedMonthThirdWeek, 'malaria_weekly_epidemio_thirdweek_aggregated'),
-            (FixedMonthFourthWeek, 'malaria_weekly_epidemio_fourthweek_aggregated'),
-            (FixedMonthFifthWeek, 'malaria_weekly_epidemio_fifthweek_aggregated')
+            (FixedMonthFirstWeek,
+             'malaria_weekly_epidemio_firstweek_aggregated'),
+            (FixedMonthSecondWeek,
+             'malaria_weekly_epidemio_secondweek_aggregated'),
+            (FixedMonthThirdWeek,
+             'malaria_weekly_epidemio_thirdweek_aggregated'),
+            (FixedMonthFourthWeek,
+             'malaria_weekly_epidemio_fourthweek_aggregated'),
+            (FixedMonthFifthWeek,
+             'malaria_weekly_epidemio_fifthweek_aggregated')
         ])
         for weekcls in week_slug_matrix.keys():
             logger.debug("\n\n-------")
@@ -167,8 +177,8 @@ def create_expected_for(period):
             logger.debug(period.start_on)
             logger.debug(period.end_on)
             try:
-                week_period = weekcls.find_create_from(year=period.start_on.year,
-                                                       month=period.start_on.month)
+                week_period = weekcls.find_create_from(
+                    year=period.start_on.year, month=period.start_on.month)
             except ValueError:
                 continue
             if week_period is None:
@@ -177,12 +187,16 @@ def create_expected_for(period):
             logger.debug(week_period.start_on)
             logger.debug(week_period.end_on)
 
-            reporting_period = week_repperiod_matrix.get(weekcls).find_create_from(year=period.start_on.year, month=period.start_on.month)
+            reporting_period = week_repperiod_matrix.get(weekcls) \
+                .find_create_from(
+                    year=period.start_on.year, month=period.start_on.month)
             logger.debug(reporting_period)
             logger.debug(reporting_period.start_on)
             logger.debug(reporting_period.end_on)
 
-            extended_reporting_period = week_extrepperiod_matrix.get(weekcls).find_create_from(year=period.start_on.year, month=period.start_on.month)
+            extended_reporting_period = week_extrepperiod_matrix \
+                .get(weekcls).find_create_from(
+                    year=period.start_on.year, month=period.start_on.month)
             logger.debug(extended_reporting_period)
             logger.debug(extended_reporting_period.start_on)
             logger.debug(extended_reporting_period.end_on)

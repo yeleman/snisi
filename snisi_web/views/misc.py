@@ -42,18 +42,17 @@ class ContactForm(forms.Form):
                               required=False,
                               label=ugettext_lazy("Subject"))
 
-    recipient = forms.ChoiceField(required=False,
-                                  label=ugettext_lazy("Recipient"),
-                                  choices=contact_choices(settings.SUPPORT_CONTACTS),
-                                  help_text=_("Choose PNLP for operational "
-                                              "requests and ANTIM for "
-                                              "technical ones."))
+    recipient = forms.ChoiceField(
+        required=False, label=ugettext_lazy("Recipient"),
+        choices=contact_choices(settings.SUPPORT_CONTACTS),
+        help_text=_("Choose PNLP for operational "
+                    "requests and ANTIM for "
+                    "technical ones."))
 
-    message = forms.CharField(required=True,
-                              label=ugettext_lazy("Your request"),
-                              widget=forms.Textarea(
-                                attrs={'placeholder': _("Your message here...")}))
-
+    message = forms.CharField(
+        required=True, label=ugettext_lazy("Your request"),
+        widget=forms.Textarea(
+            attrs={'placeholder': _("Your message here...")}))
 
 
 def contact(request, *args, **kwargs):

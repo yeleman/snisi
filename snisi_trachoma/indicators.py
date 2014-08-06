@@ -6,8 +6,9 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import copy
 
-from snisi_core.indicators import IndicatorTable, Indicator, is_ref, ref_is, hide, gen_report_indicator
-from snisi_trachoma.models import TTBacklogMissionR, AggTTBacklogMissionR
+from snisi_core.indicators import (IndicatorTable, Indicator,
+                                   gen_report_indicator)
+from snisi_trachoma.models import TTBacklogMissionR
 
 
 class TTMissionIndicator(Indicator):
@@ -35,32 +36,31 @@ class ReportSumDataMixin(object):
 
 
 def gen_reportsum_indicator(field,
-                         name=None,
-                         report_cls=None,
-                         base_indicator_cls=Indicator):
+                            name=None,
+                            report_cls=None,
+                            base_indicator_cls=Indicator):
 
     class GenericReportIndicator(ReportSumDataMixin, base_indicator_cls):
         pass
 
     cls = copy.copy(GenericReportIndicator)
     cls.report_field = field
-    cls.name = name if name else report_cls.field_name(field) if report_cls is not None else None
+    cls.name = name if name else report_cls.field_name(field) \
+        if report_cls is not None else None
     return cls
 
-gen_shortcut = lambda field, label=None: gen_report_indicator(field,
-                                                  name=label,
-                                                  report_cls=TTBacklogMissionR,
-                                                  base_indicator_cls=TTMissionIndicator)
+gen_shortcut = lambda field, label=None: gen_report_indicator(
+    field, name=label, report_cls=TTBacklogMissionR,
+    base_indicator_cls=TTMissionIndicator)
 
-gen_sum_shortcut = lambda field, label=None: gen_reportsum_indicator(field,
-                                                  name=label,
-                                                  report_cls=TTBacklogMissionR,
-                                                  base_indicator_cls=TTMissionIndicator)
-
+gen_sum_shortcut = lambda field, label=None: gen_reportsum_indicator(
+    field, name=label, report_cls=TTBacklogMissionR,
+    base_indicator_cls=TTMissionIndicator)
 
 
 class NbTTMissions(TTMissionIndicator):
     name = "Nombre de missions"
+
     def _compute(self):
         return len(self.reports)
 
@@ -77,7 +77,6 @@ class MissionDataSummary(IndicatorTable):
     title = " "
     caption = ("Données cumulatives mensuelles ; suivi du Backlog TT")
     rendering_type = 'table'
-
 
     INDICATORS = [
         NbTTMissions,
@@ -97,6 +96,7 @@ class MissionDataSummary(IndicatorTable):
 
 class ConsultationGrandTotal(TTMissionIndicator):
     name = "Cumul Opérations"
+
     def _compute(self):
         return len(self.reports)
 
@@ -109,7 +109,6 @@ class CumulativeBacklogData(IndicatorTable):
     caption = ("Évolution des opérations TT")
     rendering_type = 'graph'
     graph_type = 'areaspline'
-
 
     INDICATORS = [
         gen_sum_shortcut('consultation', "Cumul consultation"),

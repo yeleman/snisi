@@ -24,11 +24,13 @@ class CasPaludismeFemmesEnceintes(IndicatorTable):
     INDICATORS = [
         is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
                             "Nombre de cas de paludisme (tous suspectés)")),
-        ref_is(0)(gen_shortcut('pw_total_tested_malaria_cases',
-                               "Total des cas suspects testés (GE et/ou TDR)")),
-        ref_is(2)(gen_shortcut('pw_total_severe_malaria_cases',
-                              "Nombre de cas suspects testés qui sont confirmés par GE ou TDR(cas graves)")),
-
+        ref_is(0)(gen_shortcut(
+            'pw_total_tested_malaria_cases',
+            "Total des cas suspects testés (GE et/ou TDR)")),
+        ref_is(2)(gen_shortcut(
+            'pw_total_severe_malaria_cases',
+            "Nombre de cas suspects testés qui sont confirmés "
+            "par GE ou TDR(cas graves)")),
     ]
 
 
@@ -44,9 +46,11 @@ class NbreTestesConfirmesPregnantWomen(IndicatorTable):
     graph_type = 'column'
 
     INDICATORS = [
-        is_ref(gen_shortcut('pw_total_suspected_malaria_cases', "Cas suspects")),
+        is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
+                            "Cas suspects")),
         ref_is(0)(gen_shortcut('pw_total_tested_malaria_cases', "Cas testés")),
-        ref_is(0)(gen_shortcut('pw_total_confirmed_malaria_cases', "Cas confirmés")),
+        ref_is(0)(gen_shortcut('pw_total_confirmed_malaria_cases',
+                               "Cas confirmés")),
     ]
 
 
@@ -63,10 +67,10 @@ class NbreTestesPregnantWomen(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases', "Cas suspects"))),
+        hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
+                                 "Cas suspects"))),
         ref_is(0)(gen_shortcut('pw_total_tested_malaria_cases', "Cas testés")),
     ]
-
 
 
 class NbreConfirmesPregnantWomen(IndicatorTable):
@@ -82,8 +86,10 @@ class NbreConfirmesPregnantWomen(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases', "Cas suspects"))),
-        ref_is(0)(gen_shortcut('pw_total_confirmed_malaria_cases', "Cas confirmés")),
+        hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
+                                 "Cas suspects"))),
+        ref_is(0)(gen_shortcut('pw_total_confirmed_malaria_cases',
+                               "Cas confirmés")),
     ]
 
 

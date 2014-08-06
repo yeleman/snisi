@@ -65,8 +65,9 @@ def edit_report(request, report_receipt, **kwargs):
         form = ReportFormCls(request.POST, instance=report)
         if form.is_valid():
 
-            integrity_cls = import_path(report.INTEGRITY_CHECKER, failsafe=True)
-            if not integrity_cls is None:
+            integrity_cls = import_path(report.INTEGRITY_CHECKER,
+                                        failsafe=True)
+            if integrity_cls is not None:
                 data_checker = integrity_cls()
                 for field in report.data_fields():
                     data_checker.set(field, form.cleaned_data.get(field))
@@ -90,8 +91,8 @@ def edit_report(request, report_receipt, **kwargs):
                                        "contactez la Hotline.")
                     else:
                         text_message = ("Données enregistrées pour {}. "
-                                        "Le rapport n'est toujours pas validé !"
-                                        .format(report))
+                                        "Le rapport n'est toujours "
+                                        "pas validé !".format(report))
                         messages.info(request, text_message)
                 else:
                     # messages.error(request, "Données incorrectes")
@@ -134,11 +135,12 @@ def do_validation(request, report_receipt, **kwargs):
             auto_validated=False)
 
         # confirm validation
-        messages.success(request, "Le rapport {cls} nº {receipt} pour {period} "
-                                  "a été validé par {by}"
-                                  .format(cls=report.report_class(),
-                                          receipt=report.receipt,
-                                          period=report.period,
-                                          by=report.validated_by))
+        messages.success(request,
+                         "Le rapport {cls} nº {receipt} pour {period} "
+                         "a été validé par {by}"
+                         .format(cls=report.report_class(),
+                                 receipt=report.receipt,
+                                 period=report.period,
+                                 by=report.validated_by))
 
     return redirect('validation')

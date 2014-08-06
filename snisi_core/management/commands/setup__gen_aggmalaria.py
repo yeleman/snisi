@@ -6,13 +6,11 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import datetime
 
-import reversion
 from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from snisi_core.models.Entities import HealthEntity
-from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ExpectedReporting, ExpectedValidation
@@ -55,15 +53,16 @@ class Command(BaseCommand):
             print("Generating for {}".format(level))
 
             for exp in ExpectedReporting.objects.filter(
-                entity__type__slug=level,
-                report_class__slug='malaria_monthly_routine_aggregated'):
+                    entity__type__slug=level,
+                    report_class__slug='malaria_monthly_routine_aggregated'):
 
                 # if level == 'country' and exp.period == jan:
                 #     continue
 
-                agg_date = datetime.datetime(exp.period.following().middle().year,
-                                             exp.period.following().middle().month,
-                                             level_day.get(level), 8, 0).replace(tzinfo=timezone.utc)
+                agg_date = datetime.datetime(
+                    exp.period.following().middle().year,
+                    exp.period.following().middle().month,
+                    level_day.get(level), 8, 0).replace(tzinfo=timezone.utc)
 
                 DEBUG_change_system_date(agg_date, True)
 
@@ -74,16 +73,20 @@ class Command(BaseCommand):
 
                 exp.acknowledge_report(agg_r)
 
-                valperiodcls = DefaultDistrictValidationPeriod if level == 'health_center' else DefaultRegionValidationPeriod
+                valperiodcls = DefaultDistrictValidationPeriod \
+                    if level == 'health_center' \
+                    else DefaultRegionValidationPeriod
                 if level == 'country':
                     valperiodcls = DefaultNationalValidationPeriod
 
-
-                validating_entity = agg_r.entity if level == 'country' else agg_r.entity.parent
-                validating_role = Role.objects.get(slug='validation_bot') if level == 'country' else role_chargesis
+                validating_entity = agg_r.entity \
+                    if level == 'country' else agg_r.entity.parent
+                validating_role = Role.objects.get(slug='validation_bot') \
+                    if level == 'country' else role_chargesis
                 exv = ExpectedValidation.objects.create(
                     report=agg_r,
-                    validation_period=valperiodcls.find_create_by_date(agg_r.period.middle()),
+                    validation_period=valperiodcls.find_create_by_date(
+                        agg_r.period.middle()),
                     validating_entity=validating_entity,
                     validating_role=validating_role,
                 )
@@ -92,4 +95,3 @@ class Command(BaseCommand):
                                            validated_by=autobot,
                                            validated_on=agg_date,
                                            auto_validated=True)
-

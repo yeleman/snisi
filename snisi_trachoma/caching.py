@@ -12,5 +12,5 @@ from snisi_tools.caching import generate_json_cache_from_cluster_members
 
 
 def update_cluster_caches_for(cluster):
-    return generate_json_cache_from_cluster_members(cluster,
-        skip_slugs=['health_area', 'health_center', 'vfq'])
+    return generate_json_cache_from_cluster_members(
+        cluster, skip_slugs=['health_area', 'health_center', 'vfq'])

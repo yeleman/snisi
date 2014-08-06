@@ -17,7 +17,9 @@ from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          ReportStatusMixin,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
+
 
 class StockoutMixin(object):
     def has_stockouts(self):
@@ -210,7 +212,7 @@ class AggRHProductsR(PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     INDIVIDUAL_CLS = RHProductsR
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_reprohealth'
@@ -280,7 +282,8 @@ class AggRHProductsR(PeriodicAggregatedReportInterface, SNISIReport):
     ceftriaxone_1000_provided = models.PositiveIntegerField()
     ceftriaxone_1000_available = models.PositiveIntegerField()
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
@@ -310,9 +313,13 @@ class AggRHProductsR(PeriodicAggregatedReportInterface, SNISIReport):
                        == instance.SUPPLIES_AVAILABLE:
 
                         avail_field = "{}_available".format(field)
-                        setattr(report, avail_field, getattr(report, avail_field, 0) + 1)
+                        setattr(report,
+                                avail_field,
+                                getattr(report, avail_field, 0) + 1)
             else:
-                if getattr(instance, field, instance.NOT_PROVIDED) != instance.NOT_PROVIDED:
+                if getattr(instance,
+                           field,
+                           instance.NOT_PROVIDED) != instance.NOT_PROVIDED:
 
                     prov_field = "{}_provided".format(field)
                     setattr(report, prov_field,
@@ -320,7 +327,9 @@ class AggRHProductsR(PeriodicAggregatedReportInterface, SNISIReport):
 
                     if getattr(instance, field, instance.NOT_PROVIDED) > 0:
                         avail_field = "{}_available".format(field)
-                        setattr(report, avail_field, getattr(report, avail_field, 0) + 1)
+                        setattr(report,
+                                avail_field,
+                                getattr(report, avail_field, 0) + 1)
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):

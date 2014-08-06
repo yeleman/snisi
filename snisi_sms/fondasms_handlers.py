@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 INCOMING_NUMBERS_BY_OPERATOR = {}
 INCOMING_NUMBERS_WITH_OPERATOR = {}
 
+
 def snisi_outgoing_for(to, message):
     if settings.SMS_CONVERT_UNICODE_TO_ASCII:
         message = to_ascii(message)
@@ -74,7 +75,7 @@ def handle_sms_call(payload, event_type=None):
             identity=phone_number,
             event_on=received_on,
             text=message,
-            defaults={'created_on':timezone.now()})
+            defaults={'created_on': timezone.now()})
     except Exception as e:
         logger.critical("Unable to save SMS into DB: {}".format(e))
         raise
@@ -138,11 +139,12 @@ def handle_outgoing_request(payload):
 
 
 def get_phone_number_for(operator):
-    return random.choice(INCOMING_NUMBERS_BY_OPERATOR.get(operator, [None])) or None
+    return random.choice(
+        INCOMING_NUMBERS_BY_OPERATOR.get(operator, [None])) or None
 
 for number in settings.FONDA_INCOMING_NUMBERS:
     operator = operator_from_malinumber(number)
-    if not operator in INCOMING_NUMBERS_BY_OPERATOR.keys():
+    if operator not in INCOMING_NUMBERS_BY_OPERATOR.keys():
         INCOMING_NUMBERS_BY_OPERATOR.update({operator: []})
     INCOMING_NUMBERS_BY_OPERATOR[operator].append(number)
     INCOMING_NUMBERS_WITH_OPERATOR.update({number: operator})

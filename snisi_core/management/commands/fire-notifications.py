@@ -22,6 +22,7 @@ TRIGGER_DURATIONS = {
     Notification.LATER: 72 * AN_HOUR,
 }
 
+
 class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
@@ -34,8 +35,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         trigger = options.get('trigger')
 
-        if not trigger in Notification.DELIVER_OPTIONS.keys():
-            logger.error("Invalid trigger –{}– for notifications.".format(trigger))
+        if trigger not in Notification.DELIVER_OPTIONS.keys():
+            logger.error("Invalid trigger –{}– for notifications."
+                         .format(trigger))
             return
 
         trigger_duration = TRIGGER_DURATIONS.get(trigger)
@@ -45,19 +47,25 @@ class Command(BaseCommand):
                      .format(trigger, int(trigger_duration / AN_HOUR)))
 
         for recipient_dict in Notification.pending_recipients():
-            logger.debug("\t{}/{}/{}".format(recipient_dict.get('provider'),
-                                             recipient_dict.get('destination_email'),
-                                             recipient_dict.get('destination_number')))
+            logger.debug("\t{}/{}/{}"
+                         .format(recipient_dict.get('provider'),
+                                 recipient_dict.get('destination_email'),
+                                 recipient_dict.get('destination_number')))
 
-            if recipient_dict.get('provider') and not recipient_dict.get('provider').is_active:
-                logger.info("Provider is not active anymore. Remove all notifications.")
-                Notification.disable_for(provider=recipient_dict.get('provider'))
+            if recipient_dict.get('provider') \
+                    and not recipient_dict.get('provider').is_active:
+                logger.info("Provider is not active anymore. "
+                            "Remove all notifications.")
+                Notification.disable_for(
+                    provider=recipient_dict.get('provider'))
                 continue
 
             # retrieve duration of oldest notification for user
-            provider_duration = Notification.longest_duration_for(**recipient_dict)
+            provider_duration = Notification.longest_duration_for(
+                **recipient_dict)
 
             # a notif has reached its duration limit.
             # fire all notifications.
             if provider_duration >= trigger_duration:
-                Notification.send_for_recipient(trigger_on=trigger, **recipient_dict)
+                Notification.send_for_recipient(
+                    trigger_on=trigger, **recipient_dict)

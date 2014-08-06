@@ -50,6 +50,7 @@ def entities_path(root, entity):
     paths.reverse()
     return paths
 
+
 def entities_path2(root, entity):
     """ [] or {} for multi-select containing path to root entity """
     skip_slugs = ['health_area', 'vfq']
@@ -62,19 +63,24 @@ def entities_path2(root, entity):
         p = {'selected': None, 'elems': entity_children2(entity),
              'level': level}
         paths.append(p)
-    while entity.get_natural_parent(skip_slugs=skip_slugs) and not entity.slug == root.slug:
+    while entity.get_natural_parent(skip_slugs=skip_slugs) \
+            and not entity.slug == root.slug:
         p = {'selected': entity.slug,
-             'elems': entity_children2(entity.get_natural_parent(skip_slugs=skip_slugs)),
+             'elems':
+             entity_children2(
+                 entity.get_natural_parent(skip_slugs=skip_slugs)),
              'level': entity.type}
         paths.append(p)
         entity = entity.get_natural_parent(skip_slugs=skip_slugs)
     paths.reverse()
     return paths
 
+
 def entity_children2(entity):
     """ (entity.slug, entity) of all children of an entity """
     return [(e.slug, e)
-            for e in entity.get_natural_children(skip_slugs=['health_area', 'vfq'])]
+            for e in entity.get_natural_children(
+                skip_slugs=['health_area', 'vfq'])]
 
 
 def entity_children(entity):
@@ -126,7 +132,7 @@ def get_uuid():
 def get_snisi_apps():
     return [app for app in settings.INSTALLED_APPS
             if app.startswith('snisi_')
-            and not app in ('snisi_core', 'snisi_sms',
+            and app not in ('snisi_core', 'snisi_sms',
                             'snisi_web', 'snisi_tools')]
 
 
@@ -134,7 +140,8 @@ def get_from_snisi_apps(path, fusion_list=False):
     values = []
     for app in get_snisi_apps():
         try:
-            values.append(import_path('{app}.{path}'.format(app=app, path=path)))
+            values.append(import_path('{app}.{path}'
+                                      .format(app=app, path=path)))
         except (ImportError, AttributeError):
             pass
     if not fusion_list:

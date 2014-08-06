@@ -17,7 +17,8 @@ from snisi_core.models.Periods import MonthPeriod, Period
 from snisi_core.models.Entities import Entity
 from snisi_tools.auth import can_view_entity
 from snisi_trachoma.models import TTBacklogMissionR
-from snisi_web.utils import entity_browser_context, get_base_url_for_period, get_base_url_for_periods
+from snisi_web.utils import (entity_browser_context, get_base_url_for_period,
+                             get_base_url_for_periods)
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ def trachoma_mission_browser(request,
     try:
         first_period = MonthPeriod.find_create_by_date(
             TTBacklogMissionR.objects.all()
-                               .order_by('period__start_on')[0].period.middle())
+            .order_by('period__start_on')[0].period.middle())
     except IndexError:
         first_period = MonthPeriod.current()
     all_periods = MonthPeriod.all_from(first_period)
@@ -66,8 +67,9 @@ def trachoma_mission_browser(request,
     context.update({
         'all_periods': [(p.strid(), p) for p in reversed(all_periods)],
         'period': period,
-        'base_url': get_base_url_for_period(view_name='trachoma_missions', entity=entity,
-                                            period_str=period_str or period.strid())
+        'base_url': get_base_url_for_period(
+            view_name='trachoma_missions', entity=entity,
+            period_str=period_str or period.strid())
     })
 
     context.update(entity_browser_context(
@@ -75,17 +77,16 @@ def trachoma_mission_browser(request,
         full_lineage=['country', 'health_region', 'health_district'],
         cluster=cluster))
 
-
     # retrieve list of missions for that period
     missions = TTBacklogMissionR.objects.filter(
-        period=period, entity__slug__in=[e.slug for e in entity.get_health_districts()])
+        period=period,
+        entity__slug__in=[e.slug for e in entity.get_health_districts()])
 
     context.update({'missions': missions})
 
-
     return render(request,
-              kwargs.get('template_name', 'trachoma/missions_list.html'),
-              context)
+                  kwargs.get('template_name', 'trachoma/missions_list.html'),
+                  context)
 
 
 @login_required
@@ -99,8 +100,8 @@ def trachoma_mission_viewer(request, report_receipt, **kwargs):
     context.update({'mission': mission})
 
     return render(request,
-              kwargs.get('template_name', 'trachoma/mission_detail.html'),
-              context)
+                  kwargs.get('template_name', 'trachoma/mission_detail.html'),
+                  context)
 
 
 @login_required
@@ -151,8 +152,8 @@ def trachoma_dashboard(request,
 
     try:
         first_period = MonthPeriod.find_create_by_date(
-            TTBacklogMissionR.objects.all()
-                               .order_by('period__start_on')[0].period.middle())
+            TTBacklogMissionR.objects.all().order_by(
+                'period__start_on')[0].period.middle())
     except IndexError:
         first_period = MonthPeriod.current()
     all_periods = MonthPeriod.all_from(first_period)
@@ -163,9 +164,11 @@ def trachoma_dashboard(request,
         'periods': periods,
         'perioda': perioda,
         'periodb': periodb,
-        'base_url': get_base_url_for_periods(view_name='trachoma_dashboard', entity=entity,
-                                             perioda_str=perioda_str or perioda.strid(),
-                                             periodb_str=periodb_str or periodb.strid())
+        'base_url': get_base_url_for_periods(
+            view_name='trachoma_dashboard',
+            entity=entity,
+            perioda_str=perioda_str or perioda.strid(),
+            periodb_str=periodb_str or periodb.strid())
     })
 
     context.update(entity_browser_context(
@@ -173,9 +176,9 @@ def trachoma_dashboard(request,
         full_lineage=['country', 'health_region', 'health_district'],
         cluster=cluster))
 
-
     # retrieve Indicator Table
-    from snisi_trachoma.indicators import MissionDataSummary, CumulativeBacklogData
+    from snisi_trachoma.indicators import (MissionDataSummary,
+                                           CumulativeBacklogData)
 
     missions_followup = MissionDataSummary(entity=entity,
                                            periods=periods)
@@ -188,5 +191,5 @@ def trachoma_dashboard(request,
     })
 
     return render(request,
-              kwargs.get('template_name', 'trachoma/dashboard.html'),
-              context)
+                  kwargs.get('template_name', 'trachoma/dashboard.html'),
+                  context)

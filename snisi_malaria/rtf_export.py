@@ -31,16 +31,18 @@ def get_malaria_template(entity, periods, graph_periods, quarter_num, year):
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
     h1 = ss.ParagraphStyles.Heading1
 
-    header_png = os.path.join('snisi_web', 'static', 'img', 'header_malaria_report.png')
-    section.append(Paragraph(ss.ParagraphStyles.Normal, pps_center, Image(header_png)))
+    header_png = os.path.join('snisi_web', 'static', 'img',
+                              'header_malaria_report.png')
+    section.append(Paragraph(ss.ParagraphStyles.Normal,
+                             pps_center, Image(header_png)))
 
     section.append(Paragraph(h1, pps_center, "RAPPORT TRIMESTRIEL"))
-
 
     section.append(Paragraph(h1, pps_center,
                              "Données de Routine sur le Paludisme au Mali"))
     section.append(Paragraph(h1, pps_center,
-                             "Trimestre {qnum}: Période de {speriod} à {eperiod}"
+                             "Trimestre {qnum}: Période de {speriod} "
+                             "à {eperiod}"
                              .format(qnum=quarter_num,
                                      speriod=periods[0],
                                      eperiod=periods[-1])))
@@ -68,7 +70,8 @@ def health_region_report(entity, periods, graph_periods, quarter_num, year):
                               'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods,
+                               quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
         indicator_cls = WIDGET_DICT.get(widget_slug)
@@ -82,7 +85,7 @@ def health_region_report(entity, periods, graph_periods, quarter_num, year):
                                         indicator_table,
                                         break_before=break_before)
         for widget in widgets:
-            section.append( widget )
+            section.append(widget)
 
     sectiona = get_section(doc, "A. MORBIDITÉ – MORTALITÉ")
     add_widget(sectiona, 'Tableau1')
@@ -124,7 +127,8 @@ def health_district_report(entity, periods, graph_periods, quarter_num, year):
                               'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods,
+                               quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
         indicator_cls = WIDGET_DICT.get(widget_slug)
@@ -138,7 +142,7 @@ def health_district_report(entity, periods, graph_periods, quarter_num, year):
                                         indicator_table,
                                         break_before=break_before)
         for widget in widgets:
-            section.append( widget )
+            section.append(widget)
 
     sectiona = get_section(doc, "A. MORBIDITÉ – MORTALITÉ")
     add_widget(sectiona, 'Tableau1')
@@ -223,7 +227,8 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
 
             return count, _pc(count, total)
 
-        act_children, pc_act_children = count_value_for('stockout_act_children')
+        act_children, pc_act_children = count_value_for(
+            'stockout_act_children')
         act_youth, pc_act_youth = count_value_for('stockout_act_youth')
         act_adult, pc_act_adult = count_value_for('stockout_act_adult')
         datamatrix = [
@@ -252,7 +257,8 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
             if not exp.satisfied:
                 continue
             arrived += 1
-            if getattr(exp.arrived_report(), 'arrival_status', None) == MalariaR.ON_TIME:
+            if getattr(exp.arrived_report(),
+                       'arrival_status', None) == MalariaR.ON_TIME:
                 on_time += 1
 
         pc_on_time = _pc(on_time, total)
@@ -272,7 +278,8 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
                               'quarter_report.WIDGET_DICT',
                               failsafe=True)
 
-    doc = get_malaria_template(entity, periods, graph_periods, quarter_num, year)
+    doc = get_malaria_template(entity, periods, graph_periods,
+                               quarter_num, year)
 
     def add_widget(section, widget_slug, break_before=False):
         indicator_cls = WIDGET_DICT.get(widget_slug)
@@ -286,7 +293,7 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
                                         indicator_table,
                                         break_before=break_before)
         for widget in widgets:
-            section.append( widget )
+            section.append(widget)
 
     sectiona = get_section(doc, "A. MORBIDITÉ – MORTALITÉ")
     add_widget(sectiona, 'Tableau1')
@@ -337,7 +344,6 @@ def health_center_report(entity, periods, graph_periods, quarter_num, year):
 
     get_section(doc, "RECOMMENDATIONS", None)
 
-
     return doc
 
 
@@ -352,8 +358,10 @@ def generate_section_rtf(entity, periods,
 
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
 
-    header_png = os.path.join('snisi_web', 'static', 'img', 'header_malaria_report.png')
-    section.append(Paragraph(ss.ParagraphStyles.Normal, pps_center, Image(header_png)))
+    header_png = os.path.join('snisi_web', 'static', 'img',
+                              'header_malaria_report.png')
+    section.append(Paragraph(ss.ParagraphStyles.Normal,
+                             pps_center, Image(header_png)))
 
     ps = ParagraphPS()
     p = Paragraph(doc.StyleSheet.ParagraphStyles.Heading1, ps)
@@ -373,7 +381,7 @@ def generate_section_rtf(entity, periods,
         widgets = widgets_for_indicator(doc, indicator_table,
                                         break_before=break_before)
         for widget in widgets:
-            section.append( widget )
+            section.append(widget)
 
     report_folder = os.path.join(settings.FILES_REPOSITORY, base_path)
     mkdir_p(report_folder)

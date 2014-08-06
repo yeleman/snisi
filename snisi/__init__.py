@@ -6,4 +6,4 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import locale
 
-locale.setlocale(locale.LC_ALL,'')
+locale.setlocale(locale.LC_ALL, '')

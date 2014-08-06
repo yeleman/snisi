@@ -34,9 +34,11 @@ class Domain(models.Model):
     slug = models.CharField(primary_key=True, max_length=75)
     name = models.CharField(max_length=250)
     is_active = models.BooleanField(default=True)
-    technical_contact = models.ForeignKey('Provider',
+    technical_contact = models.ForeignKey(
+        'Provider',
         related_name='projects_as_techcontact', blank=True, null=True)
-    operational_contact = models.ForeignKey('Provider',
+    operational_contact = models.ForeignKey(
+        'Provider',
         related_name='projects_as_opcontact', blank=True, null=True)
     short_description = models.CharField(max_length=250, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -92,7 +94,8 @@ class Cluster(models.Model):
     slug = models.CharField(primary_key=True, max_length=75)
     name = models.CharField(max_length=250)
     is_active = models.BooleanField(default=True)
-    contact = models.ForeignKey('Provider',
+    contact = models.ForeignKey(
+        'Provider',
         related_name='clusters_as_contact', blank=True, null=True)
 
     objects = models.Manager()

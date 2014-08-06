@@ -53,14 +53,18 @@ class Command(BaseCommand):
                 DEBUG_change_system_date(period.start_on, True)
 
                 # create expected if not exist
-                eo = ExpectedReporting.objects.get(period=period, entity__slug='S5C4')
-                expected_reporting = eo.clone(save=True,
+                eo = ExpectedReporting.objects.get(
+                    period=period, entity__slug='S5C4')
+                expected_reporting = eo.clone(
+                    save=True,
                     entity=entity,
                     completion_status=ExpectedReporting.COMPLETION_MISSING)
 
-                DEBUG_change_system_date(period.start_on + timedelta(days=1), True)
+                DEBUG_change_system_date(
+                    period.start_on + timedelta(days=1), True)
 
-                provider = Provider.objects.get(location=entity, role__slug='dtc')
+                provider = Provider.objects.get(
+                    location=entity, role__slug='dtc')
                 report = MalariaR.start(
                     period=period,
                     entity=entity,
@@ -68,53 +72,77 @@ class Command(BaseCommand):
                     arrival_status=MalariaR.ON_TIME)
 
                 def sum_days(fields):
-                    fields = [fields] if not isinstance(fields, (tuple, list)) else fields
-                    return sum([sum([getattr(r, field, 0) for r in day_reports for field in fields])])
+                    fields = [fields] if not isinstance(
+                        fields, (tuple, list)) else fields
+                    return sum([sum([getattr(r, field, 0)
+                                for r in day_reports for field in fields])])
 
                 report.fill_blank()
 
                 report.add_underfive_data(
-                    total_consultation_all_causes=sum_days('u5_total_consultation_all_causes'),
-                    total_suspected_malaria_cases=sum_days('u5_total_suspected_malaria_cases'),
-                    total_simple_malaria_cases=sum_days('u5_total_simple_malaria_cases'),
-                    total_severe_malaria_cases=sum_days('u5_total_severe_malaria_cases'),
-                    total_tested_malaria_cases=sum_days(['u5_total_rdt_tested_malaria_cases',
-                                                         'u5_total_ts_tested_malaria_cases']),
-                    total_confirmed_malaria_cases=sum_days(['u5_total_rdt_confirmed_malaria_cases',
-                                                            'u5_total_ts_confirmed_malaria_cases']),
+                    total_consultation_all_causes=sum_days(
+                        'u5_total_consultation_all_causes'),
+                    total_suspected_malaria_cases=sum_days(
+                        'u5_total_suspected_malaria_cases'),
+                    total_simple_malaria_cases=sum_days(
+                        'u5_total_simple_malaria_cases'),
+                    total_severe_malaria_cases=sum_days(
+                        'u5_total_severe_malaria_cases'),
+                    total_tested_malaria_cases=sum_days(
+                        ['u5_total_rdt_tested_malaria_cases',
+                         'u5_total_ts_tested_malaria_cases']),
+                    total_confirmed_malaria_cases=sum_days(
+                        ['u5_total_rdt_confirmed_malaria_cases',
+                         'u5_total_ts_confirmed_malaria_cases']),
                     total_treated_malaria_cases=0,
                     total_inpatient_all_causes=0,
                     total_malaria_inpatient=0,
-                    total_death_all_causes=sum_days('u5_total_death_all_causes'),
-                    total_malaria_death=sum_days('u5_total_malaria_death'),
+                    total_death_all_causes=sum_days(
+                        'u5_total_death_all_causes'),
+                    total_malaria_death=sum_days(
+                        'u5_total_malaria_death'),
                     total_distributed_bednets=0)
                 report.add_overfive_data(
-                    total_consultation_all_causes=sum_days('o5_total_consultation_all_causes'),
-                    total_suspected_malaria_cases=sum_days('o5_total_suspected_malaria_cases'),
-                    total_simple_malaria_cases=sum_days('o5_total_simple_malaria_cases'),
-                    total_severe_malaria_cases=sum_days('o5_total_severe_malaria_cases'),
-                    total_tested_malaria_cases=sum_days(['o5_total_rdt_tested_malaria_cases',
-                                                         'o5_total_ts_tested_malaria_cases']),
-                    total_confirmed_malaria_cases=sum_days(['o5_total_rdt_confirmed_malaria_cases',
-                                                            'o5_total_ts_confirmed_malaria_cases']),
+                    total_consultation_all_causes=sum_days(
+                        'o5_total_consultation_all_causes'),
+                    total_suspected_malaria_cases=sum_days(
+                        'o5_total_suspected_malaria_cases'),
+                    total_simple_malaria_cases=sum_days(
+                        'o5_total_simple_malaria_cases'),
+                    total_severe_malaria_cases=sum_days(
+                        'o5_total_severe_malaria_cases'),
+                    total_tested_malaria_cases=sum_days(
+                        ['o5_total_rdt_tested_malaria_cases',
+                         'o5_total_ts_tested_malaria_cases']),
+                    total_confirmed_malaria_cases=sum_days(
+                        ['o5_total_rdt_confirmed_malaria_cases',
+                         'o5_total_ts_confirmed_malaria_cases']),
                     total_treated_malaria_cases=0,
                     total_inpatient_all_causes=0,
                     total_malaria_inpatient=0,
-                    total_death_all_causes=sum_days('o5_total_death_all_causes'),
+                    total_death_all_causes=sum_days(
+                        'o5_total_death_all_causes'),
                     total_malaria_death=sum_days('o5_total_malaria_death'))
                 report.add_pregnantwomen_data(
-                    total_consultation_all_causes=sum_days('pw_total_consultation_all_causes'),
-                    total_suspected_malaria_cases=sum_days('pw_total_suspected_malaria_cases'),
-                    total_severe_malaria_cases=sum_days('pw_total_severe_malaria_cases'),
-                    total_tested_malaria_cases=sum_days(['pw_total_rdt_tested_malaria_cases',
-                                                         'pw_total_ts_tested_malaria_cases']),
-                    total_confirmed_malaria_cases=sum_days(['pw_total_rdt_confirmed_malaria_cases',
-                                                            'pw_total_ts_confirmed_malaria_cases']),
+                    total_consultation_all_causes=sum_days(
+                        'pw_total_consultation_all_causes'),
+                    total_suspected_malaria_cases=sum_days(
+                        'pw_total_suspected_malaria_cases'),
+                    total_severe_malaria_cases=sum_days(
+                        'pw_total_severe_malaria_cases'),
+                    total_tested_malaria_cases=sum_days(
+                        ['pw_total_rdt_tested_malaria_cases',
+                         'pw_total_ts_tested_malaria_cases']),
+                    total_confirmed_malaria_cases=sum_days(
+                        ['pw_total_rdt_confirmed_malaria_cases',
+                         'pw_total_ts_confirmed_malaria_cases']),
                     total_treated_malaria_cases=0,
                     total_inpatient_all_causes=0,
                     total_malaria_inpatient=0,
-                    total_death_all_causes=sum_days('pw_total_death_all_causes'),
-                    total_malaria_death=sum_days('pw_total_malaria_death'),
+                    total_death_all_causes=sum_days(
+                        'pw_total_death_all_causes'),
+                    total_malaria_death=sum_days(
+                        'pw_total_malaria_death'),
                     total_distributed_bednets=0,
                     total_anc1=0,
                     total_sp1=0,

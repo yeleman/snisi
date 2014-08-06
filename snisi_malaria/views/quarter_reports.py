@@ -27,7 +27,6 @@ def display_report(request, entity_slug=None, **kwargs):
 
     context = {}
 
-
     def periods_for_quarter(year, quarter_num):
         start_period = MonthPeriod.find_create_from(
             year=int(year),
@@ -85,12 +84,13 @@ def display_report(request, entity_slug=None, **kwargs):
 
     cluster = Cluster.get_or_none("malaria_monthly_routine")
     context.update(entity_browser_context(
-        root=root, selected_entity=entity,
+        root=root,
+        selected_entity=entity,
         full_lineage=['country', 'health_region',
-                           'health_district', 'health_center'],
+                      'health_district', 'health_center'],
         cluster=cluster))
 
     return render(request,
                   kwargs.get('template_name',
-                                   'malaria/quarter_reports_list.html'),
+                             'malaria/quarter_reports_list.html'),
                   context)

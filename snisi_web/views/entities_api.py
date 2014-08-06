@@ -24,7 +24,7 @@ def get_children(request, parent_slug=None, type_slug=None):
 
 
 def get_cluster_children_live(request, cluster_slug,
-                         parent_slug=None, type_slug=None):
+                              parent_slug=None, type_slug=None):
     """ same get-children API but reduces results to members of cluster """
 
     cluster = Cluster.get_or_none(cluster_slug)
@@ -36,6 +36,7 @@ def get_cluster_children_live(request, cluster_slug,
                                          type_slug=type_slug,
                                          skip_slugs=['health_area', 'vfq'],
                                          filter_func=filter_func)
+
 
 def get_epidemio_children(request,
                           parent_slug=None, type_slug=None):
@@ -57,11 +58,12 @@ def get_epidemio_children(request,
                                          skip_slugs=['health_area', 'vfq'],
                                          filter_func=filter_func)
 
+
 def get_cluster_children(request,
-                              cluster_slug,
-                              parent_slug=None,
-                              type_slug=None,
-                              skip_slugs=[]):
+                         cluster_slug,
+                         parent_slug=None,
+                         type_slug=None,
+                         skip_slugs=[]):
 
     if parent_slug == '___':
         parent_slug = 'mali'
@@ -99,8 +101,10 @@ def natural_children_as_json_view(request,
     if parent is None:
         children = []
     else:
-        children = parent.get_natural_children(skip_slugs=['health_area', 'vfq'])
+        children = parent.get_natural_children(
+            skip_slugs=['health_area', 'vfq'])
 
-    return HttpResponse(json.dumps([Entity.get_or_none(e.slug).to_dict()
-                                    for e in children if is_filter_compliant(e)]),
-                        content_type='application/json')
+    return HttpResponse(json.dumps(
+        [Entity.get_or_none(e.slug).to_dict()
+         for e in children if is_filter_compliant(e)]),
+        content_type='application/json')

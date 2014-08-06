@@ -68,7 +68,8 @@ class PhoneNumber(models.Model):
     @classmethod
     def from_guess(cls, identity, provider):
         operator = operator_from_malinumber(identity)
-        category = PhoneNumberType.objects.get(slug="perso_{}".format(operator))
+        category = PhoneNumberType.objects.get(
+            slug="perso_{}".format(operator))
         return cls.objects.create(
             identity=identity,
             category=category,
@@ -78,4 +79,3 @@ class PhoneNumber(models.Model):
     @classmethod
     def by_identity(cls, identity):
         return cls.objects.get(identity=identity).provider
-

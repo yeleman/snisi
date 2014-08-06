@@ -49,9 +49,8 @@ def end_of_reporting_period_notifications(period):
                 category=PROJECT_BRAND,
                 text="Le rapport de routine de {period} pour {entity} "
                      "n'est pas encore arrivé. Envoyez-le impérativement "
-                     "avant le 10. Merci.".format(
-                    period=period,
-                    entity=exp.entity))
+                     "avant le 10. Merci."
+                     .format(period=period, entity=exp.entity))
 
 
 def end_of_extended_reporting_period_notifications(period):
@@ -101,9 +100,8 @@ def end_of_extended_reporting_period_notifications(period):
                     "collecte. Il est temps désormais de valider les "
                     "rapports arrivés.")
 
-        for recipient in Provider.active.filter(
-            location=district,
-            role__slug='charge_sis'):
+        for recipient in Provider.active.filter(location=district,
+                                                role__slug='charge_sis'):
 
             logger.debug("Sending notif to {}".format(recipient))
 

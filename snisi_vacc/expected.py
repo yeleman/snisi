@@ -8,8 +8,8 @@ import logging
 import copy
 
 from snisi_core.models.Periods import MonthPeriod
-from snisi_core.models.ReportingPeriods import (DefaultMonthlyReportingPeriod,
-                                                DefaultMonthlyExtendedReportingPeriod)
+from snisi_core.models.ReportingPeriods import (
+    DefaultMonthlyReportingPeriod, DefaultMonthlyExtendedReportingPeriod)
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
@@ -19,11 +19,13 @@ logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
 
 reportcls_pf = ReportClass.get_or_none(slug='major_vaccine_monthly')
-reportcls_pf_agg = ReportClass.get_or_none(slug='major_vaccine_monthly_aggregated')
+reportcls_pf_agg = ReportClass.get_or_none(
+    slug='major_vaccine_monthly_aggregated')
 
 
 def create_expected_for(period):
-    logger.info("Creating ExpectedReporting for {} at {}".format(DOMAIN, period))
+    logger.info("Creating ExpectedReporting for {} at {}"
+                .format(DOMAIN, period))
 
     created_list = []
 
@@ -61,7 +63,7 @@ def create_expected_for(period):
             reportcls = reportcls_pf \
                 if entity.type.slug == 'health_center' else reportcls_pf_agg
             reporting_role = dtc if entity.type.slug == 'health_center' \
-                                 else charge_sis
+                else charge_sis
 
             edict = copy.copy(expected_dict)
             edict.update({
@@ -85,8 +87,10 @@ def create_expected_for(period):
             if e.reporting_period != edict['reporting_period']:
                 e.reporting_period = edict['reporting_period']
                 e.save()
-            if e.extended_reporting_period != edict['extended_reporting_period']:
-                e.extended_reporting_period = edict['extended_reporting_period']
+            if e.extended_reporting_period != \
+                    edict['extended_reporting_period']:
+                e.extended_reporting_period = \
+                    edict['extended_reporting_period']
                 e.save()
 
     return created_list

@@ -42,7 +42,6 @@ from snisi_core.models.Providers import Provider
 from snisi_core.models.Numbers import PhoneNumber, PhoneNumberType
 from snisi_core.models.Reporting import (SNISIReport, ReportClass,
                                          ExpectedReporting, ExpectedValidation)
-from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
 from snisi_core.models.SMSMessages import SMSMessage
 from snisi_core.models.Notifications import Notification
 
@@ -52,6 +51,6 @@ from snisi_core.models.PeriodicTasks import PeriodicTask
 
 from snisi_core.models.ReportingPeriods import (DefaultMonthlyReportingPeriod,
                                                 DefaultMonthlyExtendedReportingPeriod)
-from snisi_core.models.ValidationPeriods import (DefaultDistrictValidationPeriod,
-                                                 DefaultRegionValidationPeriod,
-                                                 DefaultNationalValidationPeriod)
+from snisi_core.models.ValidationPeriods import (
+    DefaultDistrictValidationPeriod, DefaultRegionValidationPeriod,
+    DefaultNationalValidationPeriod)

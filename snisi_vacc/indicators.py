@@ -47,15 +47,13 @@ class VaccinationIndicator(Indicator):
         else:
             return float(1 - value)
 
-gen_shortcut = lambda field, label=None: gen_report_indicator(field,
-                                                  name=label,
-                                                  report_cls=VaccCovR,
-                                                  base_indicator_cls=VaccinationIndicator)
+gen_shortcut = lambda field, label=None: gen_report_indicator(
+    field, name=label, report_cls=VaccCovR,
+    base_indicator_cls=VaccinationIndicator)
 
-gen_shortcut_agg = lambda field, label=None: gen_report_indicator(field,
-                                                  name=label,
-                                                  report_cls=AggVaccCovR,
-                                                  base_indicator_cls=VaccinationIndicator)
+gen_shortcut_agg = lambda field, label=None: gen_report_indicator(
+    field, name=label, report_cls=AggVaccCovR,
+    base_indicator_cls=VaccinationIndicator)
 
 
 class BCGCoverage(VaccinationIndicator):
@@ -111,7 +109,8 @@ class NonAbandonmentRate(VaccinationIndicator):
         if self.is_hc():
             return self.inverse(self.report.polio3_abandonment_rate)
         else:
-            return self.inverse(self.sources_average('polio3_abandonment_rate'))
+            return self.inverse(
+                self.sources_average('polio3_abandonment_rate'))
 
 
 def is_indicator(module, member, only_geo=False):
@@ -137,9 +136,10 @@ def get_geo_indicators():
     for indicator_name in dir(section):
         if not is_indicator(section, indicator_name, True):
             continue
-        indicator = import_path('snisi_vacc.indicators.{}'.format(indicator_name))
+        indicator = import_path('snisi_vacc.indicators.{}'
+                                .format(indicator_name))
         geo_section = getattr(indicator, 'geo_section', None)
-        if not geo_section in indicators.keys():
+        if geo_section not in indicators.keys():
             indicators.update({geo_section: []})
         spec = indicator.spec()
         spec.update({'slug': indicator.__name__})

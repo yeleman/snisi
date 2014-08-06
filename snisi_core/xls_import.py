@@ -9,7 +9,6 @@ import logging
 
 import xlrd
 from py3compat import text_type
-from django.utils.translation import ugettext as _
 
 from snisi_core.integrity import ReportingDataHolder
 from snisi_tools import type_converters
@@ -83,7 +82,7 @@ class ExcelForm(ReportingDataHolder):
             logger.warning("Unable to read Excel Uploaded file {path}. "
                            "Raised {e}".format(path=self.filepath, e=e))
             self.add_error("Impossible d'ouvrir le masque de saisie. "
-                            "Le fichier est corrompu ou a été modifié.")
+                           "Le fichier est corrompu ou a été modifié.")
             return
 
         for field_id, field in self.mapping().items():
@@ -109,9 +108,8 @@ class ExcelForm(ReportingDataHolder):
             column = XLS_LETTERS.index(letter.upper())
             return ws.row_values(row)[column]
         except:
-            self.add_missing(
-                "Aucune donnée pour le champ “{coord}”".format(coord=coord),
-                 blocking=True, field=coord)
+            self.add_missing("Aucune donnée pour le champ “{coord}”"
+                             .format(coord=coord), blocking=True, field=coord)
             return None
 
     def field_name(self, variable):
@@ -134,5 +132,5 @@ class ExcelForm(ReportingDataHolder):
     def value_error(self, data, field, variable, exception):
         """ adds an error if data is not valid """
         self.add_error("“{data}” n'est pas une valeur correcte "
-                       "pour le champ “{field}”".format(
-                        data=data, field=field.display_name()))
+                       "pour le champ “{field}”"
+                       .format(data=data, field=field.display_name()))

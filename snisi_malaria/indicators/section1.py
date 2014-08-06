@@ -21,6 +21,7 @@ class NbSourceReportsExpected(MalariaIndicator):
 
 class NbSourceReportsArrived(MalariaIndicator):
     name = "Nombre de rapports reçus"
+
     def _compute(self):
         if self.is_hc():
             return 1 if self._expected.satisfied else 0
@@ -29,10 +30,12 @@ class NbSourceReportsArrived(MalariaIndicator):
 
 class NbSourceReportsArrivedOnTime(MalariaIndicator):
     name = "Nombre de rapports reçus à temps"
+
     def _compute(self):
         if self.is_hc():
             if self._expected.satisfied:
-                return 1 if self.report.arrival_status == MalariaR.ON_TIME else 0
+                return 1 if self.report.arrival_status == MalariaR.ON_TIME \
+                    else 0
             else:
                 return 0
         return getattr(self.report, 'nb_source_reports_arrived_on_time', 0)

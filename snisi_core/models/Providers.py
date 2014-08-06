@@ -9,7 +9,8 @@ import re
 from py3compat import implements_to_string
 import reversion
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
+from django.contrib.auth.models import (AbstractBaseUser, UserManager,
+                                        PermissionsMixin)
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.core.mail import send_mail
 from django.core import validators
@@ -73,7 +74,7 @@ class Provider(AbstractBaseUser, PermissionsMixin):
         help_text=_("Required. 50 characters or fewer. "
                     "Letters, numbers and @/./+/-/_ characters"),
         validators=[validators.RegexValidator(re.compile("^[\w.@+-]+$"),
-                _("Enter a valid username."), "invalid")])
+                    _("Enter a valid username."), "invalid")])
 
     gender = models.CharField(max_length=30,
                               choices=GENDERS.items(),
@@ -102,9 +103,12 @@ class Provider(AbstractBaseUser, PermissionsMixin):
                                         verbose_name=_("Access Since"))
 
     email = models.EmailField(_("email address"), blank=True, null=True)
-    is_staff = models.BooleanField(_("staff status"), default=False,
-        help_text=_("Designates whether the user can log into this admin site."))
-    is_active = models.BooleanField(_("active"), default=True,
+    is_staff = models.BooleanField(
+        _("staff status"), default=False,
+        help_text=_("Designates whether the user can "
+                    "log into this admin site."))
+    is_active = models.BooleanField(
+        _("active"), default=True,
         help_text=_("Designates whether this user should be treated as "
                     "active. Unselect this instead of deleting accounts."))
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
@@ -195,7 +199,8 @@ class Provider(AbstractBaseUser, PermissionsMixin):
         name = ugettext("{title_full_name}/{access}").format(**data)
         if not self.position or not self.position.strip() or not with_position:
             return name.strip()
-        return ugettext("{name} ({position})").format(name=name, position=self.position).strip()
+        return ugettext("{name} ({position})") \
+            .format(name=name, position=self.position).strip()
 
     def get_complete_name_position(self, at=None):
         return self.get_complete_name(at=at, with_position=True)
@@ -203,7 +208,8 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         if not self.has_name_infos():
             return self.username.strip()
-        return ugettext("{maiden}{first}{middle}{last}").format(**self._name_parts()).strip()
+        return ugettext("{maiden}{first}{middle}{last}") \
+            .format(**self._name_parts()).strip()
 
     def get_title_full_name(self):
         data = self._name_parts()
@@ -213,7 +219,8 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         if not self.has_name_infos():
             return self.username.strip()
-        return ugettext("{first_i}{middle_i}{last}").format(**self._name_parts()).strip()
+        return ugettext("{first_i}{middle_i}{last}") \
+            .format(**self._name_parts()).strip()
 
     def get_title_short_name(self):
         data = self._name_parts()
@@ -225,8 +232,8 @@ class Provider(AbstractBaseUser, PermissionsMixin):
             return ugettext("Désactivé")
         if not self.location.level:
             return ugettext("{role}").format(role=self.role.name).strip()
-        return ugettext("{role} à {location}").format(role=self.role.name,
-                                                       location=self.location).strip()
+        return ugettext("{role} à {location}") \
+            .format(role=self.role.name, location=self.location).strip()
 
     def has_name_infos(self):
         return (self.first_name or self.middle_name
@@ -236,13 +243,21 @@ class Provider(AbstractBaseUser, PermissionsMixin):
         empty = ""
         return {
             'position': "{}".format(self.position) if self.position else empty,
-            'title': "{} ".format(self.TITLES.get(self.title)) if self.title else empty,
-            'maiden': "{} ".format(self.maiden_name.upper()) if self.maiden_name else empty,
-            'first': "{} ".format(self.first_name.title()) if self.first_name else empty,
-            'first_i': "{}. ".format(self.first_name[0].title()) if self.first_name else empty,
-            'middle': "{} ".format(self.middle_name.title()) if self.middle_name else empty,
-            'middle_i': "{} ".format(self.middle_name[0].title()) if self.middle_name else empty,
-            'last': "{} ".format(self.last_name.upper()) if self.last_name else empty,
+            'title': "{} "
+            .format(self.TITLES.get(self.title)) if self.title else empty,
+            'maiden': "{} "
+            .format(self.maiden_name.upper()) if self.maiden_name else empty,
+            'first': "{} "
+            .format(self.first_name.title()) if self.first_name else empty,
+            'first_i': "{}. "
+            .format(self.first_name[0].title()) if self.first_name else empty,
+            'middle': "{} "
+            .format(self.middle_name.title()) if self.middle_name else empty,
+            'middle_i': "{} "
+            .format(self.middle_name[0].title())
+            if self.middle_name else empty,
+            'last': "{} "
+            .format(self.last_name.upper()) if self.last_name else empty,
             'access': self.get_access(),
         }
 
@@ -273,14 +288,15 @@ class Provider(AbstractBaseUser, PermissionsMixin):
             return None
 
     def all_numbers(self):
-        return [n.identity for n in self.phone_numbers.order_by('-priority') if not n is None]
+        return [n.identity for n in self.phone_numbers.order_by('-priority')
+                if n is not None]
 
     def has_permission(self, perm_slug, entity=None):
         """ whether or not User has this permission for Enitity """
         if entity is not None:
             if self.target() is None:
                 return False
-            if not entity in [entity] + self.target().get_descendants():
+            if entity not in [entity] + self.target().get_descendants():
                 return False
 
         if self.role() is None:

@@ -7,7 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Projects import Cluster
-from snisi_core.indicators import IndicatorTable, is_ref, ref_is, hide
+from snisi_core.indicators import IndicatorTable, is_ref, ref_is
 from snisi_malaria.indicators.section1 import (
     NbSourceReportsArrived, NbSourceReportsExpected)
 from snisi_tools.caching import json_cache_from_cluster
@@ -27,12 +27,14 @@ class TableauPromptitudeRapportage(IndicatorTable):
 
     def get_descendants(self):
         return [Entity.get_or_none(e['slug'])
-                for e in json_cache_from_cluster(cluster).get(self.entity.slug)]
+                for e
+                in json_cache_from_cluster(cluster).get(self.entity.slug)]
 
     INDICATORS = [
         is_ref(NbSourceReportsExpected),
         ref_is(0)(NbSourceReportsArrived),
     ]
+
 
 class FigurePromptitudeRapportage(IndicatorTable):
 
@@ -46,7 +48,8 @@ class FigurePromptitudeRapportage(IndicatorTable):
 
     def get_descendants(self):
         return [Entity.get_or_none(e['slug'])
-                for e in json_cache_from_cluster(cluster).get(self.entity.slug)]
+                for e
+                in json_cache_from_cluster(cluster).get(self.entity.slug)]
 
     INDICATORS = [
         is_ref(NbSourceReportsExpected),
@@ -55,6 +58,5 @@ class FigurePromptitudeRapportage(IndicatorTable):
 
 
 WIDGETS = [TableauPromptitudeRapportage,
-           FigurePromptitudeRapportage
-]
+           FigurePromptitudeRapportage]
 TITLE = "Données sur la complétude du rapportage"

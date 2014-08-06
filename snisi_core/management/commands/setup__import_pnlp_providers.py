@@ -69,8 +69,10 @@ class Command(BaseCommand):
 
         matrix_input_file = open(options.get('matrix_input_file'), 'r')
         matrix = json.load(matrix_input_file)
-        users_matrix = json.load(open(options.get('matrix_input_user_file'), 'r'))
-        get_entry = lambda l, new_username: [e for e in l if e['new_username'] == new_username][-1]
+        users_matrix = json.load(
+            open(options.get('matrix_input_user_file'), 'r'))
+        get_entry = lambda l, new_username: [
+            e for e in l if e['new_username'] == new_username][-1]
 
         new_slug_matrix = matrix['old_new']
         new_slug_matrix.update({
@@ -88,7 +90,8 @@ class Command(BaseCommand):
             "is_superuser": False,
             "last_login": "2013-07-24T10:00:00",
             "last_name": "Sangaré",
-            "password": "pbkdf2_sha256$12000$0chjcCnjHwuG$V3O/KjSLQLstLh3/IJHiPCMrSornNXaP5sbYhkGuR/A=",
+            "password": "pbkdf2_sha256$12000$0chjcCnjHwuG$V3O/Kj"
+                        "SLQLstLh3/IJHiPCMrSornNXaP5sbYhkGuR/A=",
             "phone_number": "+22370061548",
             "phone_number_extra": None,
             "pwhash": "aa",
@@ -97,7 +100,7 @@ class Command(BaseCommand):
         }
 
         input_file = open(options.get('input_file'), 'r')
-        malaria_users = json.load(input_file) + [ssangare,]
+        malaria_users = json.load(input_file) + [ssangare]
 
         # change date to NOVEMBER 11
         DEBUG_change_system_date(november, True)
@@ -114,20 +117,26 @@ class Command(BaseCommand):
             print(provider_data['username'])
 
             # If user has a changind location. Create with the old one.
-            if provider_data['username'] in [i['new_username'] for i in users_matrix]:
+            if provider_data['username'] \
+                    in [i['new_username'] for i in users_matrix]:
                 entry = get_entry(users_matrix, provider_data['username'])
                 provider_data['entity'] = entry['old_entity']
 
-            phone_number = normalized_phonenumber(provider_data['phone_number'])
-            phone_number2 = normalized_phonenumber(provider_data['phone_number_extra'])
+            phone_number = normalized_phonenumber(
+                provider_data['phone_number'])
+            phone_number2 = normalized_phonenumber(
+                provider_data['phone_number_extra'])
             try:
-                provider_data['location'] = entity_from(new_slug_matrix[provider_data['entity']])
+                provider_data['location'] = entity_from(
+                    new_slug_matrix[provider_data['entity']])
             except KeyError:
                 missed_locations.append(provider_data['entity'])
                 continue
 
-            provider_data['last_login'] = datetime_from_iso(provider_data['last_login'])
-            provider_data['date_joined'] = datetime_from_iso(provider_data['date_joined'])
+            provider_data['last_login'] = datetime_from_iso(
+                provider_data['last_login'])
+            provider_data['date_joined'] = datetime_from_iso(
+                provider_data['date_joined'])
             role_slug = role_matrix.get(provider_data['role'])
             provider_data['role'] = Role.objects.get(slug=role_slug)
 
@@ -196,22 +205,18 @@ class Command(BaseCommand):
             provider.save()
 
             for num in (phone_number, phone_number2):
-                if not num is None and num not in ('+22300000000', '+22312345678'):
+                if num is not None \
+                        and num not in ('+22300000000', '+22312345678'):
                     try:
                         p = PhoneNumber.from_guess(num, provider)
                         if num.startswith('+2237229'):
-                            p.category = PhoneNumberType.objects.get(slug='flotte')
+                            p.category = PhoneNumberType.objects.get(
+                                slug='flotte')
                             p.save()
                     except IntegrityError:
                         duplicates.update({
                             num: (provider, PhoneNumber.by_identity(num))})
             print(provider)
-
-        # print("\n".join(missed_locations))
-
-        # for number, providers in duplicates.items():
-        #     print("{}:  {}".format(number, ",".join(list([unicode(p) for p in providers]))))
-
 
         print("Updating Providers...")
         # if updating (2012-07-31), change location and save
@@ -221,7 +226,8 @@ class Command(BaseCommand):
             provider = Provider.objects.get(username=entry['new_username'])
             print(provider)
 
-            provider.location = entity_from(new_slug_matrix[entry['new_entity']])
+            provider.location = entity_from(
+                new_slug_matrix[entry['new_entity']])
             provider.save()
 
         DEBUG_change_system_date(None, True)

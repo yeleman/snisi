@@ -42,12 +42,12 @@ def generate_district_reports(period,
     logger.info("Switching to {}".format(period))
 
     region_validation_period = DefaultRegionValidationPeriod \
-                                .find_create_by_date(period.middle())
+        .find_create_by_date(period.middle())
 
     if ensure_correct_date:
         now = timezone.now()
         if not period.following().includes(now) \
-         or not now.day == ROUTINE_DISTRICT_AGG_DAY:
+                or not now.day == ROUTINE_DISTRICT_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 11th of the following period")
             return
@@ -74,8 +74,8 @@ def generate_district_reports(period,
 
         # auto-validate non-validated reports
         for report in VaccCovR.objects.filter(
-            period=period,
-            entity__in=district.get_health_centers()):
+                period=period,
+                entity__in=district.get_health_centers()):
             if not report.validated:
                 expv = ExpectedValidation.objects.get(report=report)
 
@@ -109,7 +109,7 @@ def generate_region_country_reports(period,
     if ensure_correct_date:
         now = timezone.now()
         if not period.following().includes(now) \
-         or not now.day == ROUTINE_REGION_AGG_DAY:
+                or not now.day == ROUTINE_REGION_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 11th of the following period")
             return

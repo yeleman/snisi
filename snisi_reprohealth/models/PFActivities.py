@@ -9,12 +9,13 @@ import reversion
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
 from snisi_reprohealth.xls_export import pfa_activities_as_xls
 
 
@@ -418,7 +419,8 @@ class PFActivitiesR(PFActivitiesRIface, SNISIReport):
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "MP{id}/{entity__slug}-{day}"
     UNIQUE_TOGETHER = [('period', 'entity')]
-    INTEGRITY_CHECKER = 'snisi_reprohealth.integrity.PFActivitiesRIntegrityChecker'
+    INTEGRITY_CHECKER = ('snisi_reprohealth.integrity.'
+                         'PFActivitiesRIntegrityChecker')
 
     class Meta:
         app_label = 'snisi_reprohealth'
@@ -462,7 +464,7 @@ class AggPFActivitiesR(PFActivitiesRIface,
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     INDIVIDUAL_CLS = PFActivitiesR
     RECEIPT_FORMAT = "AMP{id}/{entity__slug}-{day}"
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_reprohealth'
@@ -470,13 +472,15 @@ class AggPFActivitiesR(PFActivitiesRIface,
         verbose_name_plural = _("Aggregated Provided Services Reports")
 
     # all source reports (CSCOM)
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (all)"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports',
         symmetrical=False)
 
-    direct_indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (direct)"),
         blank=True, null=True,
         related_name='direct_source_agg_%(class)s_reports',

@@ -27,12 +27,10 @@ class MalariaIndicator(Indicator):
         return [getattr(r, field, None)
                 for r in self.report.indiv_sources.all()]
 
-gen_shortcut = lambda field, label=None: gen_report_indicator(field,
-                                                  name=label,
-                                                  report_cls=MalariaR,
-                                                  base_indicator_cls=MalariaIndicator)
+gen_shortcut = lambda field, label=None: gen_report_indicator(
+    field, name=label, report_cls=MalariaR,
+    base_indicator_cls=MalariaIndicator)
 
-gen_shortcut_agg = lambda field, label=None: gen_report_indicator(field,
-                                                  name=label,
-                                                  report_cls=AggMalariaR,
-                                                  base_indicator_cls=MalariaIndicator)
+gen_shortcut_agg = lambda field, label=None: gen_report_indicator(
+    field, name=label, report_cls=AggMalariaR,
+    base_indicator_cls=MalariaIndicator)

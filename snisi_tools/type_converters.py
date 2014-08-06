@@ -7,6 +7,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
+
 def clean(value):
     """ a stripped unicode """
     return "{}".format(value).strip()

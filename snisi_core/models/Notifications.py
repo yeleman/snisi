@@ -174,8 +174,7 @@ class Notification(models.Model):
         else:
             dest_filter = {'provider': provider}
 
-        cls.objects.filter(sent=false, **dest_filter).delete()
-
+        cls.objects.filter(sent=False, **dest_filter).delete()
 
     @classmethod
     def _prefix(cls, short=False, category=None,
@@ -183,7 +182,8 @@ class Notification(models.Model):
         if category:
             categorys = "[{category}]".format(category=category)
         elif brand_fallback:
-            categorys = "[{brand_short}]".format(brand_short=branding.get('brand_short'))
+            categorys = ("[{brand_short}]"
+                         .format(brand_short=branding.get('brand_short')))
         else:
             categorys = ""
 
@@ -212,7 +212,8 @@ class Notification(models.Model):
         if short:
             return "{prefix}".format(self.prefix(short))
 
-        title = " ".join(self.title.strip().splitlines()) if self.title else "Nouvelle notification"
+        title = " ".join(self.title.strip().splitlines()) \
+            if self.title else "Nouvelle notification"
         return "{prefix} {title}".format(
             prefix=self.prefix(False), title=title)
 
@@ -254,7 +255,7 @@ class Notification(models.Model):
         return "\n\n".join(["* {prefix} {message}".format(
             prefix=notification.prefix(short=False, brand_fallback=False),
             message=notification.message(False))
-                          for notification in notifications])
+            for notification in notifications])
 
     @classmethod
     def _preferred_method(cls,
@@ -265,9 +266,10 @@ class Notification(models.Model):
         return cls.EMAIL if provider.email else cls.SMS
 
     def preferred_method(self):
-        return self._preferred_method(provider=self.provider,
-                                      destination_email=self.destination_email,
-                                      destination_number=self.destination_number)
+        return self._preferred_method(
+            provider=self.provider,
+            destination_email=self.destination_email,
+            destination_number=self.destination_number)
 
     @classmethod
     def _destinations(cls, method,
@@ -323,9 +325,10 @@ class Notification(models.Model):
         if self.has_expired() or self.sent:
             return False
         for destination in self.destinations():
-            self.send_notification(destination=destination,
-                                   title=self.fmt_title(short=destination.short),
-                                   body=self.message(short=destination.short))
+            self.send_notification(
+                destination=destination,
+                title=self.fmt_title(short=destination.short),
+                body=self.message(short=destination.short))
             self.fire_out()
 
     def has_expired(self, now=None):
@@ -382,7 +385,8 @@ class Notification(models.Model):
 
         title = cls.title_for_list(notifications=notifications, short=False)
         body = cls.body_for_list(notifications=notifications, short=False)
-        title_short = cls.title_for_list(notifications=notifications, short=True)
+        title_short = cls.title_for_list(notifications=notifications,
+                                         short=True)
         body_short = cls.body_for_list(notifications=notifications, short=True)
         method = cls._preferred_method(provider=provider,
                                        destination_email=destination_email,
@@ -393,15 +397,15 @@ class Notification(models.Model):
 
         # actually send notifications
         for destination in destinations:
-            cls.send_notification(destination=destination,
-                                  title=title if not destination.short else title_short,
-                                  body=body if not destination.short else body_short)
+            cls.send_notification(
+                destination=destination,
+                title=title if not destination.short else title_short,
+                body=body if not destination.short else body_short)
 
         # mark all as submitted
         [notification.fire_out() for notification in notifications]
 
         return notifications
-
 
     @classmethod
     def send_notification(cls, destination, body, title=None):
@@ -428,7 +432,7 @@ class Notification(models.Model):
     def pending_recipients(cls):
         return [n.to_send_dict()
                 for n in Notification.objects.filter(sent=False)
-                                             .exclude(delivery_status=cls.EXPIRED)]
+                .exclude(delivery_status=cls.EXPIRED)]
 
     @classmethod
     def longest_duration_for(cls, provider=None,
@@ -449,6 +453,7 @@ class Notification(models.Model):
         except:
             return None
 
-        return int((timezone.now() - longest_notification.created_on).total_seconds())
+        return int((timezone.now()
+                   - longest_notification.created_on).total_seconds())
 
 receiver(post_save, sender=Notification)(submit_urgent_notifications)

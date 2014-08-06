@@ -16,27 +16,32 @@ cluster = Cluster.get_or_none("malaria_monthly_routine")
 
 class NumberOfHealthUnitsWithin(MalariaIndicator):
     name = "Nombre total de structures dans le district"
+
     def _compute(self):
         return ExpectedReporting.objects.filter(
             entity__type__slug='health_center',
             period=self.period).filter(
-                entity__slug__in=descendants_slugs(cluster, self.entity.slug) + [self.entity.slug]
+                entity__slug__in=descendants_slugs(cluster, self.entity.slug)
+                + [self.entity.slug]
             ).count()
 
 
 class NumberOfHealthUnitsInTime(MalariaIndicator):
     name = ("Nombre de structures ayant transmis leurs formulaires de "
             "collecte dans les délais prévus")
+
     def _compute(self):
         if self.is_hc():
-            if self.expected and self.expected.satisfied and self.report.ON_TIME:
+            if self.expected and self.expected.satisfied \
+                    and self.report.ON_TIME:
                 return 1
             else:
                 return 0
         if self.expected and self.expected.satisfied:
             return sum([1 for r in MalariaR.objects.filter(
                 period=self.period,
-                entity__slug__in=descendants_slugs(cluster, self.entity.slug)) if r.ON_TIME])
+                entity__slug__in=descendants_slugs(cluster, self.entity.slug))
+                if r.ON_TIME])
             return self.report.nb_source_reports_arrived_on_time
         return None
 
@@ -54,7 +59,8 @@ class NumberOfHealthUnitsReporting(MalariaIndicator):
         if self.expected and self.expected.satisfied:
             return MalariaR.objects.filter(
                 period=self.period,
-                entity__slug__in=descendants_slugs(cluster, self.entity.slug)).count()
+                entity__slug__in=descendants_slugs(cluster,
+                                                   self.entity.slug)).count()
             return self.report.nb_source_reports_arrived
         return None
 
@@ -69,7 +75,8 @@ class PercentageOfHealthUnitsReportingInTime(MalariaIndicator):
 
     def _compute(self):
         try:
-            return NumberOfHealthUnitsInTime.clone_from(self).data / NumberOfHealthUnitsWithin.clone_from(self).data
+            return NumberOfHealthUnitsInTime.clone_from(self).data \
+                / NumberOfHealthUnitsWithin.clone_from(self).data
         except:
             return 0
 
@@ -83,13 +90,15 @@ class PercentageOfHealthUnitsReporting(MalariaIndicator):
 
     def _compute(self):
         try:
-            return NumberOfHealthUnitsReporting.clone_from(self).data / NumberOfHealthUnitsWithin.clone_from(self).data
+            return NumberOfHealthUnitsReporting.clone_from(self).data \
+                / NumberOfHealthUnitsWithin.clone_from(self).data
         except:
             return 0
 
 
 class TotalInpatientMalaria(MalariaIndicator):
-    name = "Pourcentage des cas de paludisme hospitalisés chez les 5 ans et plus"
+    name = ("Pourcentage des cas de paludisme hospitalisés "
+            "chez les 5 ans et plus")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -125,7 +134,8 @@ class TotalTestedMalariaCases(MalariaIndicator):
 
 
 class TotalU5ConfirmedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas de paludisme confirmés par GE/TDR chez les moins de 5ans"
+    name = ("Pourcentage des cas de paludisme confirmés par GE/TDR "
+            "chez les moins de 5ans")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -137,7 +147,8 @@ class TotalU5ConfirmedMalariaCases(MalariaIndicator):
 
 
 class TotalU5TestedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas suspects testés par GE/TDR chez les moins de 5ans"
+    name = ("Pourcentage des cas suspects testés par GE/TDR "
+            "chez les moins de 5ans")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -149,7 +160,8 @@ class TotalU5TestedMalariaCases(MalariaIndicator):
 
 
 class TotalPWConfirmedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas de paludisme confirmés par GE/TDR chez les femmes enceintes"
+    name = ("Pourcentage des cas de paludisme confirmés par GE/TDR "
+            "chez les femmes enceintes")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -161,7 +173,8 @@ class TotalPWConfirmedMalariaCases(MalariaIndicator):
 
 
 class TotalPWTestedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas suspects testés par GE/TDR chez les femmes enceintes"
+    name = ("Pourcentage des cas suspects testés par GE/TDR "
+            "chez les femmes enceintes")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -173,7 +186,8 @@ class TotalPWTestedMalariaCases(MalariaIndicator):
 
 
 class TotalO5ACTTreatedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas de paludisme simples confirmés et traités par CTA chez les 5ans et plus"
+    name = ("Pourcentage des cas de paludisme simples confirmés et "
+            "traités par CTA chez les 5ans et plus")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -185,7 +199,8 @@ class TotalO5ACTTreatedMalariaCases(MalariaIndicator):
 
 
 class TotalU5ACTTreatedMalariaCases(MalariaIndicator):
-    name = "Pourcentage des cas de paludisme simples confirmés et traités par CTA chez les moins de 5ans"
+    name = ("Pourcentage des cas de paludisme simples confirmés et "
+            "traités par CTA chez les moins de 5ans")
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Prise en Charge (PEC)"
@@ -207,7 +222,8 @@ class HealthUnitsWithoutACTYouthStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_act_youth == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_act_youth')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_act_youth')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)
 
@@ -223,7 +239,8 @@ class HealthUnitsWithoutACTAdultStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_act_adult == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_act_adult')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_act_adult')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)
 
@@ -239,7 +256,9 @@ class HealthUnitsWithoutACTChildrenStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_act_children == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_act_children')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in
+                           self.all_hc_values('stockout_act_children')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)
 
@@ -255,7 +274,8 @@ class HealthUnitsWithoutBednetStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_bednet == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_bednet')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_bednet')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)
 
@@ -271,7 +291,8 @@ class HealthUnitsWithoutRDTStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_rdt == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_rdt')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_rdt')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)
 
@@ -287,6 +308,7 @@ class HealthUnitsWithoutSPStockout(MalariaIndicator):
         if self.is_hc():
             return not self.report.stockout_sp == self.report.YES
 
-        nb_stockout = sum([bool(v == MalariaR.NO) for v in self.all_hc_values('stockout_sp')])
+        nb_stockout = sum([bool(v == MalariaR.NO)
+                           for v in self.all_hc_values('stockout_sp')])
         return self.divide(nb_stockout,
                            NumberOfHealthUnitsReporting.clone_from(self).data)

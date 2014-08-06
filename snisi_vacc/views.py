@@ -20,22 +20,23 @@ def vacc_map(request, **kwargs):
     context = {'page_slug': 'map'}
 
     periods = [MonthPeriod.objects.get(identifier=p['period'])
-               for p in ExpectedReporting.objects \
-                        .filter(report_class__slug='major_vaccine_monthly') \
-                        .order_by('period').values('period').distinct()]
+               for p in ExpectedReporting.objects.filter(
+               report_class__slug='major_vaccine_monthly')
+               .order_by('period').values('period').distinct()]
 
     years = []
     months = {}
     for period in periods:
-        if not period.start_on.year in years:
+        if period.start_on.year not in years:
             years.append(period.start_on.year)
-        if not period.start_on.month in months.keys():
-            months.update({period.start_on.month: period.start_on.strftime("%B")})
+        if period.start_on.month not in months.keys():
+            months.update({period.start_on.month:
+                           period.start_on.strftime("%B")})
 
     context.update({'years': sorted(years),
                     'months': months,
                     'indicators': get_geo_indicators()})
 
-
-    return render(request, kwargs.get('template_name',
-                                      'vaccination/map.html'), context)
+    return render(request,
+                  kwargs.get('template_name', 'vaccination/map.html'),
+                  context)

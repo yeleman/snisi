@@ -5,9 +5,10 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.utils.translation import ugettext as _, ugettext_lazy
+# from django.contrib import messages
+# from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.utils.translation import ugettext_lazy
 from django.contrib.auth.decorators import login_required
 from django import forms
 
@@ -17,15 +18,17 @@ from snisi_core.models.Roles import Role
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Projects import Cluster
-from snisi_tools.sms import send_sms
+# from snisi_tools.sms import send_sms
 
 
 # class AddressBookForm(forms.Form):
 
-#     role = forms.ChoiceField(label=ugettext_lazy("Role"),
-#                              choices=[('', _("All"))] + [(role.slug, role.name)
-#                                                          for role in Role.objects.all()
-#                                                                          .order_by('name')])
+#     role = forms.ChoiceField(
+#         label=ugettext_lazy("Role"),
+#         choices=[
+#             ('', _("All"))] + [(role.slug, role.name)
+#                                for role in
+#                                Role.objects.all().order_by('name')])
 #     entity = TreeNodeChoiceField(queryset=Entity.objects.all(),
 #                                  level_indicator='---',
 #                                  label=ugettext_lazy("Entity"))
@@ -46,23 +49,36 @@ class FilterForm(forms.Form):
     role = forms.ChoiceField(label=ugettext_lazy("Role"),
                              required=False, widget=forms.Select)
 
-    region = forms.ChoiceField(label="Région", choices=[],
-        widget=forms.Select(attrs={'class': 'entity_filter', 'data-level': 'health_region'}))
-    district = forms.CharField(label="District", required=False,
-        widget=forms.Select(attrs={'class': 'entity_filter', 'data-level': 'health_district'}))
-    health_area = forms.CharField(label="Aire Sanitaire", required=False,
-        widget=forms.Select(attrs={'class': 'entity_filter', 'data-level': 'health_area'}))
-    request = forms.CharField(label=ugettext_lazy("Recherche"),
-                              required=False,
-                              widget=forms.TextInput(attrs={'placeholder': "Nom de famille"}))
+    region = forms.ChoiceField(
+        label="Région", choices=[],
+        widget=forms.Select(
+            attrs={'class': 'entity_filter', 'data-level': 'health_region'}))
+    district = forms.CharField(
+        label="District", required=False,
+        widget=forms.Select(
+            attrs={'class': 'entity_filter', 'data-level': 'health_district'}))
+    health_area = forms.CharField(
+        label="Aire Sanitaire", required=False,
+        widget=forms.Select(
+            attrs={'class': 'entity_filter', 'data-level': 'health_area'}))
+    request = forms.CharField(
+        label=ugettext_lazy("Recherche"),
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': "Nom de famille"}))
 
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
 
-        all_cluster = [('#', "Tous")] + [(c.slug, c.name) for c in Cluster.active.all().order_by('name')]
-        all_role = [('#', "Tous")] + [(r.slug, r.name) for r in Role.objects.all().order_by('name')]
-        all_region = [("-1", "Toutes")] + [(e.slug, e.name)
-                      for e in Entity.objects.filter(type__slug='health_region')]
+        all_cluster = [
+            ('#', "Tous")] + [(c.slug, c.name)
+                              for c in Cluster.active.all().order_by('name')]
+        all_role = [
+            ('#', "Tous")] + [(r.slug, r.name)
+                              for r in Role.objects.all().order_by('name')]
+        all_region = [
+            ("-1", "Toutes")] + [(e.slug, e.name)
+                                 for e in Entity.objects.filter(
+                                 type__slug='health_region')]
 
         self.fields['cluster'].choices = all_cluster
         self.fields['role'].choices = all_role
@@ -104,19 +120,25 @@ def addressbook(request, template='misc/addressbook.html'):
 
             location = form.get_clean_location()
 
-            providers = Provider.active.all().order_by('last_name', 'first_name')
+            providers = Provider.active.all().order_by(
+                'last_name', 'first_name')
 
             if form.cleaned_data.get('cluster'):
-                providers = providers.filter(location__participations__cluster__slug=form.cleaned_data.get('cluster').slug)
+                providers = providers.filter(
+                    location__participations__cluster__slug=form
+                    .cleaned_data.get('cluster').slug)
 
             if form.cleaned_data.get('role'):
-                providers = providers.filter(role=form.cleaned_data.get('role'))
+                providers = providers.filter(
+                    role=form.cleaned_data.get('role'))
 
             if location:
-                providers = providers.filter(location__in=location.get_descendants(True))
+                providers = providers.filter(
+                    location__in=location.get_descendants(True))
 
             if form.cleaned_data.get('request'):
-                providers = providers.filter(last_name__icontains=form.cleaned_data.get('request'))
+                providers = providers.filter(
+                    last_name__icontains=form.cleaned_data.get('request'))
 
             # send milage
             context.update({'lineage_data': [
@@ -135,4 +157,3 @@ def addressbook(request, template='misc/addressbook.html'):
     context.update({'form': form})
 
     return render(request, template, context)
-

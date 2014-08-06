@@ -11,7 +11,6 @@ from django.core.management.base import BaseCommand
 
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
-from snisi_vacc.expected import create_expected_for
 from snisi_vacc.aggregations import (generate_district_reports,
                                      generate_region_country_reports)
 from snisi_tools.datetime import DEBUG_change_system_date
@@ -37,7 +36,8 @@ class Command(BaseCommand):
 
         for period in periods:
             logger.info(period)
-            district_date = period.following().start_on + datetime.timedelta(days=10)
+            district_date = period.following().start_on \
+                + datetime.timedelta(days=10)
             DEBUG_change_system_date(district_date, True)
 
             generate_district_reports(period)

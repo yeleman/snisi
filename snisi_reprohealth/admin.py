@@ -8,11 +8,11 @@ from __future__ import (unicode_literals, absolute_import,
 from django.contrib import admin
 
 from snisi_core.admin import ReportAdmin
-from snisi_reprohealth.models.MaternalMortality import (MaternalDeathR,
-                                                       AggMaternalDeathR)
-from snisi_reprohealth.models.Commodities import RHProductsR, AggRHProductsR
-from snisi_reprohealth.models.ChildrenMortality import (ChildrenDeathR,
-                                                       AggChildrenDeathR)
+# from snisi_reprohealth.models.MaternalMortality import (MaternalDeathR,
+#                                                        AggMaternalDeathR)
+# from snisi_reprohealth.models.Commodities import RHProductsR, AggRHProductsR
+# from snisi_reprohealth.models.ChildrenMortality import (ChildrenDeathR,
+#                                                        AggChildrenDeathR)
 from snisi_reprohealth.models.PFActivities import PFActivitiesR
 
 # admin.site.register(MaternalDeathR, ReportAdmin)

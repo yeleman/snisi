@@ -21,14 +21,19 @@ class TousCasPaludismeNotifies(IndicatorTable):
     add_total = True
 
     INDICATORS = [
-        is_ref(gen_shortcut('total_consultation_all_causes',
-                            "Total consultation toutes causes confondues (TCC)")),
-        ref_is(0)(gen_shortcut('total_suspected_malaria_cases',
-                               "Nombre de cas de paludisme (tous suspectés)  parmi le total consultation ")),
-        ref_is(1)(gen_shortcut('total_tested_malaria_cases',
-                               "Total des cas suspects testés (GE et/ou TDR)")),
-        ref_is(2)(gen_shortcut('total_confirmed_malaria_cases',
-                               "Nombre de cas suspects testés qui sont confirmés par GE ou TDR")),
+        is_ref(gen_shortcut(
+            'total_consultation_all_causes',
+            "Total consultation toutes causes confondues (TCC)")),
+        ref_is(0)(gen_shortcut(
+            'total_suspected_malaria_cases',
+            "Nombre de cas de paludisme (tous suspectés) "
+            "parmi le total consultation")),
+        ref_is(1)(gen_shortcut(
+            'total_tested_malaria_cases',
+            "Total des cas suspects testés (GE et/ou TDR)")),
+        ref_is(2)(gen_shortcut(
+            'total_confirmed_malaria_cases',
+            "Nombre de cas suspects testés qui sont confirmés par GE ou TDR")),
         ref_is(3)(gen_shortcut('total_simple_malaria_cases', ". Cas simples")),
         ref_is(3)(gen_shortcut('total_severe_malaria_cases', ". Cas graves")),
     ]
@@ -47,10 +52,13 @@ class ProportionsPaludismeConsultationsTTC(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('total_consultation_all_causes',
-                            "Total consultation toutes causes confondues (TCC)"))),
-        ref_is(0)(gen_shortcut('total_suspected_malaria_cases',
-                               "Pourcentage de consultations pour Paludisme (Tous cas suspectés)")),
+        hide(is_ref(gen_shortcut(
+            'total_consultation_all_causes',
+            "Total consultation toutes causes confondues (TCC)"))),
+        ref_is(0)(gen_shortcut(
+            'total_suspected_malaria_cases',
+            "Pourcentage de consultations pour Paludisme "
+            "(Tous cas suspectés)")),
     ]
 
 
@@ -68,7 +76,8 @@ class NbreCasSuspectesTestesConfirmesALL(IndicatorTable):
     INDICATORS = [
         is_ref(gen_shortcut('total_suspected_malaria_cases', "Cas suspects")),
         ref_is(0)(gen_shortcut('total_tested_malaria_cases', "Cas testés")),
-        ref_is(0)(gen_shortcut('total_confirmed_malaria_cases', "Cas confirmés")),
+        ref_is(0)(gen_shortcut('total_confirmed_malaria_cases',
+                               "Cas confirmés")),
     ]
 
 

@@ -21,12 +21,13 @@ class HospitalisationMoinsde5ans(IndicatorTable):
     add_total = True
 
     INDICATORS = [
-        is_ref(gen_shortcut('u5_total_inpatient_all_causes',
-                            "Total des hospitalisations (toutes causes confondues)")),
-        ref_is(0)(gen_shortcut('u5_total_malaria_inpatient',
-                               "Total des hospitalisations pour paludisme grave")),
+        is_ref(gen_shortcut(
+            'u5_total_inpatient_all_causes',
+            "Total des hospitalisations (toutes causes confondues)")),
+        ref_is(0)(gen_shortcut(
+            'u5_total_malaria_inpatient',
+            "Total des hospitalisations pour paludisme grave")),
     ]
-
 
 
 class ProportionHospitalisations(IndicatorTable):
@@ -42,10 +43,12 @@ class ProportionHospitalisations(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('u5_total_inpatient_all_causes',
-                            "Total des hospitalisations (toutes causes confondues)"))),
-        ref_is(0)(gen_shortcut('u5_total_malaria_inpatient',
-                               "Total des hospitalisations pour paludisme grave")),
+        hide(is_ref(gen_shortcut(
+            'u5_total_inpatient_all_causes',
+            "Total des hospitalisations (toutes causes confondues)"))),
+        ref_is(0)(gen_shortcut(
+            'u5_total_malaria_inpatient',
+            "Total des hospitalisations pour paludisme grave")),
     ]
 
 

@@ -15,7 +15,8 @@ from snisi_core.models.Entities import AdministrativeEntity
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         OCCASIONAL_SOURCE, OCCASIONAL_AGGREGATED)
+                                         OCCASIONAL_SOURCE,
+                                         OCCASIONAL_AGGREGATED)
 
 
 class MaternalDeathR(SNISIReport):
@@ -70,7 +71,8 @@ class MaternalDeathR(SNISIReport):
     pregnancy_related_death = models.BooleanField(
         default=False, verbose_name=_("Pregnancy related death"))
 
-    cause_of_death = models.CharField(max_length=1, choices=DEATH_CAUSES.items())
+    cause_of_death = models.CharField(
+        max_length=1, choices=DEATH_CAUSES.items())
 
     def add_data(self, name, dob, dob_auto, dod, death_location,
                  living_children, dead_children, pregnant,
@@ -182,7 +184,8 @@ class AggMaternalDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     cause_abortion = models.PositiveIntegerField()
     cause_other = models.PositiveIntegerField()
 
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
@@ -260,10 +263,9 @@ class AggMaternalDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     def create_from(cls, period, entity, author):
 
         # find list of sources
-        indiv_sources = MaternalDeathR.objects \
-                                      .filter(dod__gte=period.start_on,
-                                              dod__lte=period.end_on,
-                                              death_location__in=entity.get_children())
+        indiv_sources = MaternalDeathR.objects.filter(
+            dod__gte=period.start_on, dod__lte=period.end_on,
+            death_location__in=entity.get_children())
         agg_sources = cls.objects.filter(period=period,
                                          entity__in=entity.get_children())
 
@@ -442,11 +444,13 @@ class AggMaternalDeathR(PeriodicAggregatedReportInterface, SNISIReport):
         report.have_living_children += instance.have_living_children
         report.have_one_living_children += instance.have_one_living_children
         report.have_two_living_children += instance.have_two_living_children
-        report.have_two_plus_living_children += instance.have_two_plus_living_children
+        report.have_two_plus_living_children += \
+            instance.have_two_plus_living_children
         report.have_dead_children += instance.have_dead_children
         report.have_one_dead_children += instance.have_one_dead_children
         report.have_two_dead_children += instance.have_two_dead_children
-        report.have_two_plus_dead_children += instance.have_two_plus_dead_children
+        report.have_two_plus_dead_children += \
+            instance.have_two_plus_dead_children
 
         # pregnancy
         report.is_pregnant += instance.is_pregnant

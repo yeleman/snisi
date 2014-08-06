@@ -5,18 +5,16 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import datetime
 import traceback
 import json
 
 import reversion
 from django.utils.translation import ugettext as _
-from django.utils.timezone import utc
 
 from snisi_core.integrity import ReportIntegrityChecker
 from snisi_core.models.Providers import Provider
-from snisi_core.models.Entities import HealthEntity, Entity
-from snisi_core.models.Periods import MonthPeriod, WeekPeriod, DayPeriod
+from snisi_core.models.Entities import Entity
+from snisi_core.models.Periods import MonthPeriod, DayPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Roles import Role
 from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
@@ -24,7 +22,8 @@ from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthThirdWeek,
                                                 FixedMonthFourthWeek,
                                                 FixedMonthFifthWeek)
-from snisi_malaria.models import MalariaR, EpidemioMalariaR, AggEpidemioMalariaR
+from snisi_malaria.models import (MalariaR,
+                                  EpidemioMalariaR, AggEpidemioMalariaR)
 from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation)
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
@@ -36,11 +35,11 @@ PROJECT_BRAND = "PNLP"
 
 def can_submit_malaria_report(provider, entity):
     if provider.location.slug == entity.slug \
-        and provider.role == Role.objects.get(slug='dtc'):
+            and provider.role == Role.objects.get(slug='dtc'):
         return True
 
     if provider.location.slug == entity.parent.slug \
-        and provider.role == Role.objects.get(slug='charge_sis'):
+            and provider.role == Role.objects.get(slug='charge_sis'):
         return True
 
     return False
@@ -55,22 +54,27 @@ def create_report(provider, expected_reporting, completed_on,
                             completion_status=MalariaR.COMPLETE,
                             completed_on=completed_on,
                             integrity_status=MalariaR.CORRECT,
-                            arrival_status=integrity_checker.get('arrival_status'),
+                            arrival_status=integrity_checker.get(
+                                'arrival_status'),
                             validation_status=MalariaR.NOT_VALIDATED)
 
     # fill the report from SMS data
     report.add_underfive_data(**{key[3:]: value
-                                 for key, value in integrity_checker.data.items()
+                                 for key, value
+                                 in integrity_checker.data.items()
                                  if key.startswith('u5')})
     report.add_overfive_data(**{key[3:]: value
-                                 for key, value in integrity_checker.data.items()
-                                 if key.startswith('o5')})
+                                for key, value
+                                in integrity_checker.data.items()
+                                if key.startswith('o5')})
     report.add_pregnantwomen_data(**{key[3:]: value
-                                 for key, value in integrity_checker.data.items()
-                                 if key.startswith('pw')})
+                                     for key, value
+                                     in integrity_checker.data.items()
+                                     if key.startswith('pw')})
     report.add_stockout_data(**{key: value
-                                 for key, value in integrity_checker.data.items()
-                                 if key.startswith('stockout')})
+                                for key, value
+                                in integrity_checker.data.items()
+                                if key.startswith('stockout')})
 
     try:
         with reversion.create_revision():
@@ -100,8 +104,8 @@ def create_report(provider, expected_reporting, completed_on,
         validating_role=validating_role)
 
     # Add alert to validation Entity?
-    for recipient in Provider.active.filter(
-        role=validating_role, location=validating_entity):
+    for recipient in Provider.active.filter(role=validating_role,
+                                            location=validating_entity):
 
         if recipient == provider:
             continue
@@ -113,18 +117,18 @@ def create_report(provider, expected_reporting, completed_on,
             category=PROJECT_BRAND,
             text="L'Unité Sanitaire {hc} vient d'envoyer son rapport de "
                  "routine paludisme mensuel pour {period}. "
-                 "No reçu: #{receipt}.".format(
-                    hc=report.entity.display_full_name(),
-                    period=report.period,
-                    receipt=report.receipt)
+                 "No reçu: #{receipt}."
+                 .format(hc=report.entity.display_full_name(),
+                         period=report.period,
+                         receipt=report.receipt)
             )
 
     return report, ("Le rapport de {cscom} pour {period} "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     cscom=report.entity.display_full_name(),
-                     period=report.period,
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(cscom=report.entity.display_full_name(),
+                            period=report.period,
+                            receipt=report.receipt))
 
 
 class MalariaRIntegrityChecker(ReportIntegrityChecker):
@@ -142,8 +146,8 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker):
     def check_malaria_data(self):
 
         no_more_than_text = lambda d: ("{field2} ({f2value}) ne peut pas "
-                              "être supérieur à "
-                              "{field1} ({f1value})").format(**d)
+                                       "être supérieur à "
+                                       "{field1} ({f1value})").format(**d)
         field_name = lambda f: MalariaR.field_name(f)
 
         # no_more_than_text =
@@ -197,36 +201,52 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker):
         # suspected > simple + severe
         for cat in nopwcat:
             try:
-                dic = {'field2': _("{simple} + {severe}")
-                                 .format(simple=field_name('{}_total_simple_malaria_cases'.format(cat)),
-                                         severe=field_name('{}_total_severe_malaria_cases'.format(cat)))
-                       % {'simple': field_name('{}_total_simple_malaria_cases'.format(cat)),
-                       'severe': field_name('{}_total_severe_malaria_cases'.format(cat))},
-                       'f2value': int(self.get('{}_total_simple_malaria_cases'.format(cat)))
-                       + int(self.get('{}_total_severe_malaria_cases'.format(cat))),
-                       'field1': field_name('{}_total_suspected_malaria_cases'.format(cat)),
-                       'f1value': self.get('{}_total_suspected_malaria_cases'.format(cat))}
+                dic = {
+                    'field2':
+                        _("{simple} + {severe}")
+                        .format(
+                            simple=field_name('{}_total_simple_malaria_cases'
+                                              .format(cat)),
+                            severe=field_name('{}_total_severe_malaria_cases'
+                                              .format(cat))),
+                    'f2value': int(self.get('{}_total_simple_malaria_cases'
+                                            .format(cat)))
+                        + int(self.get('{}_total_severe_malaria_cases'
+                                       .format(cat))),
+                    'field1': field_name(
+                        '{}_total_suspected_malaria_cases'.format(cat)),
+                    'f1value': self.get(
+                        '{}_total_suspected_malaria_cases'.format(cat))}
                 if dic['f1value'] < dic['f2value']:
-                    self.add_error(no_more_than_text(dic),
-                                   field='{}_total_suspected_malaria_cases'.format(cat))
+                    self.add_error(
+                        no_more_than_text(dic),
+                        field='{}_total_suspected_malaria_cases'.format(cat))
             except:
                 pass
 
         # confirmed > simple + severe
         for cat in nopwcat:
             try:
-                dic = {'field2': _("{simple} + {severe}")
-                                 .format(simple=field_name('{}_total_simple_malaria_cases'.format(cat)),
-                                         severe=field_name('{}_total_severe_malaria_cases'.format(cat)))
-                       % {'simple': field_name('%s_total_simple_malaria_cases' % cat),
-                          'severe': field_name('%s_total_severe_malaria_cases' % cat)},
-                       'f2value': int(self.get('%s_total_simple_malaria_cases' % cat))
-                       + int(self.get('%s_total_severe_malaria_cases' % cat)),
-                       'field1': field_name('%s_total_confirmed_malaria_cases' % cat),
-                       'f1value': self.get('%s_total_confirmed_malaria_cases' % cat)}
+                dic = {
+                    'field2':
+                        _("{simple} + {severe}")
+                        .format(
+                            simple=field_name('{}_total_simple_malaria_cases'
+                                              .format(cat)),
+                            severe=field_name('{}_total_severe_malaria_cases'
+                                              .format(cat))),
+                    'f2value': int(self.get('{}_total_simple_malaria_cases'
+                                            .format(cat)))
+                    + int(self.get('{}_total_severe_malaria_cases'
+                                   .format(cat))),
+                    'field1': field_name('{}_total_confirmed_malaria_cases'
+                                         .format(cat)),
+                    'f1value': self.get('{}_total_confirmed_malaria_cases'
+                                        .format(cat))}
                 if dic['f1value'] < dic['f2value']:
                     self.add_error(no_more_than_text(dic),
-                                   field='{}_total_confirmed_malaria_cases'.format(cat))
+                                   field='{}_total_confirmed_malaria_cases'
+                                         .format(cat))
             except:
                 pass
 
@@ -275,10 +295,11 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
                            blocking=True, field='month')
 
         #####
-        ### TODO: remove once district knows new codes
+        # TODO: remove once district knows new codes
         #####
         try:
-            matrix_file = open('snisi_core/fixtures/health_entities_matrix.json', 'r')
+            matrix_file = open(
+                'snisi_core/fixtures/health_entities_matrix.json', 'r')
             matrix = json.load(matrix_file)['old_new']
             if self.get('hc', '').lower() in matrix.keys():
                 self.set('hc', matrix.get(self.get('hc', '').lower()))
@@ -287,15 +308,18 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
                          .format(self.get('hc'), exp))
             logger.debug("".join(traceback.format_exc()))
 
-        entity = Entity.get_or_none(self.get('hc', '').upper(), type_slug='health_center')
+        entity = Entity.get_or_none(self.get('hc', '').upper(),
+                                    type_slug='health_center')
 
         if entity is None:
-            self.add_error("Aucun CSCOM ne correspond au code {}".format(self.get('hc')),
+            self.add_error("Aucun CSCOM ne correspond au code {}"
+                           .format(self.get('hc')),
                            field='hc', blocking=True)
 
         # expected reporting defines if report is expeted or not
         expected_reporting = ExpectedReporting.get_or_none(
-            report_class=ReportClass.objects.get(slug='malaria_monthly_routine'),
+            report_class=ReportClass.objects.get(
+                slug='malaria_monthly_routine'),
             period=period,
             within_period=False,
             entity=entity,
@@ -306,8 +330,8 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
 
         if expected_reporting is None:
             self.add_error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}".format(
-                                entity=entity, period=period),
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period),
                            blocking=True)
 
         if expected_reporting.satisfied:
@@ -317,13 +341,16 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
                            blocking=True)
 
         # check if the report arrived in time or not.
-        if expected_reporting.reporting_period.contains(self.get('submit_time')):
+        if expected_reporting.reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = MalariaR.ON_TIME
-        elif expected_reporting.extended_reporting_period.contains(self.get('submit_time')):
+        elif expected_reporting.extended_reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = MalariaR.LATE
         else:
             # arrived while not in a reporting period
-            if self.get('submit_time') < expected_reporting.reporting_period.start_on:
+            if self.get('submit_time') \
+                    < expected_reporting.reporting_period.start_on:
                 text = ("La période de collecte pour {period} "
                         "n'a pas encore commencée. Rapport refusé.")
             else:
@@ -331,7 +358,7 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
                 text = ("La période de collecte pour {period} "
                         "est terminée. Rapport refusé.")
             self.add_error(text.format(period=expected_reporting.period),
-                                       blocking=True, field='period')
+                           blocking=True, field='period')
         self.set('arrival_status', arrival_status)
 
         # check permission to submit report.
@@ -341,11 +368,11 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district
         # and the district have the Entity as child HC
-        if not provider.role.slug in ('dtc', 'charge_sis') \
+        if provider.role.slug not in ('dtc', 'charge_sis') \
             or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
             or (provider.role.slug == 'charge_sis' and
                 (not provider.location.type.slug == 'health_district'
-                 or not entity in provider.location.get_health_centers())):
+                 or entity not in provider.location.get_health_centers())):
                 self.add_error("Vous ne pouvez pas envoyer de rapport "
                                "de routine pour {entity}."
                                .format(entity=entity),
@@ -371,17 +398,18 @@ def create_epidemio_report(provider, expected_reporting, completed_on,
             entity=expected_reporting.entity)
 
         day_report = EpidemioMalariaR.start(
-                            period=day_expected.period,
-                            entity=day_expected.entity,
-                            created_by=provider,
-                            completion_status=EpidemioMalariaR.COMPLETE,
-                            completed_on=completed_on,
-                            integrity_status=EpidemioMalariaR.CORRECT,
-                            arrival_status=integrity_checker.get('arrival_status'),
-                            validation_status=EpidemioMalariaR.NOT_VALIDATED)
+            period=day_expected.period,
+            entity=day_expected.entity,
+            created_by=provider,
+            completion_status=EpidemioMalariaR.COMPLETE,
+            completed_on=completed_on,
+            integrity_status=EpidemioMalariaR.CORRECT,
+            arrival_status=integrity_checker.get('arrival_status'),
+            validation_status=EpidemioMalariaR.NOT_VALIDATED)
 
         for field in EpidemioMalariaR.data_fields():
-            setattr(day_report, field, integrity_checker.get('d{}_{}'.format(daynum, field)))
+            setattr(day_report, field,
+                    integrity_checker.get('d{}_{}'.format(daynum, field)))
 
         try:
             with reversion.create_revision():
@@ -417,10 +445,10 @@ def create_epidemio_report(provider, expected_reporting, completed_on,
 
     return report, ("Le rapport de {cscom} pour {period} "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     cscom=report.entity.display_full_name(),
-                     period=report.period,
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(cscom=report.entity.display_full_name(),
+                            period=report.period,
+                            receipt=report.receipt))
 
 
 class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
@@ -473,15 +501,15 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
         year = self.get('year')
 
         date_txt = "La valeur pour {} est incorrecte: {}"
-        if not week in range(1, 6):
+        if week not in range(1, 6):
             self.add_error(date_txt.format("semaine", week),
                            blocking=True, field='week')
 
-        if not month in range(1, 13):
+        if month not in range(1, 13):
             self.add_error(date_txt.format("mois", month),
                            blocking=True, field='month')
 
-        if not year in range(2011, 2020):
+        if year not in range(2011, 2020):
             self.add_error(date_txt.format("année", year),
                            blocking=True, field='year')
 
@@ -507,21 +535,26 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
 
         entity = Entity.get_or_none(self.get('hc'), type_slug='health_center')
         if entity is None:
-            self.add_error("Aucun CSCOM ne correspond au code {}".format(self.get('hc')),
+            self.add_error("Aucun CSCOM ne correspond au code {}"
+                           .format(self.get('hc')),
                            field='hc', blocking=True)
 
-
         week_slug_matrix = {
-            FixedMonthFirstWeek: 'malaria_weekly_epidemio_firstweek_aggregated',
-            FixedMonthSecondWeek: 'malaria_weekly_epidemio_secondweek_aggregated',
-            FixedMonthThirdWeek: 'malaria_weekly_epidemio_thirdweek_aggregated',
-            FixedMonthFourthWeek: 'malaria_weekly_epidemio_fourthweek_aggregated',
+            FixedMonthFirstWeek:
+                'malaria_weekly_epidemio_firstweek_aggregated',
+            FixedMonthSecondWeek:
+                'malaria_weekly_epidemio_secondweek_aggregated',
+            FixedMonthThirdWeek:
+                'malaria_weekly_epidemio_thirdweek_aggregated',
+            FixedMonthFourthWeek:
+                'malaria_weekly_epidemio_fourthweek_aggregated',
             FixedMonthFifthWeek: 'malaria_weekly_epidemio_fifthweek_aggregated'
         }
 
         # expected reporting defines if report is expeted or not
         expected_reporting = ExpectedReporting.get_or_none(
-            report_class=ReportClass.objects.get(slug=week_slug_matrix.get(weekcls)),
+            report_class=ReportClass.objects.get(
+                slug=week_slug_matrix.get(weekcls)),
             period=period,
             within_period=False,
             entity=entity,
@@ -532,8 +565,8 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
 
         if expected_reporting is None:
             self.add_error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}".format(
-                                entity=entity, period=period),
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period),
                            blocking=True)
 
         if expected_reporting.satisfied:
@@ -543,13 +576,16 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
                            blocking=True)
 
         # check if the report arrived in time or not.
-        if expected_reporting.reporting_period.contains(self.get('submit_time')):
+        if expected_reporting.reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = EpidemioMalariaR.ON_TIME
-        elif expected_reporting.extended_reporting_period.contains(self.get('submit_time')):
+        elif expected_reporting.extended_reporting_period.contains(
+                self.get('submit_time')):
             arrival_status = EpidemioMalariaR.LATE
         else:
             # arrived while not in a reporting period
-            if self.get('submit_time') < expected_reporting.reporting_period.start_on:
+            if self.get('submit_time') \
+                    < expected_reporting.reporting_period.start_on:
                 text = ("La période de collecte pour {period} "
                         "n'a pas encore commencée. Rapport refusé.")
             else:
@@ -557,14 +593,15 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
                 text = ("La période de collecte pour {period} "
                         "est terminée. Rapport refusé.")
             self.add_error(text.format(period=expected_reporting.period),
-                                       blocking=True, field='period')
+                           blocking=True, field='period')
         self.set('arrival_status', arrival_status)
 
         # check permission to submit report.
         provider = self.get('submitter')
 
         # provider must be DTC from that entity
-        if not provider.role.slug == 'dtc' or not provider.location.slug == entity.slug:
+        if not provider.role.slug == 'dtc' \
+                or not provider.location.slug == entity.slug:
             self.add_error("Vous ne pouvez pas envoyer de rapport "
                            "de routine pour {entity}."
                            .format(entity=entity),
@@ -572,8 +609,9 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
 
     def check_data(self):
 
-        no_more_than_text = lambda d: ("[Jour {day_in_month}] {field2} ({f2value}) ne peut pas "
-                                       "être supérieur à {field1} ({f1value})").format(**d)
+        no_more_than_text = lambda d: (
+            "[Jour {day_in_month}] {field2} ({f2value}) ne peut pas "
+            "être supérieur à {field1} ({f1value})").format(**d)
         field_name = lambda f: EpidemioMalariaR.field_name(f)
 
         allcats = ('u5', 'o5', 'pw')
@@ -586,82 +624,141 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
         def test_value_under(fieldref, fieldtest, nb_day, cats, day_in_month):
             for cat in cats:
                 try:
-                    dic = {'field2': field_name('{}_{}'.format(cat, fieldtest)),
-                           'f2value': self.get('d{}_{}_{}'.format(nb_day, cat, fieldtest)),
-                           'field1': field_name('{}_{}'.format(cat, fieldref)),
-                           'f1value': self.get('d{}_{}_{}'.format(nb_day, cat, fieldref)),
-                           'day_in_month': day_in_month}
+                    dic = {
+                        'field2': field_name('{}_{}'.format(cat, fieldtest)),
+                        'f2value': self.get('d{}_{}_{}'
+                                            .format(nb_day, cat, fieldtest)),
+                        'field1': field_name('{}_{}'.format(cat, fieldref)),
+                        'f1value': self.get('d{}_{}_{}'
+                                            .format(nb_day, cat, fieldref)),
+                        'day_in_month': day_in_month}
                     if dic['f1value'] < dic['f2value']:
                         self.add_error(no_more_than_text(dic),
                                        field=dic['field2'])
                 except:
                     # this missing data should have already been reported
                     pass
-        nb_days_for_month = self.nb_days_for_month(self.get('year'), self.get('month'))
-        for nb_day, day_in_month in enumerate(nb_day_for_week_dict(self.get('week'), nb_days_for_month)):
+        nb_days_for_month = self.nb_days_for_month(
+            self.get('year'), self.get('month'))
+        for nb_day, day_in_month in enumerate(nb_day_for_week_dict(
+                self.get('week'), nb_days_for_month)):
             nb_day += 1
-            # Nbre de cas de palu. (tous suspectés) ne peut pas être supérieur au nbre de total consultation toutes causes confondues
+            # Nbre de cas de palu. (tous suspectés) ne
+            # peut pas être supérieur au nbre de total
+            # consultation toutes causes confondues
             test_value_under('total_consultation_all_causes',
-                             'total_suspected_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (testé avec TDR) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_suspected_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (testé avec TDR) ne
+            # peut pas être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_rdt_tested_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (confirmé par TDR) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_rdt_tested_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (confirmé par TDR) ne
+            # peut pas être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_rdt_confirmed_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (confirmé par TDR) ne peut pas être supérieur au nbre de palu.(testé avec TDR)
+                             'total_rdt_confirmed_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (confirmé par TDR) ne
+            # peut pas être supérieur au nbre de palu.(testé avec TDR)
             test_value_under('total_rdt_tested_malaria_cases',
-                             'total_rdt_confirmed_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (testés avec GE) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_rdt_confirmed_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (testés avec GE) ne
+            # peut pas être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_ts_tested_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (confirmé par GE) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_ts_tested_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (confirmé par GE) ne
+            # peut pas être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_ts_confirmed_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (confirmé par GE) ne peut pas être supérieur au nbre de palu.(testé avec GE)
+                             'total_ts_confirmed_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (confirmé par GE) ne
+            # peut pas être supérieur au nbre de palu.(testé avec GE)
             test_value_under('total_ts_tested_malaria_cases',
-                             'total_ts_confirmed_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (simple) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_ts_confirmed_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (simple) ne peut
+            # pas être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_simple_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de palu. (grave) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                             'total_simple_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de palu. (grave) ne peut pas
+            # être supérieur au nbre de palu.(tout suspectés)
             test_value_under('total_suspected_malaria_cases',
-                             'total_severe_malaria_cases', nb_day, allcats, day_in_month)
-            # Nbre de cas de décès dûs au palu. ne peut pas être supérieur au nbre de cas de décès toutes causes confondues
+                             'total_severe_malaria_cases',
+                             nb_day, allcats, day_in_month)
+            # Nbre de cas de décès dûs au palu. ne peut pas
+            # être supérieur au nbre de cas de décès toutes causes confondues
             test_value_under('total_death_all_causes',
-                             'total_malaria_death', nb_day, allcats, day_in_month)
+                             'total_malaria_death',
+                             nb_day, allcats, day_in_month)
 
             for cat in allcats:
 
-                # Nbre de cas de palu. (simple + grave) ne peut pas être supérieur au nbre de palu.(tout suspectés)
+                # Nbre de cas de palu. (simple + grave) ne
+                # peut pas être supérieur au nbre de palu.(tout suspectés)
                 try:
-                    dic = {'field2': _("%(simple)s + %(severe)s") % ({'simple': field_name('{}_total_simple_malaria_cases'.format(cat)),
-                                                                 'severe': field_name('{}_total_severe_malaria_cases'.format(cat))}),
-                           'field1': field_name('{}_total_suspected_malaria_cases'.format(cat)),
-                           'f1value': self.get('d{}_{}_total_suspected_malaria_cases'.format(nb_day, cat)),
-                           'f2value': int(self.get('d{}_{}_total_simple_malaria_cases'.format(nb_day, cat)))
-                                    + int(self.get('d{}_{}_total_severe_malaria_cases'.format(nb_day, cat))),
-                           'day_in_month': day_in_month}
+                    dic = {
+                        'field2':
+                            _("{simple} + {severe}")
+                            .format(
+                                simple=field_name(
+                                    '{}_total_simple_malaria_cases'
+                                    .format(cat)),
+                                severe=field_name(
+                                    '{}_total_severe_malaria_cases'
+                                    .format(cat))),
+                        'field1': field_name(
+                            '{}_total_suspected_malaria_cases'.format(cat)),
+                        'f1value': self.get(
+                            'd{}_{}_total_suspected_malaria_cases'
+                            .format(nb_day, cat)),
+                        'f2value': int(self.get(
+                            'd{}_{}_total_simple_malaria_cases'
+                            .format(nb_day, cat)))
+                            + int(self.get('d{}_{}_total_severe_malaria_cases'
+                                           .format(nb_day, cat))),
+                        'day_in_month': day_in_month}
 
                     if dic['f1value'] < dic['f2value']:
-                        self.add_error(no_more_than_text(dic),
-                                       field='{}s_total_confirmed_malaria_cases'.format(cat))
+                        self.add_error(
+                            no_more_than_text(dic),
+                            field='{}s_total_confirmed_malaria_cases'
+                                  .format(cat))
                 except:
                     pass
 
-                # Nbre de cas de palu. (simple + grave) ne peut pas être supérieur au nbre de total consultation toutes causes confondues
+                # Nbre de cas de palu. (simple + grave) ne
+                # peut pas être supérieur au nbre de
+                # total consultation toutes causes confondues
                 try:
-                    dic = {'field2': _("%(simple)s + %(severe)s") \
-                           % ({'simple': field_name('{}_total_simple_malaria_cases'.format(cat)),
-                               'severe': field_name('{}_total_severe_malaria_cases'.format(cat))}),
-                           'field1': field_name('{}_total_consultation_all_causes'.format(cat)),
-                           'f1value': self.get('d{}_{}_total_consultation_all_causes'.format(nb_day, cat)),
-                           'f2value': int(self.get('d{}_{}_total_simple_malaria_cases'.format(nb_day, cat)))
-                                    + int(self.get('d{}_{}_total_severe_malaria_cases'.format(nb_day, cat))),
-                           'day_in_month': day_in_month}
+                    dic = {
+                        'field2':
+                            _("{simple} + {severe}").format(
+                                simple=field_name(
+                                    '{}_total_simple_malaria_cases'
+                                    .format(cat)),
+                                severe=field_name(
+                                    '{}_total_severe_malaria_cases'
+                                    .format(cat))),
+                        'field1': field_name('{}_total_consultation_all_causes'
+                                             .format(cat)),
+                        'f1value': self.get(
+                            'd{}_{}_total_consultation_all_causes'
+                            .format(nb_day, cat)),
+                        'f2value': int(self.get(
+                            'd{}_{}_total_simple_malaria_cases'
+                            .format(nb_day, cat)))
+                            + int(self.get('d{}_{}_total_severe_malaria_cases'
+                                           .format(nb_day, cat))),
+                        'day_in_month': day_in_month}
 
                     if dic['f1value'] < dic['f2value']:
-                        self.add_error(no_more_than_text(dic),
-                                       field='{}s_total_confirmed_malaria_cases'.format(cat))
+                        self.add_error(
+                            no_more_than_text(dic),
+                            field='{}s_total_confirmed_malaria_cases'
+                            .format(cat))
                 except:
                     pass

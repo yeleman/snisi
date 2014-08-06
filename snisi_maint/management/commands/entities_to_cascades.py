@@ -5,10 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import os
-import datetime
 
-from django.utils import timezone
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from py3compat import PY2

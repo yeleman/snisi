@@ -34,7 +34,7 @@ def generate_report(year, quarter_num, entity):
         '3': 7,
         '4': 10
     }
-    if not quarter_num in quarter_month_matrix.keys():
+    if quarter_num not in quarter_month_matrix.keys():
         logger.error("Incorrect quarter {}".format(quarter_num))
         return fail
     try:
@@ -114,7 +114,6 @@ class Command(BaseCommand):
                     default=None),
     )
 
-
     def handle(self, *args, **options):
 
         # set/create the destination folder
@@ -148,4 +147,3 @@ class Command(BaseCommand):
                 logger.info("\tCreated {}".format(filepath))
             else:
                 logger.info("\tNo document for {}".format(entity))
-

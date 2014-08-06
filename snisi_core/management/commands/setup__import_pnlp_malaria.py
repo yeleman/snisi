@@ -13,13 +13,15 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from snisi_core.models.Entities import Entity
-from snisi_core.models.Reporting import ExpectedReporting, ReportClass, ExpectedValidation
+from snisi_core.models.Reporting import (ExpectedReporting, ReportClass,
+                                         ExpectedValidation)
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Roles import Role
 from snisi_malaria.models import MalariaR, AggMalariaR
 from snisi_tools.datetime import datetime_from_iso, DEBUG_change_system_date
-from snisi_tools.pnlp_import import period_from, get_provider_from, entity_from #, get_user_from
+from snisi_tools.pnlp_import import (period_from, get_provider_from,
+                                     entity_from)
 from snisi_core.models.ValidationPeriods import (
     DefaultDistrictValidationPeriod, DefaultRegionValidationPeriod,
     DefaultNationalValidationPeriod)
@@ -34,6 +36,7 @@ new_slug_matrix = {}
 #     'msangare': 'msangar',
 #     'tcouliba': 'tcoulib1',
 # }
+
 
 def report_from(receipt):
     return MalariaR.objects.get(receipt=receipt)
@@ -57,7 +60,8 @@ def deserialize_malaria(report_data, report):
         for field, field_data in report_data.items():
 
             # data fields
-            if field.split('_')[0] in ('u5', 'o5', 'pw', 'stockout') or field in ('receipt',):
+            if field.split('_')[0] in ('u5', 'o5', 'pw', 'stockout') \
+                    or field in ('receipt',):
                 setattr(report, field, field_data)
 
             if field == '_status':
@@ -65,21 +69,27 @@ def deserialize_malaria(report_data, report):
                 print(report_data)
                 vs = MalariaR.VALIDATED if field_data in ('STATUS_VALIDATED',
                                                           'STATUS_AUTO_VALIDATED') \
-                                        else MalariaR.NOT_VALIDATED
+                    else MalariaR.NOT_VALIDATED
 
                 if vs == MalariaR.VALIDATED:
-                    validation_date =  datetime_from_iso(report_data.get('modified_on'))
+                    validation_date = datetime_from_iso(
+                        report_data.get('modified_on'))
                     if validation_date is None:
                         m = report.period.middle()
                         if report.entity.type.slug == 'health_center':
-                            validation_date = datetime.datetime(m.year, m.month, 16, 8, 0)
+                            validation_date = datetime.datetime(
+                                m.year, m.month, 16, 8, 0)
                         elif report.entity.type.slug == 'health_district':
-                            validation_date = datetime.datetime(m.year, m.month, 26, 8, 0)
+                            validation_date = datetime.datetime(
+                                m.year, m.month, 26, 8, 0)
                         else:
-                            validation_date = datetime.datetime(m.year, m.month, 27, 8, 0)
+                            validation_date = datetime.datetime(
+                                m.year, m.month, 27, 8, 0)
                     auto_validated = field_data == 'STATUS_AUTO_VALIDATED'
-                    modified_by = get_provider_from(report_data.get('modified_by'))
-                    if modified_by is None or modified_by.username == 'autobot':
+                    modified_by = get_provider_from(
+                        report_data.get('modified_by'))
+                    if modified_by is None \
+                            or modified_by.username == 'autobot':
                         modified_by = get_provider_from('autobot')
                         auto_validated = True
 
@@ -90,15 +100,19 @@ def deserialize_malaria(report_data, report):
                         validated_by=modified_by,
                         validated_on=validation_date,
                         auto_validated=auto_validated)
-                    report = report.__class__.objects.get(receipt=report.receipt)
+                    report = report.__class__.objects.get(
+                        receipt=report.receipt)
 
             # datetimes
             if field in ('created_on', 'modified_on'):
-                setattr(report, field, datetime_from_iso(report_data.get(field)))
+                setattr(report, field,
+                        datetime_from_iso(report_data.get(field)))
 
             # period
             if field == 'period':
-                setattr(report, field, period_from(report_data.get(field), as_class=MonthPeriod))
+                setattr(report, field,
+                        period_from(report_data.get(field),
+                                    as_class=MonthPeriod))
 
             # providers
             if field in ('created_by', 'modified_by'):
@@ -109,7 +123,8 @@ def deserialize_malaria(report_data, report):
 
             # entity
             if field == 'entity':
-                setattr(report, field, entity_from(new_slug_matrix[report_data.get(field)]))
+                setattr(report, field,
+                        entity_from(new_slug_matrix[report_data.get(field)]))
 
         # report level fields
         print(" setting completion_status")
@@ -117,11 +132,13 @@ def deserialize_malaria(report_data, report):
         print(" completion_status is now {}".format(report.completion_status))
 
         if report_data.get('created_on'):
-            setattr(report, 'completed_on', datetime_from_iso(report_data.get('created_on')))
+            setattr(report, 'completed_on',
+                    datetime_from_iso(report_data.get('created_on')))
 
         report.integrity_status = MalariaR.CORRECT
         if getattr(report, 'created_on'):
-            report.arrival_status = MalariaR.ON_TIME if report.created_on.day <= 5 else MalariaR.LATE
+            report.arrival_status = MalariaR.ON_TIME \
+                if report.created_on.day <= 5 else MalariaR.LATE
 
         return report
 
@@ -191,7 +208,8 @@ class Command(BaseCommand):
         print("Creating Reports...")
 
         report_source = ReportClass.objects.get(slug='malaria_monthly_routine')
-        report_agg = ReportClass.objects.get(slug='malaria_monthly_routine_aggregated')
+        report_agg = ReportClass.objects.get(
+            slug='malaria_monthly_routine_aggregated')
 
         # create periods
         print("Creating Periods")
@@ -215,9 +233,10 @@ class Command(BaseCommand):
             period = MonthPeriod.find_create_by_date(report_date)
 
             #####
-            ## change btraore -> ssangara from aug2013
+            # change btraore -> ssangara from aug2013
             ####
-            if report_data["created_by"] == "btraore" and report_date > aug2013:
+            if report_data["created_by"] == "btraore" \
+                    and report_date > aug2013:
                 report_data["created_by"] = "ssangare"
                 if report_data["_version"]["user"] == "btraore":
                     report_data["_version"]["user"] = "ssangare"
@@ -225,11 +244,11 @@ class Command(BaseCommand):
                 if report_data["modified_by"] == "btraore":
                     report_data["modified_by"] = "ssangare"
 
+            reportcls = report_source \
+                if entity.type.slug == 'health_center' else report_agg
 
-
-            reportcls = report_source if entity.type.slug == 'health_center' else report_agg
-
-            valperiodcls = DefaultDistrictValidationPeriod if level == 'health_center' else DefaultRegionValidationPeriod
+            valperiodcls = DefaultDistrictValidationPeriod \
+                if level == 'health_center' else DefaultRegionValidationPeriod
             if level == 'country':
                 valperiodcls = DefaultNationalValidationPeriod
 
@@ -237,12 +256,12 @@ class Command(BaseCommand):
             DEBUG_change_system_date(period.start_on, True)
 
             expected_reporting = ExpectedReporting.get_or_none(
-                    report_class=reportcls,
-                    period=period,
-                    within_period=False,
-                    entity=entity,
-                    within_entity=False,
-                    amount_expected=ExpectedReporting.EXPECTED_SINGLE)
+                report_class=reportcls,
+                period=period,
+                within_period=False,
+                entity=entity,
+                within_entity=False,
+                amount_expected=ExpectedReporting.EXPECTED_SINGLE)
             if expected_reporting is None:
                 print("NO EXPECTED")
                 continue
@@ -269,11 +288,14 @@ class Command(BaseCommand):
 
             expected_reporting.acknowledge_report(report)
 
-            validating_entity = report.entity if level == 'country' else report.entity.parent
-            validating_role = Role.objects.get(slug='validation_bot') if level == 'country' else role_chargesis
+            validating_entity = report.entity \
+                if level == 'country' else report.entity.parent
+            validating_role = Role.objects.get(slug='validation_bot') \
+                if level == 'country' else role_chargesis
             ExpectedValidation.objects.create(
                 report=report,
-                validation_period=valperiodcls.find_create_by_date(report.period.casted().following().middle()),
+                validation_period=valperiodcls.find_create_by_date(
+                    report.period.casted().following().middle()),
                 validating_entity=validating_entity,
                 validating_role=validating_role,
             )
@@ -291,4 +313,3 @@ class Command(BaseCommand):
                 update_last_revision(report,
                                      update.get('_version_date'),
                                      update.get('modified_by'))
-

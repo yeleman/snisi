@@ -9,7 +9,7 @@ import json
 from optparse import make_option
 from django.core.management.base import BaseCommand
 
-from snisi_core.models.Entities import HealthEntity, Entity
+from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Roles import Role
@@ -51,8 +51,10 @@ class Command(BaseCommand):
 
         print("Creating ExpectedReporting...")
 
-        report_source = ReportClass.objects.get(slug='malaria_monthly_routine')
-        report_agg = ReportClass.objects.get(slug='malaria_monthly_routine_aggregated')
+        report_source = ReportClass.objects.get(
+            slug='malaria_monthly_routine')
+        report_agg = ReportClass.objects.get(
+            slug='malaria_monthly_routine_aggregated')
 
         # create periods
         print("Creating Periods")
@@ -120,19 +122,26 @@ class Command(BaseCommand):
                     extended_reporting_period = None
 
                 if entity.type.slug == 'health_center':
-                    reporting_period = DefaultMonthlyReportingPeriod.find_create_by_date(period.following().middle())
-                    extended_reporting_period = DefaultMonthlyExtendedReportingPeriod.find_create_by_date(period.following().middle())
+                    reporting_period = DefaultMonthlyReportingPeriod \
+                        .find_create_by_date(period.following().middle())
+                    extended_reporting_period = \
+                        DefaultMonthlyExtendedReportingPeriod \
+                        .find_create_by_date(period.following().middle())
                 else:
                     # no reporting period for Agg.
                     reporting_period = None
                     extended_reporting_period = None
 
-                reportcls = report_source if entity.type.slug == 'health_center' else report_agg
-                role = dtc if entity.type.slug == 'health_center' else chargesis
+                reportcls = report_source \
+                    if entity.type.slug == 'health_center' else report_agg
+                role = dtc if entity.type.slug == 'health_center' \
+                    else chargesis
 
-                if entity in mopti.get_health_descendants() and period < september13:
+                if entity in mopti.get_health_descendants() \
+                        and period < september13:
                     continue
-                if entity in moptid.get_health_descendants() and period < january14:
+                if entity in moptid.get_health_descendants() \
+                        and period < january14:
                     continue
 
                 e = ExpectedReporting.objects.create(
@@ -153,4 +162,3 @@ class Command(BaseCommand):
                 del(entity)
                 del(e)
                 del(new)
-

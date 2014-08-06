@@ -4,9 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
-import types
 
-from snisi_core.indicators import Indicator
 from snisi_tools.misc import import_path
 # from snisi_malaria.indicators import section1
 
@@ -44,9 +42,10 @@ def get_indicators(key=None, only_geo=False):
 
         section_data = {'slug': section_slug,
                         'name': section_name,
-                        'indicators': [get_indicator(section, indic_name).spec()
-                                       for indic_name in dir(section)
-                                       if is_indicator(section, indic_name, only_geo)]}
+                        'indicators': [
+                            get_indicator(section, indic_name).spec()
+                            for indic_name in dir(section)
+                            if is_indicator(section, indic_name, only_geo)]}
         if key == section_slug:
             return section_data
         sections.append(section_data)
@@ -77,9 +76,10 @@ def get_geo_indicators():
     for indicator_name in dir(section):
         if not is_indicator(section, indicator_name, True):
             continue
-        indicator = import_path('snisi_malaria.indicators.map.{}'.format(indicator_name))
+        indicator = import_path('snisi_malaria.indicators.map.{}'
+                                .format(indicator_name))
         geo_section = getattr(indicator, 'geo_section', None)
-        if not geo_section in indicators.keys():
+        if geo_section not in indicators.keys():
             indicators.update({geo_section: []})
         spec = indicator.spec()
         spec.update({'slug': '{}.{}'.format(section_path,

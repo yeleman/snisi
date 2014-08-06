@@ -157,7 +157,7 @@ def msi_pf(message):
                 arguments[key] = value.strip()
             elif key.endswith('_observation'):
                 arguments[key] = None if value.strip() == '-' \
-                                      else value.strip().replace('#', ' ')
+                    else value.strip().replace('#', ' ')
             else:
                 arguments[key] = int(value)
     except:
@@ -222,11 +222,11 @@ def msi_pf(message):
     # should have already been checked in checker.
     if expected_reporting is None:
         logger.error("Expected reporting not found: "
-                     "cls:{cls} - period:{period} - entity:{entity}".format(
-                        cls=reportcls_pf, period=period, entity=entity))
+                     "cls:{cls} - period:{period} - entity:{entity}"
+                     .format(cls=reportcls_pf, period=period, entity=entity))
         return reply.error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}".format(
-                                entity=entity, period=period))
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period))
 
     report, text_message = create_pf_report(
         provider=provider,

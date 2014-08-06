@@ -3,10 +3,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    # url(r'^$', 'snisi.views.home', name='home'),
+urlpatterns = patterns(
+    '',
     url(r'^', include('snisi_web.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
 )
 

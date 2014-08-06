@@ -23,7 +23,7 @@ DUMB_PASSWORD_LENGTH = 4
 def random_password(dumb=False):
     """ random password suitable for mobile typing """
     if not dumb:
-        return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz1234567890') \
+        return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz1234567890')
                         for i in range(PASSWORD_LENGTH)])
 
     # dumb password
@@ -120,7 +120,8 @@ def can_view_entity(provider, entity):
         return False
 
     if provider.location.level <= entity.level:
-        return entity.get_type(provider.location.type.slug) == provider.location.casted()
+        return entity.get_type(provider.location.type.slug) == \
+            provider.location.casted()
 
     # slow but safer check
     return entity in provider.location.get_types(entity.type.slug)

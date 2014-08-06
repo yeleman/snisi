@@ -89,4 +89,3 @@ class Command(BaseCommand):
                         f.write(req.content)
 
                     logger.info(dest_fname)
-

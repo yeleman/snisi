@@ -20,7 +20,7 @@ def checkdigit_for(id_without_check):
         id_without_checkdigit = id_without_check.strip().upper()
 
         # this will be a running total
-        sum = 0;
+        sum = 0
 
         # loop through digits from right to left
         for n, char in enumerate(reversed(id_without_checkdigit)):

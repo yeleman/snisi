@@ -9,12 +9,13 @@ import reversion
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
-                                         PERIODICAL_SOURCE, PERIODICAL_AGGREGATED)
+                                         PERIODICAL_SOURCE,
+                                         PERIODICAL_AGGREGATED)
 
 
 class VaccCovRIface(models.Model):
@@ -90,7 +91,7 @@ class AggVaccCovR(VaccCovRIface,
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     INDIVIDUAL_CLS = VaccCovR
     RECEIPT_FORMAT = "AMVC{id}/{entity__slug}-{day}"
-    UNIQUE_TOGETHER = [('period', 'entity'),]
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_vacc'
@@ -98,13 +99,15 @@ class AggVaccCovR(VaccCovRIface,
         verbose_name_plural = _("Aggregated Major Vaccine Coverage Reports")
 
     # all source reports (CSCOM)
-    indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (all)"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports',
         symmetrical=False)
 
-    direct_indiv_sources = models.ManyToManyField(INDIVIDUAL_CLS,
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (direct)"),
         blank=True, null=True,
         related_name='direct_source_agg_%(class)s_reports',
@@ -146,13 +149,15 @@ class AggVaccCovR(VaccCovRIface,
     def update_instance_with_indiv(cls, report, instance):
         for field in instance.data_fields():
             setattr(report, field,
-                    (getattr(report, field, 0) or 0) + (getattr(instance, field, 0) or 0))
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
         for field in cls.data_fields():
             setattr(report, field,
-                    (getattr(report, field, 0) or 0) + (getattr(instance, field, 0) or 0))
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
 
 receiver(pre_save, sender=AggVaccCovR)(pre_save_report)
 receiver(post_save, sender=AggVaccCovR)(post_save_report)

@@ -19,7 +19,8 @@ from snisi_core.models.Periods import MonthPeriod, FixedDaysPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_trachoma.models import (TTBacklogVillageR,
                                    TTBacklogMissionR)
-from snisi_core.models.Reporting import ReportClass, ExpectedReporting, ExpectedValidation
+from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
+                                         ExpectedValidation)
 from snisi_core.integrity import ReportIntegrityChecker
 from snisi_tools.datetime import parse_date_string
 from snisi_trachoma import PROJECT_BRAND
@@ -62,9 +63,9 @@ class TTBacklogMissionStartChecker(ReportIntegrityChecker):
         # check auth for user at district
         user_district = self.get('submitter').location.get_health_district()
         if (user_district is None
-            or not user_district == entity
-            or not self.get('submitter').role.slug in ('tt_tso', 'tt_opt',
-                                                       'tt_amo', 'charge_sis')):
+                or not user_district == entity
+                or self.get('submitter').role.slug
+                not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
             self.add_error("Vous n'êtes pas autorisé à créer un rapport de "
                            "mission pour ce district: {}".format(entity),
                            blocking=True, field='submitter')
@@ -85,7 +86,8 @@ class TTBacklogMissionStartChecker(ReportIntegrityChecker):
                            "la période de {}".format(entity, period),
                            blocking=True)
 
-        if expected_reporting.completion_status == ExpectedReporting.COMPLETION_COMPLETE:
+        if expected_reporting.completion_status \
+                == ExpectedReporting.COMPLETION_COMPLETE:
             self.add_error("Aucune mission TT Backlog attendue à {} pour "
                            "la période de {}".format(entity, period),
                            blocking=True)
@@ -129,7 +131,7 @@ class TTBacklogMissionStartChecker(ReportIntegrityChecker):
         # strategy
         strategy = {
             'fixed': TTBacklogMissionR.FIXED,
-            'mobile':TTBacklogMissionR.MOBILE,
+            'mobile': TTBacklogMissionR.MOBILE,
             'advanced': TTBacklogMissionR.ADVANCED
         }.get(self.get('strategy').lower())
         if strategy not in TTBacklogMissionR.STRATEGIES.keys():
@@ -183,17 +185,17 @@ def create_mission_report(provider, expected_reporting, completed_on,
             expirate_on=report.started_on + datetime.timedelta(days=3),
             category=PROJECT_BRAND,
             text="Une mission TT de {district} a été créée par {author}. "
-                 "No reçu: #{receipt}.".format(
-                    district=report.entity.display_full_name(),
-                    author=report.operator,
-                    receipt=report.receipt)
+                 "No reçu: #{receipt}."
+                 .format(district=report.entity.display_full_name(),
+                         author=report.operator,
+                         receipt=report.receipt)
             )
 
     return report, ("Le rapport de mission TT au départ de {district} "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     district=report.entity.display_full_name(),
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(district=report.entity.display_full_name(),
+                            receipt=report.receipt))
 
 
 class TTBacklogVisitChecker(ReportIntegrityChecker):
@@ -299,7 +301,8 @@ class TTBacklogVisitChecker(ReportIntegrityChecker):
         self.set('arrived_on', parse_date_string(self.get('arrived_on')))
         if not isinstance(self.get('arrived_on'), datetime.date):
             self.add_error("La date d'arrivée au village est "
-                           "incompréhensible: {}".format(self.get('arrived_on')),
+                           "incompréhensible: {}"
+                           .format(self.get('arrived_on')),
                            blocking=True, field='arrived_on')
 
         # left_on is a date
@@ -353,9 +356,9 @@ class TTBacklogVisitChecker(ReportIntegrityChecker):
         # check auth for user at district
         user_district = self.get('submitter').location.get_health_district()
         if (user_district is None
-            or not user_district == district
-            or not self.get('submitter').role.slug in ('tt_tso', 'tt_opt',
-                                                       'tt_amo', 'charge_sis')):
+                or not user_district == district
+                or self.get('submitter').role.slug
+                not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
             self.add_error("Vous n'êtes pas autorisé à créer un rapport de "
                            "visite pour ce village: {}".format(village),
                            blocking=True, field='submitter')
@@ -376,7 +379,8 @@ class TTBacklogVisitChecker(ReportIntegrityChecker):
                            "Merci de contacter ANTIM.", blocking=True)
 
         # only one visit per village
-        if open_missions[0].village_reports.filter(location__slug=village.slug):
+        if open_missions[0].village_reports.filter(
+                location__slug=village.slug):
             self.add_error("Cette mission possède déjà un rapport de "
                            "visite TT pour le village {}.".format(village),
                            blocking=True, field='location')
@@ -388,7 +392,8 @@ class TTBacklogVisitChecker(ReportIntegrityChecker):
         # arrived_on => mission.started_on
         if not self.get('arrived_on').date() >= missionR.started_on:
             self.add_error("La date d'arrivée au village est antérieure au "
-                           "début de la mission: {}".format(self.get('arrived_on')),
+                           "début de la mission: {}"
+                           .format(self.get('arrived_on')),
                            blocking=True, field='arrived_on')
 
 
@@ -446,17 +451,18 @@ def create_visit_report(provider, expected_reporting, completed_on,
             expirate_on=report.left_on + datetime.timedelta(days=3),
             category=PROJECT_BRAND,
             text="La mission TT de {mission_author} a fini la visite de "
-                 " {village}. No reçu: #{receipt}.".format(
-                    village=report.location.display_full_name(),
-                    mission_author=integrity_checker.get('missionR').operator,
-                    receipt=report.receipt)
+                 " {village}. No reçu: #{receipt}."
+                 .format(
+                village=report.location.display_full_name(),
+                mission_author=integrity_checker.get('missionR').operator,
+                receipt=report.receipt)
             )
 
     return report, ("Le rapport de visite TT pour {village} "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     village=report.entity.display_full_name(),
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(village=report.entity.display_full_name(),
+                            receipt=report.receipt))
 
 
 class TTBacklogMissionEndChecker(ReportIntegrityChecker):
@@ -509,8 +515,9 @@ class TTBacklogMissionEndChecker(ReportIntegrityChecker):
         self.set('missionR', missionR)
 
         if self.get('clean_ended_on').date() < missionR.started_on:
-            self.add_error("La date de fin de mission est antérieure à la date "
-                           "de début: {}".format(self.get('clean_ended_on')),
+            self.add_error("La date de fin de mission est antérieure "
+                           "à la date de début: {}"
+                           .format(self.get('clean_ended_on')),
                            blocking=True, field='ended_on')
 
         expected_reporting = ExpectedReporting.get_or_none(
@@ -571,12 +578,12 @@ def close_mission_report(provider, expected_reporting, completed_on,
             expirate_on=report.ended_on + datetime.timedelta(days=3),
             category=PROJECT_BRAND,
             text="La mission TT de {mission_author} est terminée. "
-                 "No reçu: #{receipt}.".format(
-                    mission_author=report.operator,
-                    receipt=report.receipt)
+                 "No reçu: #{receipt}."
+                 .format(mission_author=report.operator,
+                         receipt=report.receipt)
             )
 
     return report, ("Le rapport de mission TT "
                     "a été enregistré. "
-                    "Le No de reçu est #{receipt}.".format(
-                     receipt=report.receipt))
+                    "Le No de reçu est #{receipt}."
+                    .format(receipt=report.receipt))

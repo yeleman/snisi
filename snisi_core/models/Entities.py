@@ -26,7 +26,8 @@ _s = lambda l: sorted(l, key=lambda e: e.name)
 class OnlyActiveManager(models.Manager):
 
     def get_query_set(self):
-        return super(OnlyActiveManager, self).get_query_set().filter(active=True)
+        return super(OnlyActiveManager, self).get_query_set().filter(
+            active=True)
 
 
 @implements_to_string
@@ -82,7 +83,8 @@ class Entity(MPTTModel):
     def get_or_none(cls, slug, type_slug=None):
         try:
             if type_slug is not None:
-                return cls.objects.get(slug=slug, type__slug=type_slug).casted()
+                return cls.objects.get(slug=slug,
+                                       type__slug=type_slug).casted()
             return cls.objects.get(slug=slug).casted()
         except cls.DoesNotExist:
             return None
@@ -165,7 +167,8 @@ class Entity(MPTTModel):
             if HealthEntity.objects.filter(slug=ident).count():
                 continue
             return ident
-        raise Exception("Unable to compute a free identifier for HealthEntity.")
+        raise Exception("Unable to compute a free identifier "
+                        "for HealthEntity.")
 
     def all_children(self, health_only=False):
         if self.type.slug == 'health_center':
@@ -205,18 +208,19 @@ class Entity(MPTTModel):
         return getattr(self, 'get_{}s'.format(type_slug), lambda: [])()
 
     def get_natural_children(self, skip_slugs=[]):
-        _clean_list = lambda l, sl: [slug for slug in l if not slug in sl]
+        _clean_list = lambda l, sl: [slug for slug in l if slug not in sl]
 
         lineage = _clean_list(['country',
                                'health_region', 'health_district',
-                               'health_area', ['health_center', 'vfq']], skip_slugs)
+                               'health_area',
+                               ['health_center', 'vfq']], skip_slugs)
 
         admin_lineage = _clean_list(['country',
                                      'region', 'cercle',
                                      'commune', 'vfq'], skip_slugs)
 
         ts = self.casted().type.slug
-        if not ts in lineage and not ts in admin_lineage:
+        if ts not in lineage and ts not in admin_lineage:
             return []
 
         if ts in lineage:
@@ -234,22 +238,23 @@ class Entity(MPTTModel):
         return _s(children)
 
     def get_natural_parent(self, skip_slugs=[]):
-        _clean_list = lambda l, sl: [slug for slug in l if not slug in sl]
+        _clean_list = lambda l, sl: [slug for slug in l if slug not in sl]
 
         lineage = _clean_list(['country',
                                'health_region', 'health_district',
-                               'health_area', 'health_center', 'vfq'], skip_slugs)
+                               'health_area',
+                               'health_center', 'vfq'], skip_slugs)
 
         admin_lineage = _clean_list(['country',
                                      'region', 'cercle',
                                      'commune', 'vfq'], skip_slugs)
 
         ts = self.casted().type.slug
-        if not ts in lineage and not ts in admin_lineage:
+        if ts not in lineage and ts not in admin_lineage:
             return None
 
         if ts in lineage:
-            parent_ts = lineage[lineage.index(ts) -1 ]
+            parent_ts = lineage[lineage.index(ts) - 1]
         else:
             parent_ts = admin_lineage[admin_lineage.index(ts) - 1]
 
@@ -330,7 +335,8 @@ class Entity(MPTTModel):
         if t == 'health_region':
             return _s([self.casted()])
         root = Entity.onlyactive.get(level=0)
-        return _s([e.casted() for e in root.get_children().filter(active=True, type__slug='health_region')])
+        return _s([e.casted() for e in root.get_children().filter(
+            active=True, type__slug='health_region')])
 
     def get_health_districts(self):
         # country
@@ -340,7 +346,8 @@ class Entity(MPTTModel):
             return _s([e for region in self.get_health_regions()
                        for e in region.get_health_districts()])
         if t == 'health_region':
-            return _s([e.casted() for e in self.get_children().filter(active=True, type__slug='health_district')])
+            return _s([e.casted() for e in self.get_children().filter(
+                active=True, type__slug='health_district')])
         if t == 'health_district':
             return _s([self.casted()])
         return []
@@ -352,9 +359,10 @@ class Entity(MPTTModel):
         t = self.type.slug
         if t in ('country', 'health_region'):
             return _s([e for district in self.get_health_districts()
-                           for e in district.get_health_areas()])
+                       for e in district.get_health_areas()])
         if t == 'health_district':
-            return _s([e.casted() for e in self.get_children().filter(active=True, type__slug='health_area')])
+            return _s([e.casted() for e in self.get_children().filter(
+                active=True, type__slug='health_area')])
         return []
 
     def get_health_centers(self):
@@ -364,7 +372,7 @@ class Entity(MPTTModel):
         t = self.type.slug
         if t in ('country', 'health_region', 'health_district'):
             return _s([e for area in self.get_health_areas()
-                           for e in area.get_health_centers()])
+                       for e in area.get_health_centers()])
         if t == 'health_area':
             return _s([self.casted().main_entity])
         if t == 'health_center':
@@ -425,13 +433,16 @@ class Entity(MPTTModel):
         if t in ('country', 'region', 'cercle'):
             return _s([e for area in self.get_communes()
                        for e in area.get_vfqs()])
-        if t in ('country', 'health_region', 'health_district', 'health_center'):
+        if t in ('country', 'health_region',
+                 'health_district', 'health_center'):
             return _s([e for area in self.get_health_areas()
                        for e in area.get_vfqs()])
         if t == 'health_area':
-            return _s(list(AdministrativeEntity.onlyactive.filter(type__slug='vfq', health_entity__slug=self.slug)))
+            return _s(list(AdministrativeEntity.onlyactive.filter(
+                type__slug='vfq', health_entity__slug=self.slug)))
         if t == 'commune':
-            return _s([e.casted() for e in self.get_children().filter(active=True, type__slug='vfq')])
+            return _s([e.casted() for e in self.get_children().filter(
+                active=True, type__slug='vfq')])
         if t == 'vfq':
             return _s([self.casted()])
         return []
@@ -447,7 +458,8 @@ class Entity(MPTTModel):
             return _s([e for area in self.get_cercles()
                        for e in area.get_communes()])
         if t == 'cercle':
-            return _s([e.casted() for e in self.get_children().filter(active=True, type__slug='commune')])
+            return _s([e.casted() for e in self.get_children().filter(
+                active=True, type__slug='commune')])
         if t == 'commune':
             return _s([self.casted()])
         return []
@@ -463,7 +475,8 @@ class Entity(MPTTModel):
             return _s([e for area in self.get_regions()
                        for e in area.get_cercles()])
         if t == 'region':
-            return _s([e.casted() for e in self.get_children().filter(active=True, type__slug='cercle')])
+            return _s([e.casted() for e in self.get_children().filter(
+                active=True, type__slug='cercle')])
         if t == 'cercle':
             return _s([self.casted()])
         return []
@@ -473,8 +486,8 @@ class Entity(MPTTModel):
         if t == 'region':
             return _s([self.casted()])
         root = Entity.onlyactive.get(level=0)
-        return _s([e.casted() for e in root.get_children().filter(active=True, type__slug='region')])
-
+        return _s([e.casted() for e in root.get_children().filter(
+            active=True, type__slug='region')])
 
     def get_descendants_of(self, type_slug=None,
                            include_self=False,

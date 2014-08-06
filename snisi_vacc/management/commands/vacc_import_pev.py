@@ -16,7 +16,6 @@ from xlrd import open_workbook
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_vacc import PROJECT_BRAND
 from snisi_vacc.integrity import create_pev_report, VaccCovRIntegrityChecker
 from snisi_tools.datetime import DEBUG_change_system_date
 
@@ -51,6 +50,7 @@ speriod = MonthPeriod.from_url_str("01-2013")
 eperiod = MonthPeriod.from_url_str("12-2013")
 periods = MonthPeriod.all_from(speriod, eperiod)
 
+
 def cl_slug(slug):
     return unicode(slug).strip().upper()[1:]
 
@@ -67,8 +67,10 @@ def get_entities_values_for(wb, vaccin, period):
 
     col = periods.index(period) + col_start
 
-    return {cl_slug(sheet.cell_value(row, 0)): cl_value(sheet.cell_value(row, col))
-            for row in range(row_start, row_start + 42) if cl_slug(sheet.cell_value(row, 0))}
+    return {cl_slug(sheet.cell_value(row, 0)):
+            cl_value(sheet.cell_value(row, col))
+            for row in range(row_start, row_start + 42)
+            if cl_slug(sheet.cell_value(row, 0))}
 
 
 class Command(BaseCommand):
@@ -84,8 +86,10 @@ class Command(BaseCommand):
 
         autobot = Provider.get_or_none('autobot')
 
-        if not options.get('folder', None) or not os.path.exists(options.get('folder')):
-            logger.error("Unable to access data folder {}".format(options.get('folder')))
+        if not options.get('folder', None) \
+                or not os.path.exists(options.get('folder')):
+            logger.error("Unable to access data folder {}"
+                         .format(options.get('folder')))
             return
 
         for district in districts.values():
@@ -103,17 +107,17 @@ class Command(BaseCommand):
                 bcg_data = get_entities_values_for(wb, 'bcg', period)
                 penta3_data = get_entities_values_for(wb, 'penta3', period)
                 measles_data = get_entities_values_for(wb, 'measles', period)
-                abandonment_data = get_entities_values_for(wb, 'abandonment', period)
+                abandonment_data = get_entities_values_for(
+                    wb, 'abandonment', period)
 
                 slug_data = {}
                 for slug, bcg in bcg_data.items():
-                    slug_data.update({slug: {'bcg': bcg,
-                                             'penta3': penta3_data.get(slug),
-                                             'measles': measles_data.get(slug),
-                                             'abandonment': abandonment_data.get(slug),
-                                             'entity': Entity.get_or_none(slug)
-                                             }
-                                    })
+                    slug_data.update({slug: {
+                        'bcg': bcg,
+                        'penta3': penta3_data.get(slug),
+                        'measles': measles_data.get(slug),
+                        'abandonment': abandonment_data.get(slug),
+                        'entity': Entity.get_or_none(slug)}})
 
                 for data in slug_data.values():
 
@@ -121,7 +125,9 @@ class Command(BaseCommand):
                         continue
 
                     completed_on = period.start_on + datetime.timedelta(days=2)
-                    DEBUG_change_system_date(period.following().start_on + datetime.timedelta(days=2), True)
+                    DEBUG_change_system_date(
+                        period.following().start_on
+                        + datetime.timedelta(days=2), True)
 
                     entity = data['entity']
 
@@ -136,7 +142,8 @@ class Command(BaseCommand):
                     checker.set('bcg_coverage', data.get('bcg'))
                     checker.set('polio3_coverage', data.get('penta3'))
                     checker.set('measles_coverage', data.get('measles'))
-                    checker.set('polio3_abandonment_rate', data.get('abandonment'))
+                    checker.set('polio3_abandonment_rate',
+                                data.get('abandonment'))
 
                     checker.check()
 

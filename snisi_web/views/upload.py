@@ -32,7 +32,7 @@ class ExcelUploadForm(forms.Form):
 
     reportcls = forms.ChoiceField(label="Type de rapport",
                                   choices=available_form_upload_types())
-    report_file  = forms.FileField(label="Fichier du rapport")
+    report_file = forms.FileField(label="Fichier du rapport")
 
     def get_form_cls(self):
         return import_path(self.cleaned_data.get('reportcls'))
@@ -54,7 +54,8 @@ def upload_form(request, template_name='upload_form.html'):
             excel_form.set('submitter', request.user)
             excel_form.check()
             if excel_form.is_valid():
-                report, text_message = excel_form.create_report(provider=request.user)
+                report, text_message = excel_form.create_report(
+                    provider=request.user)
                 if report:
                     messages.success(request, text_message)
                     return redirect('upload')

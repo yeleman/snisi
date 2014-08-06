@@ -45,7 +45,8 @@ def phonenumber_isint(number):
 def phonenumber_indicator(number):
     ''' extract indicator from number or "" '''
     for indic in ALL_COUNTRY_CODES:
-        if number.startswith("%{}".format(indic)) or number.startswith("+{}".format(indic)):
+        if number.startswith("%{}".format(indic)) \
+                or number.startswith("+{}".format(indic)):
             return str(indic)
     return ""
 
@@ -104,7 +105,8 @@ def normalized_phonenumber(number_text):
 def operator_from_malinumber(number, default=settings.FOREIGN):
     ''' ORANGE or MALITEL based on the number prefix '''
 
-    indicator, clean_number = phonenumber_cleaned(normalized_phonenumber(number))
+    indicator, clean_number = phonenumber_cleaned(
+        normalized_phonenumber(number))
     if indicator is not None and indicator != str(COUNTRY_PREFIX):
         return default
 

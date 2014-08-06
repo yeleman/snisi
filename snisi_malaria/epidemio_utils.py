@@ -22,7 +22,8 @@ def get_threshold(entity, from_year, month):
 
     def _notified_cases_from_matrix(entity, year, month):
         try:
-            return past_notified_cases.get(entity.slug).get(str(year))[month - 1]
+            return past_notified_cases.get(entity.slug) \
+                .get(str(year))[month - 1]
         except:
             return None
 
@@ -42,10 +43,11 @@ def get_threshold(entity, from_year, month):
         return nc
 
     # list of the last 5 years
-    years = range(from_year -5, from_year)
+    years = range(from_year - 5, from_year)
 
     # a year:value dict of values for this month over the last 5 years
-    month_values = {year: _notified_cases(entity, year, month) for year in years}
+    month_values = {year: _notified_cases(entity, year, month)
+                    for year in years}
 
     # missing one data. can't calculate the threshold
     if None in month_values.values():
@@ -54,7 +56,7 @@ def get_threshold(entity, from_year, month):
     # average notified cases for this month over last 5 years
     average = numpy.mean([month_values.get(year) for year in years])
 
-    # deviation between notifiec cases and the average for that month over 5 years
+    # deviation between notif cases and the average for that month over 5 years
     deviations = [month_values.get(year) - average for year in years]
 
     # square roots of notified cases for that month over last 5 years
@@ -67,4 +69,3 @@ def get_threshold(entity, from_year, month):
     sqrt_of_fourth = numpy.sqrt(numpy.absolute(fourth_of_squares_sum))
 
     return int(average + (2 * sqrt_of_fourth))
-
