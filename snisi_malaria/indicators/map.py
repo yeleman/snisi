@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
 from snisi_core.models.Projects import Cluster
+from snisi_core.indicators import DataIsMissing, DataNotExpected
 from snisi_malaria.models import MalariaR
 from snisi_malaria.indicators.common import MalariaIndicator
 from snisi_core.models.Reporting import ExpectedReporting
@@ -43,7 +44,10 @@ class NumberOfHealthUnitsInTime(MalariaIndicator):
                 entity__slug__in=descendants_slugs(cluster, self.entity.slug))
                 if r.ON_TIME])
             return self.report.nb_source_reports_arrived_on_time
-        return None
+        elif self.expected:
+            raise DataIsMissing
+        else:
+            raise DataNotExpected
 
 
 class NumberOfHealthUnitsReporting(MalariaIndicator):
@@ -62,7 +66,10 @@ class NumberOfHealthUnitsReporting(MalariaIndicator):
                 entity__slug__in=descendants_slugs(cluster,
                                                    self.entity.slug)).count()
             return self.report.nb_source_reports_arrived
-        return None
+        elif self.expected:
+            raise DataIsMissing
+        else:
+            raise DataNotExpected
 
 
 class PercentageOfHealthUnitsReportingInTime(MalariaIndicator):

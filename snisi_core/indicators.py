@@ -173,7 +173,6 @@ class Indicator(object):
             import traceback
             print(e)
             print("".join(traceback.format_exc()))
-
             raise e
 
         self._computed = True
