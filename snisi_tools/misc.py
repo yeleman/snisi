@@ -133,7 +133,7 @@ def get_snisi_apps():
     return [app for app in settings.INSTALLED_APPS
             if app.startswith('snisi_')
             and app not in ('snisi_core', 'snisi_sms',
-                            'snisi_web', 'snisi_tools')]
+                            'snisi_web', 'snisi_tools', 'snisi_maint')]
 
 
 def get_from_snisi_apps(path, fusion_list=False):
@@ -147,7 +147,4 @@ def get_from_snisi_apps(path, fusion_list=False):
     if not fusion_list:
         return values
 
-    merged_values = []
-    for _ in range(0, len(values)):
-        merged_values += values.pop()
-    return list(set(merged_values))
+    return [value for domain_list in values for value in domain_list]

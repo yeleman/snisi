@@ -93,16 +93,14 @@ INSTALLED_APPS = (
     'snisi_web',
     'snisi_tools',
     'snisi_sms',
-    'snisi_malaria',
+    'snisi_maint',
 
+    'snisi_malaria',
     'snisi_trachoma',
     'snisi_reprohealth',
     # 'snisi_bednets',
     'snisi_epidemiology',
-
     'snisi_vacc',
-
-    'snisi_maint',
 )
 
 MIDDLEWARE_CLASSES = (
