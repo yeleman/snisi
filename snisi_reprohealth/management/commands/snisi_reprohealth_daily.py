@@ -36,7 +36,8 @@ class Command(BaseCommand):
 
         category_matrix = {
             'end_of_reporting_period': end_of_reporting_period_notifications,
-            'end_of_extended_reporting_period': end_of_extended_reporting_period_notifications,
+            'end_of_extended_reporting_period':
+                end_of_extended_reporting_period_notifications,
             'end_of_district_period': generate_district_reports,
             'end_of_region_period': generate_region_country_reports,
         }

@@ -286,12 +286,6 @@ class RoutineIntegrityInterface(object):
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district
         # and the district have the Entity as child HC
-        print(provider.role.slug)
-        print(provider.location.type.slug)
-        print(entity)
-        print(entity in provider.location.get_health_centers())
-        print(entity.get_health_district())
-        print(provider.location.get_health_centers())
         if provider.role.slug not in ('dtc', 'charge_sis') \
             or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
             or (provider.role.slug == 'charge_sis' and

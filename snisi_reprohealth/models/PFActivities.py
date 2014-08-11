@@ -495,6 +495,55 @@ class AggPFActivitiesR(PFActivitiesRIface,
         related_name='direct_source_agg_%(class)s_reports',
         symmetrical=False)
 
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+        if indiv_sources is None and entity.type.slug == 'health_district':
+            indiv_sources = cls.INDIVIDUAL_CLS \
+                               .objects \
+                               .filter(period=period,
+                                       entity__in=entity.get_health_centers())
+        return super(AggPFActivitiesR, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
+
+    @classmethod
+    def start_aggreagted(cls, *args, **kwargs):
+        rfdict = {}
+        for field in ('completion_ok', 'integrity_ok',
+                      'arrival_ok', 'auto_validate'):
+            if field in kwargs:
+                rfdict.update({field: kwargs.get(field)})
+                del kwargs[field]
+        report = cls.start_report(*args, **kwargs)
+        report.fill_blank()
+
+        # only agg
+        if hasattr(report, 'set_reporting_status_fields'):
+            report.set_reporting_status_fields(**rfdict)
+        if hasattr(report, 'update_expected_reportings_number'):
+            report.update_expected_reportings_number()
+        return report
+
+    @classmethod
+    def update_instance_with_indiv(cls, report, instance):
+        for field in instance.data_fields():
+            if field.endswith('_observation'):
+                continue
+            setattr(report, field,
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
+
+    @classmethod
+    def update_instance_with_agg(cls, report, instance):
+        for field in cls.data_fields():
+            setattr(report, field,
+                    (getattr(report, field, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
+
 receiver(pre_save, sender=AggPFActivitiesR)(pre_save_report)
 receiver(post_save, sender=AggPFActivitiesR)(post_save_report)
 

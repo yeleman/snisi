@@ -871,16 +871,17 @@ class AggEpidemioMalariaR(EpidemioMalariaRIFace,
 
         if indiv_sources is None:
             if entity.type.slug in ('health_center', 'health_district'):
-                indiv_sources = cls.INDIVIDUAL_CLS.objects \
-                                   .filter(period__start_on__gte=period.start_on,
-                                           period__end_on__lte=period.end_on) \
-                                   .filter(entity__in=entity.get_health_centers())
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
 
         if agg_sources is None and not len(indiv_sources):
-            agg_sources = cls.objects \
-                             .filter(period__start_on__gte=period.start_on,
-                                     period__end_on__lte=period.end_on) \
-                             .filter(entity__in=entity.get_natural_children(skip_slugs=['health_area']))
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
 
         return super(AggEpidemioMalariaR, cls).create_from(
             period=period,

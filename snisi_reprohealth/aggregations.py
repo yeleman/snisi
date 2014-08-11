@@ -59,6 +59,11 @@ def generate_district_reports(period,
     # loop on all districts
     for district in districts:
 
+        # skip if exists
+        if AggPFActivitiesR.objects.filter(
+                period=period, entity=district).count():
+            continue
+
         # ack expected
         exp = ExpectedReporting.objects.filter(
             report_class=rclass,
@@ -99,7 +104,7 @@ def generate_district_reports(period,
             report=agg,
             validation_period=region_validation_period,
             validating_entity=district.get_health_region(),
-            validating_role=None)
+            validating_role=charge_sis)
 
         # send notification to Region
         # for recipient in Provider.active.filter(
