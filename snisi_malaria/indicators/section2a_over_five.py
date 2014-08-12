@@ -79,7 +79,7 @@ class NbreTestesOverFive(IndicatorTable):
         hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
                                  "Cas suspects"))),
         ref_is(0)(gen_shortcut('o5_total_tested_malaria_cases',
-                               "Cas testés")),
+                               "% Cas testés")),
     ]
 
 
@@ -99,7 +99,7 @@ class NbreConfirmesOverFive(IndicatorTable):
         hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
                                  "Cas suspects"))),
         ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases',
-                               "Cas confirmés")),
+                               "% Cas confirmés")),
     ]
 
 
@@ -122,9 +122,9 @@ class NbreCasSimplesGravesOverFive(IndicatorTable):
         hide(gen_shortcut('o5_total_confirmed_malaria_cases',
                           "Cas confirmés")),
         ref_is(0)(gen_shortcut('o5_total_simple_malaria_cases',
-                               "Cas simples")),
+                               "% Cas simples")),
         ref_is(0)(gen_shortcut('o5_total_severe_malaria_cases',
-                               "Cas graves")),
+                               "% Cas graves")),
     ]
 
 

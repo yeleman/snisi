@@ -69,7 +69,7 @@ class NbreTestesPregnantWomen(IndicatorTable):
     INDICATORS = [
         hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
                                  "Cas suspects"))),
-        ref_is(0)(gen_shortcut('pw_total_tested_malaria_cases', "Cas testés")),
+        ref_is(0)(gen_shortcut('pw_total_tested_malaria_cases', "% Cas testés")),
     ]
 
 
@@ -89,7 +89,7 @@ class NbreConfirmesPregnantWomen(IndicatorTable):
         hide(is_ref(gen_shortcut('pw_total_suspected_malaria_cases',
                                  "Cas suspects"))),
         ref_is(0)(gen_shortcut('pw_total_confirmed_malaria_cases',
-                               "Cas confirmés")),
+                               "% Cas confirmés")),
     ]
 
 
