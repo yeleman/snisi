@@ -36,7 +36,7 @@ class EvolutionCPN1SP1SP2(IndicatorTable):
 
     name = "Figure 30"
     title = " "
-    caption = "Evolution de la SP1 et SP2 chez les femmes enceintes"
+    caption = "Evolution du nombre de SP1 et SP2 chez les femmes enceintes"
     rendering_type = 'graph'
     graph_type = 'spline'
 
