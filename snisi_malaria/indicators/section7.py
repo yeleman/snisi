@@ -78,6 +78,7 @@ class EvolutionStructuresRuptureStockProduitPaluGrave(IndicatorTable):
               " en produits de prise en charge des cas de paludisme grave"
     rendering_type = 'graph'
     graph_type = 'spline'
+    as_percentage = True
 
     INDICATORS = [
         hide(is_ref(NumberOfHealthUnitsReporting)),

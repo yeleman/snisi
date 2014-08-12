@@ -78,6 +78,7 @@ class EvolutionPourcentageStructuresRuptureStockMILDTDRSP(IndicatorTable):
                "stock en MILD, TDR, SP")
     rendering_type = 'graph'
     graph_type = 'spline'
+    as_percentage = True
 
     INDICATORS = [
         hide(is_ref(NumberOfHealthUnitsReporting)),

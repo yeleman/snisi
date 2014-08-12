@@ -73,7 +73,7 @@ class EvolutionPourcentageStructuresRuptureStockCTA(IndicatorTable):
                "stock en CTA (Nourrisson-Enfant, Adolescent, Adulte")
     rendering_type = 'graph'
     graph_type = 'spline'
-    with_percentage = True
+    as_percentage = True
 
     INDICATORS = [
         hide(is_ref(NumberOfHealthUnitsReporting)),
