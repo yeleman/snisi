@@ -48,7 +48,7 @@ class ProportionHospitalisations(IndicatorTable):
             "Total des hospitalisations (toutes causes confondues)"))),
         ref_is(0)(gen_shortcut(
             'pw_total_malaria_inpatient',
-            "Total des hospitalisations pour paludisme grave")),
+            "% des hospitalisations pour paludisme grave")),
     ]
 
 

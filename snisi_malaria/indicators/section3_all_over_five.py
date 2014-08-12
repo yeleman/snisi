@@ -26,6 +26,10 @@ class AllOverFiveMalariaInpatient(MalariaIndicator):
                     self.report.pw_total_malaria_inpatient])
 
 
+class AllOverFiveMalariaInpatientFigure(AllOverFiveMalariaInpatient):
+    name = "% des hospitalisations pour paludisme grave"
+
+
 class HospitalisationPlusde5ansTous(IndicatorTable):
     """ Tableau: Hospitalisation  chez les 5 ans et plus"""
     name = "Tableau 4.1c"
@@ -56,7 +60,7 @@ class ProportionHospitalisations(IndicatorTable):
 
     INDICATORS = [
         hide(is_ref(AllOverFiveInpatientAllCauses)),
-        ref_is(0)(AllOverFiveMalariaInpatient),
+        ref_is(0)(AllOverFiveMalariaInpatientFigure),
     ]
 
 
