@@ -54,13 +54,13 @@ class GrapheConfirmes(IndicatorTable):
             "Total des cas suspects testés chez les moins de 5 ans"))),
         ref_is(0)(gen_shortcut(
             'u5_total_confirmed_malaria_cases',
-            "Total des cas confirmés chez les moins de 5 ans")),
+            "% des cas confirmés chez les moins de 5 ans")),
         hide(is_ref(gen_shortcut(
             'total_tested_malaria_cases',
             "Total des cas suspects testés chez Tout âge confond"))),
         ref_is(2)(gen_shortcut(
             'total_confirmed_malaria_cases',
-            "Total des cas confirmés chez Tout âge confond")),
+            "% des cas confirmés chez Tout âge confond")),
     ]
 
 
@@ -202,9 +202,9 @@ class GrapheCasTestesConfirmes(IndicatorTable):
         hide(is_ref(gen_shortcut('total_suspected_malaria_cases',
                                  "Total des cas suspects"))),
         ref_is(0)(gen_shortcut('total_tested_malaria_cases',
-                               "Total des cas suspects testés")),
+                               "% des cas suspects testés")),
         ref_is(1)(gen_shortcut('total_confirmed_malaria_cases',
-                               "Cas confirmés")),
+                               "% Cas confirmés")),
     ]
 
 

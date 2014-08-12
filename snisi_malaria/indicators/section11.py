@@ -47,9 +47,9 @@ class GrapheCTAMILD(CTAMILD):
         hide(is_ref(gen_shortcut('pw_total_anc1',
                                  "femmes enceintes reçues en CPN"))),
         ref_is(0)(gen_shortcut('pw_total_distributed_bednets',
-                               "MILD distribuées aux femmes enceintes")),
+                               "% MILD distribuées aux femmes enceintes")),
         ref_is(0)(gen_shortcut('pw_total_sp2',
-                               "femmes enceintes ayant reçu la SP2"))
+                               "% femmes enceintes ayant reçu la SP2"))
     ]
 
 
