@@ -1520,18 +1520,16 @@ function getMalariaMapManager(options) {
             manager.getCurrentDistrict().properties.children.features[index] = feature;
         });
 
-        // manager.hc_layer = L.mapbox.featureLayer(manager.getCurrentDistrict().properties.children);
         manager.hc_layer = L.mapbox.featureLayer();
 
-        if (!manager.static_map) {
-        	manager.hc_layer.on('layeradd', function(e) {
-                var marker = e.layer;
-                var feature = marker.feature;
-				marker.setIcon(L.icon(feature.properties.icon));
-            });
+		manager.hc_layer.on('layeradd', function(e) {
+            var marker = e.layer;
+            var feature = marker.feature;
+			marker.setIcon(L.icon(feature.properties.icon));
+        });
 
+        if (!manager.static_map) {
             manager.hc_layer.on('mouseover', function(e) {
-            	console.log('mouseover');
                 e.layer.openPopup();
             });
             manager.hc_layer.on('mouseout', function(e) {
@@ -1590,13 +1588,9 @@ function getMalariaMapManager(options) {
             var color = manager.getColorFor(manager.getDataForSlug(feature.properties.slug), true);
             var tileUrl = manager.getTileUrl(feature.properties.slug, manager.getColorName(color));
             // var tileBorderUrl = manager.getTileUrl(feature.properties.slug, 'BORDER');
-            var tileNamesUrl = manager.getTileUrl(feature.properties.slug, 'NAMES');
+            // var tileNamesUrl = manager.getTileUrl(feature.properties.slug, 'NAMES');
 
             manager.districts_layers[getKey(feature, 'shape')] = L.tileLayer(tileUrl, {opacity: manager.tileOpacity}).addTo(manager.map);
-            // manager.districts_layers[getKey(feature, 'border')] = L.tileLayer(tileBorderUrl, {opacity: 0});
-            // borderLayers.push(manager.districts_layers[getKey(feature, 'border')]);
-            // manager.districts_layers[getKey(feature, 'names')] = L.tileLayer(tileNamesUrl, {opacity: 1}).addTo(manager.map);
-            // manager.districts_layers[getKey(feature, 'names-url')] = tileNamesUrl;
         });
 
         // add region district names if on a static map and not a district
@@ -1620,37 +1614,37 @@ function getMalariaMapManager(options) {
                 }
 
                 layer.on('mouseover', function(event) {
-                        var layer = event.target;
-                        manager.infobox.update(layer.feature);
+                    var layer = event.target;
+                    manager.infobox.update(layer.feature);
 
-                        // switch border opacity ON
-                        // manager.districts_layers[getKey(layer.feature, 'border')].setOpacity(1);
-                        manager.districts_layers[feature.properties.slug+'-shape'].setOpacity(1);
+                    // switch border opacity ON
+                    // manager.districts_layers[getKey(layer.feature, 'border')].setOpacity(1);
+                    manager.districts_layers[feature.properties.slug+'-shape'].setOpacity(1);
 
 
-                        if (!L.Browser.ie && !L.Browser.opera) {
-                            if (manager.isDistrict()) {
-                                try {
-                                    manager.hc_layer.bringToFront();
-                                } catch (e) {}
-                            }
+                    if (!L.Browser.ie && !L.Browser.opera) {
+                        if (manager.isDistrict()) {
+                            try {
+                                manager.hc_layer.bringToFront();
+                            } catch (e) {}
                         }
+                    }
                 });
 
                 layer.on('mouseout', function(event) {
-                        // swicth border off
-                        //manager.districts_layers[getKey(layer.feature, 'border')].setOpacity(0);
+                    // swicth border off
+                    //manager.districts_layers[getKey(layer.feature, 'border')].setOpacity(0);
 
-                        manager.districts_layers[feature.properties.slug+'-shape'].setOpacity(manager.tileOpacity);
+                    manager.districts_layers[feature.properties.slug+'-shape'].setOpacity(manager.tileOpacity);
 
-                        if (!manager.isDistrict()) {
-                            manager.infobox.update();
-                        }
+                    if (!manager.isDistrict()) {
+                        manager.infobox.update();
+                    }
                 });
 
                 layer.on('click', function (e) {
-                        manager.current_district = e.target.feature.properties.slug;
-                        manager.parametersChanged();
+                    manager.current_district = e.target.feature.properties.slug;
+                    manager.parametersChanged();
                 });
 
             }
@@ -1663,7 +1657,6 @@ function getMalariaMapManager(options) {
         this.region_borders_layer = this.getTileLayer(this.current_region, 'BORDERS', true);
         // as well as district names if not on a district
         if (!manager.isDistrict()) {
-        	console.log("NOT ON A DISTRICT YO. Adding names from region")
         	this.region_names_layer = this.getTileLayer(this.current_region, 'NAMES', true);
         }
 
@@ -1678,7 +1671,7 @@ function getMalariaMapManager(options) {
 				var southWest = L.latLng(parseFloat(bs[1]), parseFloat(bs[0])),
 	    			northEast = L.latLng(parseFloat(bs[3]), parseFloat(bs[2])),
 	    			bounds = L.latLngBounds(southWest, northEast);
-	    	} catch (e) { var bounds = null; }
+	    	} catch (e) { console.log(e.toString()); console.log(data); var bounds = null; }
 			payload = {
     			"bounds": bounds,
     			"minZoom": parseInt(data['minzoom']),
@@ -1698,15 +1691,27 @@ function getMalariaMapManager(options) {
         return this.tiles_url_tmpl.replace('#SLUG#', feature_slug).replace('#SUFFIX#', suffix);
     };
 
+    MalariaMapManager.prototype.removeLayer = function(layer) {
+    	if (this.map.hasLayer(layer)) {
+    		this.map.removeLayer(layer);
+    	}
+
+    };
+
     MalariaMapManager.prototype.removeDistrictLayer = function() {
         this.indicator_data = {};
         this._removeLegend();
-        if (this.map.hasLayer(this.districts_layer)) {
-            this.map.removeLayer(this.districts_layer);
-        }
-        if (this.map.hasLayer(this.district_border)) {
-        	this.map.removeLayer(this.district_border);
-        }
+        
+        this.removeLayer(this.districts_layer);
+    	this.removeLayer(this.district_border);
+    	this.removeLayer(this.region_names_layer);
+
+    	if (this.districts_layers) {
+    		var manager = this;
+	        $.each(this.districts_layers, function (index, layer) {
+	        	manager.removeLayer(layer);
+	        });
+	    }
     };
 
     MalariaMapManager.prototype.loadIndicator = function() {
@@ -1727,8 +1732,6 @@ function getMalariaMapManager(options) {
         this.startLoadingUI();
         var manager = this;
         $.post(this.indicator_api_url, jsdata, function (data) {
-            console.log("received JSON");
-
             try {
                 if (manager.isDistrict()) {
                     manager.displayHCLayer(data);
@@ -1807,6 +1810,7 @@ function getMalariaMapManager(options) {
         this.current_district = null;
         this.current_indicator = null;
         this.current_indicator_name = null;
+
         this._updateTitle();
         this.infobox.update();
         this._updateIndicatorSelect();
@@ -2211,7 +2215,6 @@ function getMapExporter(options) {
                     var currentHcLegendTextY = hcLegendY + hcLegendPaddingTop;
                     var oddColor = "rgba(33,33,33, 0.1)";
                     var evenColor = "rgba(255,255,255, 0.8)";
-                    console.log("currentHcLegendTextY: "+ currentHcLegendTextY);
                     $('.hc_line').each(function (index, spanElem) {
                         var span = $(spanElem);
                         var width = cssvalue(span, 'width');
