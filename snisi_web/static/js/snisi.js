@@ -895,8 +895,8 @@ function getMalariaMapManager(options) {
         this.color_yes = '#889f37'; //'#28ff00';
         this.color_no = '#4d2c74'; //'#ff1500';
         this.colors = options.colors || ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
-        this.tiles_url_tmpl = 'http://tiles.sante.gov.ml/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
-        this.base_layer_url = 'http://tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
+        this.tiles_url_tmpl = 'http://{s}.tiles.sante.gov.ml/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.base_layer_url = 'http://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
         this.marker_url_tmpl = 'http://tiles.sante.gov.ml/markers/#FILE#';
         this.initial_latitude = 14.0512;
         this.initial_longitude = -5.519499;
