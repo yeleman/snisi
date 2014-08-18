@@ -881,7 +881,7 @@ function getMalariaMapManager(options) {
     MalariaMapManager.prototype.getTileLayer = function (feature_slug, suffix, add_to_map) {
     	var burl = this.getTileUrl(feature_slug, suffix);
     	var payload = {};
-		$.ajax(burl.replace('{}.', '').replace('{z}/{x}/{y}.png', 'metadata.json'), {async:false, }).success(function (data){
+		$.ajax(burl.replace('{s}.', '').replace('{z}/{x}/{y}.png', 'metadata.json'), {async:false, }).success(function (data){
 			try {
 				var bs = data['bounds'].split(',');
 				var southWest = L.latLng(parseFloat(bs[1]), parseFloat(bs[0])),
