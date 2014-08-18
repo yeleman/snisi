@@ -1703,6 +1703,7 @@ function getMalariaMapManager(options) {
         this.removeLayer(this.districts_layer);
     	this.removeLayer(this.district_border);
     	this.removeLayer(this.region_names_layer);
+    	this.removeLayer(this.region_borders_layer);
 
     	if (this.districts_layers) {
     		var manager = this;
