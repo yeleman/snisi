@@ -52,12 +52,12 @@ module.exports = function(grunt) {
             dest: 'css/map_alone_all.css'
         },
         mapcss: {
-            src: ['assets/mapbox.1.6.1.css', 'assets/leaflet.label.0.2.1.css'],
+            src: ['assets/mapbox.2.0.1.css', 'assets/leaflet.label.0.2.1.css'],
             dest: 'css/map.css'
         },
         mapjs: {
             options: {stripBanners: false},
-            src: ['assets/mapbox.1.6.1.js', 'assets/leaflet.label.0.2.1.js',
+            src: ['assets/mapbox.2.0.1.js', 'assets/leaflet.label.0.2.1.js',
                   'assets/leaflet.spin.js', 'assets/simple_statistics.js',
                   'assets/spin.min.js', 'assets/d3.v3.min.js',
                   'assets/leaflet-image.js'],
