@@ -903,7 +903,7 @@ function getMalariaMapManager(options) {
         this.initial_zoom = 8;
         this.mapID = options.mapID || "map";
         this.indicator_api_url = options.indicator_api_url || "/api/malaria/indicators";
-        this.geojson_api_url = options.geojson_api_url || "/api/malaria/geojson";
+        this.geojson_api_url = options.geojson_api_url || "/api/malaria/geojson/";
 
         this.map = null; // Mapbox map object
         this.scale = null; // Mapbox scale control
