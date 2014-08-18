@@ -59,6 +59,6 @@ all_indicators["{{ section}}"] = [{% for indicator in indicators %}{slug: "{{ in
 {% endfor %}
 
 mapManager = getMalariaMapManager({load: true, indicators: all_indicators});
-mapExporter = getMapExporter({mapManager: mapManager, auto_click:false});
+mapExporter = getMapExporter({mapManager: mapManager, auto_click:true});
 
 {% endblock %}
