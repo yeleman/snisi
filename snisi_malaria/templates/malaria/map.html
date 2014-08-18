@@ -13,19 +13,19 @@
         <div  class="pure-form pure-form-stacked">
             <fieldset>
                 <legend>Sélection indicateur</legend>
-                <select name="indicators" id="indicator_section_select"></select>
-                <select name="indicators" id="indicator_select"></select>
+                <select name="indicators" id="indicator_section_select" disabled="disabled"></select>
+                <select name="indicators" id="indicator_select" disabled="disabled"></select>
 
             </fieldset>
             <fieldset>
                 <legend>Sélection période</legend>
-                <select name="year" id="year_select">
+                <select name="year" id="year_select" disabled="disabled">
                     {% for year in years %}
                         <option value="{{ year }}">{{ year }}</option>
                     {% endfor %}
                 </select>
 
-                <select name="month" id="month_select">
+                <select name="month" id="month_select" disabled="disabled">
                     {% for month_num, month_name in months.items %}
                         <option value="{{ month_num }}">{{ month_name }}</option>
                     {% endfor %}
@@ -33,7 +33,7 @@
             </fieldset>
             <fieldset>
                 <legend>Sélection district</legend>
-                <select name="health_district" id="health_district_select">
+                <select name="health_district" id="health_district_select" disabled="disabled">
                 </select>
 
             </fieldset>

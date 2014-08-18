@@ -464,6 +464,32 @@ function getMalariaMapManager(options) {
         });
     };
 
+    MalariaMapManager.prototype.disableUI = function () {
+    	var elems = [this.district_select,
+        			 this.indicator_section_select,
+        			 this.indicator_select,
+        			 this.year_select,
+        			 this.month_select];
+        $.each(elems, function (index, elem) {
+        	if (elem) {
+        		elem.attr('disabled', 'disabled');
+        	}
+        });
+    }
+
+    MalariaMapManager.prototype.enableUI = function () {
+    	var elems = [this.district_select,
+        			 this.indicator_section_select,
+        			 this.indicator_select,
+        			 this.year_select,
+        			 this.month_select];
+        $.each(elems, function (index, elem) {
+        	if (elem) {
+        		elem.removeAttr('disabled');
+        	}
+        });
+    }
+
     MalariaMapManager.prototype._updateDistrictSelect = function () {
         this.district_select.children("option[value="+ this.current_district +"]").attr('selected', 'selected');
     };
@@ -624,11 +650,15 @@ function getMalariaMapManager(options) {
     };
 
     MalariaMapManager.prototype.startLoadingUI = function() {
+    	console.log("startLoadingUI");
+    	this.disableUI();
         this.map.spin(true);
     };
 
     MalariaMapManager.prototype.stopLoadingUI = function() {
+    	console.log("stopLoadingUI");
         this.map.spin(false);
+        this.enableUI();
     };
 
 	MalariaMapManager.prototype.maxLengthHcName = function() {
@@ -1023,6 +1053,7 @@ function getMalariaMapManager(options) {
 
     MalariaMapManager.prototype.switchRegion = function(region_slug) {
         console.log("switching to region " + region_slug);
+        this.startLoadingUI();
         this.current_region = region_slug;
         this.current_district = null;
         this.current_indicator = null;
@@ -1050,6 +1081,7 @@ function getMalariaMapManager(options) {
             this.displayDistrictLayer({});
         }
         this.updateZoom();
+        this.stopLoadingUI();
     };
 
 
