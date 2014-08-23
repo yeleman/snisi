@@ -21,13 +21,13 @@
                 <legend>Sélection période</legend>
                 <select name="year" id="year_select" disabled="disabled">
                     {% for year in years %}
-                        <option value="{{ year }}">{{ year }}</option>
+                        <option value="{{ year }}"{% if year = default_year %}selected="selected"{% endif %}>{{ year }}</option>
                     {% endfor %}
                 </select>
 
                 <select name="month" id="month_select" disabled="disabled">
                     {% for month_num, month_name in months.items %}
-                        <option value="{{ month_num }}">{{ month_name }}</option>
+                        <option value="{{ month_num }}"{% if month_num = default_month %}selected="selected"{% endif %}>{{ month_name }}</option>
                     {% endfor %}
                 </select>
             </fieldset>

@@ -51,7 +51,9 @@ def malaria_map(request, template_name='malaria/map.html'):
 
     context.update({'years': sorted(years),
                     'months': months,
-                    'indicators': get_geo_indicators()})
+                    'indicators': get_geo_indicators(),
+                    'default_year': periods[-1].middle().year,
+                    'default_month': periods[-1].middle().month})
 
     return render(request, template_name, context)
 
