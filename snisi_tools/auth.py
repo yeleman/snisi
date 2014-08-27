@@ -11,6 +11,10 @@ import re
 
 from py3compat import text_type
 from snisi_core.models.Providers import Provider
+from snisi_core.models.Roles import Role
+from snisi_core.models.Entities import Entity
+from snisi_core.models.Numbers import PhoneNumber, PhoneNumberType
+from snisi_tools.numbers import normalized_phonenumber
 
 logger = logging.getLogger(__name__)
 
@@ -125,3 +129,43 @@ def can_view_entity(provider, entity):
 
     # slow but safer check
     return entity in provider.location.get_types(entity.type.slug)
+
+
+def create_provider(first_name, last_name,
+                    role, location,
+                    email=None,
+                    middle_name=None, maiden_name=None,
+                    gender=Provider.UNKNOWN,
+                    title=None, position=None,
+                    phone_numbers=[]):
+    gender = gender if gender in Provider.GENDERS.keys() \
+        else Provider.UNKNOWN
+    p = Provider.objects.create(
+        username=username_from_name(first_name, last_name),
+        gender=gender,
+        title=title,
+        first_name=first_name or None,
+        last_name=last_name,
+        middle_name=middle_name,
+        maiden_name=maiden_name,
+        position=position,
+        role=Role.get_or_none(role),
+        location=Entity.get_or_none(location),
+        email=email)
+    passwd = random_password(True)
+    p.set_password(passwd)
+    p.save()
+    for number in phone_numbers:
+        if isinstance(number, (list, tuple)) and len(number) > 1:
+            flotte = bool(number[1])
+            number = number[0]
+        else:
+            flotte = False
+        npn = normalized_phonenumber(number)
+        pnt = PhoneNumberType.from_number(npn, is_flotte=flotte)
+        PhoneNumber.objects.create(
+            identity=npn,
+            category=pnt,
+            priority=pnt.priority,
+            provider=p)
+    return p, passwd

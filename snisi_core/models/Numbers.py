@@ -9,7 +9,8 @@ from py3compat import implements_to_string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from snisi_tools.numbers import operator_from_malinumber, phonenumber_repr
+from snisi_tools.numbers import (operator_from_malinumber,
+                                 phonenumber_repr, normalized_phonenumber)
 
 
 @implements_to_string
@@ -35,6 +36,13 @@ class PhoneNumberType(models.Model):
             return cls.objects.get(slug=slug)
         except cls.DoesNotExist:
             return None
+
+    @classmethod
+    def from_number(cls, number, is_flotte):
+        npn = normalized_phonenumber(number)
+        operator = operator_from_malinumber(npn)
+        slug = 'flotte' if is_flotte else 'perso_{}'.format(operator)
+        return cls.get_or_none(slug)
 
 
 @implements_to_string
