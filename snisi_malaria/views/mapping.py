@@ -97,7 +97,7 @@ def get_indicator_data(request, domain_slug='malaria'):
 def geojson_data(request, cluster_slug=None, parent_slug='mali'):
 
     mali = Entity.objects.get(slug='mali')
-    cluster = Cluster.get_or_none(cluster_slug)
+    cluster = Cluster.get_or_none(cluster_slug, True)
 
     featureColTemplate = {
         "type": "FeatureCollection",

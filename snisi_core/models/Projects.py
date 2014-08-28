@@ -114,9 +114,10 @@ class Cluster(models.Model):
         pass
 
     @classmethod
-    def get_or_none(cls, slug):
+    def get_or_none(cls, slug, inactive_too=False):
+        qs = cls.objects if inactive_too else cls.active
         try:
-            return cls.active.get(slug=slug)
+            return qs.get(slug=slug)
         except cls.DoesNotExist:
             return None
 
