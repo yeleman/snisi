@@ -374,7 +374,8 @@ class PFActivitiesRIface(models.Model):
                 'amount': self.financial_amount_for(field),
                 'revenue': self.get("{}_revenue".format(field)),
             }
-        return [_df(field) for field in self.financial_fields(include_subs=False)]
+        return [_df(field)
+                for field in self.financial_fields(include_subs=False)]
 
     @property
     def financial_amount_total(self):
