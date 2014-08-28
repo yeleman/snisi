@@ -195,7 +195,7 @@ class RoutineIntegrityInterface(object):
 
     def chk_period_is_not_future(self):
         # default period is MonthPeriod from year/month
-        if not self.get('period'):
+        if not self.has('period') or not self.get('period'):
             period = MonthPeriod.find_create_from(year=self.get('year'),
                                                   month=self.get('month'))
             self.set('period', period)
