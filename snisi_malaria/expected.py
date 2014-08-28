@@ -114,12 +114,19 @@ def create_expected_for(period):
                 e.save()
 
         # create DayPeriod for Epidemiology for each day of the month
-        nb_day_in_month = ((period.end_on - period.start_on)
+        # WARN: Weekly Epi applies to the current month and not the previous
+        # one.
+        # In routine, we expect at month N to receive month N-1.
+        # In weekly, we expect at month N to receive weeks of month N
+        # this function being called with N-1 period as parameter
+        # we need to jump into the future N (so N+1) to create expecteds
+        next_period = period.following()
+        nb_day_in_month = ((next_period.end_on - next_period.start_on)
                            + datetime.timedelta(seconds=1)).days
         for day in range(1, nb_day_in_month + 1):
             day_period = DayPeriod.find_create_from(
-                year=period.start_on.year,
-                month=period.start_on.month, day=day)
+                year=next_period.start_on.year,
+                month=next_period.start_on.month, day=day)
 
             logger.debug("Generating DayPeriod Expecteds for {}"
                          .format(day_period))
@@ -173,12 +180,13 @@ def create_expected_for(period):
         ])
         for weekcls in week_slug_matrix.keys():
             logger.debug("\n\n-------")
-            logger.debug(period)
-            logger.debug(period.start_on)
-            logger.debug(period.end_on)
+            logger.debug(next_period)
+            logger.debug(next_period.start_on)
+            logger.debug(next_period.end_on)
             try:
                 week_period = weekcls.find_create_from(
-                    year=period.start_on.year, month=period.start_on.month)
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
             except ValueError:
                 continue
             if week_period is None:
@@ -189,14 +197,16 @@ def create_expected_for(period):
 
             reporting_period = week_repperiod_matrix.get(weekcls) \
                 .find_create_from(
-                    year=period.start_on.year, month=period.start_on.month)
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
             logger.debug(reporting_period)
             logger.debug(reporting_period.start_on)
             logger.debug(reporting_period.end_on)
 
             extended_reporting_period = week_extrepperiod_matrix \
                 .get(weekcls).find_create_from(
-                    year=period.start_on.year, month=period.start_on.month)
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
             logger.debug(extended_reporting_period)
             logger.debug(extended_reporting_period.start_on)
             logger.debug(extended_reporting_period.end_on)
