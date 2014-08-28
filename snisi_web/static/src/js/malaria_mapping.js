@@ -124,7 +124,7 @@ function getMalariaMapManager(options) {
         this.geojson_api_url = options.geojson_api_url || "/api/malaria/geojson/";
 
         // Internet Explorer needs tiles on same domain.
-        if ($('html').is('.ie10, .ie11, .ie12')) {
+        if (navigator.userAgent.match(/Trident/)) {
         	this.tiles_url_tmpl = this.tiles_url_tmpl
         		.replace('{s}.tiles.sante.gov.ml/', 'snisi.sante.gov.ml/tiles/');
         	this.base_layer_url = this.base_layer_url
