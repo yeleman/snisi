@@ -13,3 +13,4 @@ circus.ini
 *.sqlite3
 protected/*
 */cache/*.json
+static
