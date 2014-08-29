@@ -1284,6 +1284,11 @@ function getMalariaMapManager(options) {
         this.district_select.children("option[value="+ this.current_district +"]").attr('selected', 'selected');
     };
 
+    MalariaMapManager.prototype.exitDistrict = function () {
+        this.district_select.children("option[value='-1']").attr('selected', 'selected');
+        this.district_select.change();
+    };
+
     MalariaMapManager.prototype._updateIndicatorSelect = function () {
         var indicator_val = this.current_indicator || '-1';
         this.indicator_select.children("option[value="+ indicator_val +"]").attr('selected', 'selected');
@@ -1300,6 +1305,11 @@ function getMalariaMapManager(options) {
         this._updateDistrictSelect();
 
         if (this.isIndicator()) {
+        	var has_data = (Object.keys(this.indicator_data_hc).length) > 0;
+	        if (has_data && this.isDistrict()) {
+	        	this.exitDistrict();
+	        	return;
+	        }
             this.loadIndicator();
         } else {
             this.switchRegion(this.current_region);
