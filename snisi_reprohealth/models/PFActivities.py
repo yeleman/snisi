@@ -321,7 +321,7 @@ class PFActivitiesRIface(models.Model):
                 'label': self.label_for_field(field),
                 'quantity': self.get(field),
                 'cap_factor': self.CAP_DATA.get(field)[0],
-                'cap_value': self.cap_for(field)
+                'cap_value': self.cap_for(field),
             }
         return [_fd(field) for field in self.cap_fields()]
 
@@ -369,6 +369,9 @@ class PFActivitiesRIface(models.Model):
             return {
                 'slug': field,
                 'label': self.label_for_field(field),
+                'qty_slug': "{}_qty".format(field),
+                'price_slug': "{}_price".format(field),
+                'revenue_slug': "{}_revenue".format(field),
                 'qty': self.get("{}_qty".format(field)),
                 'price': self.get("{}_price".format(field)),
                 'amount': self.financial_amount_for(field),
@@ -398,6 +401,11 @@ class PFActivitiesRIface(models.Model):
             return {
                 'slug': field,
                 'label': self.label_for_field(field),
+                'initial_slug': "{}_initial".format(field),
+                'used_slug': "{}_used".format(field),
+                'lost_slug': "{}_lost".format(field),
+                'received_slug': "{}_received".format(field),
+                'observation_slug': "{}_observation".format(field),
                 'initial': self.get("{}_initial".format(field)),
                 'received': self.get("{}_received".format(field)),
                 'used': self.get("{}_used".format(field)),

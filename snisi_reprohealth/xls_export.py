@@ -27,8 +27,11 @@ def pfa_activities_as_xls(report):
     template = open_workbook(TEMPLATE, formatting_info=True)
     copy_week_b = copy(template)
     sh_services = copy_week_b.get_sheet(0)
+    sh_services.portrait = False
     sh_financial = copy_week_b.get_sheet(1)
+    sh_financial.portrait = False
     sh_stocks = copy_week_b.get_sheet(2)
+    sh_stocks.portrait = False
     del(template)
 
     xls_update_value_only(sh_services, 4, 1,  report.entity.name)

@@ -40,7 +40,7 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
     report_class = reportcls_pf
     validating_role = validating_role
 
-    def check_pf_data(self):
+    def check_pf_data(self, **options):
         # ### Provided Services
         # (new_clients + previous_clients) = (under25_visits + over25_visits)
         new_and_old_clients = self.get('new_clients') \
@@ -153,8 +153,8 @@ class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                  blocking=True, field=field)
 
     def _check(self, **options):
-        self.check_pf_data()
-        self.chk_period_is_not_future()
-        self.chk_entity_exists()
-        self.chk_expected_arrival()
-        self.chk_provider_permission()
+        self.check_pf_data(**options)
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)

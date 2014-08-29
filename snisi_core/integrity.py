@@ -43,7 +43,7 @@ class ReportingDataException(Exception):
 
         super(ReportingDataException, self).__init__(message or short_message)
 
-    def add_extras(self, extras):
+    def add_extras(self, **extras):
         self.extras.update(extras)
 
     def render(self, short=False):
@@ -115,13 +115,13 @@ class ReportingDataHolder(object):
         if blocking:
             raise missing
 
-    def _read(self):
+    def _read(self, **options):
         # override if you need to read data from a stream or anything.
         # useful for Excel Forms.
         pass
 
-    def read(self):
-        self._read()
+    def read(self, **options):
+        self._read(**options)
 
     def _check(self, **options):
         # overrride to add checks here
@@ -193,7 +193,7 @@ class RoutineIntegrityInterface(object):
     report_class = None
     validating_role = None
 
-    def chk_period_is_not_future(self):
+    def chk_period_is_not_future(self, **options):
         # default period is MonthPeriod from year/month
         if not self.has('period') or not self.get('period'):
             period = MonthPeriod.find_create_from(year=self.get('year'),
@@ -206,18 +206,19 @@ class RoutineIntegrityInterface(object):
                            "le futur".format(period=self.get('period')),
                            blocking=True, field='month')
 
-    def chk_entity_exists(self):
-        entity = Entity.get_or_none(self.get('hc', '').upper(),
-                                    type_slug='health_center')
+    def chk_entity_exists(self, **options):
+        if not self.has('entity') or not self.get('entity'):
+            entity = Entity.get_or_none(self.get('hc', '').upper(),
+                                        type_slug='health_center')
+            self.set('entity', entity)
 
-        if entity is None:
+        if self.get('entity') is None \
+                or not isinstance(self.get('entity'), Entity):
             self.add_error("Aucun CSCOM ne correspond au code {}"
                            .format(self.get('hc')),
                            field='hc', blocking=True)
 
-        self.set('entity', entity)
-
-    def chk_expected_arrival(self):
+    def chk_expected_arrival(self, **options):
 
         period = self.get('period')
         entity = self.get('entity')
@@ -238,6 +239,11 @@ class RoutineIntegrityInterface(object):
                            "{entity} pour {period}"
                            .format(entity=entity, period=period),
                            blocking=True)
+
+        # Following checks only applies to incoming new reports.
+        # reports being edited already exists and should have arrived in time.
+        if options.get('is_edition'):
+            return
 
         if expected_reporting.satisfied:
             self.add_error("Le rapport de routine attendu à "
@@ -268,10 +274,10 @@ class RoutineIntegrityInterface(object):
                            blocking=True, field='period')
         self.set('arrival_status', arrival_status)
 
-    def chk_provider_permission(self):
+    def chk_provider_permission(self, **options):
         # check permission to submit report.
         provider = self.get('submitter')
-        entity = self.get('entity')
+        entity = Entity.get_or_none(self.get('entity').slug)
 
         if provider.username == 'autobot':
             return
@@ -280,6 +286,12 @@ class RoutineIntegrityInterface(object):
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district
         # and the district have the Entity as child HC
+        print(provider.role.slug)
+        print(provider.location.type.slug)
+        print(entity)
+        print(entity in provider.location.get_health_centers())
+        print(entity.get_health_district())
+        print(provider.location.get_health_centers())
         if provider.role.slug not in ('dtc', 'charge_sis') \
             or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
             or (provider.role.slug == 'charge_sis' and

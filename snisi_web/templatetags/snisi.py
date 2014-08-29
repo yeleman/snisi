@@ -264,3 +264,16 @@ def provider_additional_numbers(provider):
 @register.filter(name='to_jstimestamp')
 def convert_to_jstimestamp(adate):
     return to_jstimestamp(adate)
+
+
+@register.filter(name='igetter')
+def igetter(obj, key):
+    try:
+        return obj[key]
+    except IndexError:
+        return None
+
+
+@register.filter(name='getter')
+def getter(obj, key):
+    return getattr(obj, key, None)

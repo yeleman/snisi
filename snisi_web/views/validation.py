@@ -72,7 +72,12 @@ def edit_report(request, report_receipt, **kwargs):
                 for field in report.data_fields():
                     data_checker.set(field, form.cleaned_data.get(field))
 
-                data_checker.check()
+                # period & entity from report
+                data_checker.set('period', report.period)
+                data_checker.set('entity', report.entity)
+                data_checker.set('submitter', request.user)
+
+                data_checker.check(is_edition=True)
                 if data_checker.is_valid():
 
                     new_report = form.save(commit=False)

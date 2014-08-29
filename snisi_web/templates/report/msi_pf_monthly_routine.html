@@ -74,7 +74,9 @@
     <th>Quantité consomée</th>
     <th>Quantité perdue</th>
     <th>Quantité restante</th>
+    {% if report.report_class.slug = 'msi_pf_monthly_routine' %}
     <th>Observations</th>
+    {% endif %}
 </tr>
 {% for line in report.stock_data %}
 <tr>
@@ -84,7 +86,9 @@
     <td>{{ line.used|numberformat }}</td>
     <td>{{ line.lost|numberformat }}</td>
     <td>{{ line.balance|numberformat }}</td>
+    {% if report.report_class.slug = 'msi_pf_monthly_routine' %}
     <td align="left">{{ line.observation|default_if_none:"-" }}</td>
+   	{% endif %}
 </tr>
 {% endfor %}
 </table>
