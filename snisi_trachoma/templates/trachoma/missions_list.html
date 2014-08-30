@@ -53,9 +53,9 @@ registerEntityPeriodsFilter({
     url_tmpl: "{% url 'trachoma_missions' %}/<entity>/<period_str>"
 });
 
-var report_edit_url = "{% url 'trachoma_mission' 'AAAA' %}";
-$('.missions-list tr[data-receipt!=""]').on('click', function (e) {
-    window.location = $(this).find('a.mission-url').attr('href');
-});
+//var report_edit_url = "{% url 'trachoma_mission' 'AAAA' %}";
+//$('.missions-list tr[data-receipt!=""]').on('click', function (e) {
+//    window.location = $(this).find('a.mission-url').attr('href');
+//});
 
 {% endblock %}

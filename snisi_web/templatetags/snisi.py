@@ -11,6 +11,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.template.defaulttags import CsrfTokenNode
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
 
 from snisi_tools.numbers import phonenumber_repr
 from snisi_tools.datetime import to_jstimestamp
@@ -277,3 +278,8 @@ def igetter(obj, key):
 @register.filter(name='getter')
 def getter(obj, key):
     return getattr(obj, key, None)
+
+
+@register.filter(name='yesno')
+def yesno(val):
+    return _("Yes") if bool(val) else _("No")

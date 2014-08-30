@@ -63,7 +63,7 @@
     <td>{{ visit.refusal_female }}</td>
     <td>{{ visit.recidivism_male }}</td>
     <td>{{ visit.recidivism_female }}</td>
-    <td>{{ visit.community_assistance }}</td>
+    <td>{{ visit.community_assistance|yesno }}</td>
     <td>{{ visit.arrived_on }}</td>
     <td>{{ visit.left_on }}</td>
 </tr>
