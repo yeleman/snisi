@@ -977,11 +977,18 @@ function getMalariaMapManager(options) {
             month: this.month,
             month_name: this.month_name,
             geodata: this.geodata,
+            indicators: this.indicators,
             indicator_data: this.indicator_data,
             indicator_data_hc: this.indicator_data_hc,
-            indicator_scale: this.indicator_scale
+            indicator_scale: this.indicator_scale,
             // districts_layer: this.districts_layer,
-            // hc_layer: this.hc_layer
+            // hc_layer: this.hc_layer,
+            
+			colors: this.colors,
+			tiles_url_tmpl: this.tiles_url_tmpl,
+			dont_use_default_tiles: this.dont_use_default_tiles,
+			indicator_api_url: this.indicator_api_url,
+			geojson_api_url: this.geojson_api_url
         };
     };
 
