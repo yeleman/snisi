@@ -26,7 +26,7 @@ def epidemiology_handler(message):
     return False
 
 KEYWORDS = {
-    'mado': epidemiology_handler,
+    'smir': epidemiology_handler,
 }
 
 

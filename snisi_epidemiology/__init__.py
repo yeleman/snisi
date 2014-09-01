@@ -10,7 +10,7 @@ from snisi_core.models.Projects import Domain
 
 logger = logging.getLogger(__name__)
 
-PROJECT_BRAND = "MADO"
+PROJECT_BRAND = "SMIR"
 DOMAIN_SLUG = 'epidomiology'
 
 # epidemio is based on traditional weeks

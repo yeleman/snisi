@@ -129,5 +129,5 @@ class EpidemiologyExcelForm(EpidemiologyRIntegrityChecker, ExcelForm):
                                   data_source=self.filepath)
 
 EXPORTED_FORMS = [
-    (class_str(EpidemiologyExcelForm), "Routine Hebdomadaire MADOS")
+    (class_str(EpidemiologyExcelForm), "Routine Hebdomadaire SMIR")
 ]
