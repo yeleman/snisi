@@ -895,9 +895,11 @@ function getMalariaMapManager(options) {
         this.color_yes = '#889f37'; //'#28ff00';
         this.color_no = '#4d2c74'; //'#ff1500';
         this.colors = options.colors || ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
-        this.tiles_url_tmpl = 'http://{s}.tiles.sante.gov.ml/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.tiles_url_tmpl = options.tiles_url_tmpl || 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.default_tiles_url_tmpl = 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
         this.base_layer_url = 'http://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
         this.marker_url_tmpl = 'http://tiles.sante.gov.ml/markers/#FILE#';
+        this.dont_use_default_tiles = options.dont_use_default_tiles || false;
         this.initial_latitude = 14.0512;
         this.initial_longitude = -5.519499;
         this.initial_zoom = 8;
@@ -1734,7 +1736,12 @@ function getMalariaMapManager(options) {
 	};
 
     MalariaMapManager.prototype.getTileUrl = function (feature_slug, suffix) {
-        return this.tiles_url_tmpl.replace('#SLUG#', feature_slug).replace('#SUFFIX#', suffix);
+    	var turl = this.default_tiles_url_tmpl;
+    	if (this.dont_use_default_tiles ||
+    		[0, 1, 2, 3].indexOf(suffix) != -1) {
+	    		turl = this.tiles_url_tmpl;
+	    }
+        return turl.replace('#SLUG#', feature_slug).replace('#SUFFIX#', suffix);
     };
 
     MalariaMapManager.prototype.removeLayer = function(layer) {

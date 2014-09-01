@@ -67,7 +67,8 @@ mapManager = getMalariaMapManager({
     indicator_scale: scale,
     indicators: all_indicators,
     indicator_api_url: "{% url 'domain_indicator' domain_slug='vaccination' %}",
-    geojson_api_url: "{% url 'api_geojson_data' cluster_slug='vacc_coverage_routine' %}"
+    geojson_api_url: "{% url 'api_geojson_data' cluster_slug='vacc_coverage_routine' %}",
+    //tiles_url_tmpl: "http://{s}.tiles.sante.gov.ml/r2g/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png"
     });
 // colors: ["#f03b20", "#fec44f", "#99d8c9", "#2ca25f"]
 
