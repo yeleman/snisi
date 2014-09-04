@@ -22,4 +22,11 @@
 <li>{{ event.access }} du {{ event.from }} à {{ event.to|default_if_none:"maintenant" }}.</li>
 {% endfor %}
 </ol>
+
+<h3>Dernières actions</h3>
+<ul>
+	{% for action in provider.last_actions %}
+	<li>{{ action.label|capfirst }} le {{ action.on }}</li>
+	{% endfor %}
+</ul>
 {% endblock %}

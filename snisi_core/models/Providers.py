@@ -12,10 +12,13 @@ from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, UserManager,
                                         PermissionsMixin)
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.core.mail import send_mail
 from django.core import validators
 from django.utils import timezone
 
+from snisi_core.signals import logged_in, logged_out
+from snisi_core.models.Actions import Action
 from snisi_core.models.common import ActiveManager
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
@@ -300,7 +303,7 @@ class Provider(AbstractBaseUser, PermissionsMixin):
                 return False
 
         if self.role() is None:
-                return False
+            return False
 
         if perm_slug in [p.slug for p in self.role().permissions.all()]:
             return True
@@ -309,5 +312,34 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     def is_central(self):
         return self.location.level == 0
 
+    def last_actions(self):
+        return Action.last_for(self, limit=10)
+
 
 reversion.register(Provider)
+
+
+# catch django signals and emit ours
+def on_django_logged_in(sender, user, **kwargs):
+    logged_in.send(sender=Provider.__class__,
+                   provider=Provider.get_or_none(user.username,
+                                                 with_inactive=True))
+user_logged_in.connect(on_django_logged_in)
+
+
+def on_django_logged_out(sender, user, **kwargs):
+    logged_out.send(sender=Provider.__class__,
+                    provider=Provider.get_or_none(user.username,
+                                                  with_inactive=True))
+user_logged_out.connect(on_django_logged_out)
+
+
+# handle logged_in/out signals
+def on_logged_in(sender, provider, **kwargs):
+    Action.record('logged_in', provider, Action.WEB)
+logged_in.connect(on_logged_in)
+
+
+def on_logged_out(sender, provider, **kwargs):
+    Action.record('logged_out', provider, Action.WEB)
+logged_out.connect(on_logged_out)
