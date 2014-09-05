@@ -52,7 +52,7 @@ class PFActivitiesRIface(models.Model):
         'tubal_ligations': ("10", 10),
         'intrauterine_devices': ("4,6", 4.6),
         'injections': ("1/4", 1/4),
-        'pills': ("1/5", 1/5),
+        'pills': ("1/15", 1/15),
         'male_condoms': ("1/120", 1/120),
         'female_condoms': ("1/120", 1/120),
         'emergency_controls': ("1/120", 1/120),
