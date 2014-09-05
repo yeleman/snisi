@@ -59,6 +59,11 @@ class TTBacklogVillageR(SNISIReport):
     def visit_duration(self):
         return self.left_on - self.arrived_on
 
+    def visit_nb_days(self):
+        td = self.visit_duration()
+        extra = 1 if td.seconds else 0
+        return (td.days + extra) or 1
+
 receiver(pre_save, sender=TTBacklogVillageR)(pre_save_report)
 receiver(post_save, sender=TTBacklogVillageR)(post_save_report)
 reversion.register(TTBacklogVillageR, follow=['snisireport_ptr'])
@@ -149,6 +154,7 @@ class TTBacklogMissionR(SNISIReport):
     nb_days_max = models.PositiveIntegerField(default=0)
     nb_days_mean = models.FloatField(default=0)
     nb_days_median = models.FloatField(default=0)
+    nb_days_total = models.PositiveIntegerField(default=0)
 
     def total_for_field(self, field):
         values = []
@@ -196,12 +202,13 @@ class TTBacklogMissionR(SNISIReport):
         if report.community_assistance:
             self.nb_community_assistance += 1
 
-        durations = [r.visit_duration().days
+        durations = [r.visit_nb_days()
                      for r in self.village_reports.all()]
         self.nb_days_min = numpy.min(durations)
         self.nb_days_max = numpy.max(durations)
         self.nb_days_mean = numpy.mean(durations)
         self.nb_days_median = numpy.median(durations)
+        self.nb_days_total += numpy.sum(durations)
 
         with reversion.create_revision():
             self.save()
@@ -252,6 +259,7 @@ class AggTTBacklogMissionR(PeriodicAggregatedReportInterface, SNISIReport):
     nb_days_max = models.PositiveIntegerField()
     nb_days_avg = models.FloatField()
     nb_days_med = models.FloatField()
+    nb_days_total = models.PositiveIntegerField()
 
 receiver(pre_save, sender=AggTTBacklogMissionR)(pre_save_report)
 receiver(post_save, sender=AggTTBacklogMissionR)(post_save_report)
