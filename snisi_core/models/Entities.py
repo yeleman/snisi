@@ -23,11 +23,10 @@ logger = logging.getLogger(__name__)
 _s = lambda l: sorted(l, key=lambda e: e.name)
 
 
-class OnlyActiveManager(models.Manager):
+class EntityQuerySet(models.QuerySet):
 
-    def get_query_set(self):
-        return super(OnlyActiveManager, self).get_query_set().filter(
-            active=True)
+    def active(self):
+        return self.filter(active=True)
 
 
 @implements_to_string
@@ -74,7 +73,7 @@ class Entity(MPTTModel):
     active_changed_on = models.DateTimeField(default=timezone.now)
 
     objects = TreeManager()
-    onlyactive = OnlyActiveManager()
+    manager = EntityQuerySet.as_manager()
 
     def __str__(self):
         return self.name
@@ -172,7 +171,8 @@ class Entity(MPTTModel):
 
     def all_children(self, health_only=False):
         if self.type.slug == 'health_center':
-            qs = AdministrativeEntity.onlyactive.filter(health_entity=self)
+            qs = AdministrativeEntity.manager.active().filter(
+                health_entity=self)
         else:
             qs = self.children.all()
             if health_only:
@@ -328,13 +328,13 @@ class Entity(MPTTModel):
         return None
 
     def get_country(self):
-        return Entity.onlyactive.get(type__slug='country')
+        return Entity.manager.active().get(type__slug='country')
 
     def get_health_regions(self):
         t = self.type.slug
         if t == 'health_region':
             return _s([self.casted()])
-        root = Entity.onlyactive.get(level=0)
+        root = Entity.manager.active().get(level=0)
         return _s([e.casted() for e in root.get_children().filter(
             active=True, type__slug='health_region')])
 
@@ -438,7 +438,7 @@ class Entity(MPTTModel):
             return _s([e for area in self.get_health_areas()
                        for e in area.get_vfqs()])
         if t == 'health_area':
-            return _s(list(AdministrativeEntity.onlyactive.filter(
+            return _s(list(AdministrativeEntity.manager.active().filter(
                 type__slug='vfq', health_entity__slug=self.slug)))
         if t == 'commune':
             return _s([e.casted() for e in self.get_children().filter(
@@ -485,7 +485,7 @@ class Entity(MPTTModel):
         t = self.type.slug
         if t == 'region':
             return _s([self.casted()])
-        root = Entity.onlyactive.get(level=0)
+        root = Entity.manager.active().get(level=0)
         return _s([e.casted() for e in root.get_children().filter(
             active=True, type__slug='region')])
 
@@ -541,7 +541,7 @@ class HealthEntity(Entity):
     main_entity = models.ForeignKey('self', blank=True, null=True)
 
     objects = TreeManager()
-    onlyactive = OnlyActiveManager()
+    manager = EntityQuerySet.as_manager()
 
 
 class AdministrativeEntity(Entity):
@@ -556,6 +556,6 @@ class AdministrativeEntity(Entity):
     main_entity_distance = models.FloatField(blank=True, null=True)
 
     objects = TreeManager()
-    onlyactive = OnlyActiveManager()
+    manager = EntityQuerySet.as_manager()
 
 reversion.register(Entity)

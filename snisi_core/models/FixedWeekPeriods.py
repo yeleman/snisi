@@ -14,33 +14,33 @@ from snisi_tools.datetime import normalize_date
 
 
 class FixedMonthFirstWeekManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFirstWeekManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFirstWeek.FWP)
+            .get_queryset().filter(period_type=FixedMonthFirstWeek.FWP)
 
 
 class FixedMonthSecondWeekManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthSecondWeekManager, self) \
-            .get_query_set().filter(period_type=FixedMonthSecondWeek.FWP)
+            .get_queryset().filter(period_type=FixedMonthSecondWeek.FWP)
 
 
 class FixedMonthThirdWeekManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthThirdWeekManager, self) \
-            .get_query_set().filter(period_type=FixedMonthThirdWeek.FWP)
+            .get_queryset().filter(period_type=FixedMonthThirdWeek.FWP)
 
 
 class FixedMonthFourthWeekManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFourthWeekManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFourthWeek.FWP)
+            .get_queryset().filter(period_type=FixedMonthFourthWeek.FWP)
 
 
 class FixedMonthFifthWeekManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFifthWeekManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFifthWeek.FWP)
+            .get_queryset().filter(period_type=FixedMonthFifthWeek.FWP)
 
 
 class FixedMonthFirstWeek(MonthPeriod):

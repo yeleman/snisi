@@ -50,6 +50,7 @@ class TTBacklogVillageR(SNISIReport):
     recidivism_female = models.PositiveIntegerField(
         verbose_name="Récidives Femmes")
     community_assistance = models.BooleanField(
+        default=False,
         verbose_name="Assistance relais")
     arrived_on = models.DateField(
         verbose_name="Date d'arrivée")
@@ -244,7 +245,7 @@ class AggTTBacklogMissionR(PeriodicAggregatedReportInterface, SNISIReport):
         verbose_name="Récidives Hommes")
     recidivism_female = models.PositiveIntegerField(
         verbose_name="Récidives Femmes")
-    community_assistance = models.BooleanField(
+    community_assistance = models.PositiveIntegerField(
         verbose_name="Assistance relais")
 
     village_reports = models.ManyToManyField(

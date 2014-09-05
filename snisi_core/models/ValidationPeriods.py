@@ -14,9 +14,9 @@ from snisi_tools.datetime import normalize_date
 
 
 class DistrictValidationManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(DistrictValidationManager, self) \
-            .get_query_set().filter(
+            .get_queryset().filter(
                 period_type=DefaultDistrictValidationPeriod.DVP)
 
 
@@ -65,9 +65,9 @@ class DefaultDistrictValidationPeriod(MonthPeriod):
 
 
 class RegionValidationManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(RegionValidationManager, self) \
-            .get_query_set().filter(
+            .get_queryset().filter(
                 period_type=DefaultRegionValidationPeriod.RVP)
 
 
@@ -116,9 +116,9 @@ class DefaultRegionValidationPeriod(MonthPeriod):
 
 
 class NationalValidationManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(NationalValidationManager, self) \
-            .get_query_set().filter(
+            .get_queryset().filter(
                 period_type=DefaultNationalValidationPeriod.NVP)
 
 

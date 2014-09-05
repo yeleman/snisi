@@ -16,14 +16,13 @@ from snisi_reprohealth import get_domain
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE = os.path.join(get_domain().module_path,
-                        'fixtures', 'template-hebdo-MADO.xls')
-
 
 def epid_activities_as_xls(report):
     """ Export les données d'un rapport epidemiologique en xls """
 
-    template = open_workbook(TEMPLATE, formatting_info=True)
+    template_path = os.path.join(get_domain().module_path,
+                                 'fixtures', 'template-hebdo-MADO.xls')
+    template = open_workbook(template_path, formatting_info=True)
     copy_week_book = copy(template)
     sh_report = copy_week_book.get_sheet(0)
     del(template)

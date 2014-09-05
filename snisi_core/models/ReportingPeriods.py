@@ -11,7 +11,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.dateformat import format as date_format
 
-from snisi_core.models.Periods import MonthPeriod, ONE_MICROSECOND_DELTA, ONE_MINUTE_DELTA
+from snisi_core.models.Periods import (MonthPeriod,
+                                       ONE_MICROSECOND_DELTA, ONE_MINUTE_DELTA)
 from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthSecondWeek,
                                                 FixedMonthThirdWeek,
@@ -23,9 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 class MonthlyReportingManager(models.Manager):
-    def get_query_set(self):
-        return super(MonthlyReportingManager, self) \
-            .get_query_set().filter(period_type=DefaultMonthlyReportingPeriod.DMRP)
+    def get_queryset(self):
+        return super(MonthlyReportingManager, self).get_queryset().filter(
+            period_type=DefaultMonthlyReportingPeriod.DMRP)
 
 
 class DefaultMonthlyReportingPeriod(MonthPeriod):
@@ -53,7 +54,7 @@ class DefaultMonthlyReportingPeriod(MonthPeriod):
         return date_format(self.middle(), ugettext("1-5 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("1st to 5th F Y"))
 
     @classmethod
@@ -73,9 +74,10 @@ class DefaultMonthlyReportingPeriod(MonthPeriod):
 
 
 class MonthlyExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(MonthlyExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=DefaultMonthlyExtendedReportingPeriod.DMERP)
+            .get_queryset().filter(
+                period_type=DefaultMonthlyExtendedReportingPeriod.DMERP)
 
 
 class DefaultMonthlyExtendedReportingPeriod(MonthPeriod):
@@ -103,7 +105,7 @@ class DefaultMonthlyExtendedReportingPeriod(MonthPeriod):
         return date_format(self.middle(), ugettext("6-10 F Y"))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
         return date_format(self.middle(), ugettext("6th to 10th F Y"))
 
     @classmethod
@@ -123,9 +125,10 @@ class DefaultMonthlyExtendedReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFirstWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFirstWeekReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFirstWeekReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFirstWeekReportingPeriod.FWP)
 
 
 class FixedMonthFirstWeekReportingPeriod(MonthPeriod):
@@ -149,12 +152,14 @@ class FixedMonthFirstWeekReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM1WRP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W1/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W1/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W1/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W1/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -162,7 +167,8 @@ class FixedMonthFirstWeekReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFirstWeek.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFirstWeek.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=2) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -172,9 +178,10 @@ class FixedMonthFirstWeekReportingPeriod(MonthPeriod):
 
 
 class FixedMonthSecondWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthSecondWeekReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthSecondWeekReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthSecondWeekReportingPeriod.FWP)
 
 
 class FixedMonthSecondWeekReportingPeriod(MonthPeriod):
@@ -198,12 +205,14 @@ class FixedMonthSecondWeekReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM2WRP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W2/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W2/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W2/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W2/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -211,7 +220,8 @@ class FixedMonthSecondWeekReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthSecondWeek.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthSecondWeek.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=2) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -221,9 +231,10 @@ class FixedMonthSecondWeekReportingPeriod(MonthPeriod):
 
 
 class FixedMonthThirdWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthThirdWeekReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthThirdWeekReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthThirdWeekReportingPeriod.FWP)
 
 
 class FixedMonthThirdWeekReportingPeriod(MonthPeriod):
@@ -247,12 +258,14 @@ class FixedMonthThirdWeekReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM3WRP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W3/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W3/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W3/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W3/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -260,7 +273,8 @@ class FixedMonthThirdWeekReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthThirdWeek.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthThirdWeek.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=2) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -270,9 +284,10 @@ class FixedMonthThirdWeekReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFourthWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFourthWeekReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFourthWeekReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFourthWeekReportingPeriod.FWP)
 
 
 class FixedMonthFourthWeekReportingPeriod(MonthPeriod):
@@ -296,12 +311,14 @@ class FixedMonthFourthWeekReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM4WRP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W4/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W4/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W4/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W4/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -309,7 +326,8 @@ class FixedMonthFourthWeekReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFourthWeek.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFourthWeek.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=2) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -319,9 +337,10 @@ class FixedMonthFourthWeekReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFifthWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFifthWeekReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFifthWeekReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFifthWeekReportingPeriod.FWP)
 
 
 class FixedMonthFifthWeekReportingPeriod(MonthPeriod):
@@ -345,12 +364,14 @@ class FixedMonthFifthWeekReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM5WRP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W5/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W5/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W5/RP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W5/RP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -358,7 +379,8 @@ class FixedMonthFifthWeekReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFifthWeek.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFifthWeek.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=2) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -368,9 +390,10 @@ class FixedMonthFifthWeekReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFirstWeekExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFirstWeekExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFirstWeekExtendedReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFirstWeekExtendedReportingPeriod.FWP)
 
 
 class FixedMonthFirstWeekExtendedReportingPeriod(MonthPeriod):
@@ -394,12 +417,14 @@ class FixedMonthFirstWeekExtendedReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM1WERP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W1/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W1/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W1/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W1/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -407,7 +432,8 @@ class FixedMonthFirstWeekExtendedReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFirstWeekReportingPeriod.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFirstWeekReportingPeriod.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=3) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -417,9 +443,10 @@ class FixedMonthFirstWeekExtendedReportingPeriod(MonthPeriod):
 
 
 class FixedMonthSecondWeekExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthSecondWeekExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthSecondWeekExtendedReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthSecondWeekExtendedReportingPeriod.FWP)
 
 
 class FixedMonthSecondWeekExtendedReportingPeriod(MonthPeriod):
@@ -443,12 +470,14 @@ class FixedMonthSecondWeekExtendedReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM2WERP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W2/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W2/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W2/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W2/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -456,7 +485,8 @@ class FixedMonthSecondWeekExtendedReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthSecondWeekReportingPeriod.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthSecondWeekReportingPeriod.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=3) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -466,9 +496,10 @@ class FixedMonthSecondWeekExtendedReportingPeriod(MonthPeriod):
 
 
 class FixedMonthThirdWeekExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthThirdWeekExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthThirdWeekExtendedReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthThirdWeekExtendedReportingPeriod.FWP)
 
 
 class FixedMonthThirdWeekExtendedReportingPeriod(MonthPeriod):
@@ -492,12 +523,14 @@ class FixedMonthThirdWeekExtendedReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM3WERP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W3/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W3/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W3/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W3/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -505,7 +538,8 @@ class FixedMonthThirdWeekExtendedReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthThirdWeekReportingPeriod.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthThirdWeekReportingPeriod.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=3) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -515,9 +549,10 @@ class FixedMonthThirdWeekExtendedReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFourthWeekExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFourthWeekExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFourthWeekExtendedReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFourthWeekExtendedReportingPeriod.FWP)
 
 
 class FixedMonthFourthWeekExtendedReportingPeriod(MonthPeriod):
@@ -541,12 +576,14 @@ class FixedMonthFourthWeekExtendedReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM4WERP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W4/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W4/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W4/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W4/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -554,7 +591,8 @@ class FixedMonthFourthWeekExtendedReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFourthWeekReportingPeriod.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFourthWeekReportingPeriod.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=3) - ONE_MICROSECOND_DELTA
         return (start, end)
@@ -564,9 +602,10 @@ class FixedMonthFourthWeekExtendedReportingPeriod(MonthPeriod):
 
 
 class FixedMonthFifthWeekExtendedReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(FixedMonthFifthWeekExtendedReportingManager, self) \
-            .get_query_set().filter(period_type=FixedMonthFifthWeekExtendedReportingPeriod.FWP)
+            .get_queryset().filter(
+                period_type=FixedMonthFifthWeekExtendedReportingPeriod.FWP)
 
 
 class FixedMonthFifthWeekExtendedReportingPeriod(MonthPeriod):
@@ -590,12 +629,14 @@ class FixedMonthFifthWeekExtendedReportingPeriod(MonthPeriod):
         return self.middle().strftime('FM5WERP%m%Y')
 
     def name(self):
-        # Translators: Django's date template format for MonthPeriod.name()
-        return ugettext("W5/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.name()
+        return ugettext("W5/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     def full_name(self):
-        # Translators: Django's date template format for MonthPeriod.full_name()
-        return ugettext("W5/ERP {}").format(date_format(self.middle(), ugettext("F Y")))
+        # Translators: Django's date tmpl format for MonthPeriod.full_name()
+        return ugettext("W5/ERP {}").format(date_format(
+            self.middle(), ugettext("F Y")))
 
     @classmethod
     def delta(self):
@@ -603,7 +644,8 @@ class FixedMonthFifthWeekExtendedReportingPeriod(MonthPeriod):
 
     @classmethod
     def boundaries(cls, date_obj):
-        fw = FixedMonthFifthWeekReportingPeriod.find_create_by_date(date_obj, dont_create=True)
+        fw = FixedMonthFifthWeekReportingPeriod.find_create_by_date(
+            date_obj, dont_create=True)
         start = fw.end_on + ONE_MINUTE_DELTA
         end = start + datetime.timedelta(days=3) - ONE_MICROSECOND_DELTA
         return (start, end)

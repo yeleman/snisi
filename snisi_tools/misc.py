@@ -8,6 +8,7 @@ import logging
 import uuid
 
 from django.conf import settings
+from django.apps import apps
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +131,7 @@ def get_uuid():
 
 
 def get_snisi_apps():
-    return [app for app in settings.INSTALLED_APPS
+    return [app for app in [p.split('/')[-1] for p in apps.get_app_paths()]
             if app.startswith('snisi_')
             and app not in ('snisi_core', 'snisi_sms',
                             'snisi_web', 'snisi_tools', 'snisi_maint')]

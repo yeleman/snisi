@@ -140,6 +140,6 @@ def create_periodic_agg_report_from(cls, period, entity,
 
 class ActiveManager(models.Manager):
 
-    def get_query_set(self):
-        return super(ActiveManager, self).get_query_set() \
+    def get_queryset(self):
+        return super(ActiveManager, self).get_queryset() \
                                          .filter(is_active=True)

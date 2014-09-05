@@ -71,9 +71,9 @@ class EpiWeekPeriod(WeekPeriod):
 
 
 class EpiWeekReportingManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(EpiWeekReportingManager, self) \
-            .get_query_set().filter(period_type='epi_week_reporting_period')
+            .get_queryset().filter(period_type='epi_week_reporting_period')
 
 
 class EpiWeekReportingPeriod(WeekPeriod):
@@ -106,9 +106,9 @@ class EpiWeekReportingPeriod(WeekPeriod):
 
 
 class EpiWeekDistrictValidationManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(EpiWeekDistrictValidationManager, self) \
-            .get_query_set().filter(period_type='epi_week_district_validation')
+            .get_queryset().filter(period_type='epi_week_district_validation')
 
 
 class EpiWeekDistrictValidationPeriod(WeekPeriod):
@@ -141,9 +141,9 @@ class EpiWeekDistrictValidationPeriod(WeekPeriod):
 
 
 class EpiWeekRegionValidationManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(EpiWeekRegionValidationManager, self) \
-            .get_query_set().filter(period_type='epi_week_region_validation')
+            .get_queryset().filter(period_type='epi_week_region_validation')
 
 
 class EpiWeekRegionValidationPeriod(WeekPeriod):

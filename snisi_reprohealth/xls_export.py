@@ -17,14 +17,14 @@ from snisi_reprohealth import get_domain
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE = os.path.join(get_domain().module_path,
-                        'fixtures', 'template-MSIPF.xls')
-
 
 def pfa_activities_as_xls(report):
     """ Export les données d'un rapport en xls """
 
-    template = open_workbook(TEMPLATE, formatting_info=True)
+    template_path = os.path.join(get_domain().module_path,
+                                 'fixtures', 'template-MSIPF.xls')
+
+    template = open_workbook(template_path, formatting_info=True)
     copy_week_b = copy(template)
     sh_services = copy_week_b.get_sheet(0)
     sh_services.portrait = False

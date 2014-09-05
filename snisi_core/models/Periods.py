@@ -9,7 +9,6 @@ import datetime
 
 from py3compat import implements_to_string
 from django.db import models
-from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.dateformat import format as date_format
@@ -45,7 +44,7 @@ def next_month(year, month):
         return (year + 1, 1)
 
 
-class PeriodTypeMixin(object):
+class PeriodsQuerySet(models.QuerySet):
 
     def days(self):
         return self.filter(period_type=Period.DAY)
@@ -67,15 +66,6 @@ class PeriodTypeMixin(object):
 
     def custom(self):
         return self.exclude(period_type__in=Period.PERIOD_TYPES.keys())
-
-
-class PeriodsQuerySet(QuerySet, PeriodTypeMixin):
-    pass
-
-
-class PeriodsManager(models.Manager, PeriodTypeMixin):
-    def get_query_set(self):
-        return PeriodsQuerySet(self.model, using=self._db)
 
 
 @implements_to_string
@@ -120,8 +110,8 @@ class Period(models.Model):
                                    default=CUSTOM,
                                    verbose_name=_("Type"))
 
-    objects = PeriodsManager()
-    types = PeriodsManager()
+    objects = PeriodsQuerySet.as_manager()
+    types = PeriodsQuerySet.as_manager()
     django = models.Manager()
 
     @property
@@ -538,9 +528,9 @@ class Period(models.Model):
 class SpecificTypeManager(models.Manager):
     SPECIFIC_TYPE = Period.CUSTOM
 
-    def get_query_set(self):
+    def get_queryset(self):
         return super(SpecificTypeManager, self) \
-            .get_query_set().filter(period_type=self.SPECIFIC_TYPE)
+            .get_queryset().filter(period_type=self.SPECIFIC_TYPE)
 
 
 class DayManager(SpecificTypeManager):

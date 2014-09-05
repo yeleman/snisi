@@ -51,19 +51,19 @@ class PhoneNumberTypeAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name', 'priority')
 
 
-class ProviderModificationForm(UserChangeForm):
-    class Meta:
-        model = Provider
+# class ProviderModificationForm(UserChangeForm):
+#     class Meta:
+#         model = Provider
 
 
-class ProviderCreationForm(UserCreationForm):
-    class Meta:
-        model = Provider
+# class ProviderCreationForm(UserCreationForm):
+#     class Meta:
+#         model = Provider
 
 
 class ProviderAdmin(UserAdmin):
-    form = ProviderModificationForm
-    add_form = ProviderCreationForm
+    # form = ProviderModificationForm
+    # add_form = ProviderCreationForm
     list_display = ('__str__', 'username', 'email',
                     'first_name', 'last_name', 'is_staff')
     add_fieldsets = (
@@ -116,6 +116,7 @@ class SMSMessageAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
 
     list_display = ('deliver', 'sent', 'delivery_status', 'category', 'text')
-    list_filter = ('deliver', 'sent', 'delivery_status', 'level', 'important', 'category')
+    list_filter = ('deliver', 'sent', 'delivery_status',
+                   'level', 'important', 'category')
     ordering = ('created_on',)
     search_fields = ('title', 'text', 'text_short')

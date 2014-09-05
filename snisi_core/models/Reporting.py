@@ -9,7 +9,6 @@ import logging
 import reversion
 from py3compat import implements_to_string, string_types, text_type
 from django.db import models
-from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -66,7 +65,7 @@ class InterestingFieldsMixin(object):
         return [f.name for f in cls._meta.concrete_fields if not exclude(f)]
 
 
-class ReportStatusMixin(object):
+class ReportStatusQuerySet(models.QuerySet):
     def validated(self):
         return self.filter(validation_status=SNISIReport.VALIDATED)
 
@@ -93,15 +92,6 @@ class ReportStatusMixin(object):
 
     def complete(self):
         return self.filter(completion_status=SNISIReport.COMPLETE)
-
-
-class ReportStatusQuerySet(QuerySet, ReportStatusMixin):
-    pass
-
-
-class ReportStatusManager(models.Manager, ReportStatusMixin):
-    def get_query_set(self):
-        return ReportStatusQuerySet(self.model, using=self._db)
 
 
 @implements_to_string
@@ -220,8 +210,8 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
     report_cls = models.CharField(max_length=512, blank=True, null=True)
 
     # django manager first
-    objects = ReportStatusManager()
-    statuses = ReportStatusManager()
+    objects = ReportStatusQuerySet.as_manager()
+    statuses = ReportStatusQuerySet.as_manager()
     django = models.Manager()
 
     def __str__(self):
@@ -817,7 +807,7 @@ class ExpectedReporting(models.Model):
     report_class = models.ForeignKey(ReportClass)
     reporting_role = models.ForeignKey(Role, blank=True, null=True)
     period = models.ForeignKey(Period, related_name='expr_for_period')
-    within_period = models.BooleanField()
+    within_period = models.BooleanField(default=False)
     entity = models.ForeignKey(Entity)
     within_entity = models.BooleanField(default=False)
     reporting_period = models.ForeignKey(
