@@ -20,7 +20,15 @@ mission_report_class = ReportClass.get_or_none("ttbacklog_mission")
 
 def create_expected_for(period):
 
-    logger.info("Creating ExpectedReporting for {} at {}".format(DOMAIN, period))
+    # TT backlog mission are created for current month
+    # which corresponds to period.following()
+    logger.info("Using period from {} to {} for Trachoma."
+                .format(period, period.following()))
+
+    period = period.following()
+
+    logger.info("Creating ExpectedReporting for {} at {}"
+                .format(DOMAIN, period))
 
     created_list = []
 
