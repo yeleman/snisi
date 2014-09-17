@@ -18,6 +18,12 @@ urlpatterns = patterns(
         'snisi_malaria.views.indicators.custom_indicator',
         name='malaria_custom'),
 
+    # Map
+    url(r'/map/?$',
+        'snisi_malaria.views.mapping.malaria_map',
+        {'template_name': 'malaria/map.html'},
+        name='malaria_map'),
+
     # Malaria Indicator Browser
     url(r'^/rtf/{entity}/{periods}/{section}/{subsection}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS,

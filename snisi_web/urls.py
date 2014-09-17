@@ -133,11 +133,6 @@ urlpatterns = patterns(
         'snisi_web.views.raw_data.browser', {'period_str': None},
         name='report_browser_noperiod'),
 
-    url(r'map/malaria/?$',
-        'snisi_malaria.views.mapping.malaria_map',
-        {'template_name': 'malaria/map.html'},
-        name='malaria_map'),
-
     url(r'download-report/{receipt}.xls'.format(receipt=RGXP_RECEIPT),
         'snisi_web.views.raw_data.download_as_excel',
         name='download_report_xls'),
