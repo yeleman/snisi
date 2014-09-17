@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-05 15:30+0000\n"
-"PO-Revision-Date: 2014-08-05 15:36-0000\n"
+"POT-Creation-Date: 2014-09-17 16:46+0000\n"
+"PO-Revision-Date: 2014-09-17 16:48-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
@@ -112,11 +112,11 @@ msgstr "Maladie à déclaration obligatoire"
 
 #: models.py:199
 msgid "Ebola cases"
-msgstr "Choléra"
+msgstr "Cas de Ébola"
 
 #: models.py:200
 msgid "Ebola death"
-msgstr "Choléra"
+msgstr "Décès par Ébola"
 
 #: models.py:202
 msgid "AFP cases"
