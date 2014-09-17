@@ -19,12 +19,14 @@ from snisi_malaria import urls as malaria_urls
 from snisi_vacc import urls as vacc_urls
 from snisi_epidemiology import urls as epidemio_urls
 from snisi_reprohealth import urls as reprohealth_urls
+from snisi_nutrition import urls as nutrition_urls
 from snisi_trachoma import urls as trachoma_urls
 
 urlpatterns = patterns(
     '',
 
     url(r'^malaria', include(malaria_urls)),
+    url(r'^nutrition', include(nutrition_urls)),
     url(r'^vaccination', include(vacc_urls)),
     url(r'^msi_pf', include(reprohealth_urls)),
     url(r'^epidemiology', include(epidemio_urls)),
