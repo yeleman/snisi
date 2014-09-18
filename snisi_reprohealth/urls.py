@@ -7,10 +7,22 @@ from __future__ import (unicode_literals, absolute_import,
 
 from django.conf.urls import patterns, url
 
-from snisi_web.url_regexp import RGXP_ENTITY, RGXP_PERIOD
+from snisi_web.url_regexp import (RGXP_ENTITY, RGXP_PERIOD,
+                                  RGXP_PERIODS)
 
 urlpatterns = patterns(
     '',
+
+    url(r'^/dashboard/{entity}/{periods}/?$'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_reprohealth.views.dashboard.msipf_dashboard',
+        name='msipf_dashboard'),
+    url(r'^/dashboard/{entity}/?$'.format(entity=RGXP_ENTITY),
+        'snisi_reprohealth.views.dashboard.msipf_dashboard',
+        name='msipf_dashboard'),
+    url(r'^/dashboard/?$',
+        'snisi_reprohealth.views.dashboard.msipf_dashboard',
+        name='msipf_dashboard'),
 
     # raw-data browser
     url(r'/{entity}/{period}/?'

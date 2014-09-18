@@ -241,6 +241,10 @@ class PFActivitiesRIface(models.Model):
     pregnancy_tests_received = models.PositiveIntegerField(
         verbose_name=_("Pregnancy Tests: Quantity Received"))
 
+    @property
+    def total_clients(self):
+        return self.new_clients + self.previous_clients
+
     def fill_blank(self, **kwargs):
         for field in self.data_fields():
             if not field.endswith('_observation'):
@@ -324,6 +328,10 @@ class PFActivitiesRIface(models.Model):
                 'cap_value': self.cap_for(field),
             }
         return [_fd(field) for field in self.cap_fields()]
+
+    @property
+    def total_cap(self):
+        return sum([c['cap_value'] for c in self.cap_data()])
 
     def clients_fields(cls):
         return ['new_clients',
