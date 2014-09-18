@@ -87,29 +87,14 @@ urlpatterns = patterns(
         'snisi_web.views.entities_api.get_cluster_children',
         name='api_entities_get_cluster_children'),
 
-    url(r'^api/entities/get_epidemio_children/'
-        '(?P<parent_slug>[A-Za-z0-9\_]{3,4})'
-        '/(?P<type_slug>[a-zA-Z0-9\-\_]+)/?$',
-        'snisi_web.views.entities_api.get_epidemio_children',
-        name='api_entities_get_epidemio_children'),
-
-    # Malaria GeoJSON
-    url(r'^api/malaria/geojson/(?P<parent_slug>[a-zA-Z0-9]+)?$',
-        'snisi_malaria.views.mapping.geojson_data',
-        {'cluster_slug': 'malaria_monthly_routine'},
-        name='malaria_geojson_data'),
-
+    # GeoJSON API
     url(r'^api/geojson/(?P<cluster_slug>[a-z0-9\-\_]+)/'
         '(?P<parent_slug>[a-zA-Z0-9]+)?$',
-        'snisi_malaria.views.mapping.geojson_data',
+        'snisi_web.views.mapping.geojson_data',
         name='api_geojson_data'),
 
-    url(r'^api/malaria/indicators/?$',
-        'snisi_malaria.views.mapping.get_indicator_data',
-        name='malaria_indicator'),
-
     url(r'^api/(?P<domain_slug>[a-z\_]+)/indicators/?$',
-        'snisi_malaria.views.mapping.get_indicator_data',
+        'snisi_web.views.mapping.get_indicator_data',
         name='domain_indicator'),
 
     url(r'^api/indicators/geo/?$',
