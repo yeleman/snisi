@@ -2308,7 +2308,7 @@ function getMapExporter(options) {
                 link.attr('href', url);
                 link.attr('download', 'exported_map.png');
                 link.attr('class', 'save-as-png pure-button');
-                link.html('<i class="fa fa-save"></i>');
+                link.html('<i class="icon-floppy"></i>');
                 link.attr('title', "Enregistrer l'image PNG");
                 $('.exportbuttons').append(link);
 

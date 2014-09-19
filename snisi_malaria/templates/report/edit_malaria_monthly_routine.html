@@ -21,16 +21,16 @@
 
 <tr>
     <th>Promptitude</th>
-    <td>{% if report.on_time %}<i class="fa fa-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
+    <td>{% if report.on_time %}<i class="icon-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
     <th>Complétude</th>
-    <td>{% if report.complete %}<i class="fa fa-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
+    <td>{% if report.complete %}<i class="icon-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
 </tr>
 
 <tr>
     <th>Nº de reçu</th>
     <td>{{ report.receipt }}</td>
     <th>Validation</th>
-    <td>{{ report.expected_validations.get.validation_period }} <a data-must-confirm="1" data-confirm-text="Êtes vous sûr de vouloir valider le rapport {{report.receipt}} ?---Il ne sera plus modifiable ensuite." href="{% url 'validation_do_validate' report.receipt %}" class="pure-button button-small button-success confirm" id="validate_form" title="Valide le rapport tel qu'enregistré."><i class="fa fa-check"></i> Valider le rapport</a></td>
+    <td>{{ report.expected_validations.get.validation_period }} <a data-must-confirm="1" data-confirm-text="Êtes vous sûr de vouloir valider le rapport {{report.receipt}} ?---Il ne sera plus modifiable ensuite." href="{% url 'validation_do_validate' report.receipt %}" class="pure-button button-small button-success confirm" id="validate_form" title="Valide le rapport tel qu'enregistré."><i class="icon-check"></i> Valider le rapport</a></td>
 </tr>
 </table>
 
@@ -104,11 +104,11 @@
 </table>
 
 <fieldset>
-    <p class="alert alert-warning"><i class="fa fa-warning"></i> Les modifications seront enregistrées comme étant les données originales primaires de l'{{ report.entity.display_typed_name }}. Il ne sera <strong>plus possible de rétablir les valeurs précédentes</strong>.</p>
+    <p class="alert alert-warning"><i class="icon-attention"></i> Les modifications seront enregistrées comme étant les données originales primaires de l'{{ report.entity.display_typed_name }}. Il ne sera <strong>plus possible de rétablir les valeurs précédentes</strong>.</p>
     <div class="pure-control-group">
         <label></label>
-        <button data-reset-form="edit_report_form" class="pure-button reset" title="Ré-initialise les valeurs du formulaire à celles de départ."><i class="fa fa-refresh"></i> Annuler modifications</button>
-        <button data-must-confirm="1" data-confirm-text="Êtes-vous sûr de vouloir enregistrer les modifications ?---Il ne sera plus possible de retourner en arrière." class="pure-button button-warning"><i class="fa fa-save"></i> Enregistrer les modifications</button>
+        <button data-reset-form="edit_report_form" class="pure-button reset" title="Ré-initialise les valeurs du formulaire à celles de départ."><i class="icon-arrows-cw"></i> Annuler modifications</button>
+        <button data-must-confirm="1" data-confirm-text="Êtes-vous sûr de vouloir enregistrer les modifications ?---Il ne sera plus possible de retourner en arrière." class="pure-button button-warning"><i class="icon-floppy"></i> Enregistrer les modifications</button>
     </div>
 </fieldset>
 </form>

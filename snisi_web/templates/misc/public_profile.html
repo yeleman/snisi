@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h2><i class="fa fa-{{ provider.gender }}"></i> {{ provider }}</h2>
+<h2><i class="icon-{{ provider.gender }}"></i> {{ provider }}</h2>
 {% if provider.position %}<h3>{{ provider.position }}</h3>{% endif %}
 
 <ul>
@@ -12,7 +12,7 @@
     {% for number in provider.phone_numbers.all %}
         <li>{{ number|phone}} ({{ number.category.name }})</li>
     {% endfor %}
-    {% if provider.email %}<li><i class="fa fa-envelope"></i> <a href="mailto:{{ provider.email }}">{{ provider.email }}</a></li>{% endif %}
+    {% if provider.email %}<li><i class="icon-mail-alt"></i> <a href="mailto:{{ provider.email }}">{{ provider.email }}</a></li>{% endif %}
     {% if provider.location %}<li>{% include "parts/entity_link.html" with entity=provider.location %}</li>{% endif %}
     <li>Dernière connexion : {{ provider.last_login }}</li>
 </ul>

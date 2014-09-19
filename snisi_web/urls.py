@@ -19,12 +19,14 @@ from snisi_malaria import urls as malaria_urls
 from snisi_vacc import urls as vacc_urls
 from snisi_epidemiology import urls as epidemio_urls
 from snisi_reprohealth import urls as reprohealth_urls
+from snisi_nutrition import urls as nutrition_urls
 from snisi_trachoma import urls as trachoma_urls
 
 urlpatterns = patterns(
     '',
 
     url(r'^malaria', include(malaria_urls)),
+    url(r'^nutrition', include(nutrition_urls)),
     url(r'^vaccination', include(vacc_urls)),
     url(r'^msi_pf', include(reprohealth_urls)),
     url(r'^epidemiology', include(epidemio_urls)),
@@ -85,29 +87,14 @@ urlpatterns = patterns(
         'snisi_web.views.entities_api.get_cluster_children',
         name='api_entities_get_cluster_children'),
 
-    url(r'^api/entities/get_epidemio_children/'
-        '(?P<parent_slug>[A-Za-z0-9\_]{3,4})'
-        '/(?P<type_slug>[a-zA-Z0-9\-\_]+)/?$',
-        'snisi_web.views.entities_api.get_epidemio_children',
-        name='api_entities_get_epidemio_children'),
-
-    # Malaria GeoJSON
-    url(r'^api/malaria/geojson/(?P<parent_slug>[a-zA-Z0-9]+)?$',
-        'snisi_malaria.views.mapping.geojson_data',
-        {'cluster_slug': 'malaria_monthly_routine'},
-        name='malaria_geojson_data'),
-
+    # GeoJSON API
     url(r'^api/geojson/(?P<cluster_slug>[a-z0-9\-\_]+)/'
         '(?P<parent_slug>[a-zA-Z0-9]+)?$',
-        'snisi_malaria.views.mapping.geojson_data',
+        'snisi_web.views.mapping.geojson_data',
         name='api_geojson_data'),
 
-    url(r'^api/malaria/indicators/?$',
-        'snisi_malaria.views.mapping.get_indicator_data',
-        name='malaria_indicator'),
-
     url(r'^api/(?P<domain_slug>[a-z\_]+)/indicators/?$',
-        'snisi_malaria.views.mapping.get_indicator_data',
+        'snisi_web.views.mapping.get_indicator_data',
         name='domain_indicator'),
 
     url(r'^api/indicators/geo/?$',
@@ -130,11 +117,6 @@ urlpatterns = patterns(
         .format(cluster=RGXP_CLUSTER, entity=RGXP_ENTITY),
         'snisi_web.views.raw_data.browser', {'period_str': None},
         name='report_browser_noperiod'),
-
-    url(r'map/malaria/?$',
-        'snisi_malaria.views.mapping.malaria_map',
-        {'template_name': 'malaria/map.html'},
-        name='malaria_map'),
 
     url(r'download-report/{receipt}.xls'.format(receipt=RGXP_RECEIPT),
         'snisi_web.views.raw_data.download_as_excel',

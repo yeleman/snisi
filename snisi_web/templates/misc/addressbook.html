@@ -36,7 +36,7 @@
         <td{% if provider.is_central %} colspan="2"{% endif %}>{{ provider.role }}</td>
         {% if not provider.is_central %}
         <td>{% include "parts/entity_link.html" with entity=provider.location %}</td>{% endif %}
-        <td>{% if provider.email %}<a href="mailto:{{provider.email}}"><i class="fa fa-envelope"></i></a> {% endif %}
+        <td>{% if provider.email %}<a href="mailto:{{provider.email}}"><i class="icon-mail-alt"></i></a> {% endif %}
             <span {%if provider.primary_number.category.slug == 'flotte' %}title="Numéro Flotte" class="flotte"{% endif %}>{{ provider.primary_phone|phone }}</span> {% if provider.all_numbers|length > 1 %} <small title="{{ provider|nb_extra_nums }} autre{{ provider|nb_extra_nums|pluralize }} numéro{{ provider|nb_extra_nums|pluralize }} disponible{{ provider|nb_extra_nums|pluralize }}">(+{{ provider|nb_extra_nums }})</small>{% endif %}</td>
     </tr>
     {% endfor %}

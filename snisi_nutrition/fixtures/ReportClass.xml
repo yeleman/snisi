@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="nutrition_monthly_routine" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">nutrition_monthly_routine</field>
+        <field type="CharField" name="name">Routine Mensuelle Nutrition</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.NutritionR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">periosrc</field>
+    </object>
+    <object pk="nutrition_monthly_routine_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">nutrition_monthly_routine_aggregated</field>
+        <field type="CharField" name="name">Routine Mensuelle Nutrition (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.AggNutritionR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+</django-objects>

@@ -16,7 +16,7 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.rtf_export import (widgets_for_indicator, generic_table,
                                    title_for_text, neutral_style)
-from snisi_tools.misc import import_path
+from snisi_tools.misc import import_path, get_resource
 from snisi_tools.path import mkdir_p
 
 logger = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ def get_malaria_template(entity, periods, graph_periods, quarter_num, year):
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
     h1 = ss.ParagraphStyles.Heading1
 
-    header_png = os.path.join('snisi_web', 'static', 'img',
-                              'header_malaria_report.png')
+    header_png = get_resource('img', 'header_malaria_report.png')
+
     section.append(Paragraph(ss.ParagraphStyles.Normal,
                              pps_center, Image(header_png)))
 
@@ -358,8 +358,8 @@ def generate_section_rtf(entity, periods,
 
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
 
-    header_png = os.path.join('snisi_web', 'static', 'img',
-                              'header_malaria_report.png')
+    header_png = get_resource('img', 'header_malaria_report.png')
+
     section.append(Paragraph(ss.ParagraphStyles.Normal,
                              pps_center, Image(header_png)))
 

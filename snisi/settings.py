@@ -17,7 +17,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+SNISI_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SNISI_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -99,6 +100,7 @@ INSTALLED_APPS = (
     'snisi_reprohealth',
     # 'snisi_bednets',
     'snisi_epidemiology',
+    'snisi_nutrition',
     'snisi_vacc',
 )
 
@@ -136,7 +138,7 @@ WSGI_APPLICATION = 'snisi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(ROOT_DIR, 'db.sqlite3'),
     }
 }
 
@@ -145,7 +147,7 @@ DATABASES = {
 
 LANGUAGES = (('fr', "French"),)
 LANGUAGE_CODE = 'fr-fr'
-LOCALE_PATHS = os.path.join(BASE_DIR, 'locale')
+LOCALE_PATHS = os.path.join(ROOT_DIR, 'locale')
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
@@ -154,7 +156,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 STATIC_URL = '/static/'
 
 # DEFAULT_LOCALE = 'fr_FR.UTF-8'
@@ -200,7 +202,7 @@ SMS_CONVERT_UNICODE_TO_ASCII = False
 
 SERVE_PROTECTED_FILES = False
 FILES_REPOSITORY_URL_PATH = '/protected'
-FILES_REPOSITORY = os.path.join(BASE_DIR, 'protected')
+FILES_REPOSITORY = os.path.join(ROOT_DIR, 'protected')
 
 try:
     SITE_ID = int(os.environ['SITE_ID'])

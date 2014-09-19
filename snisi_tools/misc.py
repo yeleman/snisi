@@ -6,8 +6,8 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import uuid
+import os
 
-from django.conf import settings
 from django.apps import apps
 
 logger = logging.getLogger(__name__)
@@ -149,3 +149,9 @@ def get_from_snisi_apps(path, fusion_list=False):
         return values
 
     return [value for domain_list in values for value in domain_list]
+
+
+def get_resource(domain_slug, *file_paths):
+    from snisi_core.models.Projects import Domain
+    domain = Domain.get_or_none(domain_slug)
+    return os.path.join(domain.module_path, 'resources', *file_paths)

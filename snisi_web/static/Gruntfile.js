@@ -40,14 +40,13 @@ module.exports = function(grunt) {
             dest: 'js/<%= pkg.name %>.js'
         },
         css: {
-            src: ['assets/font-awesome-4.0.3/css/font-awesome.min.css',
-                  'assets/pure-min.css',
+            src: [
+            	  'assets/pure-grids-responsive-min.css',
                   'css/<%= pkg.name %>.css'],
             dest: 'css/<%= pkg.name %>_all.css'
         },
         mapalonecss: {
-            src: ['assets/font-awesome-4.0.3/css/font-awesome.min.css',
-                  'assets/pure-min.css',
+            src: ['assets/pure-min.css',
                   'css/map_alone.css'],
             dest: 'css/map_alone_all.css'
         },
@@ -58,7 +57,7 @@ module.exports = function(grunt) {
         mapjs: {
             options: {stripBanners: false},
             src: ['assets/mapbox.2.0.1.js', 'assets/leaflet.label.0.2.1.js',
-                  'assets/leaflet.spin.js', 'assets/simple_statistics.js',
+                  'assets/leaflet.spin.js',
                   'assets/spin.min.js', 'assets/d3.v3.min.js',
                   'assets/leaflet-image.js'],
             dest: 'js/map.js'
@@ -93,22 +92,22 @@ module.exports = function(grunt) {
                 'js/<%= pkg.name %>.min.js': ['<%= concat.js.dest %>']
             }
         },
-        map: {
-            files: {
-                'js/map.min.js': ['js/map.js']
-            }
-        },
-        chart: {
-            files: {
-                'js/chart.min.js': ['js/chart.js']
-            }
-        }
+        // map: {
+        //     files: {
+        //         'js/map.min.js': ['js/map.js']
+        //     }
+        // },
+        // chart: {
+        //     files: {
+        //         'js/chart.min.js': ['js/chart.js']
+        //     }
+        // }
     },
     copy: {
       fonts: {
         files: [
             {expand: true, cwd: 'assets/droidsans/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
-            {expand: true, cwd: 'assets/font-awesome-4.0.3/fonts/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
+            {expand: true, cwd: 'assets/fontello/font/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
         ]
       }
     },
@@ -142,7 +141,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint']);
 
   // JS distribution task.
-  grunt.registerTask('dist-js', ['concat']);
+  grunt.registerTask('dist-js', ['concat', 'uglify']);
 
   // CSS distribution task.
   grunt.registerTask('dist-css', ['copy', 'less', 'concat', 'cssmin']);

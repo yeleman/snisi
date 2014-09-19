@@ -7,7 +7,7 @@
         <th>{{ expected.report_class.name }}</th>
         <td>{{ expected.period }}</td>
         <td>{% include "parts/entity_link.html" with entity=expected.entity %}</td>
-        <td>{% if expected.satisfied %}<i class="fa fa-check"></i> Rapport reçu{% else %}Réçu {{ expected.arrived_reports.count }} / {{ expected.amount_expected }}{% endif %}</td>
+        <td>{% if expected.satisfied %}<i class="icon-check"></i> Rapport reçu{% else %}Réçu {{ expected.arrived_reports.count }} / {{ expected.amount_expected }}{% endif %}</td>
     </tr>
 {% if report %}
     <tr>
@@ -25,15 +25,15 @@
 
     <tr>
         <th>Promptitude</th>
-        <td>{% if report.on_time%}<i class="fa fa-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
+        <td>{% if report.on_time%}<i class="icon-check"></i> {% endif %}{{ report.verbose_arrival_status }}</td>
         <th>Complétude</th>
-        <td>{% if report.complete%}<i class="fa fa-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
+        <td>{% if report.complete%}<i class="icon-check"></i> {%endif %}{{ report.verbose_completion_status }} ({{ report.verbose_integrity_status }})</td>
     </tr>
 
     <tr>
         <th>Validation</th>
         {% if report.validated %}
-        <td colspan="3"><i class="fa fa-check"></i> Validé le <span class="inline-data">{{ report.validated_on }}</span> par <span class="inline-data">{% include "parts/user_link.html" with provider=report.validated_by %}{% if report.auto_validated %} (auto){% endif %}</span>.</td>
+        <td colspan="3"><i class="icon-check"></i> Validé le <span class="inline-data">{{ report.validated_on }}</span> par <span class="inline-data">{% include "parts/user_link.html" with provider=report.validated_by %}{% if report.auto_validated %} (auto){% endif %}</span>.</td>
         {% else %}
         <td colspan="3">{{ report.verbose_validation_status }}</td>
         {% endif %}

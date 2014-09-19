@@ -9,8 +9,7 @@
     <title>{{ brand_short}} | {% block title %}{{ brand_full }}{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" media="screen" type="text/css" href="{% static "css/snisi_all.min.css" %}" title="{{ brand_short }}" />
-    <!-- <link rel="stylesheet" media="print" type="text/css" href="{% static "css/print.css" %}" /> -->
-    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABoklEQVQ4jaWQ3UvCYBjF928GhaxszdDUQkIIlhejBmpplmPv/Mh9VKYQRARCdVMEfcl0LKNCii666H84XYy9Y2AJdeDAuXjP73mel2EYhslkMsJfzHjlSPESC0oXC0oXi+QOCdXCqvaAtcNHSK0B1g8dCKaD5YaNhGohJt8jUrwEBcTke8SJhTixkKxYSOs2xOYAameI+tkb1M4QpZNXiM0BUvU+4sSFjAQs1XoQTAf5o2ec9z5xPfhC6+oDamcIqf2EtG7/DkhWLAimg8LxCzyNAkTLtz4gWr6lAE9S+4lm7eKd5uXGmA3GKVXvI1mxkFRugoCE6q6fqvd/LAumg7RuI63bSNUefID3855/Ei+b4EoGuJKB6XzNB6w0bay2HMyT/bEnzG7pCBc0sDniA3jZwDzZDwB42aSZ29ZoDhc0zGw0EJKqowG8bIKXTcyVjcDU2aKO8KZbHgmIKHt+ece12DyBeHBKp07nG2Czu2Czu5gUFR/A7eiBMlcy6K1eeWbDL4ekahDA5gh96K3J5ghCUpV6ak3GpKhQT6zsuYD/6hv1gI8mX/OCxgAAAABJRU5ErkJggg==" />
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" />
     <meta http-equiv="Content-Language" content="fr-fr" />
     <meta name="ROBOTS" content="ALL" />
     <meta name="Copyright" content="PNLP, ANTIM, YELEMAN" />
@@ -32,11 +31,11 @@
             <div class="pure-menu pure-menu-open">
                 <!-- <a class="pure-menu-heading">SNISI</a> -->
                 <ul>
-                    <li class="home"><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Tableau de bord {{ brand_short }}</a></li>
-                    <li><a href="{% url 'addressbook' %}"><i class="fa fa-users"></i> Annuaire</a></li>
-                    <li><a href="{% url 'upload' %}"><i class="fa fa-upload"></i> Envoi rapport</a></li>
-                    <li><a href="{% url 'validation' %}"><i class="fa fa-check-square-o"></i> Validation rapports</a></li>
-                    <li><a href="{% url 'entities_list' %}"><i class="fa fa-h-square"></i> Carte sanitaire SNISI</a></li>
+                    <li class="home"><a href="{% url 'home' %}"><i class="icon-gauge"></i> Tableau de bord {{ brand_short }}</a></li>
+                    <li><a href="{% url 'addressbook' %}"><i class="icon-users"></i> Annuaire</a></li>
+                    <li><a href="{% url 'upload' %}"><i class="icon-upload"></i> Envoi rapport</a></li>
+                    <li><a href="{% url 'validation' %}"><i class="icon-check"></i> Validation rapports</a></li>
+                    <li><a href="{% url 'entities_list' %}"><i class="icon-h-sigh"></i> Carte sanitaire SNISI</a></li>
                 </ul>
                 <a class="pure-menu-heading">Monitoring</a>
                 <ul>
@@ -54,11 +53,16 @@
                     <li><a href="{% url 'malaria_quarter_report' %}">Rapports trimestriels</a></li>
                     <li><a href="{% url 'malaria_custom' %}">Analyse personnalisée</a></li>
                 </ul>
+                <!-- <a class="pure-menu-heading">NUTRITION</a>
+                <ul>
+                    <li><a class="" href="{% url 'nutrition_raw_data' %}">Données brutes</a></li>
+                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
+                </ul>
                 <a class="pure-menu-heading">CÉCITÉ</a>
                 <ul>
                     <li><a href="{% url 'trachoma_missions' %}">Données brutes</a></li>
                     <li><a href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
-                </ul>
+                </ul> -->
                 <a class="pure-menu-heading"><abbr title="Surveillance Intégrée des Maladies et de la Riposte">SMIR</abbr> <span class="label label-{{ mado_level }}">{{ mado_nb_cases }}</span></a>
                 <ul>
                     <li><a href="{% url 'epidemio_dashboard' %}">Suivi temps-réel</a></li>
@@ -69,7 +73,7 @@
                 <ul>
                     <li><a class="" href="{% url 'msipf_raw_data' %}">Données brutes MSI/PF</a></li>
                     <li><a class="pure-button-disabled" href="#">Données brutes FNUAP</a></li>
-                    <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
+                    <li><a class="" href="{% url 'msipf_dashboard' %}">Données analysées</a></li>
                 </ul>
                 <a class="pure-menu-heading">VACCINATION</a>
                 <ul>
@@ -91,7 +95,7 @@
                 {% if messages %}
                 <div id="notifications" class="">
                 {% for message in messages %}
-                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="fa fa-times close-notif-button"></i></p>
+                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="icon-cancel close-notif-button"></i></p>
                 {% endfor %}
                 </div>
                 {% endif %}
@@ -106,21 +110,21 @@
             <footer>
                 <div class="pure-menu pure-menu-open pure-menu-horizontal footer-menu">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" title="Accèder au profil" class="pure-menu-heading"><i class="fa fa-user-md"></i> {{ user }}</a>
+                    <a href="{% url 'profile' %}" title="Accèder au profil" class="pure-menu-heading"><i class="icon-user-md"></i> {{ user }}</a>
                     {% endif %}
                     <ul>
-                        <li><a href="{% url 'contact' %}"><i class="fa fa-envelope"></i> Contact</a></li>
-                        <li><a href="{% url 'support' %}"><i class="fa fa-question"></i> Support</a></li>
-                        <li><a href="{% url 'about' %}"><i class="fa fa-info-circle"></i> À propos</a></li>
-                        <li><a href="{% url 'resources' %}"><i class="fa fa-download"></i> Ressources</a></li>
-                        {% if user.is_authenticated %}<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Se déconnecter</a></li>{% endif %}
+                        <li><a href="{% url 'contact' %}"><i class="icon-mail-alt"></i> Contact</a></li>
+                        <li><a href="{% url 'support' %}"><i class="icon-help"></i> Support</a></li>
+                        <li><a href="{% url 'about' %}"><i class="icon-info-circled"></i> À propos</a></li>
+                        <li><a href="{% url 'resources' %}"><i class="icon-download"></i> Ressources</a></li>
+                        {% if user.is_authenticated %}<li><a href="{% url 'logout' %}"><i class="icon-logout"></i> Se déconnecter</a></li>{% endif %}
                     </ul>
                 </div>
             </footer>
         </div>
     </div>
 </body>
-<script src="{% static "js/snisi.js" %}"></script>
+<script src="{% static "js/snisi.min.js" %}"></script>
 {% block assets %}{% endblock %}
 <script>
 $(document).ready(function(){
