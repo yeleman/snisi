@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'snisi-icon';
-  src: url('../font/snisi-icon.eot?7432044');
-  src: url('../font/snisi-icon.eot?7432044#iefix') format('embedded-opentype'),
-       url('../font/snisi-icon.woff?7432044') format('woff'),
-       url('../font/snisi-icon.ttf?7432044') format('truetype'),
-       url('../font/snisi-icon.svg?7432044#snisi-icon') format('svg');
+  src: url('../font/snisi-icon.eot?45513362');
+  src: url('../font/snisi-icon.eot?45513362#iefix') format('embedded-opentype'),
+       url('../font/snisi-icon.woff?45513362') format('woff'),
+       url('../font/snisi-icon.ttf?45513362') format('truetype'),
+       url('../font/snisi-icon.svg?45513362#snisi-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'snisi-icon';
-    src: url('../font/snisi-icon.svg?7432044#snisi-icon') format('svg');
+    src: url('../font/snisi-icon.svg?45513362#snisi-icon') format('svg');
   }
 }
 */
@@ -76,3 +76,4 @@
 .icon-female:before { content: '\e817'; } /* '' */
 .icon-table:before { content: '\e818'; } /* '' */
 .icon-cancel:before { content: '\e819'; } /* '' */
+.icon-attention-alt:before { content: '\e81a'; } /* '' */

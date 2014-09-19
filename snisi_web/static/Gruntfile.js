@@ -40,7 +40,8 @@ module.exports = function(grunt) {
             dest: 'js/<%= pkg.name %>.js'
         },
         css: {
-            src: ['assets/pure-min.css',
+            src: [
+            	  'assets/pure-grids-responsive-min.css',
                   'css/<%= pkg.name %>.css'],
             dest: 'css/<%= pkg.name %>_all.css'
         },
@@ -56,7 +57,7 @@ module.exports = function(grunt) {
         mapjs: {
             options: {stripBanners: false},
             src: ['assets/mapbox.2.0.1.js', 'assets/leaflet.label.0.2.1.js',
-                  'assets/leaflet.spin.js', 'assets/simple_statistics.js',
+                  'assets/leaflet.spin.js',
                   'assets/spin.min.js', 'assets/d3.v3.min.js',
                   'assets/leaflet-image.js'],
             dest: 'js/map.js'

@@ -78,7 +78,7 @@ def pure_field_group(field):
 
     # help_text is an info icon with title-tooltip
     if field.help_text:
-        output += ' <i class="fa fa-info-circle help-text" title="{}"></i>' \
+        output += ' <i class="icon-info-circled help-text" title="{}"></i>' \
                   .format(field.help_text)
     output += '\n</div>\n'
     return mark_safe(output)
@@ -86,7 +86,7 @@ def pure_field_group(field):
 
 @register.filter(name='purefieldlabel')
 def pure_field_label(field):
-    error_marker = (' <i class="fa fa-exclamation '
+    error_marker = (' <i class="icon-attention-alt '
                     'alert-danger" title="{}"></i>'
                     .format("\n".join(field.errors)) if field.errors else '')
 

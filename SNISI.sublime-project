@@ -2,13 +2,22 @@
 	"folders":
 	[
 		{
+			"file_exclude_patterns":
+			[
+				"*.sql",
+				"*.bz2",
+				"*.css"
+			],
 			"folder_exclude_patterns":
 			[
-				"protected"
+				"protected",
+				"sqls",
+				"node_modules",
+				"static/js"
 			],
 			"follow_symlinks": true,
 			"path": ".",
-			"file_exclude_patterns": ["*.sql", "*.bz2"]
+			"name": "SNISI"
 		}
 	]
 }
