@@ -9,8 +9,7 @@
     <title>{{ brand_short}} | {% block title %}{{ brand_full }}{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" media="screen" type="text/css" href="{% static "css/snisi_all.min.css" %}" title="{{ brand_short }}" />
-    <!-- <link rel="stylesheet" media="print" type="text/css" href="{% static "css/print.css" %}" /> -->
-    <link rel="shortcut icon" href="data:image/png;base64,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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" />
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" />
     <meta http-equiv="Content-Language" content="fr-fr" />
     <meta name="ROBOTS" content="ALL" />
     <meta name="Copyright" content="PNLP, ANTIM, YELEMAN" />
@@ -32,11 +31,11 @@
             <div class="pure-menu pure-menu-open">
                 <!-- <a class="pure-menu-heading">SNISI</a> -->
                 <ul>
-                    <li class="home"><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Tableau de bord {{ brand_short }}</a></li>
-                    <li><a href="{% url 'addressbook' %}"><i class="fa fa-users"></i> Annuaire</a></li>
-                    <li><a href="{% url 'upload' %}"><i class="fa fa-upload"></i> Envoi rapport</a></li>
-                    <li><a href="{% url 'validation' %}"><i class="fa fa-check-square-o"></i> Validation rapports</a></li>
-                    <li><a href="{% url 'entities_list' %}"><i class="fa fa-h-square"></i> Carte sanitaire SNISI</a></li>
+                    <li class="home"><a href="{% url 'home' %}"><i class="icon-gauge"></i> Tableau de bord {{ brand_short }}</a></li>
+                    <li><a href="{% url 'addressbook' %}"><i class="icon-users"></i> Annuaire</a></li>
+                    <li><a href="{% url 'upload' %}"><i class="icon-upload"></i> Envoi rapport</a></li>
+                    <li><a href="{% url 'validation' %}"><i class="icon-check"></i> Validation rapports</a></li>
+                    <li><a href="{% url 'entities_list' %}"><i class="icon-h-sigh"></i> Carte sanitaire SNISI</a></li>
                 </ul>
                 <a class="pure-menu-heading">Monitoring</a>
                 <ul>
@@ -96,7 +95,7 @@
                 {% if messages %}
                 <div id="notifications" class="">
                 {% for message in messages %}
-                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="fa fa-times close-notif-button"></i></p>
+                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="icon-cancel close-notif-button"></i></p>
                 {% endfor %}
                 </div>
                 {% endif %}
@@ -111,21 +110,21 @@
             <footer>
                 <div class="pure-menu pure-menu-open pure-menu-horizontal footer-menu">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" title="Accèder au profil" class="pure-menu-heading"><i class="fa fa-user-md"></i> {{ user }}</a>
+                    <a href="{% url 'profile' %}" title="Accèder au profil" class="pure-menu-heading"><i class="icon-user-md"></i> {{ user }}</a>
                     {% endif %}
                     <ul>
-                        <li><a href="{% url 'contact' %}"><i class="fa fa-envelope"></i> Contact</a></li>
-                        <li><a href="{% url 'support' %}"><i class="fa fa-question"></i> Support</a></li>
-                        <li><a href="{% url 'about' %}"><i class="fa fa-info-circle"></i> À propos</a></li>
-                        <li><a href="{% url 'resources' %}"><i class="fa fa-download"></i> Ressources</a></li>
-                        {% if user.is_authenticated %}<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Se déconnecter</a></li>{% endif %}
+                        <li><a href="{% url 'contact' %}"><i class="icon-mail-alt"></i> Contact</a></li>
+                        <li><a href="{% url 'support' %}"><i class="icon-help"></i> Support</a></li>
+                        <li><a href="{% url 'about' %}"><i class="icon-info-circled"></i> À propos</a></li>
+                        <li><a href="{% url 'resources' %}"><i class="icon-download"></i> Ressources</a></li>
+                        {% if user.is_authenticated %}<li><a href="{% url 'logout' %}"><i class="icon-logout"></i> Se déconnecter</a></li>{% endif %}
                     </ul>
                 </div>
             </footer>
         </div>
     </div>
 </body>
-<script src="{% static "js/snisi.js" %}"></script>
+<script src="{% static "js/snisi.min.js" %}"></script>
 {% block assets %}{% endblock %}
 <script>
 $(document).ready(function(){

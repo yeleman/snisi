@@ -6,13 +6,13 @@
 {% block content %}
 
 <h2>
-    <i class="fa {% if 'health' in entity.type.slug %}fa-hospital-o{% elif entity.type.slug == 'country' %}fa-flag{% else %}fa-home{% endif %}"></i>
+    <i class="{% if 'health' in entity.type.slug %}icon-h-sigh{% elif entity.type.slug == 'country' %}icon-flag{% else %}icon-home{% endif %}"></i>
     {% if entity.type.slug == 'country' %}{{ entity.display_full_name }} {% else %}{{ entity.display_full_typed_name }}{% endif %}
 </h2>
 
 <dl>
     <dt>Code</dt>
-    <dd>{{ entity.slug }} <i class="fa fa-globe"></i> <a title="Voir sur la Carte Sanitaire Numérique: csn.sante.gov.ml" href="http://ident.sante.gov.ml/browse/{{ entity.slug }}">csn.sante.gov.ml</a></dd>
+    <dd>{{ entity.slug }} <i class="icon-globe"></i> <a title="Voir sur la Carte Sanitaire Numérique: csn.sante.gov.ml" href="http://ident.sante.gov.ml/browse/{{ entity.slug }}">csn.sante.gov.ml</a></dd>
     <dt>Type</dt>
     <dd>{{ entity.type }}</dd>
     {% if entity.get_health_center and entity.get_health_center != entity %}
@@ -45,7 +45,7 @@
     {% endif %}
     {% if entity.gps %}
     <dt>Coordonnées GPS</dt>
-    <dd>Lat: {{ entity.latitude }}. Lon: {{ entity.longitude }}. {% localize off %}<a title="Voir les coordonnées sur Open Street Map" href="http://www.openstreetmap.org/?mlat={{ entity.latitude }}&mlon={{ entity.longitude }}#map=13/{{ entity.latitude }}/{{ entity.longitude }}"><i class="fa fa-map-marker"></i> OSM</a>{% endlocalize %}</dd>
+    <dd>Lat: {{ entity.latitude }}. Lon: {{ entity.longitude }}. {% localize off %}<a title="Voir les coordonnées sur Open Street Map" href="http://www.openstreetmap.org/?mlat={{ entity.latitude }}&mlon={{ entity.longitude }}#map=13/{{ entity.latitude }}/{{ entity.longitude }}"><i class="icon-location"></i> OSM</a>{% endlocalize %}</dd>
     {% endif %}
     <dt>Statut</dt>
     <dd>{% if entity.active %}Actif{% else %}Non actif{% endif %} depuis le {{ entity.active_changed_on }}.</dd>
