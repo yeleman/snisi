@@ -106,7 +106,7 @@ module.exports = function(grunt) {
       fonts: {
         files: [
             {expand: true, cwd: 'assets/droidsans/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
-            {expand: true, cwd: 'assets/snisi-icon/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
+            {expand: true, cwd: 'assets/fontello/font/', src: ['**'], dest: 'fonts/', filter: 'isFile'},
         ]
       }
     },
