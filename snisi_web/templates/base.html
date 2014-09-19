@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>{{ brand_short}} | {% block title %}{{ brand_full }}{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" media="screen" type="text/css" href="{% static "css/snisi_all.min.css" %}" title="{{ brand_short }}" />
+    <link rel="stylesheet" media="screen" type="text/css" href="{% static "css/snisi_all.min.css" %}?date=20140919" title="{{ brand_short }}" />
     <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" />
     <meta http-equiv="Content-Language" content="fr-fr" />
     <meta name="ROBOTS" content="ALL" />
@@ -124,7 +124,7 @@
         </div>
     </div>
 </body>
-<script src="{% static "js/snisi.min.js" %}"></script>
+<script src="{% static "js/snisi.min.js" %}?date=20140919"></script>
 {% block assets %}{% endblock %}
 <script>
 $(document).ready(function(){
