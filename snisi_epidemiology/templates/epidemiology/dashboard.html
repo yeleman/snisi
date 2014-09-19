@@ -6,7 +6,7 @@
 {% if all_quiet %}
 <p class="alert alert-success"><i class="icon-smile"></i> Aucun cas de MADO déclaré durant le mois de {{ current_period }}.</p>
 {% else %}
-<p class="alert alert-danger"><strong>ATTENTION</strong>, <strong>{{ nb_cases_this_month }}</strong> cas ont été rapportés au moins de <strong>{{ current_period }}</strong></p>
+<p class="alert alert-danger"><strong>ATTENTION</strong>, <strong>{{ nb_cases_this_month }}</strong> cas suspect{{nb_cases_this_month|pluralize}} {{nb_cases_this_month|pluralize:"à,ont"}} été rapporté{{nb_cases_this_month|pluralize}} au mois de <strong>{{ current_period }}</strong></p>
 
 <table class="pure-table table-striped table-bordered all-left">
 <tr><th>Semaine</th><th>Du</th><th>Au</th><th>Situation (cas/décès)</th></tr>

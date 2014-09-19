@@ -296,7 +296,7 @@ class AbstractEpidemiologyR(SNISIReport):
             setattr(self, field, 0)
 
     def as_xls(self):
-        file_name = "MADO_{entity}s.{day}.{month}.{year}.xls" \
+        file_name = "MADO_{entity}.{day}.{month}.{year}.xls" \
                     .format(entity=self.entity.slug,
                             day=self.period.middle().day,
                             month=self.period.middle().month,
@@ -329,6 +329,15 @@ class AbstractEpidemiologyR(SNISIReport):
     @classmethod
     def disease_name(cls, disease):
         return cls.DISEASE_NAMES.get(disease)
+
+    def name_cases_deaths(self):
+        lines = []
+        for disease in self.disease_fields():
+            line = [self.disease_name(disease),
+                    getattr(self, '{}_case'.format(disease), 0),
+                    getattr(self, '{}_death'.format(disease), 0)]
+            lines.append(line)
+        return lines
 
 
 @implements_to_string
@@ -371,6 +380,10 @@ class AggEpidemiologyR(PeriodicAggregatedReportInterface,
         INDIVIDUAL_CLS, verbose_name=_("Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
+
+    @classmethod
+    def start(cls, *args, **kwargs):
+        return cls.start_report(*args, **kwargs)
 
 receiver(pre_save, sender=AggEpidemiologyR)(pre_save_report)
 receiver(post_save, sender=AggEpidemiologyR)(post_save_report)

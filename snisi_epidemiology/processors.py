@@ -9,21 +9,22 @@ import datetime
 
 from django.utils import timezone
 
-from snisi_epidemiology.models import EpidemiologyR, EpiWeekPeriod
+from snisi_epidemiology.models import AggEpidemiologyR, EpiWeekPeriod
 from snisi_epidemiology.views import nb_cases_for
 
 logger = logging.getLogger(__name__)
 
 
 def default_context():
+    # TODO: restore EpidemiologyR instead of AggEpidemiologyR
     periods = EpiWeekPeriod.all_from(
         EpiWeekPeriod.find_create_by_date(
             timezone.now() - datetime.timedelta(days=15)))
 
-    mado_nb_cases = nb_cases_for(periods, EpidemiologyR)
+    mado_nb_cases = nb_cases_for(periods, AggEpidemiologyR)
     if mado_nb_cases:
         level = 'danger' \
-            if nb_cases_for(periods, EpidemiologyR, 'deaths') else 'warning'
+            if nb_cases_for(periods, AggEpidemiologyR, 'deaths') else 'warning'
     else:
         level = 'success'
 

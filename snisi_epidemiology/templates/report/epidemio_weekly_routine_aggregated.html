@@ -1,0 +1,14 @@
+{% load snisi %}
+
+{% with form=report.as_form %}
+<h2>Données SMIR</h2>
+<table class="pure-table center report-table">
+{% for disease, cases, deaths in report.name_cases_deaths %}
+<tr>
+	<th>{{ disease }}</th>
+	<td>{{ cases }}</td>
+	<td>{{ deaths }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endwith %}

@@ -24,7 +24,8 @@ validating_role = Role.get_or_none('charge_sis')
 
 
 def create_epid_report(provider, expected_reporting, completed_on,
-                       integrity_checker, data_source):
+                       integrity_checker, data_source,
+                       reportcls=EpidemiologyR):
 
     validation_period = EpiWeekDistrictValidationPeriod.find_create_by_date(
         expected_reporting.period.middle())
@@ -35,7 +36,7 @@ def create_epid_report(provider, expected_reporting, completed_on,
         completed_on=completed_on,
         data_source=data_source,
         integrity_checker=integrity_checker,
-        reportcls=EpidemiologyR,
+        reportcls=reportcls,
         project_brand=PROJECT_BRAND,
         validation_period=validation_period,
         validating_entity=expected_reporting.entity.get_health_district(),
@@ -46,6 +47,7 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
                                     ReportIntegrityChecker):
     report_class = reportcls_epidemio
     validating_role = validating_role
+    period_class = EpiWeekPeriod
 
     def check_epid_data(self):
         list_fields = ['ebola',
@@ -61,7 +63,8 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
                        'acute_measles_diarrhea',
                        'other_notifiable_disease']
 
-        if self.get('reporting_date').weekday() != 4:
+        if self.period_class == EpiWeekPeriod and \
+                self.get('reporting_date').weekday() != 4:
             self.add_error("Fin de semaine doit être un vendredi et non un {}."
                            .format(self.get('reporting_date').strftime("%A")),
                            field="year")
@@ -96,7 +99,7 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
         else:
             self.set('reporting_date', reporting_date)
 
-        period = EpiWeekPeriod.find_create_by_date(
+        period = self.period_class.find_create_by_date(
             reporting_date - datetime.timedelta(days=3))
         self.set('period', period)
 

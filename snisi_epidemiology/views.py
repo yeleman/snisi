@@ -120,6 +120,8 @@ def indicators(request,
 def dashboard(request, **kwargs):
     context = {}
 
+    # TODO: in this context we should use only Epidemiology not Agg
+
     context.update({
         'current_period': MonthPeriod.current(),
         'periods': EpiWeekPeriod.all_from(
@@ -131,7 +133,7 @@ def dashboard(request, **kwargs):
     nb_cases_previous_months = nb_cases_for(context['periods'],
                                             AggEpidemiologyR)
     nb_cases_this_month = nb_cases_for([MonthPeriod.current()],
-                                       EpidemiologyR)
+                                       AggEpidemiologyR)
     nb_cases_total = sum([nb_cases_previous_months, nb_cases_this_month])
 
     all_quiet = nb_cases_total == 0
@@ -147,11 +149,11 @@ def dashboard(request, **kwargs):
             data = {field: {'cases': 0,
                             'deaths': 0,
                             'reports': []}
-                    for field in EpidemiologyR.disease_fields()}
+                    for field in AggEpidemiologyR.disease_fields()}
             # data = {field: 0 for field in EpidemiologyR.disease_fields()}
             # data_located = {field: []
             #                 for field in EpidemiologyR.disease_fields()}
-            for report in EpidemiologyR.objects.filter(period=period):
+            for report in AggEpidemiologyR.objects.filter(period=period):
                 for field in data.keys():
                     cases = getattr(report, "{}_case".format(field), 0)
                     deaths = getattr(report, "{}_death".format(field), 0)

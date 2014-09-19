@@ -367,24 +367,13 @@ class Period(models.Model):
                       if period.start_on <= date_obj
                       and period.end_on >= date_obj][0]
         except IndexError:
-            logger.debug("IndexError")
-
             try:
-                logger.debug("boundaries")
-                logger.debug(cls.boundaries(date_obj))
                 period = cls.find_create_with(*cls.boundaries(date_obj))
-                logger.debug("find_create_with")
-                logger.debug(period)
             except:
-                logger.debug("find_create_with raised an exception")
                 return None
             if dont_create:
-                logger.debug("do not save period")
                 return period
-            logger.debug(period)
             period.save()
-            logger.debug("period saved")
-            logger.debug(period)
         return period
 
     @classmethod

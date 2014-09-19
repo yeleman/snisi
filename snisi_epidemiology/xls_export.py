@@ -12,7 +12,7 @@ from xlrd import open_workbook
 from xlutils.copy import copy
 
 from snisi_core.xls_export import xls_update_value_only
-from snisi_reprohealth import get_domain
+from snisi_epidemiology import get_domain
 
 logger = logging.getLogger(__name__)
 

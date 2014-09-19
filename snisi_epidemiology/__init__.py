@@ -11,7 +11,7 @@ from snisi_core.models.Projects import Domain
 logger = logging.getLogger(__name__)
 
 PROJECT_BRAND = "SMIR"
-DOMAIN_SLUG = 'epidomiology'
+DOMAIN_SLUG = 'epidemiology'
 
 # epidemio is based on traditional weeks
 # period ends on Friday noon and collect ends on Sunday noon.
