@@ -2,14 +2,14 @@
 <django-objects version="1.0">
     <object pk="epidemio_weekly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">epidemio_weekly_routine</field>
-        <field type="CharField" name="name">Routine Hebdomadire MADO</field>
+        <field type="CharField" name="name">SMIR</field>
         <field type="CharField" name="cls">snisi_epidemiology.models.EpidemiologyR</field>
         <field type="CharField" name="period_cls">snisi_epidemiology.models.EpiWeekPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="epidemio_weekly_routine_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">epidemio_weekly_routine_aggregated</field>
-        <field type="CharField" name="name">Routine Hebdomadire MADO (Aggrégé)</field>
+        <field type="CharField" name="name">SMIR (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_epidemiology.models.AggEpidemiologyR</field>
         <field type="CharField" name="period_cls">snisi_epidemiology.models.EpiWeekPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
