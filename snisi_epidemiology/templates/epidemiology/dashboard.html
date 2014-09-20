@@ -9,7 +9,7 @@
 <p class="alert alert-danger"><strong>ATTENTION</strong>, <strong>{{ nb_cases_this_month }}</strong> cas suspect{{nb_cases_this_month|pluralize}} {{nb_cases_this_month|pluralize:"à,ont"}} été rapporté{{nb_cases_this_month|pluralize}} au mois de <strong>{{ current_period }}</strong></p>
 
 <table class="pure-table table-striped table-bordered all-left">
-<tr><th>Semaine</th><th>Du</th><th>Au</th><th>Situation (cas/décès)</th></tr>
+<tr><th>Semaine</th><th>Du</th><th>Au</th><th>Situation (cas suspects/décès suspects)</th></tr>
 {% for week, week_data in weeks %}
 <tr><td>{{ week.strid }}</td><td>{{ week.start_on }}</td><td>{{ week.end_on }}</td>
 <td>

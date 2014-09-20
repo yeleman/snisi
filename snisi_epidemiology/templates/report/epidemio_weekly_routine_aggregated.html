@@ -3,6 +3,11 @@
 {% with form=report.as_form %}
 <h2>Données SMIR</h2>
 <table class="pure-table center report-table">
+<tr>
+	<th>MADO</th>
+	<th>Cas suspects</th>
+	<th>Décès suspects</th>
+</tr>
 {% for disease, cases, deaths in report.name_cases_deaths %}
 <tr>
 	<th>{{ disease }}</th>

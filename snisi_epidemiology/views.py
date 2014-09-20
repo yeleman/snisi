@@ -48,7 +48,8 @@ class Summary(IndicatorTable):
 
     name = "Tableau 1"
     title = ""
-    caption = ("Cas et décès des Maladies à Déclaration Obligatoire")
+    caption = ("Cas suspects et décès suspects des "
+               "Maladies à Déclaration Obligatoire")
     rendering_type = 'table'
 
     INDICATORS = [

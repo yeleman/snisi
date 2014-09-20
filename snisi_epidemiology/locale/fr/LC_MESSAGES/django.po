@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-17 16:46+0000\n"
-"PO-Revision-Date: 2014-09-17 16:48-0000\n"
+"POT-Creation-Date: 2014-09-20 10:03+0000\n"
+"PO-Revision-Date: 2014-09-20 10:05-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:74
+#: integrity.py:77
 #, python-brace-format
 msgid "{field_name}: ({case}) number case lower than ({death}) number death"
 msgstr ""
 "{field_name}: Nombre de cas ({case}) inférieur au nombre de décès ({death})."
 
-#: integrity.py:85
+#: integrity.py:88
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"
@@ -111,123 +111,147 @@ msgid "Other Notifiable Diseases"
 msgstr "Maladie à déclaration obligatoire"
 
 #: models.py:199
-msgid "Ebola cases"
-msgstr "Cas de Ébola"
+#| msgid "Ebola cases"
+msgid "Suspected Ebola cases"
+msgstr "Cas suspects Ébola"
 
 #: models.py:200
-msgid "Ebola death"
-msgstr "Décès par Ébola"
-
-#: models.py:202
-msgid "AFP cases"
-msgstr "Cas de paralysie flasque aiguë"
+#| msgid "Ebola death"
+msgid "Suspected Ebola death"
+msgstr "Décès suspects Ébola"
 
 #: models.py:203
-msgid "AFP death"
-msgstr "Décès par paralysie flasque aiguë"
+#| msgid "AFP cases"
+msgid "Suspected AFP cases"
+msgstr "Cas suspects paralysie flasque aiguë"
 
 #: models.py:205
-msgid "Influenza A H1N1 cases"
-msgstr "Cas de grippe A H1N1"
-
-#: models.py:206
-msgid "Influenza A H1N1 death"
-msgstr "Décès par grippe A H1N1"
+#| msgid "AFP death"
+msgid "Suspected AFP death"
+msgstr "Décès suspects paralysie flasque aiguë"
 
 #: models.py:208
-msgid "Cholera cases"
-msgstr "Cas de choléra"
+#| msgid "Influenza A H1N1 cases"
+msgid "Suspected Influenza A H1N1 cases"
+msgstr "Cas suspects grippe A H1N1"
 
-#: models.py:209
-msgid "Cholera death"
-msgstr "Décès par choléra"
-
-#: models.py:211
-msgid "Red Diarrhea cases"
-msgstr "Cas de diarrhée rouge"
+#: models.py:210
+#| msgid "Influenza A H1N1 death"
+msgid "Suspected Influenza A H1N1 death"
+msgstr "Décès suspects grippe A H1N1"
 
 #: models.py:212
-msgid "Red Diarrhea death"
-msgstr "Décès par diarrhée rouge"
+#| msgid "Cholera cases"
+msgid "Suspected Cholera cases"
+msgstr "Cas suspects choléra"
 
-#: models.py:214
-msgid "Measles cases"
-msgstr "Cas de rougeole"
+#: models.py:213
+#| msgid "Cholera death"
+msgid "Suspected Cholera death"
+msgstr "Décès suspects choléra"
 
 #: models.py:215
-msgid "Measles death"
-msgstr "Décès par rougeole"
+#| msgid "Red Diarrhea cases"
+msgid "Suspected Red Diarrhea cases"
+msgstr "Cas suspects diarrhée rouge"
 
-#: models.py:217
-msgid "Yellow Fever cases"
-msgstr "Cas de fièvre jaune"
+#: models.py:216
+#| msgid "Red Diarrhea death"
+msgid "Suspected Red Diarrhea death"
+msgstr "Décès suspects diarrhée rouge"
 
 #: models.py:218
-msgid "Yellow Fever death"
-msgstr "Décès par fièvre jaune"
+#| msgid "Measles cases"
+msgid "Suspected Measles cases"
+msgstr "Cas suspects rougeole"
 
-#: models.py:220
-msgid "NNT cases"
-msgstr "Cas de TNN"
+#: models.py:219
+#| msgid "Measles death"
+msgid "Suspected Measles death"
+msgstr "Décès suspects rougeole"
 
 #: models.py:221
-msgid "NNT death"
-msgstr "Décès par TNN"
+#| msgid "Yellow Fever cases"
+msgid "Suspected Yellow Fever cases"
+msgstr "Cas suspects fièvre jaune"
 
-#: models.py:223
-msgid "Meningitis cases"
-msgstr "Cas de méningite"
+#: models.py:222
+#| msgid "Yellow Fever death"
+msgid "Suspected Yellow Fever death"
+msgstr "Décès suspects fièvre jaune"
 
 #: models.py:224
-msgid "Meningitis death"
-msgstr "Décès par méningite"
+#| msgid "NNT cases"
+msgid "Suspected NNT cases"
+msgstr "Cas suspects TNN"
 
-#: models.py:226
-msgid "Rabies cases"
-msgstr "Cas de rage"
+#: models.py:225
+#| msgid "NNT death"
+msgid "Suspected NNT death"
+msgstr "Décès suspects TNN"
 
 #: models.py:227
-msgid "Rabies death"
-msgstr "Décès par rage"
+#| msgid "Meningitis cases"
+msgid "Suspected Meningitis cases"
+msgstr "Cas suspects méningite"
+
+#: models.py:228
+#| msgid "Meningitis death"
+msgid "Suspected Meningitis death"
+msgstr "Décès suspect méningite"
 
 #: models.py:230
-msgid "Acute Measles Diarrhea cases"
-msgstr "Cas de rougeole aiguë et diarrhée"
+#| msgid "Rabies cases"
+msgid "Suspected Rabies cases"
+msgstr "Cas suspects rage"
 
-#: models.py:232
-msgid "Acute Measles Diarrhea death"
-msgstr "Décès par rougeole aiguë et diarrhée"
+#: models.py:231
+#| msgid "Rabies death"
+msgid "Suspected Rabies death"
+msgstr "Décès suspects rage"
 
-#: models.py:235
-msgid "Other Notifiable Diseases cases"
-msgstr "Autres cas de maladie à déclaration obligatoire"
+#: models.py:234
+#| msgid "Acute Measles Diarrhea cases"
+msgid "Suspected Acute Measles Diarrhea cases"
+msgstr "Cas suspects rougeole aiguë et diarrhée"
 
-#: models.py:237
-msgid "Other Notifiable Diseases death"
-msgstr "Autres décès de maladie à déclaration obligatoire"
+#: models.py:236
+#| msgid "Acute Measles Diarrhea death"
+msgid "Suspected Acute Measles Diarrhea death"
+msgstr "Décès suspects rougeole aiguë et diarrhée"
 
-#: models.py:289
+#: models.py:239
+#| msgid "Other Notifiable Diseases cases"
+msgid "Suspected Other Notifiable Diseases cases"
+msgstr "Autres cas suspects de maladie à déclaration obligatoire"
+
+#: models.py:241
+#| msgid "Other Notifiable Diseases death"
+msgid "Suspected Other Notifiable Diseases death"
+msgstr "Autres décès suspects maladie à déclaration obligatoire"
+
+#: models.py:293
 #, python-brace-format
 msgid "{cscom} / {period} / {receipt}"
 msgstr "{cscom} / {period} / {receipt}"
 
-#: models.py:345
+#: models.py:358
 msgid "Epidemiology Report"
 msgstr "Rapport épidémiologie"
 
-#: models.py:346
+#: models.py:359
 msgid "Epidemiology Reports"
 msgstr "Rapports épidémiologie"
 
-#: models.py:367
+#: models.py:380
 msgid "Aggregated Epidemiology Report"
 msgstr "Rapport épidémiologie agrégé"
 
-#: models.py:368
+#: models.py:381
 msgid "Aggregated Epidemiology Reports"
 msgstr "Rapports épidémiologie agrégés"
 
-#: models.py:371
+#: models.py:384
 msgid "Primary. Sources"
 msgstr "Sources primaires"
 

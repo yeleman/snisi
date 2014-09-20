@@ -196,45 +196,49 @@ class AbstractEpidemiologyR(SNISIReport):
         'other_notifiable_disease': _("Other Notifiable Diseases")
     }
 
-    ebola_case = models.IntegerField(_("Ebola cases"))
-    ebola_death = models.IntegerField(_("Ebola death"))
+    ebola_case = models.IntegerField(_("Suspected Ebola cases"))
+    ebola_death = models.IntegerField(_("Suspected Ebola death"))
 
-    acute_flaccid_paralysis_case = models.IntegerField(_("AFP cases"))
-    acute_flaccid_paralysis_death = models.IntegerField(_("AFP death"))
+    acute_flaccid_paralysis_case = models.IntegerField(
+        _("Suspected AFP cases"))
+    acute_flaccid_paralysis_death = models.IntegerField(
+        _("Suspected AFP death"))
 
-    influenza_a_h1n1_case = models.IntegerField(_("Influenza A H1N1 cases"))
-    influenza_a_h1n1_death = models.IntegerField(_("Influenza A H1N1 death"))
+    influenza_a_h1n1_case = models.IntegerField(
+        _("Suspected Influenza A H1N1 cases"))
+    influenza_a_h1n1_death = models.IntegerField(
+        _("Suspected Influenza A H1N1 death"))
 
-    cholera_case = models.IntegerField(_("Cholera cases"))
-    cholera_death = models.IntegerField(_("Cholera death"))
+    cholera_case = models.IntegerField(_("Suspected Cholera cases"))
+    cholera_death = models.IntegerField(_("Suspected Cholera death"))
 
-    red_diarrhea_case = models.IntegerField(_("Red Diarrhea cases"))
-    red_diarrhea_death = models.IntegerField(_("Red Diarrhea death"))
+    red_diarrhea_case = models.IntegerField(_("Suspected Red Diarrhea cases"))
+    red_diarrhea_death = models.IntegerField(_("Suspected Red Diarrhea death"))
 
-    measles_case = models.IntegerField(_("Measles cases"))
-    measles_death = models.IntegerField(_("Measles death"))
+    measles_case = models.IntegerField(_("Suspected Measles cases"))
+    measles_death = models.IntegerField(_("Suspected Measles death"))
 
-    yellow_fever_case = models.IntegerField(_("Yellow Fever cases"))
-    yellow_fever_death = models.IntegerField(_("Yellow Fever death"))
+    yellow_fever_case = models.IntegerField(_("Suspected Yellow Fever cases"))
+    yellow_fever_death = models.IntegerField(_("Suspected Yellow Fever death"))
 
-    neonatal_tetanus_case = models.IntegerField(_("NNT cases"))
-    neonatal_tetanus_death = models.IntegerField(_("NNT death"))
+    neonatal_tetanus_case = models.IntegerField(_("Suspected NNT cases"))
+    neonatal_tetanus_death = models.IntegerField(_("Suspected NNT death"))
 
-    meningitis_case = models.IntegerField(_("Meningitis cases"))
-    meningitis_death = models.IntegerField(_("Meningitis death"))
+    meningitis_case = models.IntegerField(_("Suspected Meningitis cases"))
+    meningitis_death = models.IntegerField(_("Suspected Meningitis death"))
 
-    rabies_case = models.IntegerField(_("Rabies cases"))
-    rabies_death = models.IntegerField(_("Rabies death"))
+    rabies_case = models.IntegerField(_("Suspected Rabies cases"))
+    rabies_death = models.IntegerField(_("Suspected Rabies death"))
 
     acute_measles_diarrhea_case = models.IntegerField(
-        _("Acute Measles Diarrhea cases"))
+        _("Suspected Acute Measles Diarrhea cases"))
     acute_measles_diarrhea_death = models.IntegerField(
-        _("Acute Measles Diarrhea death"))
+        _("Suspected Acute Measles Diarrhea death"))
 
     other_notifiable_disease_case = models.IntegerField(
-        _("Other Notifiable Diseases cases"))
+        _("Suspected Other Notifiable Diseases cases"))
     other_notifiable_disease_death = models.IntegerField(
-        _("Other Notifiable Diseases death"))
+        _("Suspected Other Notifiable Diseases death"))
 
     def add_data(self, ebola_case,
                  ebola_death,

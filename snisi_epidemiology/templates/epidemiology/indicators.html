@@ -29,7 +29,7 @@ $.each(hc_graphs, function (idx) {
 {% block content %}
 
 <div id="entity_periods_filter" class="pure-form" method="POST">
-    <legend>Suivi épidémiologique des MADO</legend>
+    <legend>SMIR</legend>
     {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
 
     {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
