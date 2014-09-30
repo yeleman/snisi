@@ -192,6 +192,7 @@ class RoutineIntegrityInterface(object):
 
     report_class = None
     validating_role = None
+    entity_type = 'health_center'
 
     def chk_period_is_not_future(self, **options):
         # default period is MonthPeriod from year/month
@@ -209,7 +210,7 @@ class RoutineIntegrityInterface(object):
     def chk_entity_exists(self, **options):
         if not self.has('entity') or not self.get('entity'):
             entity = Entity.get_or_none(self.get('hc', '').upper(),
-                                        type_slug='health_center')
+                                        type_slug=self.entity_type)
             self.set('entity', entity)
 
         if self.get('entity') is None \
@@ -278,6 +279,9 @@ class RoutineIntegrityInterface(object):
         # check permission to submit report.
         provider = self.get('submitter')
         entity = Entity.get_or_none(self.get('entity').slug)
+        allow_district = options.get('allow_district', False)
+        additional_entities = [Entity.get_or_none(provider.location.slug)] \
+            if allow_district else []
 
         if provider.username == 'autobot':
             return
@@ -286,11 +290,14 @@ class RoutineIntegrityInterface(object):
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district
         # and the district have the Entity as child HC
+        # if allow_district then entity can be same district itself
         if provider.role.slug not in ('dtc', 'charge_sis') \
             or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
             or (provider.role.slug == 'charge_sis' and
                 (not provider.location.type.slug == 'health_district'
-                 or entity not in provider.location.get_health_centers())):
+                 or entity
+                 not in provider.location.get_health_centers() +
+                 additional_entities)):
                 self.add_error("Vous ne pouvez pas envoyer de rapport "
                                "de routine pour {entity}."
                                .format(entity=entity),

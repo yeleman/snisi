@@ -95,7 +95,7 @@
                 {% if messages %}
                 <div id="notifications" class="">
                 {% for message in messages %}
-                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}<i class="icon-cancel close-notif-button"></i></p>
+                    <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message|linebreaksbr }}<i class="icon-cancel close-notif-button"></i></p>
                 {% endfor %}
                 </div>
                 {% endif %}

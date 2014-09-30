@@ -20,7 +20,7 @@ reportcls_epi = ReportClass.get_or_none(slug='epidemio_weekly_routine')
 
 
 def epidemiology_handler(message):
-    if message.content.lower().startswith('mado '):
+    if message.content.lower().startswith('smir '):
         return epidemio(message)
 
     return False
