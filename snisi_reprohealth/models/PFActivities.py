@@ -169,6 +169,13 @@ class PFActivitiesRIface(models.Model):
     implant_removal_revenue = models.PositiveIntegerField(
         verbose_name=_("Implants Removals"))
 
+    emergency_controls_removal_qty = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Quantity"))
+    emergency_controls_removal_price = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Price"))
+    emergency_controls_removal_revenue = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls"))
+
     # stock
     intrauterine_devices_initial = models.PositiveIntegerField(
         verbose_name=_("IUD: Initial Quantity"))
@@ -241,6 +248,15 @@ class PFActivitiesRIface(models.Model):
     pregnancy_tests_received = models.PositiveIntegerField(
         verbose_name=_("Pregnancy Tests: Quantity Received"))
 
+    emergency_controls_initial = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Initial Quantity"))
+    emergency_controls_used = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Quantity Used"))
+    emergency_controls_lost = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Quantity Lost"))
+    emergency_controls_received = models.PositiveIntegerField(
+        verbose_name=_("Emergency Controls: Quantity Received"))
+
     @property
     def total_clients(self):
         return self.new_clients + self.previous_clients
@@ -264,7 +280,8 @@ class PFActivitiesRIface(models.Model):
                   'female_condoms',
                   'hiv_tests',
                   'iud_removal',
-                  'implant_removal']
+                  'implant_removal',
+                  'emergency_controls']
         if not include_subs:
             return fields
 
@@ -283,7 +300,8 @@ class PFActivitiesRIface(models.Model):
                   'male_condoms',
                   'female_condoms',
                   'hiv_tests',
-                  'pregnancy_tests']
+                  'pregnancy_tests',
+                  'emergency_controls']
         if not include_subs:
             return fields
 
@@ -466,6 +484,9 @@ class PFActivitiesR(PFActivitiesRIface, SNISIReport):
         max_length=500, null=True, blank=True)
 
     pregnancy_tests_observation = models.CharField(
+        max_length=500, null=True, blank=True)
+
+    emergency_controls_observation = models.CharField(
         max_length=500, null=True, blank=True)
 
 

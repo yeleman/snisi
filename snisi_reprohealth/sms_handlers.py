@@ -98,6 +98,9 @@ def msi_pf(message):
                       'implant_removal_qty',
                       'implant_removal_price',
                       'implant_removal_revenue',
+                      'emergency_controls_qty',
+                      'emergency_controls_price',
+                      'emergency_controls_revenue',
 
                       'intrauterine_devices_initial',
                       'intrauterine_devices_used',
@@ -131,6 +134,10 @@ def msi_pf(message):
                       'pregnancy_tests_used',
                       'pregnancy_tests_lost',
                       'pregnancy_tests_received',
+                      'emergency_controls_initial',
+                      'emergency_controls_used',
+                      'emergency_controls_lost',
+                      'emergency_controls_received',
                       'intrauterine_devices_observation',
                       'implants_observation',
                       'injections_observation',
@@ -138,7 +145,8 @@ def msi_pf(message):
                       'male_condoms_observation',
                       'female_condoms_observation',
                       'hiv_tests_observation',
-                      'pregnancy_tests_observation']
+                      'pregnancy_tests_observation',
+                      'emergency_controls_observation']
 
         args_values = message.content.strip().lower().split()
         arguments = dict(zip(args_names, args_values))
