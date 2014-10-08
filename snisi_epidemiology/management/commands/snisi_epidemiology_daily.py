@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        logger.info("snisi_malaria daily-checkups")
+        logger.info("snisi_epidemiology daily-checkups")
 
         now = timezone.now()
 
