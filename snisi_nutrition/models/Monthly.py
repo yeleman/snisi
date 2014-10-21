@@ -21,7 +21,14 @@ from snisi_core.models.Reporting import (SNISIReport,
 logger = logging.getLogger(__name__)
 
 
-class NutritionR(SNISIReport):
+class AbstractNutritionR(SNISIReport):
+
+    class Meta:
+        app_label = 'snisi_nutrition'
+        abstract = True
+
+
+class NutritionR(AbstractNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period}-NUT/{rand}"
@@ -32,6 +39,13 @@ class NutritionR(SNISIReport):
         verbose_name = _("Nutrition Report")
         verbose_name_plural = _("Nutrition Reports")
 
+    urenam_report = models.ForeignKeyField(
+        'URENAMNutritionR', null=True, blank=True, related_name='nutritionr')
+    urenas_report = models.ForeignKeyField(
+        'URENASNutritionR', null=True, blank=True, related_name='nutritionr')
+    ureni_report = models.ForeignKeyField(
+        'URENINutritionR', null=True, blank=True, related_name='nutritionr')
+
 
 receiver(pre_save, sender=NutritionR)(pre_save_report)
 receiver(post_save, sender=NutritionR)(post_save_report)
@@ -39,9 +53,11 @@ receiver(post_save, sender=NutritionR)(post_save_report)
 reversion.register(NutritionR)
 
 
-class AggNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
+class AggNutritionR(AbstractNutritionR,
+                    PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
+    RECEIPT_FORMAT = "{period}-NUTa/{rand}"
     INDIVIDUAL_CLS = NutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 
@@ -49,6 +65,16 @@ class AggNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
         app_label = 'snisi_nutrition'
         verbose_name = _("Aggregated Nutrition Report")
         verbose_name_plural = _("Aggregated Nutrition Reports")
+
+    urenam_report = models.ForeignKeyField(
+        'AggURENAMNutritionR', null=True, blank=True,
+        related_name='agg_nutritionr')
+    urenas_report = models.ForeignKeyField(
+        'AggURENASNutritionR', null=True, blank=True,
+        related_name='agg_nutritionr')
+    ureni_report = models.ForeignKeyField(
+        'AggURENINutritionR', null=True, blank=True,
+        related_name='agg_nutritionr')
 
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
@@ -61,18 +87,10 @@ class AggNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
 
         cls.update_instance_with_indiv_meta(report, instance)
 
-        for field in cls.data_fields():
-            setattr(report, field,
-                    getattr(report, field, 0) + getattr(instance, field, 0))
-
     @classmethod
     def update_instance_with_agg(cls, report, instance):
 
         cls.update_instance_with_agg_meta(report, instance)
-
-        for field in cls.data_fields():
-            setattr(report, field,
-                    getattr(report, field, 0) + getattr(instance, field, 0))
 
 
 receiver(pre_save, sender=AggNutritionR)(pre_save_report)
