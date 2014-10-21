@@ -7,7 +7,6 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import os
 
-from django.utils import timezone
 from django.core.management.base import BaseCommand
 from optparse import make_option
 from py3compat import PY2
@@ -16,7 +15,10 @@ from snisi_core.models.Entities import Entity, HealthEntity, EntityType
 from snisi_core.models.Roles import Role
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Projects import Cluster, Participation
+from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_tools.auth import create_provider
+from snisi_reprohealth.models.PFActivities import (
+    AggPFActivitiesR, PFActivitiesR)
 
 if PY2:
     import unicodecsv as csv
@@ -44,6 +46,15 @@ class Command(BaseCommand):
             logger.error("CSV file `{}` does not exist."
                          .format(options.get('filename')))
             return
+
+        # delete existing expected and PFActivitiesR
+        if False:
+            for rc in ('msi_pf_monthly_routine',
+                       'msi_pf_monthly_routine_aggregated'):
+                ExpectedReporting.objects.filter(
+                    report_class=ReportClass.get_or_none(rc)).delete()
+            PFActivitiesR.objects.all().delete()
+            AggPFActivitiesR.objects.all().delete()
 
         privates = {
             'PTAP9': ('ZX5W9', "Cabinet Liberté"),
