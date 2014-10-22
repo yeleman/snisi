@@ -39,11 +39,11 @@ class NutritionR(AbstractNutritionR):
         verbose_name = _("Nutrition Report")
         verbose_name_plural = _("Nutrition Reports")
 
-    urenam_report = models.ForeignKeyField(
+    urenam_report = models.ForeignKey(
         'URENAMNutritionR', null=True, blank=True, related_name='nutritionr')
-    urenas_report = models.ForeignKeyField(
+    urenas_report = models.ForeignKey(
         'URENASNutritionR', null=True, blank=True, related_name='nutritionr')
-    ureni_report = models.ForeignKeyField(
+    ureni_report = models.ForeignKey(
         'URENINutritionR', null=True, blank=True, related_name='nutritionr')
 
 
@@ -66,13 +66,13 @@ class AggNutritionR(AbstractNutritionR,
         verbose_name = _("Aggregated Nutrition Report")
         verbose_name_plural = _("Aggregated Nutrition Reports")
 
-    urenam_report = models.ForeignKeyField(
+    urenam_report = models.ForeignKey(
         'AggURENAMNutritionR', null=True, blank=True,
         related_name='agg_nutritionr')
-    urenas_report = models.ForeignKeyField(
+    urenas_report = models.ForeignKey(
         'AggURENASNutritionR', null=True, blank=True,
         related_name='agg_nutritionr')
-    ureni_report = models.ForeignKeyField(
+    ureni_report = models.ForeignKey(
         'AggURENINutritionR', null=True, blank=True,
         related_name='agg_nutritionr')
 
