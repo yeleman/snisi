@@ -17,7 +17,7 @@ class SMSReply(object):
 
     LEVEL_PREFIXES = {
         INFO: "",
-        ERROR: _("ERREUR"),
+        ERROR: _("ECHEC"),
         WARNING: _("/!\\"),
         SUCCESS: _("OK")
     }
