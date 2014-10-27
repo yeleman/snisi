@@ -42,7 +42,6 @@ class SMSReply(object):
     def namespace(self):
         return self._namespace
 
-    @property
     def prefix(self, level=None):
         ns = self.namespace
         level_str = self.LEVEL_PREFIXES.get(level)
@@ -59,8 +58,9 @@ class SMSReply(object):
         return "[{}]".format(":".join(parts))
 
     def body(self, text, level=INFO):
-        if self.prefix is not None:
-            return "{prefix} {text}".format(prefix=self.prefix, text=text)
+        if self.prefix(level) is not None:
+            return "{prefix} {text}".format(
+                prefix=self.prefix(level), text=text)
         return text
 
     def send(self, text, level=INFO):
