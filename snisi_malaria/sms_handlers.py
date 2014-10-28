@@ -20,6 +20,7 @@ from snisi_malaria.integrity import (MalariaRSourceReportChecker,
                                      create_report, PROJECT_BRAND)
 from snisi_tools.sms import send_sms
 from snisi_sms.reply import SMSReply
+from snisi_sms.common import change_passwd, ask_for_help
 
 logger = logging.getLogger(__name__)
 reportcls = ReportClass.objects.get(slug='malaria_monthly_routine')
@@ -28,11 +29,11 @@ reportcls = ReportClass.objects.get(slug='malaria_monthly_routine')
 def malaria_handler(message):
     if message.content.lower().startswith('palu '):
         if message.content.lower().startswith('palu passwd'):
-            return malaria_passwd(message)
+            return change_passwd(message)
         elif message.content.lower().strip() == 'palu aide':
-            return malaria_help(message, True)
+            return ask_for_help(message, True)
         elif message.content.lower().startswith('palu aide'):
-            return malaria_help(message)
+            return ask_for_help(message)
         else:
             return malaria_report(message)
 
