@@ -13,11 +13,12 @@
 				"protected",
 				"sqls",
 				"node_modules",
-				"static/js"
+				"static/js",
+				"static"
 			],
 			"follow_symlinks": true,
-			"path": ".",
-			"name": "SNISI"
+			"name": "SNISI",
+			"path": "."
 		}
 	]
 }
