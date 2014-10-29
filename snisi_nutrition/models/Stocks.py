@@ -177,50 +177,6 @@ class AbstractNutritionStocksR(SNISIReport):
     def resomal_consumed(self):
         return self.consumed_for('resomal')
 
-    # Csb_Plus
-    csb_plus_initial = models.IntegerField(
-        _("Csb_Plus Initial"), default=0)
-    csb_plus_received = models.IntegerField(
-        _("Csb_Plus Received"), default=0)
-    csb_plus_used = models.IntegerField(
-        _("Csb_Plus Used"), default=0)
-    csb_plus_lost = models.IntegerField(
-        _("Csb_Plus Lost"), default=0)
-
-    @property
-    def csb_plus_balance(self):
-        return self.balance_for('csb_plus')
-
-    @property
-    def csb_plus_stocked(self):
-        return self.stocked_for('csb_plus')
-
-    @property
-    def csb_plus_consumed(self):
-        return self.consumed_for('csb_plus')
-
-    # Sugar
-    sugar_initial = models.IntegerField(
-        _("Sugar Initial"), default=0)
-    sugar_received = models.IntegerField(
-        _("Sugar Received"), default=0)
-    sugar_used = models.IntegerField(
-        _("Sugar Used"), default=0)
-    sugar_lost = models.IntegerField(
-        _("Sugar Lost"), default=0)
-
-    @property
-    def sugar_balance(self):
-        return self.balance_for('sugar')
-
-    @property
-    def sugar_stocked(self):
-        return self.stocked_for('sugar')
-
-    @property
-    def sugar_consumed(self):
-        return self.consumed_for('sugar')
-
     # Oil
     oil_initial = models.IntegerField(
         _("Oil Initial"), default=0)
@@ -243,139 +199,73 @@ class AbstractNutritionStocksR(SNISIReport):
     def oil_consumed(self):
         return self.consumed_for('oil')
 
-    # Cereals
-    cereals_initial = models.IntegerField(
-        _("Cereals Initial"), default=0)
-    cereals_received = models.IntegerField(
-        _("Cereals Received"), default=0)
-    cereals_used = models.IntegerField(
-        _("Cereals Used"), default=0)
-    cereals_lost = models.IntegerField(
-        _("Cereals Lost"), default=0)
+    # Amoxycilline 125mg Vials
+    amoxycilline_125_vials_initial = models.IntegerField(
+        _("Amoxycilline_125_Vials Initial"), default=0)
+    amoxycilline_125_vials_received = models.IntegerField(
+        _("Amoxycilline_125_Vials Received"), default=0)
+    amoxycilline_125_vials_used = models.IntegerField(
+        _("Amoxycilline_125_Vials Used"), default=0)
+    amoxycilline_125_vials_lost = models.IntegerField(
+        _("Amoxycilline_125_Vials Lost"), default=0)
 
     @property
-    def cereals_balance(self):
-        return self.balance_for('cereals')
+    def amoxycilline_125_vials_balance(self):
+        return self.balance_for('amoxycilline_125_vials')
 
     @property
-    def cereals_stocked(self):
-        return self.stocked_for('cereals')
+    def amoxycilline_125_vials_stocked(self):
+        return self.stocked_for('amoxycilline_125_vials')
 
     @property
-    def cereals_consumed(self):
-        return self.consumed_for('cereals')
+    def amoxycilline_125_vials_consumed(self):
+        return self.consumed_for('amoxycilline_125_vials')
 
-    # Legumes
-    legumes_initial = models.IntegerField(
-        _("Legumes Initial"), default=0)
-    legumes_received = models.IntegerField(
-        _("Legumes Received"), default=0)
-    legumes_used = models.IntegerField(
-        _("Legumes Used"), default=0)
-    legumes_lost = models.IntegerField(
-        _("Legumes Lost"), default=0)
-
-    @property
-    def legumes_balance(self):
-        return self.balance_for('legumes')
+    # Amoxycilline 250mg Caps
+    amoxycilline_250_caps_initial = models.IntegerField(
+        _("Amoxycilline_250_Caps Initial"), default=0)
+    amoxycilline_250_caps_received = models.IntegerField(
+        _("Amoxycilline_250_Caps Received"), default=0)
+    amoxycilline_250_caps_used = models.IntegerField(
+        _("Amoxycilline_250_Caps Used"), default=0)
+    amoxycilline_250_caps_lost = models.IntegerField(
+        _("Amoxycilline_250_Caps Lost"), default=0)
 
     @property
-    def legumes_stocked(self):
-        return self.stocked_for('legumes')
+    def amoxycilline_250_caps_balance(self):
+        return self.balance_for('amoxycilline_250_caps')
 
     @property
-    def legumes_consumed(self):
-        return self.consumed_for('legumes')
-
-    # Amoxycilline_Vials
-    amoxycilline_vials_initial = models.IntegerField(
-        _("Amoxycilline_Vials Initial"), default=0)
-    amoxycilline_vials_received = models.IntegerField(
-        _("Amoxycilline_Vials Received"), default=0)
-    amoxycilline_vials_used = models.IntegerField(
-        _("Amoxycilline_Vials Used"), default=0)
-    amoxycilline_vials_lost = models.IntegerField(
-        _("Amoxycilline_Vials Lost"), default=0)
+    def amoxycilline_250_caps_stocked(self):
+        return self.stocked_for('amoxycilline_250_caps')
 
     @property
-    def amoxycilline_vials_balance(self):
-        return self.balance_for('amoxycilline_vials')
+    def amoxycilline_250_caps_consumed(self):
+        return self.consumed_for('amoxycilline_250_caps')
 
-    @property
-    def amoxycilline_vials_stocked(self):
-        return self.stocked_for('amoxycilline_vials')
-
-    @property
-    def amoxycilline_vials_consumed(self):
-        return self.consumed_for('amoxycilline_vials')
-
-    # Amoxycilline_Caps
-    amoxycilline_caps_initial = models.IntegerField(
-        _("Amoxycilline_Caps Initial"), default=0)
-    amoxycilline_caps_received = models.IntegerField(
-        _("Amoxycilline_Caps Received"), default=0)
-    amoxycilline_caps_used = models.IntegerField(
-        _("Amoxycilline_Caps Used"), default=0)
-    amoxycilline_caps_lost = models.IntegerField(
-        _("Amoxycilline_Caps Lost"), default=0)
-
-    @property
-    def amoxycilline_caps_balance(self):
-        return self.balance_for('amoxycilline_caps')
-
-    @property
-    def amoxycilline_caps_stocked(self):
-        return self.stocked_for('amoxycilline_caps')
-
-    @property
-    def amoxycilline_caps_consumed(self):
-        return self.consumed_for('amoxycilline_caps')
-
-    # Ceftriaxone
-    ceftriaxone_initial = models.IntegerField(
-        _("Ceftriaxone Initial"), default=0)
-    ceftriaxone_received = models.IntegerField(
-        _("Ceftriaxone Received"), default=0)
-    ceftriaxone_used = models.IntegerField(
-        _("Ceftriaxone Used"), default=0)
-    ceftriaxone_lost = models.IntegerField(
-        _("Ceftriaxone Lost"), default=0)
-
-    @property
-    def ceftriaxone_balance(self):
-        return self.balance_for('ceftriaxone')
-
-    @property
-    def ceftriaxone_stocked(self):
-        return self.stocked_for('ceftriaxone')
-
-    @property
-    def ceftriaxone_consumed(self):
-        return self.consumed_for('ceftriaxone')
-
-    # Albendazole
-    albendazole_initial = models.IntegerField(
+    # Albendazole 400mg
+    albendazole_400_initial = models.IntegerField(
         _("Albendazole Initial"), default=0)
-    albendazole_received = models.IntegerField(
+    albendazole_400_received = models.IntegerField(
         _("Albendazole Received"), default=0)
-    albendazole_used = models.IntegerField(
+    albendazole_400_used = models.IntegerField(
         _("Albendazole Used"), default=0)
-    albendazole_lost = models.IntegerField(
+    albendazole_400_lost = models.IntegerField(
         _("Albendazole Lost"), default=0)
 
     @property
-    def albendazole_balance(self):
+    def albendazole_400_balance(self):
         return self.balance_for('albendazole')
 
     @property
-    def albendazole_stocked(self):
+    def albendazole_400_stocked(self):
         return self.stocked_for('albendazole')
 
     @property
-    def albendazole_consumed(self):
+    def albendazole_400_consumed(self):
         return self.consumed_for('albendazole')
 
-    # Vita_100_Injectable
+    # VitA 100K UI Injectable
     vita_100_injectable_initial = models.IntegerField(
         _("Vita_100_Injectable Initial"), default=0)
     vita_100_injectable_received = models.IntegerField(
@@ -397,7 +287,7 @@ class AbstractNutritionStocksR(SNISIReport):
     def vita_100_injectable_consumed(self):
         return self.consumed_for('vita_100_injectable')
 
-    # Vita_200_Injectable
+    # VitA 200K UI Injectable
     vita_200_injectable_initial = models.IntegerField(
         _("Vita_200_Injectable Initial"), default=0)
     vita_200_injectable_received = models.IntegerField(
@@ -418,94 +308,6 @@ class AbstractNutritionStocksR(SNISIReport):
     @property
     def vita_200_injectable_consumed(self):
         return self.consumed_for('vita_200_injectable')
-
-    # Nystatine_Syrup
-    nystatine_syrup_initial = models.IntegerField(
-        _("Nystatine_Syrup Initial"), default=0)
-    nystatine_syrup_received = models.IntegerField(
-        _("Nystatine_Syrup Received"), default=0)
-    nystatine_syrup_used = models.IntegerField(
-        _("Nystatine_Syrup Used"), default=0)
-    nystatine_syrup_lost = models.IntegerField(
-        _("Nystatine_Syrup Lost"), default=0)
-
-    @property
-    def nystatine_syrup_balance(self):
-        return self.balance_for('nystatine_syrup')
-
-    @property
-    def nystatine_syrup_stocked(self):
-        return self.stocked_for('nystatine_syrup')
-
-    @property
-    def nystatine_syrup_consumed(self):
-        return self.consumed_for('nystatine_syrup')
-
-    # Nystatine_Tabs
-    nystatine_tabs_initial = models.IntegerField(
-        _("Nystatine_Tabs Initial"), default=0)
-    nystatine_tabs_received = models.IntegerField(
-        _("Nystatine_Tabs Received"), default=0)
-    nystatine_tabs_used = models.IntegerField(
-        _("Nystatine_Tabs Used"), default=0)
-    nystatine_tabs_lost = models.IntegerField(
-        _("Nystatine_Tabs Lost"), default=0)
-
-    @property
-    def nystatine_tabs_balance(self):
-        return self.balance_for('nystatine_tabs')
-
-    @property
-    def nystatine_tabs_stocked(self):
-        return self.stocked_for('nystatine_tabs')
-
-    @property
-    def nystatine_tabs_consumed(self):
-        return self.consumed_for('nystatine_tabs')
-
-    # Folic_Acid
-    folic_acid_initial = models.IntegerField(
-        _("Folic_Acid Initial"), default=0)
-    folic_acid_received = models.IntegerField(
-        _("Folic_Acid Received"), default=0)
-    folic_acid_used = models.IntegerField(
-        _("Folic_Acid Used"), default=0)
-    folic_acid_lost = models.IntegerField(
-        _("Folic_Acid Lost"), default=0)
-
-    @property
-    def folic_acid_balance(self):
-        return self.balance_for('folic_acid')
-
-    @property
-    def folic_acid_stocked(self):
-        return self.stocked_for('folic_acid')
-
-    @property
-    def folic_acid_consumed(self):
-        return self.consumed_for('folic_acid')
-
-    # Iron
-    iron_initial = models.IntegerField(
-        _("Iron Initial"), default=0)
-    iron_received = models.IntegerField(
-        _("Iron Received"), default=0)
-    iron_used = models.IntegerField(
-        _("Iron Used"), default=0)
-    iron_lost = models.IntegerField(
-        _("Iron Lost"), default=0)
-
-    @property
-    def iron_balance(self):
-        return self.balance_for('iron')
-
-    @property
-    def iron_stocked(self):
-        return self.stocked_for('iron')
-
-    @property
-    def iron_consumed(self):
-        return self.consumed_for('iron')
 
     # Iron_Folic_Acid
     iron_folic_acid_initial = models.IntegerField(
