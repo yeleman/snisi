@@ -85,8 +85,8 @@ def phonenumber_repr(number, skip_indicator=str(COUNTRY_PREFIX)):
         else:
             span = 3
         # use NBSP
-        return " ".join(["".join(number[i:i + span])
-                        for i in range(0, len(number), span)])
+        return " ".join(["".join(number[i:i + span])
+                         for i in range(0, len(number), span)])
 
     indicator, clean_number = phonenumber_cleaned(number)
     if indicator and indicator != skip_indicator:
