@@ -89,7 +89,7 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                 .format(uren=self.report_class.uren_str(),
                         age=self.report_class.age_str(age),
                         msg=message),
-                field=field)
+                field=field, blocking=False)
 
         for a in self.report_class.age_groups:
 
@@ -101,6 +101,36 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                    "nouveaux + réadmissions ({}) doit être égal "
                    "au total admis ({})"
                    .format(new_and_returned, gf(a, 'total_in')))
+
+            # Détails sorties
+            all_out_reasons = sum([gf(a, 'healed'),
+                                   gf(a, 'deceased'),
+                                   gf(a, 'abandon'),
+                                   gf(a, 'not_responding')])
+            if not all_out_reasons == gf(a, 'total_out'):
+                ae(a, af(a, 'new_cases'),
+                   "guéris, décès, abandons, non-resp. ({}) doit être égal "
+                   "au total sorties ({})"
+                   .format(all_out_reasons, gf(a, 'healed')))
+
+            # Sorties inferieur ou egal à PEC
+            all_avail = sum([gf(a, 'total_start'), gf(a, 'grand_total_in')])
+            if not gf(a, 'grand_total_out') <= all_avail:
+                ae(a, af(a, 'total_out_m'),
+                   "total sorties général ({}) ne peut pas dépasser le "
+                   "total début + admissions ({})"
+                   .format(gf(a, 'grand_total_out'), all_avail))
+
+            # Total fin de mois
+            # total_end = total_start + grand_total_in - grand_total_out
+            start_in_not_out = sum([gf(a, 'total_start'),
+                                    gf(a, 'grand_total_in')]) \
+                - gf(a, 'grand_total_out')
+            if not gf(a, 'total_end') == start_in_not_out:
+                ae(a, af(a, 'total_end_m'),
+                   "total fin de mois ({}) doit être égal au début "
+                   "+ admissions - sorties ({})"
+                   .format(gf(a, 'total_end'), start_in_not_out))
 
     def add_calculated_values(self, **options):
         # update with calculated fields
@@ -116,41 +146,6 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
     validating_role = validating_role
     is_urenam = True
 
-    # - MAM/MAS checks (pour chaque tranche d’age)
-    #     calculations:
-    #         non_respondant = 0
-    #         if MAM:
-    #             transfered = 0
-    #         total_start = total_start_m + total_start_f
-    #         total_in = total_in_m + total_in_f
-    #         grand_total_in = total_in + transfered
-    #         total_out = total_out_m + total_out_f
-    #         grand_total_out = total_out + referred
-    #         total_end = total_end_m + total_end_f
-
-    #     # Admisssion (nouveau cas + readmission) = Total dam (M + F)
-    #     - total_in = new + returning
-
-    #     # Sorties
-    #     total_out = healed + deceased + abandoned (+ non_respondant)
-
-    #     # sorties no more than avail
-    #     total_out <= total_start + grand_total_in
-
-    #     # Total fin de mois
-    #     total_end = total_start + grand_total_in - grand_total_out
-
-    # - URENI checks (pour chaque tranche d’age)
-    #     calculations:
-    #         grand_total_in = total_in + reffered
-    #         grand_total_out = total_out + transferred
-
-    # - Intrants Checks (pour chaque produit)
-    #     (debut + reçu) >= (utilisé + perdu)
-
-    def check_urenam_data(self, **options):
-        pass
-
     def _check_completeness(self, **options):
         for field in URENAMNutritionR.data_fields():
             if not self.has(field):
@@ -159,7 +154,7 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
 
     def _check(self, **options):
         self.add_calculated_values(**options)
-        self.check_urenam_data(**options)
+        self.check_common_uren(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
