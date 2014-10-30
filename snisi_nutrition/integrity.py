@@ -67,11 +67,54 @@ class NutritionRIntegrityChecker(RoutineIntegrityInterface,
         self.chk_provider_permission(**options)
 
 
-class URENAMNutritionRIntegrityChecker(RoutineIntegrityInterface,
-                                       ReportIntegrityChecker):
+class NutritionURENCommonChecks(RoutineIntegrityInterface,
+                                ReportIntegrityChecker):
+
+    is_urenam = False
+    is_urenas = False
+    is_ureni = False
+
+    def age_sum_for(self, age, fields):
+        return sum([getattr(self, '{}_{}'.format(age, field))
+                    for field in fields])
+
+    def check_common_uren(self, **options):
+        # get field by age
+        af = lambda a, f: '{}_{}'.format(a, f)
+        gf = lambda a, f: self.get(af(a, f), 0)
+
+        def ae(age, field, message):
+            self.add_error(
+                "{uren},{age}: {msg}"
+                .format(uren=self.report_class.uren_str(),
+                        age=self.report_class.age_str(age),
+                        msg=message),
+                field=field)
+
+        for a in self.report_class.age_groups:
+
+            # Details admissions
+            # new_cases + returned == total_in
+            new_and_returned = sum([gf(a, 'new_cases'), gf(a, 'returned')])
+            if not new_and_returned == gf(a, 'total_in'):
+                ae(a, af(a, 'new_cases'),
+                   "nouveaux + réadmissions ({}) doit être égal "
+                   "au total admis ({})"
+                   .format(new_and_returned, gf(a, 'total_in')))
+
+    def add_calculated_values(self, **options):
+        # update with calculated fields
+        for age in self.reportcls.age_groups:
+            data = self.report_class.expand_data_for(self, age)
+            for k, v in data.items():
+                self.set('{}_{}'.format(age, k), v)
+
+
+class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
 
     report_class = reportcls_urenam
     validating_role = validating_role
+    is_urenam = True
 
     # - MAM/MAS checks (pour chaque tranche d’age)
     #     calculations:
@@ -115,6 +158,7 @@ class URENAMNutritionRIntegrityChecker(RoutineIntegrityInterface,
                                  blocking=True, field=field)
 
     def _check(self, **options):
+        self.add_calculated_values(**options)
         self.check_urenam_data(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)

@@ -13,54 +13,56 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from snisi_core.models.common import pre_save_report, post_save_report
-from snisi_core.models.Reporting import (SNISIReport,
-                                         PeriodicAggregatedReportInterface,
+from snisi_core.models.Reporting import (PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
+from snisi_nutrition.models.Common import AbstractURENutritionR
 
 logger = logging.getLogger(__name__)
 
 
-class AbstractURENASNutritionR(SNISIReport):
+class AbstractURENASNutritionR(AbstractURENutritionR):
 
     class Meta:
         app_label = 'snisi_nutrition'
         abstract = True
 
+    IS_URENAS = True
+
     # 6-59 months
-    u59_total_start_m = models.PositiveIntegerField(
+    u59o6_total_start_m = models.PositiveIntegerField(
         _("[6-59m] Start of Month Male"))
-    u59_total_start_f = models.PositiveIntegerField(
+    u59o6_total_start_f = models.PositiveIntegerField(
         _("[6-59m] Start of Month Female"))
 
-    u59_new_cases = models.PositiveIntegerField(
+    u59o6_new_cases = models.PositiveIntegerField(
         _("[6-59m] New Cases"))
-    u59_returned = models.PositiveIntegerField(
+    u59o6_returned = models.PositiveIntegerField(
         _("[6-59m] Returned"))
-    u59_total_in_m = models.PositiveIntegerField(
+    u59o6_total_in_m = models.PositiveIntegerField(
         _("[6-59m] Total Admitted Male"))
-    u59_total_in_f = models.PositiveIntegerField(
+    u59o6_total_in_f = models.PositiveIntegerField(
         _("[6-59m] Total Admitted Female"))
-    u59_transferred = models.PositiveIntegerField(
+    u59o6_transferred = models.PositiveIntegerField(
         _("[6-59m] Transferred from URENI"))
 
-    u59_healed = models.PositiveIntegerField(
+    u59o6_healed = models.PositiveIntegerField(
         _("[6-59m] Healed"))
-    u59_deceased = models.PositiveIntegerField(
+    u59o6_deceased = models.PositiveIntegerField(
         _("[6-59m] Deceased"))
-    u59_abandon = models.PositiveIntegerField(
+    u59o6_abandon = models.PositiveIntegerField(
         _("[6-59m] Abandon"))
-    u59_total_out_m = models.PositiveIntegerField(
+    u59o6_total_out_m = models.PositiveIntegerField(
         _("[6-59m] Total Out Male"))
-    u59_total_out_f = models.PositiveIntegerField(
+    u59o6_total_out_f = models.PositiveIntegerField(
         _("[6-59m] Total Out Female"))
 
-    u59_referred = models.PositiveIntegerField(
+    u59o6_referred = models.PositiveIntegerField(
         _("[6-59m] Referred"))
 
-    u59_total_end_m = models.PositiveIntegerField(
+    u59o6_total_end_m = models.PositiveIntegerField(
         _("[6-59m] End of Month Male"))
-    u59_total_end_f = models.PositiveIntegerField(
+    u59o6_total_end_f = models.PositiveIntegerField(
         _("[6-59m] End of Month Female"))
 
     # Pregnant & Breast Feeding Women
@@ -99,37 +101,33 @@ class AbstractURENASNutritionR(SNISIReport):
     o59_total_end_f = models.PositiveIntegerField(
         _("[59m+] End of Month Female"))
 
-    def age_sum_for(self, age, fields):
-        return sum([getattr(self, '{}_{}'.format(age, field))
-                    for field in fields])
-
     # 6-59 months
     @property
-    def u59_total_start(self):
+    def u59o6_total_start(self):
         return self.age_sum_for('u59', ['total_start_m', 'total_start_f'])
 
     @property
-    def u59_total_in(self):
+    def u59o6_total_in(self):
         return self.age_sum_for('u59', ['total_in_m', 'total_in_f'])
 
     @property
-    def u59_grand_total_in(self):
+    def u59o6_grand_total_in(self):
         return self.age_sum_for('u59', ['total_in', 'transferred'])
 
     @property
-    def u59_not_responding(self):
+    def u59o6_not_responding(self):
         return 0
 
     @property
-    def u59_total_out(self):
+    def u59o6_total_out(self):
         return self.age_sum_for('u59', ['total_out_m', 'total_out_f'])
 
     @property
-    def u59_grand_total_out(self):
+    def u59o6_grand_total_out(self):
         return self.age_sum_for('u59', ['total_out', 'referred'])
 
     @property
-    def u59_total_end(self):
+    def u59o6_total_end(self):
         return self.age_sum_for('u59', ['total_end_m', 'total_end_f'])
 
     # Over 59 months
@@ -161,6 +159,10 @@ class AbstractURENASNutritionR(SNISIReport):
     def o59_total_end(self):
         return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
 
+    @classmethod
+    def age_groups(cls):
+        return ['u59o6', 'o59']
+
 
 class URENASNutritionR(AbstractURENASNutritionR):
 
@@ -181,7 +183,7 @@ reversion.register(URENASNutritionR)
 
 
 class AggURENASNutritionR(AbstractURENASNutritionR,
-                          PeriodicAggregatedReportInterface, SNISIReport):
+                          PeriodicAggregatedReportInterface):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     RECEIPT_FORMAT = "{period__year_short}{period__month}NASa-{dow}/{rand}"

@@ -13,19 +13,21 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from snisi_core.models.common import pre_save_report, post_save_report
-from snisi_core.models.Reporting import (SNISIReport,
-                                         PeriodicAggregatedReportInterface,
+from snisi_core.models.Reporting import (PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
+from snisi_nutrition.models.Common import AbstractURENutritionR
 
 logger = logging.getLogger(__name__)
 
 
-class AbstractURENINutritionR(SNISIReport):
+class AbstractURENINutritionR(AbstractURENutritionR):
 
     class Meta:
         app_label = 'snisi_nutrition'
         abstract = True
+
+    IS_URENI = True
 
     # 0-6 months
     u6_total_start_m = models.PositiveIntegerField(
@@ -141,9 +143,9 @@ class AbstractURENINutritionR(SNISIReport):
     o59_total_end_f = models.PositiveIntegerField(
         _("[59m+] End of Month Female"))
 
-    def age_sum_for(self, age, fields):
-        return sum([getattr(self, '{}_{}'.format(age, field))
-                    for field in fields])
+    @classmethod
+    def age_groups(cls):
+        return ['u6', 'u59o6', 'o59']
 
     # 0-6 months
     @property
@@ -240,7 +242,7 @@ reversion.register(URENINutritionR)
 
 
 class AggURENINutritionR(AbstractURENINutritionR,
-                         PeriodicAggregatedReportInterface, SNISIReport):
+                         PeriodicAggregatedReportInterface):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     RECEIPT_FORMAT = "{period__year_short}{period__month}NASa-{dow}/{rand}"
