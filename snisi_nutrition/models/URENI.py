@@ -68,41 +68,41 @@ class AbstractURENINutritionR(AbstractURENutritionR):
         _("[0-6m] End of Month Female"))
 
     # 6-59 months
-    u59_total_start_m = models.PositiveIntegerField(
+    u59o6_total_start_m = models.PositiveIntegerField(
         _("[6-59m] Start of Month Male"))
-    u59_total_start_f = models.PositiveIntegerField(
+    u59o6_total_start_f = models.PositiveIntegerField(
         _("[6-59m] Start of Month Female"))
 
-    u59_new_cases = models.PositiveIntegerField(
+    u59o6_new_cases = models.PositiveIntegerField(
         _("[6-59m] New Cases"))
-    u59_returned = models.PositiveIntegerField(
+    u59o6_returned = models.PositiveIntegerField(
         _("[6-59m] Returned"))
-    u59_total_in_m = models.PositiveIntegerField(
+    u59o6_total_in_m = models.PositiveIntegerField(
         _("[6-59m] Total Admitted Male"))
-    u59_total_in_f = models.PositiveIntegerField(
+    u59o6_total_in_f = models.PositiveIntegerField(
         _("[6-59m] Total Admitted Female"))
-    u59_referred = models.PositiveIntegerField(
+    u59o6_referred = models.PositiveIntegerField(
         _("[6-59m] Referred"))
 
-    u59_healed = models.PositiveIntegerField(
+    u59o6_healed = models.PositiveIntegerField(
         _("[6-59m] Healed"))
-    u59_deceased = models.PositiveIntegerField(
+    u59o6_deceased = models.PositiveIntegerField(
         _("[6-59m] Deceased"))
-    u59_abandon = models.PositiveIntegerField(
+    u59o6_abandon = models.PositiveIntegerField(
         _("[6-59m] Abandon"))
-    u59_not_responding = models.PositiveIntegerField(
+    u59o6_not_responding = models.PositiveIntegerField(
         _("[6-59m] Not Respondant"))
-    u59_total_out_m = models.PositiveIntegerField(
+    u59o6_total_out_m = models.PositiveIntegerField(
         _("[6-59m] Total Out Male"))
-    u59_total_out_f = models.PositiveIntegerField(
+    u59o6_total_out_f = models.PositiveIntegerField(
         _("[6-59m] Total Out Female"))
 
-    u59_transferred = models.PositiveIntegerField(
+    u59o6_transferred = models.PositiveIntegerField(
         _("[6-59m] Transferred"))
 
-    u59_total_end_m = models.PositiveIntegerField(
+    u59o6_total_end_m = models.PositiveIntegerField(
         _("[6-59m] End of Month Male"))
-    u59_total_end_f = models.PositiveIntegerField(
+    u59o6_total_end_f = models.PositiveIntegerField(
         _("[6-59m] End of Month Female"))
 
     # Over 59 months
@@ -174,28 +174,28 @@ class AbstractURENINutritionR(AbstractURENutritionR):
 
     # 6-59 months
     @property
-    def u59_total_start(self):
-        return self.age_sum_for('u59', ['total_start_m', 'total_start_f'])
+    def u59o6_total_start(self):
+        return self.age_sum_for('u59o6', ['total_start_m', 'total_start_f'])
 
     @property
-    def u59_total_in(self):
-        return self.age_sum_for('u59', ['total_in_m', 'total_in_f'])
+    def u59o6_total_in(self):
+        return self.age_sum_for('u59o6', ['total_in_m', 'total_in_f'])
 
     @property
-    def u59_grand_total_in(self):
-        return self.age_sum_for('u59', ['total_in', 'transferred'])
+    def u59o6_grand_total_in(self):
+        return self.age_sum_for('u59o6', ['total_in', 'transferred'])
 
     @property
-    def u59_total_out(self):
-        return self.age_sum_for('u59', ['total_out_m', 'total_out_f'])
+    def u59o6_total_out(self):
+        return self.age_sum_for('u59o6', ['total_out_m', 'total_out_f'])
 
     @property
-    def u59_grand_total_out(self):
-        return self.age_sum_for('u59', ['total_out', 'referred'])
+    def u59o6_grand_total_out(self):
+        return self.age_sum_for('u59o6', ['total_out', 'referred'])
 
     @property
-    def u59_total_end(self):
-        return self.age_sum_for('u59', ['total_end_m', 'total_end_f'])
+    def u59o6_total_end(self):
+        return self.age_sum_for('u59o6', ['total_end_m', 'total_end_f'])
 
     # Over 59 months
     @property

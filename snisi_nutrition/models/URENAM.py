@@ -97,6 +97,40 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     u59o23_total_end_f = models.PositiveIntegerField(
         _("[23-59m] End of Month Female"))
 
+    # 59+ months
+    o59_total_start_m = models.PositiveIntegerField(
+        _("[59m+] Start of Month Male"))
+    o59_total_start_f = models.PositiveIntegerField(
+        _("[59m+] Start of Month Female"))
+
+    o59_new_cases = models.PositiveIntegerField(
+        _("[59m+] New Cases"))
+    o59_returned = models.PositiveIntegerField(
+        _("[59m+] Returned"))
+    o59_total_in_m = models.PositiveIntegerField(
+        _("[59m+] Total Admitted Male"))
+    o59_total_in_f = models.PositiveIntegerField(
+        _("[59m+] Total Admitted Female"))
+
+    o59_healed = models.PositiveIntegerField(
+        _("[59m+] Healed"))
+    o59_deceased = models.PositiveIntegerField(
+        _("[59m+] Deceased"))
+    o59_abandon = models.PositiveIntegerField(
+        _("[59m+] Abandon"))
+    o59_total_out_m = models.PositiveIntegerField(
+        _("[59m+] Total Out Male"))
+    o59_total_out_f = models.PositiveIntegerField(
+        _("[59m+] Total Out Female"))
+
+    o59_referred = models.PositiveIntegerField(
+        _("[59m+] Referred"))
+
+    o59_total_end_m = models.PositiveIntegerField(
+        _("[59m+] End of Month Male"))
+    o59_total_end_f = models.PositiveIntegerField(
+        _("[59m+] End of Month Female"))
+
     # Pregnant & Breast Feeding Women
     pw_total_start_m = models.PositiveIntegerField(
         _("[PW/BF] Start of Month Male"))
@@ -152,16 +186,16 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
 
     @classmethod
     def age_groups(cls):
-        return ['u23o6', 'u59o23', 'pw', 'exsam']
+        return ['u23o6', 'u59o23', 'o59', 'pw', 'exsam']
 
     # 6-23 months
     @property
     def u23o6_total_start(self):
-        return self.age_sum_for('u23', ['total_start_m', 'total_start_f'])
+        return self.age_sum_for('u23o6', ['total_start_m', 'total_start_f'])
 
     @property
     def u23o6_total_in(self):
-        return self.age_sum_for('u23', ['total_in_m', 'total_in_f'])
+        return self.age_sum_for('u23o6', ['total_in_m', 'total_in_f'])
 
     @property
     def u23o6_transferred(self):
@@ -174,28 +208,28 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
 
     @property
     def u23o6_grand_total_in(self):
-        return self.age_sum_for('u23', ['total_in', 'transferred'])
+        return self.age_sum_for('u23o6', ['total_in', 'transferred'])
 
     @property
     def u23o6_total_out(self):
-        return self.age_sum_for('u23', ['total_out_m', 'total_out_f'])
+        return self.age_sum_for('u23o6', ['total_out_m', 'total_out_f'])
 
     @property
     def u23o6_grand_total_out(self):
-        return self.age_sum_for('u23', ['total_out', 'referred'])
+        return self.age_sum_for('u23o6', ['total_out', 'referred'])
 
     @property
     def u23o6_total_end(self):
-        return self.age_sum_for('u23', ['total_end_m', 'total_end_f'])
+        return self.age_sum_for('u23o6', ['total_end_m', 'total_end_f'])
 
     # 23-59 months
     @property
     def u59o23_total_start(self):
-        return self.age_sum_for('u59', ['total_start_m', 'total_start_f'])
+        return self.age_sum_for('u59o23', ['total_start_m', 'total_start_f'])
 
     @property
     def u59o23_total_in(self):
-        return self.age_sum_for('u59', ['total_in_m', 'total_in_f'])
+        return self.age_sum_for('u59o23', ['total_in_m', 'total_in_f'])
 
     @property
     def u59o23_transferred(self):
@@ -208,19 +242,53 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
 
     @property
     def u59o23_grand_total_in(self):
-        return self.age_sum_for('u59', ['total_in', 'transferred'])
+        return self.age_sum_for('u59o23', ['total_in', 'transferred'])
 
     @property
     def u59o23_total_out(self):
-        return self.age_sum_for('u59', ['total_out_m', 'total_out_f'])
+        return self.age_sum_for('u59o23', ['total_out_m', 'total_out_f'])
 
     @property
     def u59o23_grand_total_out(self):
-        return self.age_sum_for('u59', ['total_out', 'referred'])
+        return self.age_sum_for('u59o23', ['total_out', 'referred'])
 
     @property
     def u59o23_total_end(self):
-        return self.age_sum_for('u59', ['total_end_m', 'total_end_f'])
+        return self.age_sum_for('u59o23', ['total_end_m', 'total_end_f'])
+
+        # 59+ months
+    @property
+    def o59_total_start(self):
+        return self.age_sum_for('o59', ['total_start_m', 'total_start_f'])
+
+    @property
+    def o59_total_in(self):
+        return self.age_sum_for('o59', ['total_in_m', 'total_in_f'])
+
+    @property
+    def o59_transferred(self):
+        # URENAM can't receive transfers
+        return 0
+
+    @property
+    def o59_not_responding(self):
+        return 0
+
+    @property
+    def o59_grand_total_in(self):
+        return self.age_sum_for('o59', ['total_in', 'transferred'])
+
+    @property
+    def o59_total_out(self):
+        return self.age_sum_for('o59', ['total_out_m', 'total_out_f'])
+
+    @property
+    def o59_grand_total_out(self):
+        return self.age_sum_for('o59', ['total_out', 'referred'])
+
+    @property
+    def o59_total_end(self):
+        return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
 
     # Pregnant & Breast Feeding Women
     @property

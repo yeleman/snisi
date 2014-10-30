@@ -104,15 +104,15 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
     # 6-59 months
     @property
     def u59o6_total_start(self):
-        return self.age_sum_for('u59', ['total_start_m', 'total_start_f'])
+        return self.age_sum_for('u59o6', ['total_start_m', 'total_start_f'])
 
     @property
     def u59o6_total_in(self):
-        return self.age_sum_for('u59', ['total_in_m', 'total_in_f'])
+        return self.age_sum_for('u59o6', ['total_in_m', 'total_in_f'])
 
     @property
     def u59o6_grand_total_in(self):
-        return self.age_sum_for('u59', ['total_in', 'transferred'])
+        return self.age_sum_for('u59o6', ['total_in', 'transferred'])
 
     @property
     def u59o6_not_responding(self):
@@ -120,15 +120,15 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
 
     @property
     def u59o6_total_out(self):
-        return self.age_sum_for('u59', ['total_out_m', 'total_out_f'])
+        return self.age_sum_for('u59o6', ['total_out_m', 'total_out_f'])
 
     @property
     def u59o6_grand_total_out(self):
-        return self.age_sum_for('u59', ['total_out', 'referred'])
+        return self.age_sum_for('u59o6', ['total_out', 'referred'])
 
     @property
     def u59o6_total_end(self):
-        return self.age_sum_for('u59', ['total_end_m', 'total_end_f'])
+        return self.age_sum_for('u59o6', ['total_end_m', 'total_end_f'])
 
     # Over 59 months
     @property
