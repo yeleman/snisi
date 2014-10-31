@@ -32,7 +32,7 @@ validating_role = Role.get_or_none('charge_sis')
 
 
 def create_nut_report(provider, expected_reporting, completed_on,
-                      integrity_checker, data_source):
+                      integrity_checker, data_source, subreport_checkers):
 
     return create_monthly_routine_report(
         provider=provider,
@@ -60,7 +60,6 @@ class NutritionRIntegrityChecker(RoutineIntegrityInterface,
                                  blocking=True, field=field)
 
     def _check(self, **options):
-        self.check_pf_data(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
@@ -161,3 +160,61 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.chk_provider_permission(**options)
 
 
+class URENASNutritionRIntegrityChecker(NutritionURENCommonChecks):
+
+    report_class = reportcls_urenas
+    validating_role = validating_role
+    is_urenas = True
+
+    def _check_completeness(self, **options):
+        for field in URENASNutritionR.data_fields():
+            if not self.has(field):
+                self.add_missing(_("Missing data for {f}").format(f=field),
+                                 blocking=True, field=field)
+
+    def _check(self, **options):
+        self.add_calculated_values(**options)
+        self.check_common_uren(**options)
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)
+
+
+class URENINutritionRIntegrityChecker(NutritionURENCommonChecks):
+
+    report_class = reportcls_ureni
+    validating_role = validating_role
+    is_ureni = True
+
+    def _check_completeness(self, **options):
+        for field in URENINutritionR.data_fields():
+            if not self.has(field):
+                self.add_missing(_("Missing data for {f}").format(f=field),
+                                 blocking=True, field=field)
+
+    def _check(self, **options):
+        self.add_calculated_values(**options)
+        self.check_common_uren(**options)
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)
+
+
+class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
+                                       ReportIntegrityChecker):
+    report_class = reportcls_stocks
+    validating_role = validating_role
+
+    def _check_completeness(self, **options):
+        for field in URENINutritionR.data_fields():
+            if not self.has(field):
+                self.add_missing(_("Missing data for {f}").format(f=field),
+                                 blocking=True, field=field)
+
+    def _check(self, **options):
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)

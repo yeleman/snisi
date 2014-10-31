@@ -26,7 +26,7 @@ class AbstractURENutritionR(SNISIReport):
         'u23o6': "6-23m",  # URENAM
         'u59o23': "23-59m",  # URENAM
         'u59o6': "6-59m",  # URENAS, URENI
-        'o59': "59m+",  # URENAS, URENI
+        'o59': "59m+",  # URENAM, URENAS, URENI
         'pw': "FE/FA",  # URENAM
         'exsam': "ExMAS",  # URENAM
     }

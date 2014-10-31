@@ -539,6 +539,9 @@ class HealthEntity(Entity):
         verbose_name_plural = _("Health Entities")
 
     main_entity = models.ForeignKey('self', blank=True, null=True)
+    has_urenam = models.BooleanField(default=False)
+    has_urenas = models.BooleanField(default=False)
+    has_ureni = models.BooleanField(default=False)
 
     objects = TreeManager()
     manager = EntityQuerySet.as_manager()

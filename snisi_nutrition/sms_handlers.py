@@ -16,7 +16,11 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_nutrition import PROJECT_BRAND
 from snisi_nutrition.integrity import (
-    NutritionRIntegrityChecker, create_nut_report)
+    NutritionRIntegrityChecker, create_nut_report,
+    URENAMNutritionRIntegrityChecker,
+    URENASNutritionRIntegrityChecker,
+    URENINutritionRIntegrityChecker,
+    StocksNutritionRIntegrityChecker)
 from snisi_sms.reply import SMSReply
 
 logger = logging.getLogger(__name__)
@@ -164,7 +168,9 @@ def monthly_report(message):
 
     # create variables from text messages.
     try:
-        args_names = ['kw', 'username', 'password', 'month', 'year']
+        args_names = [
+            'kw', 'username', 'password', 'month', 'year',
+            'urenam_data', 'urenas_data', 'ureni_data']
 
         args_values = message.content.strip().lower().split()
         arguments = dict(zip(args_names, args_values))
@@ -199,6 +205,116 @@ def monthly_report(message):
     if not provider.check_password(arguments['password']):
         return reply.error("Votre mot de passe est incorrect.")
 
+    # URENAM
+    urenam_names = [
+        'u23o6_total_start_m', 'u23o6_total_start_f',
+        'u23o6_new_cases', 'u23o6_returned',
+        'u23o6_total_in_m', 'u23o6_total_in_f',
+        'u23o6_healed', 'u23o6_deceased', 'u23o6_abandon',
+        'u23o6_total_out_m', 'u23o6_total_out_f',
+        'u23o6_referred', 'u23o6_total_end_m', 'u23o6_total_end_f',
+
+        'u59o23_total_start_m', 'u59o23_total_start_f',
+        'u59o23_new_cases', 'u59o23_returned',
+        'u59o23_total_in_m', 'u59o23_total_in_f',
+        'u59o23_healed', 'u59o23_deceased', 'u59o23_abandon',
+        'u59o23_total_out_m', 'u59o23_total_out_f',
+        'u59o23_referred', 'u59o23_total_end_m', 'u59o23_total_end_f',
+
+        'o59_total_start_m', 'o59_total_start_f',
+        'o59_new_cases', 'o59_returned',
+        'o59_total_in_m', 'o59_total_in_f',
+        'o59_healed', 'o59_deceased', 'o59_abandon',
+        'o59_total_out_m', 'o59_total_out_f',
+        'o59_referred', 'o59_total_end_m', 'o59_total_end_f',
+
+        'pw_total_start_m', 'pw_total_start_f',
+        'pw_new_cases', 'pw_returned',
+        'pw_total_in_m', 'pw_total_in_f',
+        'pw_healed', 'pw_deceased', 'pw_abandon',
+        'pw_total_out_m', 'pw_total_out_f',
+        'pw_referred', 'pw_total_end_m', 'pw_total_end_f',
+
+        'exsam_total_start_m', 'exsam_total_start_f',
+        'exsam_total_out_m', 'exsam_total_out_f',
+        'exsam_referred', 'exsam_total_end_m', 'exsam_total_end_f']
+
+    # URENAS
+    urenas_names = [
+        'u59o6_total_start_m', 'u59o6_total_start_f',
+        'u59o6_new_cases', 'u59o6_returned',
+        'u59o6_total_in_m', 'u59o6_total_in_f', 'u59o6_transferred',
+        'u59o6_healed', 'u59o6_deceased', 'u59o6_abandon',
+        'u59o6_total_out_m', 'u59o6_total_out_f',
+        'u59o6_referred', 'u59o6_total_end_m', 'u59o6_total_end_f',
+
+        'o59_total_start_m', 'o59_total_start_f',
+        'o59_new_cases', 'o59_returned',
+        'o59_total_in_m', 'o59_total_in_f', 'o59_transferred',
+        'o59_healed', 'o59_deceased', 'o59_abandon',
+        'o59_total_out_m', 'o59_total_out_f', 'o59_referred',
+        'o59_total_end_m', 'o59_total_end_f',
+    ]
+
+    # URENI
+    ureni_names = [
+        'u6_total_start_m', 'u6_total_start_f',
+        'u6_new_cases', 'u6_returned',
+        'u6_total_in_m', 'u6_total_in_f', 'u6_referred',
+        'u6_healed', 'u6_deceased', 'u6_abandon', 'u6_not_responding',
+        'u6_total_out_m', 'u6_total_out_f', 'u6_transferred',
+        'u6_total_end_m', 'u6_total_end_f',
+
+        'u59o6_total_start_m', 'u59o6_total_start_f',
+        'u59o6_new_cases', 'u59o6_returned',
+        'u59o6_total_in_m', 'u59o6_total_in_f', 'u59o6_referred',
+        'u59o6_healed', 'u59o6_deceased',
+        'u59o6_abandon', 'u59o6_not_responding',
+        'u59o6_total_out_m', 'u59o6_total_out_f', 'u59o6_transferred',
+        'u59o6_total_end_m', 'u59o6_total_end_f',
+        'o59_total_start_m', 'o59_total_start_f',
+        'o59_new_cases', 'o59_returned',
+        'o59_total_in_m', 'o59_total_in_f',
+        'o59_referred', 'o59_healed', 'o59_deceased',
+        'o59_abandon', 'o59_not_responding',
+        'o59_total_out_m', 'o59_total_out_f', 'o59_transferred',
+        'o59_total_end_m', 'o59_total_end_f',
+    ]
+
+    # STOCKS (52 fields)
+    stocks_names = [
+        'plumpy_nut_initial',  'milk_f75_received',
+        'milk_f75_used',  'milk_f75_lost',
+        'milk_f100_initial',  'milk_f100_received',
+        'milk_f100_used',  'milk_f100_lost',
+        'resomal_initial',  'resomal_received',
+        'resomal_used',  'resomal_lost',
+        'plumpy_sup_initial',  'plumpy_sup_received',
+        'plumpy_sup_used',  'plumpy_sup_lost',
+        'supercereal_initial',  'supercereal_received',
+        'supercereal_used',  'supercereal_lost',
+        'supercereal_plus_initial',  'supercereal_plus_received',
+        'supercereal_plus_used',  'supercereal_plus_lost',
+        'oil_initial',  'oil_received',
+        'oil_used',  'oil_lost',
+        'amoxycilline_125_vials_initial',
+        'amoxycilline_125_vials_received',
+        'amoxycilline_125_vials_used',
+        'amoxycilline_125_vials_lost',
+        'amoxycilline_250_caps_initial',
+        'amoxycilline_250_caps_received',
+        'amoxycilline_250_caps_used',
+        'amoxycilline_250_caps_lost',
+        'albendazole_400_initial',  'albendazole_400_received',
+        'albendazole_400_used',  'albendazole_400_lost',
+        'vita_100_injectable_initial',  'vita_100_injectable_received',
+        'vita_100_injectable_used',  'vita_100_injectable_lost',
+        'vita_200_injectable_initial',  'vita_200_injectable_received',
+        'vita_200_injectable_used',  'vita_200_injectable_lost',
+        'iron_folic_acid_initial',  'iron_folic_acid_received',
+        'iron_folic_acid_used',  'iron_folic_acid_lost',
+    ]
+
     # now we have well formed and authenticated data.
     # let's check for business-logic errors.
     checker = NutritionRIntegrityChecker()
@@ -222,7 +338,7 @@ def monthly_report(message):
     checker.set('author', provider.name())
     checker.set('submitter', provider)
 
-    # test the data
+    # ensure we have a expecteds and all
     checker.check()
     if not checker.is_valid():
         return reply.error(checker.errors.pop().render(short=True))
@@ -251,12 +367,69 @@ def monthly_report(message):
                            "{entity} pour {period}"
                            .format(entity=entity, period=period))
 
+    def prepare_checker_with(master_checker, uren_checker, uren,
+                             sms_part, arg_names):
+
+        master_fields = ['month', 'year', 'username',
+                         'entity', 'hc', 'fillin_day', 'fillin_month',
+                         'fillin_year', 'submit_time', 'author', 'submitter']
+
+        for field in master_fields:
+            uren_checker.set(field, checker.get(field))
+
+        # create variables from text messages.
+        try:
+            args_values = sms_part.strip().lower().split("-")
+            arguments = dict(zip(args_names, args_values))
+            assert len(args_values) == len(args_names)
+        except (ValueError, AssertionError):
+            # failure to split means we proabably lack a data or more
+            # we can't process it.
+            return "Le format du SMS est incorrect."
+
+        # convert form-data to int or bool respectively
+        try:
+            for key, value in arguments.items():
+                arguments[key] = int(value)
+        except:
+            logger.warning("Unable to convert/cast SMS data: {}"
+                           .format(sms_part))
+            # failure to convert means non-numeric value
+            # which we can't process.
+            return "Les données sont malformées."
+
+    # check data individually for sub reports
+    integrity_map = {
+        'urenam': URENAMNutritionRIntegrityChecker,
+        'urenas': URENAMNutritionRIntegrityChecker,
+        'ureni': URENINutritionRIntegrityChecker,
+        'stocks': StocksNutritionRIntegrityChecker
+    }
+
+    sr_checkers = {}
+
+    for sr, sr_cls in integrity_map.items():
+        if sr == 'stocks' or getattr(entity, 'has_{}'.format(sr), False):
+            sri = sr_cls()
+            error = prepare_checker_with(
+                master_checker=checker,
+                uren_checker=sri,
+                uren=sr,
+                sms_part=arguments.get('{}_data'.format(sr)))
+            if error is not None:
+                return reply.error(error)
+            else:
+                sr_checkers[sr] = sri
+
+    # all sub reports have been checked. we can safely create reports
+
     report, text_message = create_nut_report(
         provider=provider,
         expected_reporting=expected_reporting,
         completed_on=timezone.now(),
         integrity_checker=checker,
-        data_source=message.content)
+        data_source=message.content,
+        subreport_checkers=sr_checkers)
 
     if report:
         return reply.success(text_message)

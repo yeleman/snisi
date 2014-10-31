@@ -45,72 +45,6 @@ class AbstractNutritionStocksR(SNISIReport):
     def plumpy_nut_consumed(self):
         return self.consumed_for('plumpy_nut')
 
-    # Plumpy_Sup
-    plumpy_sup_initial = models.IntegerField(
-        _("Plumpy_Sup Initial"), default=0)
-    plumpy_sup_received = models.IntegerField(
-        _("Plumpy_Sup Received"), default=0)
-    plumpy_sup_used = models.IntegerField(
-        _("Plumpy_Sup Used"), default=0)
-    plumpy_sup_lost = models.IntegerField(
-        _("Plumpy_Sup Lost"), default=0)
-
-    @property
-    def plumpy_sup_balance(self):
-        return self.balance_for('plumpy_sup')
-
-    @property
-    def plumpy_sup_stocked(self):
-        return self.stocked_for('plumpy_sup')
-
-    @property
-    def plumpy_sup_consumed(self):
-        return self.consumed_for('plumpy_sup')
-
-    # Supercereal
-    supercereal_initial = models.IntegerField(
-        _("Supercereal Initial"), default=0)
-    supercereal_received = models.IntegerField(
-        _("Supercereal Received"), default=0)
-    supercereal_used = models.IntegerField(
-        _("Supercereal Used"), default=0)
-    supercereal_lost = models.IntegerField(
-        _("Supercereal Lost"), default=0)
-
-    @property
-    def supercereal_balance(self):
-        return self.balance_for('supercereal')
-
-    @property
-    def supercereal_stocked(self):
-        return self.stocked_for('supercereal')
-
-    @property
-    def supercereal_consumed(self):
-        return self.consumed_for('supercereal')
-
-    # Supercereal_Plus
-    supercereal_plus_initial = models.IntegerField(
-        _("Supercereal_Plus Initial"), default=0)
-    supercereal_plus_received = models.IntegerField(
-        _("Supercereal_Plus Received"), default=0)
-    supercereal_plus_used = models.IntegerField(
-        _("Supercereal_Plus Used"), default=0)
-    supercereal_plus_lost = models.IntegerField(
-        _("Supercereal_Plus Lost"), default=0)
-
-    @property
-    def supercereal_plus_balance(self):
-        return self.balance_for('supercereal_plus')
-
-    @property
-    def supercereal_plus_stocked(self):
-        return self.stocked_for('supercereal_plus')
-
-    @property
-    def supercereal_plus_consumed(self):
-        return self.consumed_for('supercereal_plus')
-
     # Milk_F75
     milk_f75_initial = models.IntegerField(
         _("Milk_F75 Initial"), default=0)
@@ -176,6 +110,72 @@ class AbstractNutritionStocksR(SNISIReport):
     @property
     def resomal_consumed(self):
         return self.consumed_for('resomal')
+
+    # Plumpy_Sup
+    plumpy_sup_initial = models.IntegerField(
+        _("Plumpy_Sup Initial"), default=0)
+    plumpy_sup_received = models.IntegerField(
+        _("Plumpy_Sup Received"), default=0)
+    plumpy_sup_used = models.IntegerField(
+        _("Plumpy_Sup Used"), default=0)
+    plumpy_sup_lost = models.IntegerField(
+        _("Plumpy_Sup Lost"), default=0)
+
+    @property
+    def plumpy_sup_balance(self):
+        return self.balance_for('plumpy_sup')
+
+    @property
+    def plumpy_sup_stocked(self):
+        return self.stocked_for('plumpy_sup')
+
+    @property
+    def plumpy_sup_consumed(self):
+        return self.consumed_for('plumpy_sup')
+
+    # Supercereal
+    supercereal_initial = models.IntegerField(
+        _("Supercereal Initial"), default=0)
+    supercereal_received = models.IntegerField(
+        _("Supercereal Received"), default=0)
+    supercereal_used = models.IntegerField(
+        _("Supercereal Used"), default=0)
+    supercereal_lost = models.IntegerField(
+        _("Supercereal Lost"), default=0)
+
+    @property
+    def supercereal_balance(self):
+        return self.balance_for('supercereal')
+
+    @property
+    def supercereal_stocked(self):
+        return self.stocked_for('supercereal')
+
+    @property
+    def supercereal_consumed(self):
+        return self.consumed_for('supercereal')
+
+    # Supercereal_Plus
+    supercereal_plus_initial = models.IntegerField(
+        _("Supercereal_Plus Initial"), default=0)
+    supercereal_plus_received = models.IntegerField(
+        _("Supercereal_Plus Received"), default=0)
+    supercereal_plus_used = models.IntegerField(
+        _("Supercereal_Plus Used"), default=0)
+    supercereal_plus_lost = models.IntegerField(
+        _("Supercereal_Plus Lost"), default=0)
+
+    @property
+    def supercereal_plus_balance(self):
+        return self.balance_for('supercereal_plus')
+
+    @property
+    def supercereal_plus_stocked(self):
+        return self.stocked_for('supercereal_plus')
+
+    @property
+    def supercereal_plus_consumed(self):
+        return self.consumed_for('supercereal_plus')
 
     # Oil
     oil_initial = models.IntegerField(
@@ -342,6 +342,23 @@ class AbstractNutritionStocksR(SNISIReport):
 
     def balance_for(self, field):
         return self.stocked_for(field) - self.consumed_for(field)
+
+    @classmethod
+    def inputs(cls):
+        return ['plumpy_nut',
+                'milk_f75',
+                'milk_f100',
+                'resomal',
+                'plumpy_sup',
+                'supercereal',
+                'supercereal_plus',
+                'oil',
+                'amoxycilline_125_vials',
+                'amoxycilline_250_caps',
+                'albendazole_400',
+                'vita_100_injectable',
+                'vita_200_injectable',
+                'iron_folic_acid']
 
 
 class NutritionStocksR(AbstractNutritionStocksR):
