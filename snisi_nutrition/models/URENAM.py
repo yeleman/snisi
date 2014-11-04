@@ -50,6 +50,10 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[6-23m] Deceased"))
     u23o6_abandon = models.PositiveIntegerField(
         _("[6-23m] Abandon"))
+
+    u23o6_not_responding = models.PositiveIntegerField(
+        _("[6-23m] Not Responding"))
+
     u23o6_total_out_m = models.PositiveIntegerField(
         _("[6-23m] Total Out Male"))
     u23o6_total_out_f = models.PositiveIntegerField(
@@ -84,6 +88,8 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[23-59m] Deceased"))
     u59o23_abandon = models.PositiveIntegerField(
         _("[23-59m] Abandon"))
+    u59o23_not_responding = models.PositiveIntegerField(
+        _("[23-59m] Not Responding"))
     u59o23_total_out_m = models.PositiveIntegerField(
         _("[23-59m] Total Out Male"))
     u59o23_total_out_f = models.PositiveIntegerField(
@@ -118,6 +124,8 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[59m+] Deceased"))
     o59_abandon = models.PositiveIntegerField(
         _("[59m+] Abandon"))
+    o59_not_responding = models.PositiveIntegerField(
+        _("[59m+] Not Responding"))
     o59_total_out_m = models.PositiveIntegerField(
         _("[59m+] Total Out Male"))
     o59_total_out_f = models.PositiveIntegerField(
@@ -152,6 +160,8 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[PW/BF] Deceased"))
     pw_abandon = models.PositiveIntegerField(
         _("[PW/BF] Abandon"))
+    pw_not_responding = models.PositiveIntegerField(
+        _("[PW/BF] Not Responding"))
     pw_total_out_m = models.PositiveIntegerField(
         _("[PW/BF] Total Out Male"))
     pw_total_out_f = models.PositiveIntegerField(
@@ -170,11 +180,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[Ex-SAM] Start of Month Male"))
     exsam_total_start_f = models.PositiveIntegerField(
         _("[Ex-SAM] Start of Month Female"))
-
-    exsam_total_out_m = models.PositiveIntegerField(
-        _("[Ex-SAM] Total Out Male"))
-    exsam_total_out_f = models.PositiveIntegerField(
-        _("[Ex-SAM] Total Out Female"))
 
     exsam_referred = models.PositiveIntegerField(
         _("[Ex-SAM] Referred"))
@@ -200,10 +205,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def u23o6_transferred(self):
         # URENAM can't receive transfers
-        return 0
-
-    @property
-    def u23o6_not_responding(self):
         return 0
 
     @property
@@ -237,10 +238,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         return 0
 
     @property
-    def u59o23_not_responding(self):
-        return 0
-
-    @property
     def u59o23_grand_total_in(self):
         return self.age_sum_for('u59o23', ['total_in', 'transferred'])
 
@@ -271,10 +268,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         return 0
 
     @property
-    def o59_not_responding(self):
-        return 0
-
-    @property
     def o59_grand_total_in(self):
         return self.age_sum_for('o59', ['total_in', 'transferred'])
 
@@ -302,10 +295,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def pw_transferred(self):
         # URENAM can't receive transfers
-        return 0
-
-    @property
-    def pw_not_responding(self):
         return 0
 
     @property
@@ -368,6 +357,14 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def exsam_transferred(self):
         # URENAM can't receive transfers
+        return 0
+
+    @property
+    def exsam_total_out_m(self):
+        return 0
+
+    @property
+    def exsam_total_out_f(self):
         return 0
 
     @property

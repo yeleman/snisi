@@ -52,6 +52,8 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
         _("[6-59m] Deceased"))
     u59o6_abandon = models.PositiveIntegerField(
         _("[6-59m] Abandon"))
+    u59o6_not_responding = models.PositiveIntegerField(
+        _("[6-59m] Not Responding"))
     u59o6_total_out_m = models.PositiveIntegerField(
         _("[6-59m] Total Out Male"))
     u59o6_total_out_f = models.PositiveIntegerField(
@@ -88,6 +90,8 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
         _("[59m+] Deceased"))
     o59_abandon = models.PositiveIntegerField(
         _("[59m+] Abandon"))
+    o59_not_responding = models.PositiveIntegerField(
+        _("[59m+] Not Responding"))
     o59_total_out_m = models.PositiveIntegerField(
         _("[59m+] Total Out Male"))
     o59_total_out_f = models.PositiveIntegerField(
@@ -115,10 +119,6 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
         return self.age_sum_for('u59o6', ['total_in', 'transferred'])
 
     @property
-    def u59o6_not_responding(self):
-        return 0
-
-    @property
     def u59o6_total_out(self):
         return self.age_sum_for('u59o6', ['total_out_m', 'total_out_f'])
 
@@ -142,10 +142,6 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
     @property
     def o59_grand_total_in(self):
         return self.age_sum_for('o59', ['total_in', 'transferred'])
-
-    @property
-    def o59_not_responding(self):
-        return 0
 
     @property
     def o59_total_out(self):
