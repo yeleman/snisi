@@ -169,11 +169,11 @@ class PFActivitiesRIface(models.Model):
     implant_removal_revenue = models.PositiveIntegerField(
         verbose_name=_("Implants Removals"))
 
-    emergency_controls_removal_qty = models.PositiveIntegerField(
+    emergency_controls_qty = models.PositiveIntegerField(
         verbose_name=_("Emergency Controls: Quantity"))
-    emergency_controls_removal_price = models.PositiveIntegerField(
+    emergency_controls_price = models.PositiveIntegerField(
         verbose_name=_("Emergency Controls: Price"))
-    emergency_controls_removal_revenue = models.PositiveIntegerField(
+    emergency_controls_revenue = models.PositiveIntegerField(
         verbose_name=_("Emergency Controls"))
 
     # stock

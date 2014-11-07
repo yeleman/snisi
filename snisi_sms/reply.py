@@ -17,7 +17,7 @@ class SMSReply(object):
 
     LEVEL_PREFIXES = {
         INFO: "",
-        ERROR: _("ERREUR"),
+        ERROR: _("ECHEC"),
         WARNING: _("/!\\"),
         SUCCESS: _("OK")
     }
@@ -44,7 +44,7 @@ class SMSReply(object):
 
     def prefix(self, level=None):
         ns = self.namespace
-        level_str = self.LEVEL_PREFIXES.get(level)
+        level_str = self.LEVEL_PREFIXES.get(level).format()
 
         if ns is None and level is None:
             return None

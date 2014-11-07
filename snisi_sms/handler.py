@@ -7,7 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_core.models.Projects import Domain
-from snisi_sms.common import test, echo
+from snisi_sms.common import test, echo, change_passwd, ask_for_help
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,9 @@ def snisi_sms_handler(message):
         message.identity, message.content))
 
     keywords = {'test': test,
-                'echo': echo}
+                'echo': echo,
+                'passwd': change_passwd,
+                'help': ask_for_help}
 
     for domain in Domain.active.all():
         domain_kw = domain.import_from('sms_handlers.KEYWORDS')
