@@ -2,7 +2,7 @@
 <django-objects version="1.0">
     <object pk="nutrition" model="snisi_core.domain">
         <field type="CharField" name="name">Routine Nutrition</field>
-        <field type="BooleanField" name="is_active">False</field>
+        <field type="BooleanField" name="is_active">True</field>
         <field to="snisi_core.provider" name="technical_contact" rel="ManyToOneRel">adolo</field>
         <field to="snisi_core.provider" name="operational_contact" rel="ManyToOneRel">adolo</field>
         <field type="CharField" name="short_description">Données de routine Nutrition</field>

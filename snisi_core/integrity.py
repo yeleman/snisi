@@ -96,6 +96,10 @@ class ReportingDataHolder(object):
         return key in self.data.keys() and \
             (self.data.get(key) is not None or not test_value)
 
+    def update(self, adict):
+        for k, v in adict.items():
+            self.set(k, v)
+
     def add_warning(self, warning, **kwargs):
         if isinstance(warning, text_type):
             warning = ReportingDataWarning(warning, **kwargs)

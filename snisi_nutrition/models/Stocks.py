@@ -344,7 +344,25 @@ class AbstractNutritionStocksR(SNISIReport):
         return self.stocked_for(field) - self.consumed_for(field)
 
     @classmethod
-    def inputs(cls):
+    def consumed_for_dict(cls, data, field):
+        return sum([data.get('{}_used'.format(field), 0),
+                    data.get('{}_lost'.format(field), 0)])
+
+    @classmethod
+    def stocked_for_dict(cls, data, field):
+        return sum([data.get('{}_initial'.format(field), 0),
+                    data.get('{}_received'.format(field), 0)])
+
+    @classmethod
+    def balance_for_dict(cls, data, field):
+        return cls.stocked_for_dict(data, field) \
+            - cls.consumed_for_dict(data, field)
+
+    @classmethod
+    def inputs(cls, ureni_only=False):
+        if ureni_only:
+            return ['milk_f75', 'milk_f100', 'resomal']
+
         return ['plumpy_nut',
                 'milk_f75',
                 'milk_f100',

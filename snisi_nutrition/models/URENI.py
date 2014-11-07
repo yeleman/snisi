@@ -43,8 +43,9 @@ class AbstractURENINutritionR(AbstractURENutritionR):
         _("[0-6m] Total Admitted Male"))
     u6_total_in_f = models.PositiveIntegerField(
         _("[0-6m] Total Admitted Female"))
-    u6_referred = models.PositiveIntegerField(
-        _("[0-6m] Referred"))
+
+    u6_transferred = models.PositiveIntegerField(
+        _("[0-6m] Transferred"))
 
     u6_healed = models.PositiveIntegerField(
         _("[0-6m] Healed"))
@@ -59,8 +60,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     u6_total_out_f = models.PositiveIntegerField(
         _("[0-6m] Total Out Female"))
 
-    u6_transferred = models.PositiveIntegerField(
-        _("[0-6m] Transferred"))
+    u6_referred = models.PositiveIntegerField(
+        _("[0-6m] Referred"))
 
     u6_total_end_m = models.PositiveIntegerField(
         _("[0-6m] End of Month Male"))
@@ -81,8 +82,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
         _("[6-59m] Total Admitted Male"))
     u59o6_total_in_f = models.PositiveIntegerField(
         _("[6-59m] Total Admitted Female"))
-    u59o6_referred = models.PositiveIntegerField(
-        _("[6-59m] Referred"))
+    u59o6_transferred = models.PositiveIntegerField(
+        _("[6-59m] Transferred"))
 
     u59o6_healed = models.PositiveIntegerField(
         _("[6-59m] Healed"))
@@ -97,8 +98,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     u59o6_total_out_f = models.PositiveIntegerField(
         _("[6-59m] Total Out Female"))
 
-    u59o6_transferred = models.PositiveIntegerField(
-        _("[6-59m] Transferred"))
+    u59o6_referred = models.PositiveIntegerField(
+        _("[6-59m] Referred"))
 
     u59o6_total_end_m = models.PositiveIntegerField(
         _("[6-59m] End of Month Male"))
@@ -119,8 +120,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
         _("[59m+] Total Admitted Male"))
     o59_total_in_f = models.PositiveIntegerField(
         _("[59m+] Total Admitted Female"))
-    o59_referred = models.PositiveIntegerField(
-        _("[59m+] Referred"))
+    o59_transferred = models.PositiveIntegerField(
+        _("[59m+] Transferred"))
 
     o59_healed = models.PositiveIntegerField(
         _("[59m+] Healed"))
@@ -135,8 +136,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     o59_total_out_f = models.PositiveIntegerField(
         _("[59m+] Total Out Female"))
 
-    o59_transferred = models.PositiveIntegerField(
-        _("[59m+] Transferred"))
+    o59_referred = models.PositiveIntegerField(
+        _("[59m+] Referred"))
 
     o59_total_end_m = models.PositiveIntegerField(
         _("[59m+] End of Month Male"))

@@ -9,7 +9,8 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from snisi_malaria import (ROUTINE_REPORTING_END_DAY,
+from snisi_malaria import (DOMAIN_SLUG,
+                           ROUTINE_REPORTING_END_DAY,
                            ROUTINE_EXTENDED_REPORTING_END_DAY,
                            ROUTINE_DISTRICT_AGG_DAY,
                            ROUTINE_REGION_AGG_DAY)
@@ -43,8 +44,8 @@ class Command(BaseCommand):
         }
 
         def handle_category(category):
-            slug = "{period}_{category}".format(period=period_str,
-                                                category=category)
+            slug = "{domain}_{period}_{category}".format(
+                domain=DOMAIN_SLUG, period=period_str, category=category)
             task, created = PeriodicTask.get_or_create(slug, category)
 
             if task.can_trigger():

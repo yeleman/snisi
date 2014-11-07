@@ -10,11 +10,13 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from snisi_epidemiology import (ROUTINE_REPORTING_END_WEEKDAY,
+from snisi_core.models.Periods import MonthPeriod
+from snisi_core.models.PeriodicTasks import PeriodicTask
+from snisi_epidemiology import (DOMAIN_SLUG,
+                                ROUTINE_REPORTING_END_WEEKDAY,
                                 ROUTINE_DISTRICT_AGG_DAYS_DELTA,
                                 ROUTINE_REGION_AGG_DAYS_DELTA)
 from snisi_epidemiology.models import EpiWeekPeriod
-from snisi_core.models.PeriodicTasks import PeriodicTask
 from snisi_epidemiology.aggregations import (generate_district_reports,
                                              generate_region_country_reports)
 
@@ -28,6 +30,7 @@ class Command(BaseCommand):
         logger.info("snisi_epidemiology daily-checkups")
 
         now = timezone.now()
+        period = MonthPeriod.current()
 
         category_matrix = {
             'end_of_district_period': generate_district_reports,
@@ -35,8 +38,8 @@ class Command(BaseCommand):
         }
 
         def handle_category(category, period):
-            slug = "{period}_{category}".format(period=period.strid(),
-                                                category=category)
+            slug = "{domain}_{period}_{category}".format(
+                domain=DOMAIN_SLUG, period=period.strid(), category=category)
             task, created = PeriodicTask.get_or_create(slug, category)
 
             if task.can_trigger():
@@ -45,10 +48,10 @@ class Command(BaseCommand):
 
         # number and position of weeks across month is inconsistent.
         # loop through potential past weeks and process if possible
-        periods = []
-        period = EpiWeekPeriod.current()
-        while period.end_on < now:
-            periods.append(period)
+        pf = EpiWeekPeriod.find_create_by_date(period.start_on)
+        pe = EpiWeekPeriod.current()
+        periods = [p for p in EpiWeekPeriod.all_from(pf, pe)
+                   if p.end_on < now]
 
         for period in periods:
             reporting_end = period.end_on + datetime.timedelta(

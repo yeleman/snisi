@@ -17,42 +17,42 @@
 	<object pk="nut_urenam_monthly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_urenam_monthly_routine</field>
         <field type="CharField" name="name">Routine Mensuelle URENAM</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.URENAMNutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENAM.URENAMNutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="nut_urenam_monthly_routine_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_urenam_monthly_routine_aggregated</field>
         <field type="CharField" name="name">Routine Mensuelle URENAM (Aggrégé)</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.AggURENAMNutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENAM.AggURENAMNutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="nut_urenas_monthly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_urenas_monthly_routine</field>
         <field type="CharField" name="name">Routine Mensuelle URENAS</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.URENASNutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENAS.URENASNutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="nut_urenas_monthly_routine_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_urenas_monthly_routine_aggregated</field>
         <field type="CharField" name="name">Routine Mensuelle URENAS (Aggrégé)</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.AggURENASNutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENAS.AggURENASNutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="nut_ureni_monthly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_ureni_monthly_routine</field>
         <field type="CharField" name="name">Routine Mensuelle URENI</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.URENINutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENI.URENINutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="nut_ureni_monthly_routine_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">nut_ureni_monthly_routine_aggregated</field>
         <field type="CharField" name="name">Routine Mensuelle URENI (Aggrégé)</field>
-        <field type="CharField" name="cls">snisi_nutrition.models.Monthly.AggURENINutritionR</field>
+        <field type="CharField" name="cls">snisi_nutrition.models.URENI.AggURENINutritionR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>

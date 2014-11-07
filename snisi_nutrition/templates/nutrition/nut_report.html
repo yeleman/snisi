@@ -33,7 +33,7 @@
 {% block onJQready %}
 entities_browser = getEntitiesBrowser({
     parentID: 'report_entity_filter',
-    baseURL: '/api/entities/getclusterchildren/msi_reprohealth_routine',
+    baseURL: '/api/entities/getclusterchildren/nutrition_routine',
     root: "{{ root.slug }}",
     lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
     lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],

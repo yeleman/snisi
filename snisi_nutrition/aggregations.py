@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+import datetime
 
 from django.utils import timezone
 
@@ -15,9 +16,13 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_nutrition.models import (AggNutritionR, NutritionR)
+from snisi_nutrition.models.Monthly import AggNutritionR
+from snisi_nutrition.models.Weekly import (
+    NutWeekRegionValidationPeriod, AggWeeklyNutritionR)
 from snisi_nutrition import (ROUTINE_DISTRICT_AGG_DAY,
-                             ROUTINE_REGION_AGG_DAY)
+                             ROUTINE_REGION_AGG_DAY,
+                             ROUTINE_DISTRICT_AGG_DAYS_DELTA,
+                             ROUTINE_REGION_AGG_DAYS_DELTA)
 from snisi_nutrition.integrity import PROJECT_BRAND
 from snisi_core.models.Notifications import Notification
 
@@ -37,6 +42,246 @@ get_regions = lambda: [e for e in cluster.members()
                        if e.type.slug == 'health_region']
 
 
+def handle_district_validation(district,
+                               report_class, report_class_agg,
+                               period, region_validation_period):
+
+    report_cls = report_class.report_class
+    report_cls_agg = report_class_agg.report_class
+
+    # find expected for Agg
+    exp = ExpectedReporting.objects.filter(
+        report_class=report_class_agg,
+        entity__slug=district.slug,
+        period=period)
+
+    # not expected
+    if exp.count() == 0:
+        return None, None, None
+    else:
+        # might explode if 2 exp but that's the point
+        exp = exp.get()
+
+    # auto-validate non-validated reports
+    for report in report_cls.objects.filter(
+            period=period, entity__in=district.get_health_centers()):
+        if not report.validated:
+            expv = ExpectedValidation.objects.get(report=report)
+
+            expv.acknowledge_validation(
+                validated=True,
+                validated_by=autobot,
+                validated_on=timezone.now(),
+                auto_validated=True)
+
+    # create Aggregated Report
+    agg = report_cls_agg.create_from(
+        period=period,
+        entity=district,
+        created_by=autobot)
+
+    exp.acknowledge_report(agg)
+
+    # create expected validation
+    expv = ExpectedValidation.objects.create(
+        report=agg,
+        validation_period=region_validation_period,
+        validating_entity=district.get_health_region(),
+        validating_role=charge_sis)
+
+    return exp, agg, expv
+
+
+def handle_region_validation(region, report_class_agg, period):
+
+    report_cls_agg = report_class_agg.report_class
+
+    # get Expected Agg
+    exp = ExpectedReporting.objects.filter(
+        report_class=report_class_agg,
+        entity__slug=region.slug,
+        period=period)
+
+    if exp.count() == 0:
+        return None, None
+    else:
+        exp = exp.get()
+
+    # loop on districts
+    for district in [d for d in region.get_health_districts()
+                     if d in cluster.members()]:
+
+        logger.info("\t\tAt district {}".format(district))
+
+        try:
+            # ack validation (auto)
+            expv = ExpectedValidation.objects.get(
+                report__entity=district,
+                report__period=period)
+        except ExpectedValidation.DoesNotExist:
+            continue
+
+        expv.acknowledge_validation(
+            validated=True,
+            validated_by=autobot,
+            validated_on=timezone.now(),
+            auto_validated=True)
+
+    # create Agg/region
+    agg = report_cls_agg.create_from(
+        period=period,
+        entity=region,
+        created_by=autobot)
+
+    exp.acknowledge_report(agg)
+
+    # validate (no expected validation)
+    agg.record_validation(
+        validated=True,
+        validated_by=autobot,
+        validated_on=timezone.now(),
+        auto_validated=True)
+
+    return exp, agg
+
+
+def handle_country_validation(country, report_class_agg, period):
+
+    report_cls_agg = report_class_agg.report_class
+
+    # ack expected
+    exp = ExpectedReporting.objects.get(
+        report_class=rclass,
+        entity=country,
+        period=period)
+
+    if exp is None:
+        return None, None
+
+    # create AggNutritionR/country
+    agg = report_cls_agg.create_from(
+        period=period,
+        entity=country,
+        created_by=autobot)
+
+    exp.acknowledge_report(agg)
+
+    # validate (no expected validation)
+    agg.record_validation(
+        validated=True,
+        validated_by=autobot,
+        validated_on=timezone.now(),
+        auto_validated=True)
+
+    return exp, agg
+
+
+def generate_weekly_district_reports(period, ensure_correct_date=True):
+
+    logger.info("Switching to {}".format(period))
+
+    region_validation_period = NutWeekRegionValidationPeriod \
+        .find_create_by_date(period.middle())
+
+    if ensure_correct_date:
+        now = timezone.now()
+        district_agg_day = period.end_on + datetime.timedelta(
+            days=ROUTINE_DISTRICT_AGG_DAYS_DELTA)
+        if not now.date() == district_agg_day.date():
+            logger.error("Not allowed to generate district agg "
+                         "outside the next Sunday")
+            return
+
+    districts = get_districts()
+
+    # loop on all districts
+    for district in districts:
+
+        # skip if exists (assume if AggNutritionR exist, all others exist too)
+        if AggWeeklyNutritionR.objects.filter(
+                period=period, entity=district).count():
+            continue
+
+        logger.info("\tAt district {}".format(district))
+
+        # AggWeeklyNutritionR
+        nut_exp, nut_agg, nut_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nutrition_weekly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nutrition_weekly_routine_aggregated"),
+            period=period,
+            region_validation_period=region_validation_period)
+
+        # send notification to Region
+        for recipient in Provider.active.filter(
+                role=charge_sis, location=nut_agg.entity.get_health_region()):
+
+            Notification.create(
+                provider=recipient,
+                deliver=Notification.TODAY,
+                expirate_on=region_validation_period.end_on,
+                category=PROJECT_BRAND,
+                text="Le rapport (aggrégé) de routine Nutrition hedomadaire "
+                     "de {period} pour {entity} est prêt. "
+                     "No reçu: #{receipt}. "
+                     "Vous devez le valider avant le 25."
+                     .format(entity=nut_agg.entity.display_full_name(),
+                             period=nut_agg.period,
+                             receipt=nut_agg.receipt)
+                )
+
+
+def generate_weekly_region_country_reports(period, ensure_correct_date=True):
+
+    logger.info("Switching to {}".format(period))
+
+    if ensure_correct_date:
+        now = timezone.now()
+        region_agg_day = period.end_on + datetime.timedelta(
+            days=ROUTINE_REGION_AGG_DAYS_DELTA)
+        if not now.date() == region_agg_day.date():
+            logger.error("Not allowed to generate district agg "
+                         "outside the next Monday")
+            return
+
+    regions = get_regions()
+
+    # loop on all regions
+    for region in regions:
+
+        logger.info("\tAt region {}".format(region))
+
+        # AggWeeklyNutritionR
+        nut_exp, nut_agg, nut_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nutrition_weekly_routine_aggregated"),
+            period=period)
+
+    # COUNTRY LEVEL
+    country = mali
+
+    # AggWeeklyNutritionR
+    nut_exp, nut_agg, nut_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nutrition_weekly_routine_aggregated"),
+        period=period)
+
+    # send notification to National level
+    for recipient in Provider.active.filter(location__level=0):
+
+        Notification.create(
+            provider=recipient,
+            deliver=Notification.TODAY,
+            expirate_on=nut_agg.period.following().following().start_on,
+            category=PROJECT_BRAND,
+            text="Le rapport national (aggrégé) de routine Nutrition hedbo. "
+                 "pour {period} est disponible. No reçu: #{receipt}."
+                 .format(period=nut_agg.period, receipt=nut_agg.receipt))
+
+
 def generate_district_reports(period,
                               ensure_correct_date=True):
 
@@ -50,7 +295,7 @@ def generate_district_reports(period,
         if not period.following().includes(now) \
                 or not now.day == ROUTINE_DISTRICT_AGG_DAY:
             logger.error("Not allowed to generate district agg "
-                         "outside the 11th of the following period")
+                         "outside the 16th of the following period")
             return
 
     districts = get_districts()
@@ -58,56 +303,61 @@ def generate_district_reports(period,
     # loop on all districts
     for district in districts:
 
-        # skip if exists
+        # skip if exists (assume if AggNutritionR exist, all others exist too)
         if AggNutritionR.objects.filter(
                 period=period, entity=district).count():
             continue
 
-        # ack expected
-        exp = ExpectedReporting.objects.filter(
-            report_class=rclass,
-            entity__slug=district.slug,
-            period=period)
-
-        # not expected
-        if exp.count() == 0:
-            continue
-        else:
-            # might explode if 2 exp but that's the point
-            exp = exp.get()
-
         logger.info("\tAt district {}".format(district))
 
-        # auto-validate non-validated reports
-        for report in NutritionR.objects.filter(
-                period=period, entity__in=district.get_health_centers()):
-            if not report.validated:
-                expv = ExpectedValidation.objects.get(report=report)
-
-                expv.acknowledge_validation(
-                    validated=True,
-                    validated_by=autobot,
-                    validated_on=timezone.now(),
-                    auto_validated=True)
-
-        # create AggNutritionR
-        agg = AggNutritionR.create_from(
+        # URENAM
+        urenam_exp, urenam_agg, urenam_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nut_urenam_monthly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nut_urenam_monthly_routine_aggregated"),
             period=period,
-            entity=district,
-            created_by=autobot)
+            region_validation_period=region_validation_period)
 
-        exp.acknowledge_report(agg)
+        # URENAS
+        urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nut_urenas_monthly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nut_urenas_monthly_routine_aggregated"),
+            period=period,
+            region_validation_period=region_validation_period)
 
-        # create expected validation
-        ExpectedValidation.objects.create(
-            report=agg,
-            validation_period=region_validation_period,
-            validating_entity=district.get_health_region(),
-            validating_role=charge_sis)
+        # URENI
+        urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nut_ureni_monthly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nut_ureni_monthly_routine_aggregated"),
+            period=period,
+            region_validation_period=region_validation_period)
+
+        # STOCKS
+        urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nut_stocks_monthly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nut_stocks_monthly_routine_aggregated"),
+            period=period,
+            region_validation_period=region_validation_period)
+
+        # AggNutritionR
+        nut_exp, nut_agg, nut_expv = handle_district_validation(
+            district=district,
+            report_class=ReportClass.get_or_none("nutrition_monthly_routine"),
+            report_class_agg=ReportClass.get_or_none(
+                "nutrition_monthly_routine_aggregated"),
+            period=period,
+            region_validation_period=region_validation_period)
 
         # send notification to Region
         for recipient in Provider.active.filter(
-                role=charge_sis, location=agg.entity.get_health_region()):
+                role=charge_sis, location=nut_agg.entity.get_health_region()):
 
             Notification.create(
                 provider=recipient,
@@ -118,9 +368,9 @@ def generate_district_reports(period,
                      "de {period} pour {entity} est prêt. "
                      "No reçu: #{receipt}. "
                      "Vous devez le valider avant le 25."
-                     .format(entity=agg.entity.display_full_name(),
-                             period=agg.period,
-                             receipt=agg.receipt)
+                     .format(entity=nut_agg.entity.display_full_name(),
+                             period=nut_agg.period,
+                             receipt=nut_agg.receipt)
                 )
 
 
@@ -134,7 +384,7 @@ def generate_region_country_reports(period,
         if not period.following().includes(now) \
                 or not now.day == ROUTINE_REGION_AGG_DAY:
             logger.error("Not allowed to generate district agg "
-                         "outside the 11th of the following period")
+                         "outside the 26th of the following period")
             return
 
     regions = get_regions()
@@ -142,77 +392,80 @@ def generate_region_country_reports(period,
     # loop on all regions
     for region in regions:
 
-        # ack expected
-        exp = ExpectedReporting.objects.filter(
-            report_class=rclass,
-            entity__slug=region.slug,
-            period=period)
-
-        if exp.count() == 0:
-            continue
-        else:
-            exp = exp.get()
-
         logger.info("\tAt region {}".format(region))
 
-        # loop on districts
-        for district in [d for d in region.get_health_districts()
-                         if d in cluster.members()]:
+        # URENAM
+        urenam_exp, urenam_agg, urenam_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nut_urenam_monthly_routine_aggregated"),
+            period=period)
 
-            logger.info("\t\tAt district {}".format(district))
+        # URENAS
+        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nut_urenas_monthly_routine_aggregated"),
+            period=period)
 
-            try:
-                # ack validation (auto)
-                expv = ExpectedValidation.objects.get(
-                    report__entity=district,
-                    report__period=period)
-            except ExpectedValidation.DoesNotExist:
-                continue
+        # URENI
+        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nut_ureni_monthly_routine_aggregated"),
+            period=period)
 
-            expv.acknowledge_validation(
-                validated=True,
-                validated_by=autobot,
-                validated_on=timezone.now(),
-                auto_validated=True)
+        # STOCKS
+        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nut_stocks_monthly_routine_aggregated"),
+            period=period)
 
-        # create AggNutritionR/region
-        agg = AggNutritionR.create_from(
-            period=period,
-            entity=region,
-            created_by=autobot)
+        # AggNutritionR
+        nut_exp, nut_agg, nut_expv = handle_region_validation(
+            region=region,
+            report_class_agg=ReportClass.get_or_none(
+                "nutrition_monthly_routine_aggregated"),
+            period=period)
 
-        exp.acknowledge_report(agg)
+    # COUNTRY LEVEL
+    country = mali
 
-        # validate (no expected validation)
-        agg.record_validation(
-            validated=True,
-            validated_by=autobot,
-            validated_on=timezone.now(),
-            auto_validated=True)
-
-    # ack expected
-    exp = ExpectedReporting.objects.get(
-        report_class=rclass,
-        entity__slug=mali.slug,
+    # URENAM
+    urenam_exp, urenam_agg, urenam_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nut_urenam_monthly_routine_aggregated"),
         period=period)
 
-    if exp is None:
-        return
+    # URENAS
+    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nut_urenas_monthly_routine_aggregated"),
+        period=period)
 
-    # create AggNutritionR/country
-    agg = AggNutritionR.create_from(
-        period=period,
-        entity=mali,
-        created_by=autobot)
+    # URENI
+    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nut_ureni_monthly_routine_aggregated"),
+        period=period)
 
-    exp.acknowledge_report(agg)
+    # STOCKS
+    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nut_stocks_monthly_routine_aggregated"),
+        period=period)
 
-    # validate (no expected validation)
-    agg.record_validation(
-        validated=True,
-        validated_by=autobot,
-        validated_on=timezone.now(),
-        auto_validated=True)
+    # AggNutritionR
+    nut_exp, nut_agg, nut_expv = handle_country_validation(
+        country=country,
+        report_class_agg=ReportClass.get_or_none(
+            "nutrition_monthly_routine_aggregated"),
+        period=period)
 
     # send notification to National level
     for recipient in Provider.active.filter(location__level=0):
@@ -220,8 +473,8 @@ def generate_region_country_reports(period,
         Notification.create(
             provider=recipient,
             deliver=Notification.TODAY,
-            expirate_on=agg.period.following().following().start_on,
+            expirate_on=nut_agg.period.following().following().start_on,
             category=PROJECT_BRAND,
             text="Le rapport national (aggrégé) de routine Nutrition mensuel "
                  "pour {period} est disponible. No reçu: #{receipt}."
-                 .format(period=agg.period, receipt=agg.receipt))
+                 .format(period=nut_agg.period, receipt=nut_agg.receipt))

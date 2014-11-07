@@ -140,8 +140,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[59m+] End of Month Female"))
 
     # Pregnant & Breast Feeding Women
-    pw_total_start_m = models.PositiveIntegerField(
-        _("[PW/BF] Start of Month Male"))
     pw_total_start_f = models.PositiveIntegerField(
         _("[PW/BF] Start of Month Female"))
 
@@ -149,8 +147,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[PW/BF] New Cases"))
     pw_returned = models.PositiveIntegerField(
         _("[PW/BF] Returned"))
-    pw_total_in_m = models.PositiveIntegerField(
-        _("[PW/BF] Total Admitted Male"))
     pw_total_in_f = models.PositiveIntegerField(
         _("[PW/BF] Total Admitted Female"))
 
@@ -162,16 +158,12 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         _("[PW/BF] Abandon"))
     pw_not_responding = models.PositiveIntegerField(
         _("[PW/BF] Not Responding"))
-    pw_total_out_m = models.PositiveIntegerField(
-        _("[PW/BF] Total Out Male"))
     pw_total_out_f = models.PositiveIntegerField(
         _("[PW/BF] Total Out Female"))
 
     pw_referred = models.PositiveIntegerField(
         _("[PW/BF] Referred"))
 
-    pw_total_end_m = models.PositiveIntegerField(
-        _("[PW/BF] End of Month Male"))
     pw_total_end_f = models.PositiveIntegerField(
         _("[PW/BF] End of Month Female"))
 
@@ -284,6 +276,22 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
 
     # Pregnant & Breast Feeding Women
+    @property
+    def pw_total_start_m(self):
+        return 0
+
+    @property
+    def pw_total_in_m(self):
+        return 0
+
+    @property
+    def pw_total_out_m(self):
+        return 0
+
+    @property
+    def pw_total_end_m(self):
+        return 0
+
     @property
     def pw_total_start(self):
         return self.age_sum_for('pw', ['total_start_m', 'total_start_f'])

@@ -65,12 +65,12 @@ class AbstractURENutritionR(SNISIReport):
             if age == 'exsam':
                 fields += ['new_cases', 'returned',
                            'total_in_m', 'total_in_f',
-                           'healed', 'deceased', 'abandon']
+                           'healed', 'deceased', 'abandon', 'not_responding']
+            if age == 'pw':
+                fields += ['total_start_m', 'total_in_m',
+                           'total_out_m', 'total_end_m']
 
-        if not cls.IS_URENI:
-            fields += ['not_responding']
-
-        return fields
+        return list(set(fields))
 
     # overriden
     @classmethod
@@ -99,11 +99,7 @@ class AbstractURENutritionR(SNISIReport):
 
     @classmethod
     def grand_total_in_for(cls, data, age):
-        if cls.IS_URENI:
-            fields = ['total_in', 'referred']
-        else:
-            fields = ['total_in', 'transferred']
-        return cls.age_sum_for_dict(data, age, fields)
+        return cls.age_sum_for_dict(data, age, ['total_in', 'transferred'])
 
     @classmethod
     def total_out_for(cls, data, age):
@@ -111,11 +107,7 @@ class AbstractURENutritionR(SNISIReport):
 
     @classmethod
     def grand_total_out_for(cls, data, age):
-        if cls.IS_URENI:
-            fields = ['total_out', 'transferred']
-        else:
-            fields = ['total_out', 'referred']
-        return cls.age_sum_for_dict(data, age, fields)
+        return cls.age_sum_for_dict(data, age, ['total_out', 'referred'])
 
     @classmethod
     def total_end_for(cls, data, age):
@@ -124,13 +116,26 @@ class AbstractURENutritionR(SNISIReport):
     @classmethod
     def expand_data_for(cls, data, age):
         for field in cls.uren_fields():
+            afield = '{age}_{field}'.format(age=age, field=field)
             if field in cls.silent_uren_fields(age):
-                data.update({field: 0})
+                data.update({afield: 0})
 
-        data['total_start'] = cls.total_start_for(data, age)
-        data['total_in'] = cls.total_in_for(data, age)
-        data['grand_total_in'] = cls.grand_total_in_for(data, age)
-        data['total_out'] = cls.total_out_for(data, age)
-        data['grand_total_out'] = cls.grand_total_out_for(data, age)
-        data['total_end'] = cls.total_end_for(data, age)
+        data.update(
+            {'{}_total_start'.format(age):
+             cls.total_start_for(data, age)})
+        data.update(
+            {'{}_total_in'.format(age):
+             cls.total_in_for(data, age)})
+        data.update(
+            {'{}_grand_total_in'.format(age):
+             cls.grand_total_in_for(data, age)})
+        data.update(
+            {'{}_total_out'.format(age):
+             cls.total_out_for(data, age)})
+        data.update(
+            {'{}_grand_total_out'.format(age):
+             cls.grand_total_out_for(data, age)})
+        data.update(
+            {'{}_total_end'.format(age):
+             cls.total_end_for(data, age)})
         return data

@@ -1,4 +1,4 @@
-Django==1.7
+Django==1.7.1
 MySQL-python
 South==1.0
 django-mptt==0.6.1

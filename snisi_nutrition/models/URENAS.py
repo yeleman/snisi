@@ -67,7 +67,7 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
     u59o6_total_end_f = models.PositiveIntegerField(
         _("[6-59m] End of Month Female"))
 
-    # Pregnant & Breast Feeding Women
+    # Over 59 months
     o59_total_start_m = models.PositiveIntegerField(
         _("[59m+] Start of Month Male"))
     o59_total_start_f = models.PositiveIntegerField(
