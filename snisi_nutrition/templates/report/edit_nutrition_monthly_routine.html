@@ -261,7 +261,7 @@
     <td class="nodata"></td>
     <td class="nodata"></td>
     <td class="nodata"></td>
-    <td>{{ report.urenam_report.exsam_grand_total_in }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_grand_total_in" %}
 </tr>
 <tr class="total-row">
     <td align="left">TOTAL</td>
@@ -513,8 +513,8 @@
     <td class="nodata"></td>
     <td class="nodata"></td>
     <td class="nodata"></td>
-    {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_referred" %}
-    <td>{{ report.urenam_report.exsam_grand_total_out }}</td>
+    <td class="nodata"></td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_grand_total_out" %}
     <td>{{ report.urenam_report.exsam_total_end }}</td>
     {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_total_end_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_total_end_f" %}

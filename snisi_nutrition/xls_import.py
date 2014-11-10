@@ -505,10 +505,14 @@ class NutritionExcelForm(NutritionRIntegrityChecker, ExcelForm):
             "D19", int,
             URENAMNutritionR._meta.get_field(
                 'exsam_total_start_f').verbose_name, sheet=URENAMURENAS),
-        'urenam_exsam_referred': ExcelFormField(
-            "M34", int,
+        'urenam_exsam_grand_total_in': ExcelFormField(
+            "O19", int,
             URENAMNutritionR._meta.get_field(
-                'exsam_referred').verbose_name, sheet=URENAMURENAS),
+                'exsam_grand_total_in').verbose_name, sheet=URENAMURENAS),
+        'urenam_exsam_grand_total_out': ExcelFormField(
+            "O34", int,
+            URENAMNutritionR._meta.get_field(
+                'exsam_grand_total_out').verbose_name, sheet=URENAMURENAS),
         'urenam_exsam_total_end_m': ExcelFormField(
             "Q34", int,
             URENAMNutritionR._meta.get_field(

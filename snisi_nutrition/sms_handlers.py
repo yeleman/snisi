@@ -275,7 +275,8 @@ def monthly_report(message):
         'pw_total_end_f',
         'exsam_total_start_m',
         'exsam_total_start_f',
-        'exsam_referred',
+        'exsam_grand_total_in',
+        'exsam_grand_total_out',
         'exsam_total_end_m',
         'exsam_total_end_f',
     ]

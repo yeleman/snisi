@@ -130,15 +130,17 @@ class AbstractURENutritionR(SNISIReport):
         data.update(
             {'{}_total_in'.format(age):
              cls.total_in_for(data, age)})
-        data.update(
-            {'{}_grand_total_in'.format(age):
-             cls.grand_total_in_for(data, age)})
+        if age != "exsam":
+            data.update(
+                {'{}_grand_total_in'.format(age):
+                 cls.grand_total_in_for(data, age)})
         data.update(
             {'{}_total_out'.format(age):
              cls.total_out_for(data, age)})
-        data.update(
-            {'{}_grand_total_out'.format(age):
-             cls.grand_total_out_for(data, age)})
+        if age != "exsam":
+            data.update(
+                {'{}_grand_total_out'.format(age):
+                 cls.grand_total_out_for(data, age)})
         data.update(
             {'{}_total_end'.format(age):
              cls.total_end_for(data, age)})

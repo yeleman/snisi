@@ -173,8 +173,11 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     exsam_total_start_f = models.PositiveIntegerField(
         _("[Ex-SAM] Start of Month Female"))
 
-    exsam_referred = models.PositiveIntegerField(
-        _("[Ex-SAM] Referred"))
+    exsam_grand_total_in = models.PositiveIntegerField(
+        _("[Ex-SAM] Grand Total In"))
+
+    exsam_grand_total_out = models.PositiveIntegerField(
+        _("[Ex-SAM] Grand Total Out"))
 
     exsam_total_end_m = models.PositiveIntegerField(
         _("[Ex-SAM] End of Month Male"))
@@ -363,6 +366,10 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
         return self.age_sum_for('exsam', ['total_in_m', 'total_in_f'])
 
     @property
+    def exsam_referred(self):
+        return 0
+
+    @property
     def exsam_transferred(self):
         # URENAM can't receive transfers
         return 0
@@ -374,18 +381,6 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def exsam_total_out_f(self):
         return 0
-
-    @property
-    def exsam_grand_total_in(self):
-        return self.age_sum_for('exsam', ['total_in', 'transferred'])
-
-    @property
-    def exsam_total_out(self):
-        return self.age_sum_for('exsam', ['total_out_m', 'total_out_f'])
-
-    @property
-    def exsam_grand_total_out(self):
-        return self.age_sum_for('exsam', ['total_out', 'referred'])
 
     @property
     def exsam_total_end(self):
