@@ -11,7 +11,6 @@ from collections import OrderedDict
 from django.utils import timezone
 
 from snisi_core.models.Providers import Provider
-# from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
@@ -103,7 +102,7 @@ def weekly_report(message):
 
     # harmonized meta-data
     try:
-        hc = provider.location
+        hc = Entity.get_or_none(provider.location.slug)
     except:
         hc = None
     checker.set('entity', hc)
@@ -125,7 +124,7 @@ def weekly_report(message):
     period = MonthPeriod.find_create_from(year=checker.get('year'),
                                           month=checker.get('month'))
 
-    entity = Entity.get_or_none(checker.get('hc'))
+    entity = checker.get('entity')
 
     # expected reporting defines if report is expeted or not
     expected_reporting = ExpectedReporting.get_or_none(
@@ -433,7 +432,7 @@ def monthly_report(message):
 
     # harmonized meta-data
     try:
-        hc = provider.location
+        hc = Entity.get_or_none(provider.location.slug)
     except:
         hc = None
     checker.set('entity', hc)

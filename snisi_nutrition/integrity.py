@@ -13,7 +13,6 @@ from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_period_routine_report,
                                   RoutineIntegrityInterface)
 from snisi_core.models.Roles import Role
-from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
 from snisi_nutrition import PROJECT_BRAND
 from snisi_nutrition.models.Monthly import NutritionR
 from snisi_nutrition.models.URENAM import URENAMNutritionR
@@ -57,56 +56,55 @@ def create_nut_weekly_report(provider, expected_reporting, completed_on,
 def create_nut_report(provider, expected_reporting, completed_on,
                       integrity_checker, data_source, subreport_checkers):
 
-    validation_period = DefaultDistrictValidationPeriod.find_create_by_date(
-        expected_reporting.period.casted().following().middle())
+    entity = integrity_checker.get('entity')
 
     # create URENAM
-    integrity = subreport_checkers.get('urenam')
-    expected = integrity.get('expected_reporting')
-    urenam_report, urenam_msg = create_monthly_routine_report(
-        provider=provider,
-        expected_reporting=expected,
-        completed_on=completed_on,
-        data_source=data_source,
-        integrity_checker=integrity,
-        reportcls=reportcls_urenam,
-        project_brand=PROJECT_BRAND,
-        validation_period=validation_period,
-        validating_entity=expected.entity.get_health_district(),
-        validating_role=validating_role)
-    integrity_checker.set('urenam_report', urenam_report)
+    if entity.has_urenam:
+        integrity = subreport_checkers.get('urenam')
+        expected = integrity.get('expected_reporting')
+        urenam_report, urenam_msg = create_monthly_routine_report(
+            provider=provider,
+            expected_reporting=expected,
+            completed_on=completed_on,
+            data_source=data_source,
+            integrity_checker=integrity,
+            reportcls=URENAMNutritionR,
+            project_brand=PROJECT_BRAND)
+        if not urenam_report:
+            return urenam_report, urenam_msg
+        integrity_checker.set('urenam_report', urenam_report)
 
     # create URENAS
-    integrity = subreport_checkers.get('urenas')
-    expected = integrity.get('expected_reporting')
-    urenas_report, urenas_msg = create_monthly_routine_report(
-        provider=provider,
-        expected_reporting=expected,
-        completed_on=completed_on,
-        data_source=data_source,
-        integrity_checker=integrity,
-        reportcls=reportcls_urenas,
-        project_brand=PROJECT_BRAND,
-        validation_period=validation_period,
-        validating_entity=expected.entity.get_health_district(),
-        validating_role=validating_role)
-    integrity_checker.set('urenas_report', urenas_report)
+    if entity.has_urenas:
+        integrity = subreport_checkers.get('urenas')
+        expected = integrity.get('expected_reporting')
+        urenas_report, urenas_msg = create_monthly_routine_report(
+            provider=provider,
+            expected_reporting=expected,
+            completed_on=completed_on,
+            data_source=data_source,
+            integrity_checker=integrity,
+            reportcls=URENASNutritionR,
+            project_brand=PROJECT_BRAND)
+        if not urenas_report:
+            return urenas_report, urenas_msg
+        integrity_checker.set('urenas_report', urenas_report)
 
     # create URENI
-    integrity = subreport_checkers.get('ureni')
-    expected = integrity.get('expected_reporting')
-    ureni_report, ureni_msg = create_monthly_routine_report(
-        provider=provider,
-        expected_reporting=expected,
-        completed_on=completed_on,
-        data_source=data_source,
-        integrity_checker=integrity,
-        reportcls=reportcls_ureni,
-        project_brand=PROJECT_BRAND,
-        validation_period=validation_period,
-        validating_entity=expected.entity.get_health_district(),
-        validating_role=validating_role)
-    integrity_checker.set('ureni_report', ureni_report)
+    if entity.has_ureni:
+        integrity = subreport_checkers.get('ureni')
+        expected = integrity.get('expected_reporting')
+        ureni_report, ureni_msg = create_monthly_routine_report(
+            provider=provider,
+            expected_reporting=expected,
+            completed_on=completed_on,
+            data_source=data_source,
+            integrity_checker=integrity,
+            reportcls=URENINutritionR,
+            project_brand=PROJECT_BRAND)
+        if not ureni_report:
+            return ureni_report, ureni_msg
+        integrity_checker.set('ureni_report', ureni_report)
 
     # create STOCKS
     integrity = subreport_checkers.get('stocks')
@@ -117,11 +115,10 @@ def create_nut_report(provider, expected_reporting, completed_on,
         completed_on=completed_on,
         data_source=data_source,
         integrity_checker=integrity,
-        reportcls=reportcls_stocks,
-        project_brand=PROJECT_BRAND,
-        validation_period=validation_period,
-        validating_entity=expected.entity.get_health_district(),
-        validating_role=validating_role)
+        reportcls=NutritionStocksR,
+        project_brand=PROJECT_BRAND)
+    if not stocks_report:
+            return stocks_report, stocks_msg
     integrity_checker.set('stocks_report', stocks_report)
 
     # create NutritionR
@@ -170,7 +167,6 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                     for field in fields])
 
     def check_common_uren(self, **options):
-        rcls = self.report_class.report_class
 
         # get field by age
         af = lambda a, f: '{}_{}'.format(a, f)
@@ -179,12 +175,12 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
         def ae(age, field, message):
             self.add_error(
                 "{uren},{age}: {msg}"
-                .format(uren=rcls.uren_str(),
-                        age=rcls.age_str(age),
+                .format(uren=self.rcls.uren_str(),
+                        age=self.rcls.age_str(age),
                         msg=message),
                 field=field, blocking=False)
 
-        for a in rcls.age_groups():
+        for a in self.rcls.age_groups():
 
             # Details admissions
             # new_cases + returned == total_in
@@ -226,10 +222,9 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                    .format(gf(a, 'total_end'), start_in_not_out))
 
     def add_calculated_values(self, **options):
-        rcls = self.report_class.report_class
         # update with calculated fields
-        for age in rcls.age_groups():
-            rcls.expand_data_for(self, age)
+        for age in self.rcls.age_groups():
+            self.rcls.expand_data_for(self, age)
 
 
 class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
@@ -245,20 +240,12 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
                                  blocking=True, field=field)
 
     def _check(self, **options):
-        logger.debug("URENAM CHECK")
         self.add_calculated_values(**options)
-        logger.debug("add_calculated_values")
         self.check_common_uren(**options)
-        logger.debug("check_common_uren")
         self.chk_period_is_not_future(**options)
-        logger.debug("chk_period_is_not_future")
         self.chk_entity_exists(**options)
-        logger.debug("chk_entity_exists")
         self.chk_expected_arrival(**options)
-        logger.debug("chk_expected_arrival")
-        logger.debug(self.get('expected_reporting'))
         self.chk_provider_permission(**options)
-        logger.debug("chk_provider_permission")
 
 
 class URENASNutritionRIntegrityChecker(NutritionURENCommonChecks):
@@ -332,7 +319,7 @@ class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
                     "Stocks, {field}: Les quantitées utilisées et perdues "
                     "({qc}) ne peuvent dépasser le stock initial + reçues "
                     "({qs})."
-                    .format(field=self.report_class.report_class.uren_str(),
+                    .format(field=self.rcls.uren_str(),
                             qc=NutritionStocksR.consumed_for_dict(self, field),
                             qs=NutritionStocksR.stocked_for_dict(self, field)),
                     field=field, blocking=False)

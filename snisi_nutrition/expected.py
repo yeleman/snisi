@@ -127,7 +127,8 @@ def create_expected_for(period):
             for uren, rcls, rcls_agg in report_classes:
 
                 # only create expected if entity has UREN
-                if not getattr(entity, 'has_{}'.format(uren), False):
+                if uren != 'stocks' and not getattr(
+                        entity, 'has_{}'.format(uren), False):
                     continue
 
                 reportcls = rcls if entity.type.slug == 'health_center' \

@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+from collections import OrderedDict
 
 from snisi_core.models.Reporting import SNISIReport
 
@@ -65,7 +66,8 @@ class AbstractURENutritionR(SNISIReport):
             if age == 'exsam':
                 fields += ['new_cases', 'returned',
                            'total_in_m', 'total_in_f',
-                           'healed', 'deceased', 'abandon', 'not_responding']
+                           'healed', 'deceased', 'abandon', 'not_responding',
+                           'total_out_m', 'total_out_f']
             if age == 'pw':
                 fields += ['total_start_m', 'total_in_m',
                            'total_out_m', 'total_end_m']
@@ -139,3 +141,20 @@ class AbstractURENutritionR(SNISIReport):
             {'{}_total_end'.format(age):
              cls.total_end_for(data, age)})
         return data
+
+    def age_lines(self):
+        def fdata(age, field):
+            return {
+                'slug': "{}_{}".format(age, field),
+                'full_slug': "urenam_{}_{}".format(age, field),
+                'value': getattr(self, "{}_{}".format(age, field), 0)
+            }
+        lines = []
+        for age in self.age_groups():
+            line = {'label': self.age_str(age),
+                    'age': age,
+                    'fields': [fdata(age, field)
+                               for field in self.uren_fields()
+                               if field not in self.silent_uren_fields(age)]}
+            lines.append(line)
+        return lines

@@ -1,7 +1,8 @@
 {% load snisi %}
-<td {%if field.errors %} class="error"{% endif %}
-    {% if not field %} class="nodata"{% endif %}
+<td {%if field.errors %} class="error {{ classes }}"{% endif %}
+    {% if not field %} class="nodata {{ classes }}"{% endif %}
     {% if not dataonly %}
+    class="{{ classes }}"
     data-container="body"
     data-original-value="{{ field.value }}"
     data-toggle="popover"

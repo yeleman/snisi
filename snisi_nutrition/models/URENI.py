@@ -228,7 +228,7 @@ class URENINutritionR(AbstractURENINutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period__year_short}{period__month}NAS-{dow}/{rand}"
-    UNIQUE_TOGETHER = ('period', 'entity')
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_nutrition'

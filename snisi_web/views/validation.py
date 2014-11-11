@@ -58,8 +58,14 @@ def edit_report(request, report_receipt, **kwargs):
                     'edit_template': "report/edit_{}.html"
                                      .format(report.report_class().slug)})
 
-    ReportFormCls = modelform_factory(model=report.casted().__class__,
-                                      fields=report.data_fields())
+    rcls = report.casted().__class__
+    from snisi_nutrition.forms import NutritionRForm
+    from snisi_nutrition.models.Monthly import NutritionR
+    if rcls == NutritionR:
+        ReportFormCls = NutritionRForm
+    else:
+        ReportFormCls = modelform_factory(model=report.casted().__class__,
+                                          fields=report.data_fields())
 
     if request.method == 'POST':
         form = ReportFormCls(request.POST, instance=report)

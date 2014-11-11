@@ -12,6 +12,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from snisi_core.models.Entities import Entity
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
@@ -26,6 +27,27 @@ class AbstractNutritionStocksR(SNISIReport):
     class Meta:
         app_label = 'snisi_nutrition'
         abstract = True
+
+    INPUTS_LABELS = {
+        'plumpy_nut': "Plumpy Nut",
+        'milk_f75': "Milk F75",
+        'milk_f100': "Milk F100",
+        'resomal': "Resomal",
+        'plumpy_sup': "Plumpy Sup",
+        'supercereal': "Supercereal",
+        'supercereal_plus': "Supercereal+",
+        'oil': "Oil",
+        'amoxycilline_125_vials': "Amoxycilline 125",
+        'amoxycilline_250_caps': "Amoxycilline 250",
+        'albendazole_400': "Albendazole",
+        'vita_100_injectable': "Vitamin A 100",
+        'vita_200_injectable': "Vitamin A 200",
+        'iron_folic_acid': "Iron/Folic Acid"
+    }
+
+    @classmethod
+    def input_str(cls, input_slug):
+        return cls.INPUTS_LABELS.get(input_slug)
 
     # Plumpy Nut
     plumpy_nut_initial = models.IntegerField(_("Plumpy Nut Initial"))
@@ -378,12 +400,37 @@ class AbstractNutritionStocksR(SNISIReport):
                 'vita_200_injectable',
                 'iron_folic_acid']
 
+    def line_data(self):
+        e = Entity.get_or_none(self.entity.slug)
+        lines = []
+        for inp in self.inputs():
+            if not e.has_ureni and inp in self.inputs(ureni_only=True):
+                continue
+
+            d = {'label': self.input_str(inp),
+                 'unit': '-'}
+
+            suffixes = ['initial', 'received', 'used', 'lost']
+            auto_suffixes = ['balance', 'consumed', 'stocked']
+
+            for suffix in auto_suffixes + suffixes:
+                value = getattr(self, '{}_{}'.format(inp, suffix))
+                if suffix in auto_suffixes:
+                    full_slug = '{}_{}'.format(inp, suffix)
+                else:
+                    full_slug = 'stocks_{}_{}'.format(inp, suffix)
+                d[suffix] = value
+                d[suffix + '_full_slug'] = full_slug
+
+            lines.append(d)
+        return lines
+
 
 class NutritionStocksR(AbstractNutritionStocksR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period__year_short}{period__month}NUTST-{dow}/{rand}"
-    UNIQUE_TOGETHER = ('period', 'entity')
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_nutrition'

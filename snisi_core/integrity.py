@@ -198,6 +198,10 @@ class RoutineIntegrityInterface(object):
     validating_role = None
     entity_type = 'health_center'
 
+    @property
+    def rcls(self):
+        return self.report_class.report_class
+
     def chk_period_is_not_future(self, **options):
         # default period is MonthPeriod from year/month
         if not self.has('period') or not self.get('period'):
@@ -222,6 +226,8 @@ class RoutineIntegrityInterface(object):
             self.add_error("Aucun CSCOM ne correspond au code {}"
                            .format(self.get('hc')),
                            field='hc', blocking=True)
+        logger.debug("***")
+        logger.debug(self.get('entity').__class__)
 
     def chk_expected_arrival(self, **options):
 
@@ -355,11 +361,14 @@ def create_period_routine_report(
 
     # fill the report from SMS data
     for field in report.data_fields():
+        logger.debug(field)
         if integrity_checker.has(field):
             setattr(report, field, integrity_checker.get(field))
+
     try:
         with reversion.create_revision():
             report.save()
+
     except Exception as e:
         logger.error("Unable to save report to DB. Content: {} | Exp: {}"
                      .format(data_source, e))

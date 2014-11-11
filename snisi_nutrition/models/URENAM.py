@@ -391,12 +391,16 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     def exsam_total_end(self):
         return self.age_sum_for('exsam', ['total_end_m', 'total_end_f'])
 
+    def fill_blank(self):
+        for field in self.data_fields():
+            setattr(self, field, 0)
+
 
 class URENAMNutritionR(AbstractURENAMNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period__year_short}{period__month}NAM-{dow}/{rand}"
-    UNIQUE_TOGETHER = ('period', 'entity')
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_nutrition'

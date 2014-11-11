@@ -33,7 +33,7 @@ class NutritionR(AbstractNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period}-NUT/{rand}"
-    UNIQUE_TOGETHER = ('period', 'entity')
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_nutrition'
