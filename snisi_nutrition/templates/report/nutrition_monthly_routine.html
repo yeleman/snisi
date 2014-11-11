@@ -1,9 +1,407 @@
 {% load snisi %}
 
-{% with form=report.as_form %}
-<h2>--</h2>
+<h2>P.E.C Malnutrition</h2>
+
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+<th rowspan="2"></th>
+    <th colspan="3" style="text-align: center;">Total début de mois</th>
+    <th colspan="5" style="text-align: center;">Admissions</th>
+    <th rowspan="2" style="text-align: center;">Transf. URENI</th>
+    <th rowspan="2" style="text-align: center;">Grand Total Admis.</th>
+</tr>
+<tr>
+	
+    <th>Total</th>
+    <th>M</th>
+    <th>F</th>
+    <th>Nouveau cas</th>
+    <th>Réadmissions</th>
+    <th>Total</th>
+    <th>M</th>
+    <th>F</th>
+</tr>
+</thead>
+<tbody>
+{% if report.ureni_report %}
+<tr>
+	<th colspan="11">URENI</th>
+</tr>
+<tr>
+    <td align="left">0-6m</td>
+    <td>{{ report.ureni_report.u6_total_start }}</td>
+    <td>{{ report.ureni_report.u6_total_start_m }}</td>
+    <td>{{ report.ureni_report.u6_total_start_f }}</td>
+    <td>{{ report.ureni_report.u6_new_cases }}</td>
+    <td>{{ report.ureni_report.u6_returned }}</td>
+    <td>{{ report.ureni_report.u6_total_in }}</td>
+    <td>{{ report.ureni_report.u6_total_in_m }}</td>
+    <td>{{ report.ureni_report.u6_total_in_f }}</td>
+    <td>{{ report.ureni_report.u6_transferred }}</td>
+    <td>{{ report.ureni_report.u6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    <td>{{ report.ureni_report.u59o6_total_start }}</td>
+    <td>{{ report.ureni_report.u59o6_total_start_m }}</td>
+    <td>{{ report.ureni_report.u59o6_total_start_f }}</td>
+    <td>{{ report.ureni_report.u59o6_new_cases }}</td>
+    <td>{{ report.ureni_report.u59o6_returned }}</td>
+    <td>{{ report.ureni_report.u59o6_total_in }}</td>
+    <td>{{ report.ureni_report.u59o6_total_in_m }}</td>
+    <td>{{ report.ureni_report.u59o6_total_in_f }}</td>
+    <td>{{ report.ureni_report.u59o6_transferred }}</td>
+    <td>{{ report.ureni_report.u59o6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.ureni_report.o59_total_start }}</td>
+    <td>{{ report.ureni_report.o59_total_start_m }}</td>
+    <td>{{ report.ureni_report.o59_total_start_f }}</td>
+    <td>{{ report.ureni_report.o59_new_cases }}</td>
+    <td>{{ report.ureni_report.o59_returned }}</td>
+    <td>{{ report.ureni_report.o59_total_in }}</td>
+    <td>{{ report.ureni_report.o59_total_in_m }}</td>
+    <td>{{ report.ureni_report.o59_total_in_f }}</td>
+    <td>{{ report.ureni_report.o59_transferred }}</td>
+    <td>{{ report.ureni_report.o59_grand_total_in }}</td>
+</tr>
+{% endif %}
+
+{% if report.urenas_report %}
+<tr>
+	<th colspan="11">URENAS</th>
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    <td>{{ report.urenas_report.u59o6_total_start }}</td>
+    <td>{{ report.urenas_report.u59o6_total_start_m }}</td>
+    <td>{{ report.urenas_report.u59o6_total_start_f }}</td>
+    <td>{{ report.urenas_report.u59o6_new_cases }}</td>
+    <td>{{ report.urenas_report.u59o6_returned }}</td>
+    <td>{{ report.urenas_report.u59o6_total_in }}</td>
+    <td>{{ report.urenas_report.u59o6_total_in_m }}</td>
+    <td>{{ report.urenas_report.u59o6_total_in_f }}</td>
+    <td>{{ report.urenas_report.u59o6_transferred }}</td>
+    <td>{{ report.urenas_report.u59o6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.urenas_report.o59_total_start }}</td>
+    <td>{{ report.urenas_report.o59_total_start_m }}</td>
+    <td>{{ report.urenas_report.o59_total_start_f }}</td>
+    <td>{{ report.urenas_report.o59_new_cases }}</td>
+    <td>{{ report.urenas_report.o59_returned }}</td>
+    <td>{{ report.urenas_report.o59_total_in }}</td>
+    <td>{{ report.urenas_report.o59_total_in_m }}</td>
+    <td>{{ report.urenas_report.o59_total_in_f }}</td>
+    <td>{{ report.urenas_report.o59_transferred }}</td>
+    <td>{{ report.urenas_report.o59_grand_total_in }}</td>
+</tr>
+{% endif %}
+
+{% if report.urenam_report %}
+<tr>
+	<th colspan="11">URENAM</th>
+</tr>
+<tr>
+    <td align="left">6-23m</td>
+    <td>{{ report.urenam_report.u23o6_total_start }}</td>
+    <td>{{ report.urenam_report.u23o6_total_start_m }}</td>
+    <td>{{ report.urenam_report.u23o6_total_start_f }}</td>
+    <td>{{ report.urenam_report.u23o6_new_cases }}</td>
+    <td>{{ report.urenam_report.u23o6_returned }}</td>
+    <td>{{ report.urenam_report.u23o6_total_in }}</td>
+    <td>{{ report.urenam_report.u23o6_total_in_m }}</td>
+    <td>{{ report.urenam_report.u23o6_total_in_f }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.u23o6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">23-59m</td>
+    <td>{{ report.urenam_report.u59o23_total_start }}</td>
+    <td>{{ report.urenam_report.u59o23_total_start_m }}</td>
+    <td>{{ report.urenam_report.u59o23_total_start_f }}</td>
+    <td>{{ report.urenam_report.u59o23_new_cases }}</td>
+    <td>{{ report.urenam_report.u59o23_returned }}</td>
+    <td>{{ report.urenam_report.u59o23_total_in }}</td>
+    <td>{{ report.urenam_report.u59o23_total_in_m }}</td>
+    <td>{{ report.urenam_report.u59o23_total_in_f }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.u59o23_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.urenam_report.o59_total_start }}</td>
+    <td>{{ report.urenam_report.o59_total_start_m }}</td>
+    <td>{{ report.urenam_report.o59_total_start_f }}</td>
+    <td>{{ report.urenam_report.o59_new_cases }}</td>
+    <td>{{ report.urenam_report.o59_returned }}</td>
+    <td>{{ report.urenam_report.o59_total_in }}</td>
+    <td>{{ report.urenam_report.o59_total_in_m }}</td>
+    <td>{{ report.urenam_report.o59_total_in_f }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.o59_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">FE/FA</td>
+    <td>{{ report.urenam_report.pw_total_start }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.pw_total_start_f }}</td>
+    <td>{{ report.urenam_report.pw_new_cases }}</td>
+    <td>{{ report.urenam_report.pw_returned }}</td>
+    <td>{{ report.urenam_report.pw_total_in }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.pw_total_in_f }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.pw_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">Ex MAS</td>
+    <td>{{ report.urenam_report.exsam_total_start }}</td>
+    <td>{{ report.urenam_report.exsam_total_start_m }}</td>
+    <td>{{ report.urenam_report.exsam_total_start_f }}</td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.exsam_grand_total_in }}</td>
+</tr>
+</tbody>
+</table>
+{% endif %}
+
+<hr />
+
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+	<th rowspan="3"></th>
+    <th colspan="9" style="text-align: center;">Sorties</th>
+    <th colspan="3" rowspan="2" style="text-align: center;">Total fin du mois</th>
+</tr>
+<tr>
+	<th rowspan="2">Guéris</th>
+	<th rowspan="2">Décès</th>
+	<th rowspan="2">Abandons</th>
+	<th rowspan="2">Non répond.</th>
+	<th colspan="3">Total sorties</th>
+	<th rowspan="2">Réf. URENI.</th>
+	<th rowspan="2">Toutes sorties</th>
+</tr>
+<tr>
+    <th>Total</th>
+    <th>M</th>
+    <th>F</th>
+
+    <th>Total</th>
+    <th>M</th>
+    <th>F</th>
+</tr>
+</thead>
+<tbody>
+
+{% if report.ureni_report %}
+<tr>
+	<th colspan="13">URENI</th>
+</tr>
+<tr>
+    <td align="left">0-6m</td>
+    <td>{{ report.ureni_report.u6_healed }}</td>
+    <td>{{ report.ureni_report.u6_deceased }}</td>
+    <td>{{ report.ureni_report.u6_abandon }}</td>
+    <td>{{ report.ureni_report.u6_not_responding }}</td>
+    <td>{{ report.ureni_report.u6_total_out }}</td>
+    <td>{{ report.ureni_report.u6_total_out_m }}</td>
+    <td>{{ report.ureni_report.u6_total_out_f }}</td>
+    <td>{{ report.ureni_report.u6_referred }}</td>
+    <td>{{ report.ureni_report.u6_grand_total_out }}</td>
+    <td>{{ report.ureni_report.u6_total_end }}</td>
+    <td>{{ report.ureni_report.u6_total_end_m }}</td>
+    <td>{{ report.ureni_report.u6_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    <td>{{ report.ureni_report.u59o6_healed }}</td>
+    <td>{{ report.ureni_report.u59o6_deceased }}</td>
+    <td>{{ report.ureni_report.u59o6_abandon }}</td>
+    <td>{{ report.ureni_report.u59o6_not_responding }}</td>
+    <td>{{ report.ureni_report.u59o6_total_out }}</td>
+    <td>{{ report.ureni_report.u59o6_total_out_m }}</td>
+    <td>{{ report.ureni_report.u59o6_total_out_f }}</td>
+    <td>{{ report.ureni_report.u59o6_referred }}</td>
+    <td>{{ report.ureni_report.u59o6_grand_total_out }}</td>
+    <td>{{ report.ureni_report.u59o6_total_end }}</td>
+    <td>{{ report.ureni_report.u59o6_total_end_m }}</td>
+    <td>{{ report.ureni_report.u59o6_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.ureni_report.o59_healed }}</td>
+    <td>{{ report.ureni_report.o59_deceased }}</td>
+    <td>{{ report.ureni_report.o59_abandon }}</td>
+    <td>{{ report.ureni_report.o59_not_responding }}</td>
+    <td>{{ report.ureni_report.o59_total_out }}</td>
+    <td>{{ report.ureni_report.o59_total_out_m }}</td>
+    <td>{{ report.ureni_report.o59_total_out_f }}</td>
+    <td>{{ report.ureni_report.o59_referred }}</td>
+    <td>{{ report.ureni_report.o59_grand_total_out }}</td>
+    <td>{{ report.ureni_report.o59_total_end }}</td>
+    <td>{{ report.ureni_report.o59_total_end_m }}</td>
+    <td>{{ report.ureni_report.o59_total_end_f }}</td>
+</tr>
+{% endif %}
+
+{% if report.urenas_report %}
+<tr>
+	<th colspan="13">URENAS</th>
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    <td>{{ report.urenas_report.u59o6_healed }}</td>
+    <td>{{ report.urenas_report.u59o6_deceased }}</td>
+    <td>{{ report.urenas_report.u59o6_abandon }}</td>
+    <td>{{ report.urenas_report.u59o6_not_responding }}</td>
+    <td>{{ report.urenas_report.u59o6_total_out }}</td>
+    <td>{{ report.urenas_report.u59o6_total_out_m }}</td>
+    <td>{{ report.urenas_report.u59o6_total_out_f }}</td>
+    <td>{{ report.urenas_report.u59o6_referred }}</td>
+    <td>{{ report.urenas_report.u59o6_grand_total_out }}</td>
+    <td>{{ report.urenas_report.u59o6_total_end }}</td>
+    <td>{{ report.urenas_report.u59o6_total_end_m }}</td>
+    <td>{{ report.urenas_report.u59o6_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.urenas_report.o59_healed }}</td>
+    <td>{{ report.urenas_report.o59_deceased }}</td>
+    <td>{{ report.urenas_report.o59_abandon }}</td>
+    <td>{{ report.urenas_report.o59_not_responding }}</td>
+    <td>{{ report.urenas_report.o59_total_out }}</td>
+    <td>{{ report.urenas_report.o59_total_out_m }}</td>
+    <td>{{ report.urenas_report.o59_total_out_f }}</td>
+    <td>{{ report.urenas_report.o59_referred }}</td>
+    <td>{{ report.urenas_report.o59_grand_total_out }}</td>
+    <td>{{ report.urenas_report.o59_total_end }}</td>
+    <td>{{ report.urenas_report.o59_total_end_m }}</td>
+    <td>{{ report.urenas_report.o59_total_end_f }}</td>
+</tr>
+{% endif %}
+
+{% if report.urenam_report %}
+<tr>
+	<th colspan="13">URENAM</th>
+</tr>
+<tr>
+    <td align="left">6-23m</td>
+    <td>{{ report.urenam_report.u23o6_healed }}</td>
+    <td>{{ report.urenam_report.u23o6_deceased }}</td>
+    <td>{{ report.urenam_report.u23o6_abandon }}</td>
+    <td>{{ report.urenam_report.u23o6_not_responding }}</td>
+    <td>{{ report.urenam_report.u23o6_total_out }}</td>
+    <td>{{ report.urenam_report.u23o6_total_out_m }}</td>
+    <td>{{ report.urenam_report.u23o6_total_out_f }}</td>
+    <td>{{ report.urenam_report.u23o6_referred }}</td>
+    <td>{{ report.urenam_report.u23o6_grand_total_out }}</td>
+    <td>{{ report.urenam_report.u23o6_total_end }}</td>
+    <td>{{ report.urenam_report.u23o6_total_end_m }}</td>
+    <td>{{ report.urenam_report.u23o6_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">23-59m</td>
+    <td>{{ report.urenam_report.u59o23_healed }}</td>
+    <td>{{ report.urenam_report.u59o23_deceased }}</td>
+    <td>{{ report.urenam_report.u59o23_abandon }}</td>
+    <td>{{ report.urenam_report.u59o23_not_responding }}</td>
+    <td>{{ report.urenam_report.u59o23_total_out }}</td>
+    <td>{{ report.urenam_report.u59o23_total_out_m }}</td>
+    <td>{{ report.urenam_report.u59o23_total_out_f }}</td>
+    <td>{{ report.urenam_report.u59o23_referred }}</td>
+    <td>{{ report.urenam_report.u59o23_grand_total_out }}</td>
+    <td>{{ report.urenam_report.u59o23_total_end }}</td>
+    <td>{{ report.urenam_report.u59o23_total_end_m }}</td>
+    <td>{{ report.urenam_report.u59o23_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.urenam_report.o59_healed }}</td>
+    <td>{{ report.urenam_report.o59_deceased }}</td>
+    <td>{{ report.urenam_report.o59_abandon }}</td>
+    <td>{{ report.urenam_report.o59_not_responding }}</td>
+    <td>{{ report.urenam_report.o59_total_out }}</td>
+    <td>{{ report.urenam_report.o59_total_out_m }}</td>
+    <td>{{ report.urenam_report.o59_total_out_f }}</td>
+    <td>{{ report.urenam_report.o59_referred }}</td>
+    <td>{{ report.urenam_report.o59_grand_total_out }}</td>
+    <td>{{ report.urenam_report.o59_total_end }}</td>
+    <td>{{ report.urenam_report.o59_total_end_m }}</td>
+    <td>{{ report.urenam_report.o59_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">FE/FA</td>
+    <td>{{ report.urenam_report.pw_healed }}</td>
+    <td>{{ report.urenam_report.pw_deceased }}</td>
+    <td>{{ report.urenam_report.pw_abandon }}</td>
+    <td>{{ report.urenam_report.pw_not_responding }}</td>
+    <td>{{ report.urenam_report.pw_total_out }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.pw_total_out_f }}</td>
+    <td>{{ report.urenam_report.pw_referred }}</td>
+    <td>{{ report.urenam_report.pw_grand_total_out }}</td>
+    <td>{{ report.urenam_report.pw_total_end }}</td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.pw_total_end_f }}</td>
+</tr>
+<tr>
+    <td align="left">Ex MAS</td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td class="nodata"></td>
+    <td>{{ report.urenam_report.exsam_referred }}</td>
+    <td>{{ report.urenam_report.exsam_grand_total_out }}</td>
+    <td>{{ report.urenam_report.exsam_total_end }}</td>
+    <td>{{ report.urenam_report.exsam_total_end_m }}</td>
+    <td>{{ report.urenam_report.exsam_total_end_f }}</td>
+</tr>
+{% endif %}
+
+</tbody>
+</table>
+
+<h2>Situation des Intrants</h2>
+
 <table class="pure-table center report-table">
+<thead>
+<tr>
+	<th>Intrant</th>
+    <th style="text-align: center;">Unité</th>
+    <th style="text-align: center;">Stock Initial</th>
+    <th style="text-align: center;">Quantité reçue</th>
+    <th style="text-align: center;">Quantité utilisée</th>
+    <th style="text-align: center;">Quantité perdue</th>
+    <th style="text-align: center;">Solde</th>
+</tr>
+</thead>
+<tbody>
+{% for line in report.stocks_report.line_data %}
+<tr>
+	<td>{{ line.label }}</td>
+	<td>{{ line.unit }}</td>
+	{% include "parts/report_form_field.html" with field=form|igetter:line.initial_full_slug %}
+	{% include "parts/report_form_field.html" with field=form|igetter:line.received_full_slug %}
+	{% include "parts/report_form_field.html" with field=form|igetter:line.used_full_slug %}
+	{% include "parts/report_form_field.html" with field=form|igetter:line.lost_full_slug %}
+	<td>{{ report.stocks_report|getter:line.balance_full_slug }}</td>
+</tr>
+{% endfor %}
+</tbody>
 
 </table>
-{% endwith %}
 

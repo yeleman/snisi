@@ -18,7 +18,7 @@ from snisi_nutrition.models.Monthly import NutritionR
 from snisi_nutrition.models.URENAM import URENAMNutritionR
 from snisi_nutrition.models.URENAS import URENASNutritionR
 from snisi_nutrition.models.URENI import URENINutritionR
-from snisi_nutrition.models.Weekly import (WeeklyNutritionR,
+from snisi_nutrition.models.Weekly import (NutWeekPeriod, WeeklyNutritionR,
                                            NutWeekDistrictValidationPeriod)
 from snisi_nutrition.models.Stocks import NutritionStocksR
 from snisi_core.models.Reporting import ReportClass
@@ -132,17 +132,38 @@ def create_nut_report(provider, expected_reporting, completed_on,
         project_brand=PROJECT_BRAND)
 
 
+class WeeklyNutritionRIntegrityChecker(RoutineIntegrityInterface,
+                                       ReportIntegrityChecker):
+
+    report_class = reportcls_weekly
+    validating_role = validating_role
+    period_class = NutWeekPeriod
+
+    def _check_completeness(self, **options):
+
+        for field in WeeklyNutritionR.data_fields():
+            if not options.get('has_ureni', False) \
+                    and field.startswith('ureni'):
+                continue
+            if not self.has(field):
+                self.add_missing(_("Missing data for {f}").format(f=field),
+                                 blocking=True, field=field)
+
+    def _check(self, **options):
+        period = self.period_class.find_create_by_date(
+            self.get('reporting_date')).previous()
+        self.set('period', period)
+        # self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)
+
+
 class NutritionRIntegrityChecker(RoutineIntegrityInterface,
                                  ReportIntegrityChecker):
 
     report_class = reportcls_monthly
     validating_role = validating_role
-
-    def check_inter_report_data(self, **options):
-
-        # Transfer et references
-
-        pass
 
     def _check_completeness(self, **options):
         # we don't hold any data but actual reports here.

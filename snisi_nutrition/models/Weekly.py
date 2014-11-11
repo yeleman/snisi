@@ -216,18 +216,17 @@ class AbstractWeeklyNutritionR(SNISIReport):
         app_label = 'snisi_nutrition'
         abstract = True
 
-    mam_screening = models.IntegerField(_("MAM Screening"))
-    sam_screening = models.IntegerField(_("SAM Screening"))
-    samc_screening = models.IntegerField(_("SAM+ Screening"))
+    urenam_screening = models.IntegerField(_("MAM Screening"))
+    urenam_cases = models.IntegerField(_("MAM Cases"))
+    urenam_deaths = models.IntegerField(_("MAM Deaths"))
 
-    mam_cases = models.IntegerField(_("MAM Screening"))
-    mam_deaths = models.IntegerField(_("MAM Screening"))
+    urenas_screening = models.IntegerField(_("SAM Screening"))
+    urenas_cases = models.IntegerField(_("SAM Cases"))
+    urenas_deaths = models.IntegerField(_("SAM Deaths"))
 
-    sam_cases = models.IntegerField(_("SAM Screening"))
-    sam_deaths = models.IntegerField(_("SAM Screening"))
-
-    samc_cases = models.IntegerField(_("SAM+ Screening"))
-    samc_deaths = models.IntegerField(_("SAM+ Screening"))
+    ureni_screening = models.IntegerField(_("SAM+ Screening"))
+    ureni_cases = models.IntegerField(_("SAM+ Cases"))
+    ureni_deaths = models.IntegerField(_("SAM+ Deaths"))
 
     def screening_fields(self):
         return [field for field in self.data_fields()
@@ -258,7 +257,7 @@ class WeeklyNutritionR(AbstractWeeklyNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period}-WNUT/{rand}"
-    UNIQUE_TOGETHER = ('period', 'entity')
+    UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
         app_label = 'snisi_nutrition'

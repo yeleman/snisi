@@ -15,8 +15,10 @@ from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_nutrition import PROJECT_BRAND
+from snisi_nutrition.models.Weekly import NutWeekPeriod
 from snisi_nutrition.integrity import (
     create_nut_weekly_report,
+    WeeklyNutritionRIntegrityChecker,
     NutritionRIntegrityChecker, create_nut_report,
     URENAMNutritionRIntegrityChecker,
     URENASNutritionRIntegrityChecker,
@@ -26,6 +28,7 @@ from snisi_sms.reply import SMSReply
 
 logger = logging.getLogger(__name__)
 reportcls_nut = ReportClass.get_or_none(slug='nutrition_monthly_routine')
+reportcls_nut_week = ReportClass.get_or_none(slug='nutrition_weekly_routine')
 
 
 def nut_handler(message):
@@ -53,11 +56,15 @@ def weekly_report(message):
     # create variables from text messages.
     try:
         args_names = ['kw', 'w', 'username', 'password',
-                      'thursday',
-                      'mam_screening', 'sam_screening', 'samc_screening',
-                      'mam_cases', 'mam_deaths',
-                      'sam_cases', 'sam_deaths',
-                      'samc_cases', 'samc_deaths']
+                      'urenam_screening',
+                      'urenam_cases',
+                      'urenam_deaths',
+                      'urenas_screening',
+                      'urenas_cases',
+                      'urenas_deaths',
+                      'ureni_screening',
+                      'ureni_cases',
+                      'ureni_deaths']
 
         args_values = message.content.strip().lower().split()
         arguments = dict(zip(args_names, args_values))
@@ -94,7 +101,7 @@ def weekly_report(message):
 
     # now we have well formed and authenticated data.
     # let's check for business-logic errors.
-    checker = NutritionRIntegrityChecker()
+    checker = WeeklyNutritionRIntegrityChecker()
 
     # feed data holder with sms provided data
     for key, value in arguments.items():
@@ -111,24 +118,24 @@ def weekly_report(message):
     checker.set('fillin_day', today.day)
     checker.set('fillin_month', today.month)
     checker.set('fillin_year', today.year)
+    checker.set('reporting_date', today)
     checker.set('submit_time', message.event_on)
     checker.set('author', provider.name())
     checker.set('submitter', provider)
 
     # test the data
-    checker.check()
+    checker.check(has_ureni=hc.has_ureni)
     if not checker.is_valid():
         return reply.error(checker.errors.pop().render(short=True))
 
     # build requirements for report
-    period = MonthPeriod.find_create_from(year=checker.get('year'),
-                                          month=checker.get('month'))
+    period = NutWeekPeriod.find_create_by_date(today).previous()
 
     entity = checker.get('entity')
 
     # expected reporting defines if report is expeted or not
     expected_reporting = ExpectedReporting.get_or_none(
-        report_class=reportcls_nut,
+        report_class=reportcls_nut_week,
         period=period,
         within_period=False,
         entity=entity,
@@ -139,8 +146,9 @@ def weekly_report(message):
     if expected_reporting is None:
         logger.error("Expected reporting not found: "
                      "cls:{cls} - period:{period} - entity:{entity}"
-                     .format(cls=reportcls_nut, period=period, entity=entity))
-        return reply.error("Aucun rapport de routine attendu à "
+                     .format(cls=reportcls_nut_week,
+                             period=period, entity=entity))
+        return reply.error("Aucun rapport hedbo attendu à "
                            "{entity} pour {period}"
                            .format(entity=entity, period=period))
 

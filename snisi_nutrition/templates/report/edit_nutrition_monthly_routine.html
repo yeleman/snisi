@@ -91,12 +91,58 @@
 </tr>
 </thead>
 <tbody>
+{% if report.ureni_report %}
+<tr>
+	<th colspan="11">URENI</th>
+</tr>
+<tr>
+    <td align="left">0-6m</td>
+    <td>{{ report.ureni_report.u6_total_start }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_start_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_start_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_new_cases" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_returned" %}
+    <td>{{ report.ureni_report.u6_total_in }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_in_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_in_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_transferred" %}
+    <td>{{ report.ureni_report.u6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    <td>{{ report.ureni_report.u59o6_total_start }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_start_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_start_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_new_cases" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_returned" %}
+    <td>{{ report.ureni_report.u59o6_total_in }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_in_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_in_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_transferred" %}
+    <td>{{ report.ureni_report.u59o6_grand_total_in }}</td>
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    <td>{{ report.ureni_report.o59_total_start }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_start_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_start_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_new_cases" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_returned" %}
+    <td>{{ report.ureni_report.o59_total_in }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_in_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_in_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_transferred" %}
+    <td>{{ report.ureni_report.o59_grand_total_in }}</td>
+</tr>
+{% endif %}
+
+{% if report.urenas_report %}
 <tr>
 	<th colspan="11">URENAS</th>
 </tr>
 <tr>
     <td align="left">6-59m</td>
-    <td>{{ report.urenam_report.u59o6_total_start }}</td>
+    <td>{{ report.urenas_report.u59o6_total_start }}</td>
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_total_start_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_total_start_f" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_new_cases" %}
@@ -104,7 +150,7 @@
     <td>{{ report.urenas_report.u59o6_total_in }}</td>
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_total_in_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_total_in_f" %}
-    <td class="nodata"></td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"urenas_u59o6_transferred" %}
     <td>{{ report.urenas_report.u59o6_grand_total_in }}</td>
 </tr>
 <tr>
@@ -117,11 +163,12 @@
     <td>{{ report.urenas_report.o59_total_in }}</td>
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_o59_total_in_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_o59_total_in_f" %}
-    <td class="nodata"></td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"urenas_o59_transferred" %}
     <td>{{ report.urenas_report.o59_grand_total_in }}</td>
 </tr>
+{% endif %}
 
-
+{% if report.urenam_report %}
 <tr>
 	<th colspan="11">URENAM</th>
 </tr>
@@ -192,6 +239,7 @@
 </tr>
 </tbody>
 </table>
+{% endif %}
 
 <hr />
 
@@ -222,6 +270,59 @@
 </tr>
 </thead>
 <tbody>
+
+{% if report.ureni_report %}
+<tr>
+	<th colspan="13">URENI</th>
+</tr>
+<tr>
+    <td align="left">0-6m</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_healed" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_deceased" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_abandon" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_not_responding" %}
+    <td>{{ report.ureni_report.u6_total_out }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_out_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_out_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_referred" %}
+    <td>{{ report.ureni_report.u6_grand_total_out }}</td>
+    <td>{{ report.ureni_report.u6_total_end }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_end_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u6_total_end_f" %}
+</tr>
+<tr>
+    <td align="left">6-59m</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_healed" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_deceased" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_abandon" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_not_responding" %}
+    <td>{{ report.ureni_report.u59o6_total_out }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_out_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_out_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_referred" %}
+    <td>{{ report.ureni_report.u59o6_grand_total_out }}</td>
+    <td>{{ report.ureni_report.u59o6_total_end }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_end_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_u59o6_total_end_f" %}
+</tr>
+<tr>
+    <td align="left">59m+</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_healed" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_deceased" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_abandon" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_not_responding" %}
+    <td>{{ report.ureni_report.o59_total_out }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_out_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_out_f" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_referred" %}
+    <td>{{ report.ureni_report.o59_grand_total_out }}</td>
+    <td>{{ report.ureni_report.o59_total_end }}</td>
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_end_m" %}
+    {% include "parts/report_form_field.html" with field=form|igetter:"ureni_o59_total_end_f" %}
+</tr>
+{% endif %}
+
+{% if report.urenas_report %}
 <tr>
 	<th colspan="13">URENAS</th>
 </tr>
@@ -255,6 +356,9 @@
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_o59_total_end_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenas_o59_total_end_f" %}
 </tr>
+{% endif %}
+
+{% if report.urenam_report %}
 <tr>
 	<th colspan="13">URENAM</th>
 </tr>
@@ -333,6 +437,8 @@
     {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_total_end_m" %}
     {% include "parts/report_form_field.html" with field=form|igetter:"urenam_exsam_total_end_f" %}
 </tr>
+{% endif %}
+
 </tbody>
 </table>
 
