@@ -293,8 +293,8 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
                 for field in cls.data_fields()
                 + cls.meta_fields() + cls.meta_agg_fields()}
 
-    def get(self, slug):
-        return getattr(self, slug)
+    def get(self, slug, default=None):
+        return getattr(self, slug, default)
 
     @classmethod
     def field_name(cls, slug):

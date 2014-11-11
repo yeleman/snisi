@@ -126,51 +126,61 @@ def pfa_activities_as_xls(report):
                           report.intrauterine_devices_received)
     xls_update_value_only(sh_stocks, 3, row, report.intrauterine_devices_used)
     xls_update_value_only(sh_stocks, 4, row, report.intrauterine_devices_lost)
-    xls_update_value_only(sh_stocks, 6, row,
-                          report.intrauterine_devices_observation)
+    if hasattr(report, 'intrauterine_devices_observation'):
+        xls_update_value_only(sh_stocks, 6, row,
+                              report.intrauterine_devices_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.implants_initial)
     xls_update_value_only(sh_stocks, 2, row, report.implants_received)
     xls_update_value_only(sh_stocks, 3, row, report.implants_used)
     xls_update_value_only(sh_stocks, 4, row, report.implants_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.implants_observation)
+    if hasattr(report, 'implants_observation'):
+        xls_update_value_only(sh_stocks, 6, row, report.implants_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.injections_initial)
     xls_update_value_only(sh_stocks, 2, row, report.injections_received)
     xls_update_value_only(sh_stocks, 3, row, report.injections_used)
     xls_update_value_only(sh_stocks, 4, row, report.injections_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.injections_observation)
+    if hasattr(report, 'injections_observation'):
+        xls_update_value_only(sh_stocks, 6, row, report.injections_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.pills_initial)
     xls_update_value_only(sh_stocks, 2, row, report.pills_received)
     xls_update_value_only(sh_stocks, 3, row, report.pills_used)
     xls_update_value_only(sh_stocks, 4, row, report.pills_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.pills_observation)
+    if hasattr(report, 'pills_observation'):
+        xls_update_value_only(sh_stocks, 6, row, report.pills_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.male_condoms_initial)
     xls_update_value_only(sh_stocks, 2, row, report.male_condoms_received)
     xls_update_value_only(sh_stocks, 3, row, report.male_condoms_used)
     xls_update_value_only(sh_stocks, 4, row, report.male_condoms_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.male_condoms_observation)
+    if hasattr(report, 'male_condoms_observation'):
+        xls_update_value_only(sh_stocks, 6, row,
+                              report.male_condoms_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.female_condoms_initial)
     xls_update_value_only(sh_stocks, 2, row, report.female_condoms_received)
     xls_update_value_only(sh_stocks, 3, row, report.female_condoms_used)
     xls_update_value_only(sh_stocks, 4, row, report.female_condoms_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.female_condoms_observation)
+    if hasattr(report, 'female_condoms_observation'):
+        xls_update_value_only(sh_stocks, 6, row,
+                              report.female_condoms_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.hiv_tests_initial)
     xls_update_value_only(sh_stocks, 2, row, report.hiv_tests_received)
     xls_update_value_only(sh_stocks, 3, row, report.hiv_tests_used)
     xls_update_value_only(sh_stocks, 4, row, report.hiv_tests_lost)
-    xls_update_value_only(sh_stocks, 6, row, report.hiv_tests_observation)
+    if hasattr(report, 'hiv_tests_observation'):
+        xls_update_value_only(sh_stocks, 6, row, report.hiv_tests_observation)
     row += 1
     xls_update_value_only(sh_stocks, 1, row, report.pregnancy_tests_initial)
     xls_update_value_only(sh_stocks, 2, row, report.pregnancy_tests_received)
     xls_update_value_only(sh_stocks, 3, row, report.pregnancy_tests_used)
     xls_update_value_only(sh_stocks, 4, row, report.pregnancy_tests_lost)
-    xls_update_value_only(sh_stocks, 6, row,
-                          report.pregnancy_tests_observation)
+    if hasattr(report, 'pregnancy_tests_observation'):
+        xls_update_value_only(sh_stocks, 6, row,
+                              report.pregnancy_tests_observation)
 
     for cpt in range(3, 11):
         xls_update_value_only(sh_stocks, 5, cpt - 1,

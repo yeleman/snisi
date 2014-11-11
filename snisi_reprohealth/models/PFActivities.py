@@ -437,7 +437,7 @@ class PFActivitiesRIface(models.Model):
                 'used': self.get("{}_used".format(field)),
                 'lost': self.get("{}_lost".format(field)),
                 'balance': balance_for(field),
-                'observation': self.get("{}_observation".format(field)),
+                'observation': self.get("{}_observation".format(field), None),
             }
         return [_df(field) for field in self.stocks_fields(include_subs=False)]
 

@@ -166,7 +166,9 @@ def generate_region_country_reports(period,
                 # ack validation (auto)
                 expv = ExpectedValidation.objects.get(
                     report__entity=district,
-                    report__period=period)
+                    report__period=period,
+                    report__report_cls='snisi_reprohealth.models.'
+                                       'PFActivities.AggPFActivitiesR')
             except ExpectedValidation.DoesNotExist:
                 continue
 
@@ -191,6 +193,7 @@ def generate_region_country_reports(period,
             validated_on=timezone.now(),
             auto_validated=True)
 
+    logger.info("\t\tAt {}".format(mali))
     # ack expected
     exp = ExpectedReporting.objects.get(
         report_class=rclass,
