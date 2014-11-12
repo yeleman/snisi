@@ -37,7 +37,7 @@ class Command(BaseCommand):
             'end_of_region_period': generate_region_country_reports,
         }
 
-        def handle_category(category, period):
+        def handle_category(category):
             slug = "{domain}_{period}_{category}".format(
                 domain=DOMAIN_SLUG, period=period.strid(), category=category)
             task, created = PeriodicTask.get_or_create(slug, category)
