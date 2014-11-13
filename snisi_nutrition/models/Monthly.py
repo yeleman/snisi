@@ -28,6 +28,98 @@ class AbstractNutritionR(SNISIReport):
         app_label = 'snisi_nutrition'
         abstract = True
 
+    def total_for(self, field):
+        return sum([
+            getattr(report, 'total_for', lambda x: 0)(field)
+            for report in (self.urenam_report,
+                           self.urenas_report,
+                           self.ureni_report)
+            ])
+
+    @property
+    def total_start(self):
+        return self.total_for('total_start')
+
+    @property
+    def total_start_m(self):
+        return self.total_for('total_start_m')
+
+    @property
+    def total_start_f(self):
+        return self.total_for('total_start_f')
+
+    @property
+    def new_cases(self):
+        return self.total_for('new_cases')
+
+    @property
+    def returned(self):
+        return self.total_for('returned')
+
+    @property
+    def total_in_m(self):
+        return self.total_for('total_in_m')
+
+    @property
+    def total_in_f(self):
+        return self.total_for('total_in_f')
+
+    @property
+    def transferred(self):
+        return self.total_for('transferred')
+
+    @property
+    def grand_total_in(self):
+        return self.total_for('grand_total_in')
+
+    @property
+    def healed(self):
+        return self.total_for('healed')
+
+    @property
+    def deceased(self):
+        return self.total_for('deceased')
+
+    @property
+    def abandon(self):
+        return self.total_for('abandon')
+
+    @property
+    def not_responding(self):
+        return self.total_for('not_responding')
+
+    @property
+    def total_out(self):
+        return self.total_for('total_out')
+
+    @property
+    def total_out_m(self):
+        return self.total_for('total_out_m')
+
+    @property
+    def total_out_f(self):
+        return self.total_for('total_out_f')
+
+    @property
+    def referred(self):
+        return self.total_for('referred')
+
+    @property
+    def grand_total_out(self):
+        return self.total_for('grand_total_out')
+
+    @property
+    def total_end(self):
+        return self.total_for('total_end')
+
+    @property
+    def total_end_m(self):
+        return self.total_for('total_end_m')
+
+    @property
+    def total_end_f(self):
+        return self.total_for('total_end_f')
+
 
 class NutritionR(AbstractNutritionR):
 

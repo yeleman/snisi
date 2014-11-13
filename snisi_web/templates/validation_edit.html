@@ -13,4 +13,11 @@
 
 {% block onJQready %}
 $('[data-toggle="popover"]').popover({trigger:'hover', placement: 'top', html:true});
+$('td.report-field input').on('change', function (e) {
+	if ($(this).val() != $(this).parent().data('original-value')) {
+		$(this).parent().addClass("changed");
+	} else {
+		$(this).parent().removeClass("changed");
+	}
+})
 {% endblock %}

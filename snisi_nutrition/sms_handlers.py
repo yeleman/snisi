@@ -430,6 +430,18 @@ def monthly_report(message):
         'iron_folic_acid_lost',
     ]
 
+    # harmonized meta-data
+    try:
+        hc = Entity.get_or_none(provider.location.slug)
+    except:
+        hc = None
+
+    for rslug in ('urenam', 'urenas', 'ureni', 'stocks'):
+        if (getattr(hc, 'has_{}'.format(rslug), False) or rslug == 'stocks') \
+                and len(arguments.get('{}_data'.format(rslug))) < 2:
+            return reply.error("Données manquantes pour {}"
+                               .format(rslug.upper()))
+
     # now we have well formed and authenticated data.
     # let's check for business-logic errors.
     checker = NutritionRIntegrityChecker()
@@ -438,11 +450,6 @@ def monthly_report(message):
     for key, value in arguments.items():
         checker.set(key, value)
 
-    # harmonized meta-data
-    try:
-        hc = Entity.get_or_none(provider.location.slug)
-    except:
-        hc = None
     checker.set('entity', hc)
     checker.set('hc', getattr(hc, 'slug', None))
     today = datetime.date.today()
@@ -502,10 +509,16 @@ def monthly_report(message):
             # we can't process it.
             return "[{}] Le format du SMS est incorrect.".format(uren)
 
-        # convert form-data to int or bool respectively
+        # convert form-data to int or float respectively
         try:
             for key, value in arguments.items():
-                arguments[key] = int(value)
+                if key in ('supercereal_initial',
+                           'supercereal_received',
+                           'supercereal_used',
+                           'supercereal_lost'):
+                    arguments[key] = float(value)
+                else:
+                    arguments[key] = int(value)
         except:
             logger.warning("Unable to convert/cast SMS data: {}"
                            .format(sms_part))

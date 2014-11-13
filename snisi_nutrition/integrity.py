@@ -199,7 +199,7 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                 .format(uren=self.rcls.uren_str(),
                         age=self.rcls.age_str(age),
                         msg=message),
-                field=field, blocking=False)
+                field=field, blocking=True)
 
         for a in self.rcls.age_groups():
 
@@ -218,10 +218,10 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                                    gf(a, 'abandon'),
                                    gf(a, 'not_responding')])
             if not all_out_reasons == gf(a, 'total_out'):
-                ae(a, af(a, 'new_cases'),
+                ae(a, af(a, 'healed'),
                    "guéris, décès, abandons, non-resp. ({}) doit être égal "
                    "au total sorties ({})"
-                   .format(all_out_reasons, gf(a, 'healed')))
+                   .format(all_out_reasons, gf(a, 'total_out')))
 
             # Sorties inferieur ou egal à PEC
             all_avail = sum([gf(a, 'total_start'), gf(a, 'grand_total_in')])

@@ -156,13 +156,13 @@ class AbstractNutritionStocksR(SNISIReport):
         return self.consumed_for('plumpy_sup')
 
     # Supercereal
-    supercereal_initial = models.IntegerField(
+    supercereal_initial = models.FloatField(
         _("Supercereal Initial"), default=0)
-    supercereal_received = models.IntegerField(
+    supercereal_received = models.FloatField(
         _("Supercereal Received"), default=0)
-    supercereal_used = models.IntegerField(
+    supercereal_used = models.FloatField(
         _("Supercereal Used"), default=0)
-    supercereal_lost = models.IntegerField(
+    supercereal_lost = models.FloatField(
         _("Supercereal Lost"), default=0)
 
     @property

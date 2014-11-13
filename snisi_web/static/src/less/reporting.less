@@ -27,11 +27,11 @@ table.pure-table {
     border-bottom: solid 6px @border-table-nodata;
 }
 
-.pure-table tr:nth-child(even) td:not(.error) {
+.pure-table tr:nth-child(even) td:not(.error) td:not(.changed) {
     background-color: @background-table-even;
 }
 
-.pure-table tr:nth-child(odd) td:not(.error) {
+.pure-table tr:nth-child(odd) td:not(.error) td:not(.changed) {
     background-color: @background-table-odd;
 }
 
@@ -48,7 +48,7 @@ tr.spacer, tr.spacer td {
     background-color: transparent !important;
 }
 
-.pure-table td.changed {
+.pure-table tr td.changed {
     background-color: orange;
 }
 
@@ -74,4 +74,8 @@ table.pure-table {
 .pure-table.shrink-input * input {
 	width: 4.5em;
 	text-align: center;
+}
+
+tr.total-row {
+	font-weight: bold;
 }
