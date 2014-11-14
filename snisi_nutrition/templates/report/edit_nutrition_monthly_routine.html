@@ -571,7 +571,7 @@
 <tbody>
 {% for line in report.stocks_report.line_data %}
 <tr>
-	<td>{{ line.label }}</td>
+	<th>{{ line.label }}</th>
 	<td>{{ line.unit }}</td>
 	{% include "parts/report_form_field.html" with field=form|igetter:line.initial_full_slug %}
 	{% include "parts/report_form_field.html" with field=form|igetter:line.received_full_slug %}

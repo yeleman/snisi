@@ -119,6 +119,11 @@ class ReportingDataHolder(object):
         if blocking:
             raise missing
 
+    def add_feedback(self, feedback, blocking=False):
+        self._feedbacks.append(feedback)
+        if blocking:
+            raise feedback
+
     def _read(self, **options):
         # override if you need to read data from a stream or anything.
         # useful for Excel Forms.

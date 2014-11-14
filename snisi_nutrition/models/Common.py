@@ -17,6 +17,9 @@ class AbstractURENutritionR(SNISIReport):
         app_label = 'snisi_nutrition'
         abstract = True
 
+    # Disable direct edit/validation of this report type (always through NutR)
+    no_edition = True
+
     IS_URENAM = False
     IS_URENAS = False
     IS_URENI = False

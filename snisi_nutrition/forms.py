@@ -9,11 +9,11 @@ import logging
 from django import forms
 
 from snisi_core.models.Entities import Entity
-from snisi_nutrition.models.URENAM import URENAMNutritionR, AggURENAMNutritionR
-from snisi_nutrition.models.URENAS import URENASNutritionR, AggURENASNutritionR
-from snisi_nutrition.models.URENI import URENINutritionR, AggURENINutritionR
-from snisi_nutrition.models.Stocks import NutritionStocksR, AggNutritionStocksR
-from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
+from snisi_nutrition.models.URENAM import URENAMNutritionR
+from snisi_nutrition.models.URENAS import URENASNutritionR
+from snisi_nutrition.models.URENI import URENINutritionR
+from snisi_nutrition.models.Stocks import NutritionStocksR
+from snisi_nutrition.models.Monthly import NutritionR
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +48,7 @@ class NutritionRForm(forms.ModelForm):
                 ff = forms.IntegerField(
                     label=rcls.field_name(field),
                     required=True,
+                    min_value=0,
                     initial=getattr(report, field))
                 self.fields['{}_{}'.format(uren, field)] = ff
                 logger.debug('{}_{}'.format(uren, field))

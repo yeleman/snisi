@@ -18,6 +18,38 @@ from snisi_web.decorators import user_role_within
 from snisi_tools.misc import import_path
 
 
+def handle_report_edition(report, form, provider):
+
+    integrity_cls = import_path(report.INTEGRITY_CHECKER,
+                                failsafe=True)
+    if integrity_cls is not None:
+        data_checker = integrity_cls()
+        for field in report.data_fields():
+            data_checker.set(field, form.cleaned_data.get(field))
+
+        # period & entity from report
+        data_checker.set('period', report.period)
+        data_checker.set('entity', report.entity)
+        data_checker.set('submitter', provider)
+
+        data_checker.check(is_edition=True)
+        if data_checker.is_valid():
+
+            new_report = form.save(commit=False)
+            new_report.modified_by = provider
+            new_report.modified_on = timezone.now()
+
+            try:
+                with reversion.create_revision():
+                    new_report.save()
+                    reversion.set_user(provider)
+            except:
+                return data_checker, None
+
+            return data_checker, new_report
+    return None, None
+
+
 @login_required
 @user_role_within(['charge_sis', 'dtc'])
 def pending_validation_list(request, template_name='validation_list.html'):
@@ -30,6 +62,9 @@ def pending_validation_list(request, template_name='validation_list.html'):
         validation_period__start_on__lte=timezone.now(),
         validation_period__end_on__gt=timezone.now(),
         satisfied=False)
+
+    pending = [ev for ev in pending
+               if not getattr(ev.report.casted(), 'no_edition', False)]
 
     context.update({'pending_list': pending})
 
@@ -59,58 +94,42 @@ def edit_report(request, report_receipt, **kwargs):
                                      .format(report.report_class().slug)})
 
     rcls = report.casted().__class__
-    from snisi_nutrition.forms import NutritionRForm
-    from snisi_nutrition.models.Monthly import NutritionR
-    if rcls == NutritionR:
-        ReportFormCls = NutritionRForm
-    else:
-        ReportFormCls = modelform_factory(model=report.casted().__class__,
-                                          fields=report.data_fields())
+    ReportFormCls = modelform_factory(model=rcls, fields=report.data_fields())
+    domain = rcls.get_domain()
+    if domain is not None:
+        # Report Form Class might be custom based on Report Class
+        try:
+            ReportFormCls = domain.import_from(
+                'validation.get_form_class_for')(rcls)
+        except:
+            pass
+        # Handling of report form might be custom to domain/report
+        try:
+            handle_report_func = domain.import_from(
+                'validation.handle_report_edition')
+        except:
+            handle_report_func = handle_report_edition
 
     if request.method == 'POST':
         form = ReportFormCls(request.POST, instance=report)
         if form.is_valid():
 
-            integrity_cls = import_path(report.INTEGRITY_CHECKER,
-                                        failsafe=True)
-            if integrity_cls is not None:
-                data_checker = integrity_cls()
-                for field in report.data_fields():
-                    data_checker.set(field, form.cleaned_data.get(field))
+            data_checker, new_report = handle_report_func(
+                report, form, request.user)
 
-                # period & entity from report
-                data_checker.set('period', report.period)
-                data_checker.set('entity', report.entity)
-                data_checker.set('submitter', request.user)
+            if new_report is None:
+                messages.error(request,
+                               "Erreur lors de l'enregistrement des "
+                               "modifications du rapport.\nMerci de "
+                               "réessayer. Si le problème persiste, "
+                               "contactez la Hotline.")
+            else:
+                text_message = ("Données enregistrées pour {}. "
+                                "Le rapport n'est toujours "
+                                "pas validé !".format(report))
+                messages.info(request, text_message)
 
-                data_checker.check(is_edition=True)
-                if data_checker.is_valid():
-
-                    new_report = form.save(commit=False)
-                    new_report.modified_by = request.user
-                    new_report.modified_on = timezone.now()
-
-                    try:
-                        with reversion.create_revision():
-                            new_report.save()
-                            reversion.set_user(request.user)
-                    except:
-                        messages.error(request,
-                                       "Erreur lors de l'enregistrement des "
-                                       "modifications du rapport.\nMerci de "
-                                       "réessayer. Si le problème persiste, "
-                                       "contactez la Hotline.")
-                    else:
-                        text_message = ("Données enregistrées pour {}. "
-                                        "Le rapport n'est toujours "
-                                        "pas validé !".format(report))
-                        messages.info(request, text_message)
-                else:
-                    # messages.error(request, "Données incorrectes")
-                    text_message = None
-                context.update({'data_checker': data_checker,
-                                'text_message': text_message})
-
+            context.update({'data_checker': data_checker})
         else:
             # django form validation errors
             pass
@@ -124,6 +143,30 @@ def edit_report(request, report_receipt, **kwargs):
                   context)
 
 
+def handle_do_validation(report, provider):
+    # mark report as validated
+    expected_val = report.expected_validations.get()
+
+    if not expected_val.validation_period.casted().contains(timezone.now()):
+        return (False, "Impossible de valider ce rapport en dehors "
+                       "de la période de validation ({})"
+                       .format(expected_val.validation_period))
+    else:
+        expected_val.acknowledge_validation(
+            validated=True,
+            validated_by=provider,
+            validated_on=timezone.now(),
+            auto_validated=False)
+
+        # confirm validation
+        return (True, "Le rapport {cls} nº {receipt} pour {period} "
+                      "a été validé par {by}"
+                      .format(cls=report.report_class(),
+                              receipt=report.receipt,
+                              period=report.period,
+                              by=report.validated_by))
+
+
 @login_required
 @user_role_within(['charge_sis'])
 def do_validation(request, report_receipt, **kwargs):
@@ -131,27 +174,20 @@ def do_validation(request, report_receipt, **kwargs):
     if report is None:
         raise Http404("No report for receipt {}".format(report_receipt))
 
-    # mark report as validated
-    expected_val = report.expected_validations.get()
+    do_validation_func = handle_do_validation
+    domain = report.get_domain()
+    if domain is not None:
+        try:
+            do_validation_func = domain.import_from(
+                'validation.do_validation')
+        except:
+            pass
 
-    if not expected_val.validation_period.casted().contains(timezone.now()):
-        messages.error(request, "Impossible de valider ce rapport en dehors "
-                                "de la période de validation ({})"
-                                .format(expected_val.validation_period))
+    success, message = do_validation_func(report, request.user)
+
+    if success:
+        messages.success(request, message)
     else:
-        expected_val.acknowledge_validation(
-            validated=True,
-            validated_by=request.user,
-            validated_on=timezone.now(),
-            auto_validated=False)
-
-        # confirm validation
-        messages.success(request,
-                         "Le rapport {cls} nº {receipt} pour {period} "
-                         "a été validé par {by}"
-                         .format(cls=report.report_class(),
-                                 receipt=report.receipt,
-                                 period=report.period,
-                                 by=report.validated_by))
+        messages.error(request, message)
 
     return redirect('validation')

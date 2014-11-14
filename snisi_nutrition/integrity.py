@@ -199,7 +199,7 @@ class NutritionURENCommonChecks(RoutineIntegrityInterface,
                 .format(uren=self.rcls.uren_str(),
                         age=self.rcls.age_str(age),
                         msg=message),
-                field=field, blocking=True)
+                field=field, blocking=False)
 
         for a in self.rcls.age_groups():
 

@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
+from snisi_core.models.Projects import Domain
 from snisi_core.models.common import (pre_save_report_incomplete,
                                       post_save_report)
 from snisi_core.models.Providers import Provider
@@ -249,6 +250,13 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
             if errors:
                 raise ValidationError(errors)
         return super(SNISIReport, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_domain(cls):
+        try:
+            return Domain.objects.get(module_path=cls._meta.app_label)
+        except cls.DoesNotExist:
+            return None
 
     @classmethod
     def create(cls, *args, **kwargs):

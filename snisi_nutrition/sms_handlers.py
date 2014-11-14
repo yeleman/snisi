@@ -178,7 +178,7 @@ def monthly_report(message):
     # create variables from text messages.
     try:
         args_names = [
-            'kw', 'kw2', 'username', 'password', 'month', 'year',
+            'kw', 'kw2', 'username', 'password',
             'urenam_data', 'urenas_data', 'ureni_data', 'stocks_data']
 
         args_values = message.content.strip().lower().split()
@@ -275,8 +275,6 @@ def monthly_report(message):
         'pw_total_end_f',
         'exsam_total_start_m',
         'exsam_total_start_f',
-        'exsam_total_out_m',
-        'exsam_total_out_f',
         'exsam_referred',
         'exsam_total_end_m',
         'exsam_total_end_f',
@@ -450,8 +448,12 @@ def monthly_report(message):
     for key, value in arguments.items():
         checker.set(key, value)
 
+    period = MonthPeriod.current().previous()
+
     checker.set('entity', hc)
     checker.set('hc', getattr(hc, 'slug', None))
+    checker.set('month', period.middle().month)
+    checker.set('year', period.middle().year)
     today = datetime.date.today()
     checker.set('fillin_day', today.day)
     checker.set('fillin_month', today.month)
@@ -466,9 +468,6 @@ def monthly_report(message):
         return reply.error(checker.errors.pop().render(short=True))
 
     # build requirements for report
-    period = MonthPeriod.find_create_from(year=checker.get('year'),
-                                          month=checker.get('month'))
-
     entity = Entity.get_or_none(checker.get('hc'))
 
     # expected reporting defines if report is expeted or not
@@ -492,7 +491,7 @@ def monthly_report(message):
     def prepare_checker_with(master_checker, uren_checker, uren,
                              sms_part, args_names):
 
-        master_fields = ['month', 'year', 'username',
+        master_fields = ['username', 'month', 'year',
                          'entity', 'hc', 'fillin_day', 'fillin_month',
                          'fillin_year', 'submit_time', 'author', 'submitter']
 
@@ -503,6 +502,7 @@ def monthly_report(message):
         try:
             args_values = sms_part.strip().lower().split("-")
             arguments = dict(zip(args_names, args_values))
+            print(len(args_values), len(args_names))
             assert len(args_values) == len(args_names)
         except (ValueError, AssertionError):
             # failure to split means we proabably lack a data or more

@@ -28,26 +28,50 @@ class AbstractNutritionStocksR(SNISIReport):
         app_label = 'snisi_nutrition'
         abstract = True
 
+    # Disable direct edit/validation of this report type (always through NutR)
+    no_edition = True
+
     INPUTS_LABELS = {
-        'plumpy_nut': "Plumpy Nut",
-        'milk_f75': "Milk F75",
-        'milk_f100': "Milk F100",
-        'resomal': "Resomal",
-        'plumpy_sup': "Plumpy Sup",
-        'supercereal': "Supercereal",
-        'supercereal_plus': "Supercereal+",
-        'oil': "Oil",
-        'amoxycilline_125_vials': "Amoxycilline 125",
-        'amoxycilline_250_caps': "Amoxycilline 250",
-        'albendazole_400': "Albendazole",
-        'vita_100_injectable': "Vitamin A 100",
-        'vita_200_injectable': "Vitamin A 200",
-        'iron_folic_acid': "Iron/Folic Acid"
+        'plumpy_nut': _("Plumpy Nut"),
+        'milk_f75': _("Milk F75"),
+        'milk_f100': _("Milk F100"),
+        'resomal': _("Resomal"),
+        'plumpy_sup': _("Plumpy Sup"),
+        'supercereal': _("Supercereal"),
+        'supercereal_plus': _("Supercereal+"),
+        'oil': _("Oil"),
+        'amoxycilline_125_vials': _("Amoxycilline 125"),
+        'amoxycilline_250_caps': _("Amoxycilline 250"),
+        'albendazole_400': _("Albendazole"),
+        'vita_100_injectable': _("Vitamin A 100"),
+        'vita_200_injectable': _("Vitamin A 200"),
+        'iron_folic_acid': _("Iron/Folic Acid"),
+    }
+
+    INPUTS_UNITS = {
+        'plumpy_nut': _("Packet"),
+        'milk_f75': _("Packet"),
+        'milk_f100': _("Packet"),
+        'resomal': _("Packet"),
+        'plumpy_sup': _("Packet"),
+        'supercereal': _("Kilo"),
+        'supercereal_plus': _("1.5Kg Packet"),
+        'oil': _("Liter"),
+        'amoxycilline_125_vials': _("Vials"),
+        'amoxycilline_250_caps': _("Caps"),
+        'albendazole_400': _("Caps"),
+        'vita_100_injectable': _("Vials"),
+        'vita_200_injectable': _("Vials"),
+        'iron_folic_acid': _("Caps"),
     }
 
     @classmethod
     def input_str(cls, input_slug):
         return cls.INPUTS_LABELS.get(input_slug)
+
+    @classmethod
+    def unit_str(cls, input_slug):
+        return cls.INPUTS_UNITS.get(input_slug)
 
     # Plumpy Nut
     plumpy_nut_initial = models.IntegerField(_("Plumpy Nut Initial"))
@@ -408,19 +432,21 @@ class AbstractNutritionStocksR(SNISIReport):
                 continue
 
             d = {'label': self.input_str(inp),
-                 'unit': '-'}
+                 'unit': self.unit_str(inp)}
 
             suffixes = ['initial', 'received', 'used', 'lost']
             auto_suffixes = ['balance', 'consumed', 'stocked']
 
             for suffix in auto_suffixes + suffixes:
                 value = getattr(self, '{}_{}'.format(inp, suffix))
+                slug = '{}_{}'.format(inp, suffix)
                 if suffix in auto_suffixes:
                     full_slug = '{}_{}'.format(inp, suffix)
                 else:
                     full_slug = 'stocks_{}_{}'.format(inp, suffix)
                 d[suffix] = value
                 d[suffix + '_full_slug'] = full_slug
+                d[suffix + '_slug'] = slug
 
             lines.append(d)
         return lines
