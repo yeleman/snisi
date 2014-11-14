@@ -37,6 +37,11 @@ class NutritionRForm(forms.ModelForm):
             'stocks': NutritionStocksR
         }
 
+        float_fields = ['supercereal_initial',
+                        'supercereal_received',
+                        'supercereal_used',
+                        'supercereal_lost']
+
         for uren, rcls in uren_map.items():
 
             if uren != 'stocks' and not getattr(entity, 'has_{}'.format(uren)):
@@ -45,10 +50,12 @@ class NutritionRForm(forms.ModelForm):
             report = getattr(instance, '{}_report'.format(uren))
 
             for field in rcls.data_fields():
-                ff = forms.IntegerField(
+                ffcls = forms.FloatField \
+                    if field in float_fields else forms.IntegerField
+                ff = ffcls(
                     label=rcls.field_name(field),
                     required=True,
                     min_value=0,
+                    localize=False,
                     initial=getattr(report, field))
                 self.fields['{}_{}'.format(uren, field)] = ff
-                logger.debug('{}_{}'.format(uren, field))

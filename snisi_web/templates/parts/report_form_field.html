@@ -1,10 +1,11 @@
 {% load snisi %}
+{% load l10n %}
 <td {%if field.errors %} class="report-field error {{ classes }}"{% endif %}
     {% if not field %} class="report-field nodata {{ classes }}"{% endif %}
     {% if not dataonly %}
     class="report-field {{ classes }}"
     data-container="body"
-    data-original-value="{{ field.value }}"
+    data-original-value="{{ field.value|unlocalize  }}"
     data-toggle="popover"
     data-content="{% if field.errors %}{% for error in field.errors %}{{ error }}{% endfor %}{% endif %}{{ field.value }}"
     {% endif %}>
