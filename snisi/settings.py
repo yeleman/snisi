@@ -100,7 +100,7 @@ INSTALLED_APPS = (
     'snisi_reprohealth',
     # 'snisi_bednets',
     'snisi_epidemiology',
-    'snisi_nutrition',
+    # 'snisi_nutrition',
     'snisi_vacc',
 )
 
