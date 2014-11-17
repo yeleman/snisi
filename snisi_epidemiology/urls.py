@@ -29,7 +29,7 @@ urlpatterns = patterns(
         name='epidemio_indicators'),
     url(r'^/?$',
         'snisi_epidemiology.views.dashboard',
-        {'template_name': 'epidemiology/dashboard.html'},
+        {'template_name': 'epidemiology/dashboard_alerts.html'},
         name='epidemio_dashboard'),
 
     # raw data

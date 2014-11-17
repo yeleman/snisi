@@ -5,21 +5,29 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+import datetime
 
 from django.utils import timezone
 
+from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_epidemiology import PROJECT_BRAND
 from snisi_epidemiology.integrity import (EpidemiologyRIntegrityChecker,
-                                          create_epid_report)
+                                          create_epid_report,
+                                          EpidemiologyAlertRIntegrityChecker,
+                                          create_epialert_report)
 from snisi_sms.reply import SMSReply
 
 logger = logging.getLogger(__name__)
 reportcls_epi = ReportClass.get_or_none(slug='epidemio_weekly_routine')
+reportcls_epi_alert = ReportClass.get_or_none(slug='epidemio_alert')
 
 
 def epidemiology_handler(message):
+    if message.content.lower().startswith('smir alert'):
+        return epidemio_alert(message)
+
     if message.content.lower().startswith('smir '):
         return epidemio(message)
 
@@ -144,6 +152,111 @@ def epidemio(message):
                            .format(entity=entity, period=period))
 
     report, text_message = create_epid_report(
+        provider=provider,
+        expected_reporting=expected_reporting,
+        completed_on=timezone.now(),
+        integrity_checker=checker,
+        data_source=message.content)
+
+    if report:
+        return reply.success(text_message)
+    else:
+        return reply.error(text_message)
+
+
+def epidemio_alert(message):
+
+    reply = SMSReply(message, PROJECT_BRAND)
+
+    try:
+        args_names = ['kw', 'kw2', 'username', 'password', 'disease',
+                      'suspected_cases',
+                      'confirmed_cases',
+                      'deaths']
+
+        args_values = message.content.strip().lower().split()
+        arguments = dict(zip(args_names, args_values))
+        assert len(args_values) == len(args_names)
+    except (ValueError, AssertionError):
+        # failure to split means we proabably lack a data or more
+        # we can't process it.
+        return reply.error("Le format du SMS est incorrect.")
+
+    # convert form-data to int or bool respectively
+    try:
+        for key, value in arguments.items():
+
+            if key in ('kw', 'kw2'):
+                continue
+            elif key in ('username', 'password', 'disease'):
+                arguments[key] = value.strip()
+            else:
+                arguments[key] = int(value)
+    except:
+        logger.warning("Unable to convert/cast SMS data: {}"
+                       .format(message.content))
+        # failure to convert means non-numeric value which we can't process.
+        return reply.error("Les données sont malformées.")
+
+    # check credentials
+    try:
+        provider = Provider.active.get(username=arguments['username'])
+    except Provider.DoesNotExist:
+        return reply.error("Ce nom d'utilisateur ({}) n'existe pas."
+                           .format(arguments['username']))
+    if not provider.check_password(arguments['password']):
+        return reply.error("Votre mot de passe est incorrect.")
+
+    checker = EpidemiologyAlertRIntegrityChecker()
+
+    for key, value in arguments.items():
+        checker.set(key, value)
+
+    try:
+        hc = Entity.get_or_none(provider.location.slug)
+    except:
+        hc = None
+
+    today = datetime.date.today()
+    checker.set('entity', hc)
+    checker.set('hc', getattr(hc, 'slug', None))
+    checker.set('submit_time', message.event_on)
+    checker.set('author', provider.name())
+    checker.set('submitter', provider)
+    checker.set('date', today)
+    checker.set('year', today.year)
+    checker.set('month', today.month)
+    checker.set('day', today.day)
+
+    # test the data
+    checker.check()
+    if not checker.is_valid():
+        return reply.error(checker.errors.pop().render(short=True))
+
+    # build requirements for report
+    period = checker.get('period')
+    entity = checker.get('entity')
+
+    # expected reporting defines if report is expeted or not
+    expected_reporting = ExpectedReporting.get_or_none(
+        report_class=reportcls_epi_alert,
+        period=period,
+        within_period=True,
+        entity=entity,
+        within_entity=False,
+        amount_expected=ExpectedReporting.EXPECTED_ZEROPLUS)
+
+    # should have already been checked in checker.
+    if expected_reporting is None:
+        logger.error("Expected reporting not found: "
+                     "cls:{cls} - period:{period} - entity:{entity}"
+                     .format(cls=reportcls_epi_alert,
+                             period=period, entity=entity))
+        return reply.error("Aucun rapport d'alerte attendu à "
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period))
+
+    report, text_message = create_epialert_report(
         provider=provider,
         expected_reporting=expected_reporting,
         completed_on=timezone.now(),

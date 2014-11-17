@@ -21,9 +21,10 @@ logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
 
 logger = logging.getLogger(__name__)
-reportcls_pf = ReportClass.get_or_none(slug='epidemio_weekly_routine')
-reportcls_pf_agg = ReportClass.get_or_none(
+reportcls_epi = ReportClass.get_or_none(slug='epidemio_weekly_routine')
+reportcls_epi_agg = ReportClass.get_or_none(
     slug='epidemio_weekly_routine_aggregated')
+reportcls_epi_alert = ReportClass.get_or_none(slug='epidemio_alert')
 
 
 def create_expected_for(period):
@@ -52,7 +53,46 @@ def create_expected_for(period):
         logger.debug("Period {} is not relevant to {}".format(period, DOMAIN))
         return created_list
     else:
+        # create expected Alerts for current month
+        current_month = period.following()
+        reporting_period = current_month
 
+        for entity in routine_cluster.members():
+            if entity.type.slug not in ('health_center', 'health_district'):
+                continue
+
+            edict = copy.copy(expected_dict)
+            edict.update({
+                'entity': entity,
+                'period': current_month,
+                'within_period': True,
+                'report_class': reportcls_epi_alert,
+                'reporting_role': dtc,
+                'reporting_period': reporting_period,
+                'amount_expected': ExpectedReporting.EXPECTED_ZEROPLUS
+            })
+
+            finddict = copy.copy(edict)
+            del(finddict['reporting_period'])
+            del(finddict['extended_reporting_period'])
+
+            e, created = ExpectedReporting.objects \
+                .get_or_create(**finddict)
+            if created:
+                logger.debug("Created {}".format(e))
+                created_list.append(e)
+            else:
+                logger.debug("Exists already: {}".format(e))
+            if e.reporting_period != edict['reporting_period']:
+                e.reporting_period = edict['reporting_period']
+                e.save()
+            if e.extended_reporting_period \
+                    != edict['extended_reporting_period']:
+                e.extended_reporting_period \
+                    = edict['extended_reporting_period']
+                e.save()
+
+        # Routine Weekly reports
         wperiods = list(set([EpiWeekPeriod.find_create_by_date(
             period.start_on + datetime.timedelta(days=d))
             for d in (1, 7, 14, 21, 28)]))
@@ -68,9 +108,9 @@ def create_expected_for(period):
             for entity in routine_cluster.members():
 
                 # report class is based on indiv/agg
-                reportcls = reportcls_pf \
+                reportcls = reportcls_epi \
                     if entity.type.slug == 'health_center' \
-                    else reportcls_pf_agg
+                    else reportcls_epi_agg
                 reporting_role = dtc \
                     if entity.type.slug == 'health_center' else charge_sis
 
@@ -107,4 +147,4 @@ def create_expected_for(period):
 
 
 def report_classes_for(cluster):
-    return [reportcls_pf, reportcls_pf_agg]
+    return [reportcls_epi, reportcls_epi_agg]

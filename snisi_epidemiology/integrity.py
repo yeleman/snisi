@@ -6,21 +6,27 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import datetime
+import reversion
+import traceback
 
 from django.utils.translation import ugettext as _
 
 from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_period_routine_report,
                                   RoutineIntegrityInterface)
+from snisi_core.models.Notifications import Notification
+from snisi_core.models.Groups import Group
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import ExpectedReporting, SNISIReport
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ReportClass
 from snisi_epidemiology import PROJECT_BRAND
 from snisi_epidemiology.models import (EpidemiologyR, EpiWeekPeriod,
-                                       EpiWeekDistrictValidationPeriod)
+                                       EpiWeekDistrictValidationPeriod,
+                                       EpidemiologyAlertR)
 
 logger = logging.getLogger(__name__)
+reportcls_epidemio_alert = ReportClass.get_or_none('epidemio_alert')
 reportcls_epidemio = ReportClass.get_or_none('epidemio_weekly_routine')
 reportcls_epidemio_agg = ReportClass.get_or_none(
     'epidemio_weekly_routine_aggregated')
@@ -263,3 +269,135 @@ class EpidemiologyRDistrictIntegrityChecker(RoutineIntegrityInterface,
         self.chk_expected_arrival()
         self.chk_expected_arrivals()
         self.chk_provider_permission(allow_district=True)
+
+
+def create_epialert_report(provider, expected_reporting, completed_on,
+                           integrity_checker, data_source,
+                           reportcls=EpidemiologyAlertR):
+
+    report = reportcls.start(
+        period=expected_reporting.period,
+        entity=expected_reporting.entity,
+        created_by=provider,
+        completion_status=SNISIReport.COMPLETE,
+        completed_on=completed_on,
+        integrity_status=SNISIReport.CORRECT,
+        arrival_status=integrity_checker.get('arrival_status'),
+        validation_status=SNISIReport.VALIDATED)
+
+    # fill the report from SMS data
+    for field in report.data_fields():
+        if integrity_checker.has(field):
+            setattr(report, field, integrity_checker.get(field))
+    try:
+        with reversion.create_revision():
+            report.save()
+
+    except Exception as e:
+        logger.error("Unable to save report to DB. Content: {} | Exp: {}"
+                     .format(data_source, e))
+        logger.debug("".join(traceback.format_exc()))
+        return False, ("Une erreur technique s'est "
+                       "produite. Réessayez plus tard et "
+                       "contactez ANTIM si le problème persiste.")
+    else:
+        expected_reporting.acknowledge_report(report)
+
+    # no expected validation
+
+    # send a notification to the SMIR Alert Response Group
+    try:
+        recipients = Group.get_or_none("smir_alert_response") \
+            .members.all()
+    except:
+        recipients = []
+    msg = ("{provider} ({contact}) vient d'envoyer une alerte pour {nb_cases} "
+           "cas de {disease} ({nb_suspected} suspects, {nb_confirmed} "
+           "confirmés, {nb_death} décès).").format(
+        provider=provider.name(),
+        contact=provider.primary_number(),
+        nb_cases=report.cases_total,
+        disease=report.disease_name,
+        nb_suspected=report.suspected_cases,
+        nb_confirmed=report.confirmed_cases,
+        nb_death=report.deaths)
+    expirate_on = integrity_checker.get('submit_time') + \
+        datetime.timedelta(days=1)
+    for recipient in recipients:
+
+        if recipient == provider:
+            continue
+
+        Notification.create(
+            provider=recipient,
+            deliver=Notification.IMMEDIATELY,
+            expirate_on=expirate_on,
+            category=PROJECT_BRAND,
+            text=msg)
+
+    return report, ("L'alerte {disease} a bien été prise en compte "
+                    "et notifiée. Le No de reçu est #{receipt}."
+                    .format(disease=report.disease_name,
+                            receipt=report.receipt))
+
+
+class EpidemiologyAlertRIntegrityChecker(ReportIntegrityChecker):
+
+    report_class = reportcls_epidemio_alert
+    validating_role = validating_role
+
+    def _check_completeness(self, **options):
+        for field in EpidemiologyAlertR.data_fields():
+            if not self.has(field):
+                self.add_missing(_("Missing data for {f}").format(f=field),
+                                 blocking=True, field=field)
+
+    def chk_expected_arrival(self, **options):
+
+        period = self.get('period')
+        entity = self.get('entity')
+
+        # expected reporting defines if report is expeted or not
+        expected_reporting = ExpectedReporting.get_or_none(
+            report_class=self.report_class,
+            period=period,
+            within_period=True,
+            entity=entity,
+            within_entity=False,
+            amount_expected=ExpectedReporting.EXPECTED_ZEROPLUS)
+
+        self.set('expected_reporting', expected_reporting)
+
+        if expected_reporting is None:
+            self.add_error("Aucun rapport d'alerte attendu à "
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period),
+                           blocking=True)
+
+        # Following checks only applies to incoming new reports.
+        # reports being edited already exists and should
+        # have arrived in time.
+        if options.get('is_edition'):
+            return
+
+        if expected_reporting.satisfied:
+            self.add_error("Plus de rapport d'alerte supplémentaire "
+                           "attendu pour {period} à {entity}."
+                           .format(entity=entity, period=period),
+                           blocking=True)
+
+        self.set('arrival_status', SNISIReport.ON_TIME)
+
+    def _check(self, **options):
+
+        # check if disease is in list
+        if not self.get('disease') in EpidemiologyR.DISEASE_NAMES.keys():
+            self.add_error(
+                "Cette maladie `{disease}` n'est pas prise en charge."
+                .format(disease=self.get('disease')),
+                blocking=True, field='disease')
+
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)

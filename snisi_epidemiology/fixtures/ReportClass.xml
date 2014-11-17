@@ -14,4 +14,11 @@
         <field type="CharField" name="period_cls">snisi_epidemiology.models.EpiWeekPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
+    <object pk="epidemio_alert" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">epidemio_alert</field>
+        <field type="CharField" name="name">Alerte SMIR</field>
+        <field type="CharField" name="cls">snisi_epidemiology.models.EpidemiologyAlertR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.MonthPeriod</field>
+        <field type="CharField" name="report_type">occasiosrc</field>
+    </object>
 </django-objects>

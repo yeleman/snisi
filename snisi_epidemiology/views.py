@@ -9,10 +9,13 @@ import datetime
 
 from django.shortcuts import render
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
-from snisi_epidemiology.models import EpidemiologyR, AggEpidemiologyR
+from snisi_epidemiology.models import (EpidemiologyR,
+                                       AggEpidemiologyR,
+                                       EpidemiologyAlertR)
 from snisi_web.utils import entity_periods_context
 from snisi_core.indicators import IndicatorTable, is_ref, ref_is
 from snisi_core.indicators import Indicator, gen_report_indicator
@@ -88,6 +91,7 @@ def nb_cases_for(periods, report_cls, field='cases'):
             period__end_on__lte=periods[-1].end_on)])
 
 
+@login_required
 def indicators(request,
                entity_slug=None,
                perioda_str=None,
@@ -118,54 +122,64 @@ def indicators(request,
                   context)
 
 
+@login_required
 def dashboard(request, **kwargs):
     context = {}
 
-    # TODO: in this context we should use only Epidemiology not Agg
+    # # TODO: in this context we should use only Epidemiology not Agg
 
+    # context.update({
+    #     'current_period': MonthPeriod.current(),
+    #     'periods': EpiWeekPeriod.all_from(
+    #         EpiWeekPeriod.find_create_by_date(
+    #             timezone.now() - datetime.timedelta(days=60)))
+    # })
+
+    # # if there has been NO case at all, do nothing
+    # nb_cases_previous_months = nb_cases_for(context['periods'],
+    #                                         AggEpidemiologyR)
+    # nb_cases_this_month = nb_cases_for([MonthPeriod.current()],
+    #                                    AggEpidemiologyR)
+    # nb_cases_total = sum([nb_cases_previous_months, nb_cases_this_month])
+
+    # all_quiet = nb_cases_total == 0
+    # context.update({'nb_cases_previous_months': nb_cases_previous_months,
+    #                 'nb_cases_this_month': nb_cases_this_month,
+    #                 'nb_cases_total': nb_cases_total,
+    #                 'all_quiet': all_quiet})
+
+    # # if there is at least one case, add warning
+    # weeks = []
+    # if not all_quiet:
+    #     for period in reversed(context['periods']):
+    #         data = {field: {'cases': 0,
+    #                         'deaths': 0,
+    #                         'reports': []}
+    #                 for field in AggEpidemiologyR.disease_fields()}
+    #         # data = {field: 0 for field in EpidemiologyR.disease_fields()}
+    #         # data_located = {field: []
+    #         #                 for field in EpidemiologyR.disease_fields()}
+    #         for report in AggEpidemiologyR.objects.filter(period=period):
+    #             for field in data.keys():
+    #                 cases = getattr(report, "{}_case".format(field), 0)
+    #                 deaths = getattr(report, "{}_death".format(field), 0)
+    #                 if cases:
+    #                     data[field]['cases'] += cases
+    #                     data[field]['deaths'] += deaths
+    #                     data[field]['reports'].append(report)
+    #         weeks.append((period, data))
+    # context.update({'weeks': weeks})
+
+    amonth_ago = datetime.date.today() - datetime.timedelta(days=30)
+
+    alerts = EpidemiologyAlertR.objects.filter(
+        date__gte=amonth_ago).order_by('-date')
     context.update({
-        'current_period': MonthPeriod.current(),
-        'periods': EpiWeekPeriod.all_from(
-            EpiWeekPeriod.find_create_by_date(
-                timezone.now() - datetime.timedelta(days=60)))
+        'alerts': alerts,
+        'nb_cases_this_month': sum([a.cases_total for a in alerts.all()]),
     })
-
-    # if there has been NO case at all, do nothing
-    nb_cases_previous_months = nb_cases_for(context['periods'],
-                                            AggEpidemiologyR)
-    nb_cases_this_month = nb_cases_for([MonthPeriod.current()],
-                                       AggEpidemiologyR)
-    nb_cases_total = sum([nb_cases_previous_months, nb_cases_this_month])
-
-    all_quiet = nb_cases_total == 0
-    context.update({'nb_cases_previous_months': nb_cases_previous_months,
-                    'nb_cases_this_month': nb_cases_this_month,
-                    'nb_cases_total': nb_cases_total,
-                    'all_quiet': all_quiet})
-
-    # if there is at least one case, add warning
-    weeks = []
-    if not all_quiet:
-        for period in reversed(context['periods']):
-            data = {field: {'cases': 0,
-                            'deaths': 0,
-                            'reports': []}
-                    for field in AggEpidemiologyR.disease_fields()}
-            # data = {field: 0 for field in EpidemiologyR.disease_fields()}
-            # data_located = {field: []
-            #                 for field in EpidemiologyR.disease_fields()}
-            for report in AggEpidemiologyR.objects.filter(period=period):
-                for field in data.keys():
-                    cases = getattr(report, "{}_case".format(field), 0)
-                    deaths = getattr(report, "{}_death".format(field), 0)
-                    if cases:
-                        data[field]['cases'] += cases
-                        data[field]['deaths'] += deaths
-                        data[field]['reports'].append(report)
-            weeks.append((period, data))
-    context.update({'weeks': weeks})
 
     return render(request,
                   kwargs.get('template_name',
-                             'epidemiology/dashboard.html'),
+                             'epidemiology/dashboard_alerts.html'),
                   context)

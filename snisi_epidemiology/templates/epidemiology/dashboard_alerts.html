@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load snisi_epidemiology %}
+
+{% block content %}
+
+{% if alerts.count == 0 %}
+<p class="alert alert-success"><i class="icon-smile"></i> Aucun cas de MADO déclaré durant les 30 derniers jours.</p>
+{% else %}
+<p class="alert alert-danger"><strong>ATTENTION</strong>, <strong>{{ nb_cases_this_month }}</strong> cas {{nb_cases_this_month|pluralize:"à,ont"}} été rapporté{{nb_cases_this_month|pluralize}} durant les <strong>30 derniers jours</strong>.</p>
+
+<table class="pure-table table-striped table-bordered all-left">
+<tr><th>Date</th><th>Maladie</th><th>Cas suspects</th><th>Cas confirmés</th><th>Décès</th><th>Rapporteur</th></tr>
+{% for alert in alerts %}
+<tr>
+	<td>{{ alert.date }}</td>
+	<td>{{ alert.disease_name }}</td>
+	<td>{{ alert.suspected_cases }}</td>
+	<td>{{ alert.confirmed_cases }}</td>
+	<td>{{ alert.deaths }}</td>
+	<td>{% include "parts/user_link.html" with provider=alert.created_by %}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

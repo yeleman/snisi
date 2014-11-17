@@ -21,7 +21,8 @@ from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
-                                         PERIODICAL_AGGREGATED)
+                                         PERIODICAL_AGGREGATED,
+                                         OCCASIONAL_SOURCE)
 from snisi_epidemiology.xls_export import epid_activities_as_xls
 
 EPI_WEEK = 'epi_week'
@@ -344,7 +345,6 @@ class AbstractEpidemiologyR(SNISIReport):
         return lines
 
 
-@implements_to_string
 class EpidemiologyR(AbstractEpidemiologyR):
 
     RECEIPT_FORMAT = ("MDO-{entity__slug}/"
@@ -364,7 +364,6 @@ receiver(post_save, sender=EpidemiologyR)(post_save_report)
 reversion.register(EpidemiologyR)
 
 
-@implements_to_string
 class AggEpidemiologyR(PeriodicAggregatedReportInterface,
                        AbstractEpidemiologyR):
 
@@ -393,3 +392,37 @@ receiver(pre_save, sender=AggEpidemiologyR)(pre_save_report)
 receiver(post_save, sender=AggEpidemiologyR)(post_save_report)
 
 reversion.register(AggEpidemiologyR)
+
+
+class EpidemiologyAlertR(SNISIReport):
+
+    RECEIPT_FORMAT = ("MDOA-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}/{id}-{rand}")
+    REPORTING_TYPE = OCCASIONAL_SOURCE
+    UNIQUE_TOGETHER = []
+
+    class Meta:
+        app_label = 'snisi_epidemiology'
+        verbose_name = _("Epidemiology Alert")
+        verbose_name_plural = _("Epidemiology Alerts")
+
+    disease = models.SlugField(
+        _("Disease"), choices=EpidemiologyR.DISEASE_NAMES.items())
+    suspected_cases = models.PositiveIntegerField(_("Suspected cases"))
+    confirmed_cases = models.PositiveIntegerField(_("Confirmed cases"))
+    deaths = models.PositiveIntegerField(_("Deaths"))
+    date = models.DateField()  # default=datetime.date.today
+
+    @property
+    def cases_total(self):
+        return sum([self.suspected_cases, self.confirmed_cases])
+
+    @property
+    def disease_name(self):
+        return AbstractEpidemiologyR.DISEASE_NAMES.get(self.disease)
+
+receiver(pre_save, sender=EpidemiologyAlertR)(pre_save_report)
+receiver(post_save, sender=EpidemiologyAlertR)(post_save_report)
+
+reversion.register(EpidemiologyAlertR)
