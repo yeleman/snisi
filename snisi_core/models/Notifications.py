@@ -210,7 +210,7 @@ class Notification(models.Model):
 
     def fmt_title(self, short=False):
         if short:
-            return "{prefix}".format(self.prefix(short))
+            return "{prefix}".format(prefix=self.prefix(short))
 
         title = " ".join(self.title.strip().splitlines()) \
             if self.title else "Nouvelle notification"
