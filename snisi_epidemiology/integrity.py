@@ -390,6 +390,8 @@ class EpidemiologyAlertRIntegrityChecker(ReportIntegrityChecker):
 
     def _check(self, **options):
 
+        options.update({'allow_district': True})
+
         # check if disease is in list
         if not self.get('disease') in EpidemiologyR.DISEASE_NAMES.keys():
             self.add_error(

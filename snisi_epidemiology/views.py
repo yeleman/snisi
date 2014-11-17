@@ -173,7 +173,7 @@ def dashboard(request, **kwargs):
     amonth_ago = datetime.date.today() - datetime.timedelta(days=30)
 
     alerts = EpidemiologyAlertR.objects.filter(
-        date__gte=amonth_ago).order_by('-date')
+        date__gte=amonth_ago).order_by('-created_on')
     context.update({
         'alerts': alerts,
         'nb_cases_this_month': sum([a.cases_total for a in alerts.all()]),
