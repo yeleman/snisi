@@ -5,12 +5,15 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import smtplib
+import logging
 
 from django.core import mail
 from django.conf import settings
 from django.template import loader, Context
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
+
+logger = logging.getLogger(__name__)
 
 
 def send_email(recipients, message=None, template=None, context={},
@@ -81,4 +84,7 @@ def send_email(recipients, message=None, template=None, context={},
         return (True, recipients.__len__())
     except smtplib.SMTPException as e:
         # log that error
-        return (False, e)
+        logger.error("SMTP Exception: %r".format(e))
+    except Exception as e:
+        logger.error("Exception in sending Email: %r".format(e))
+    return (False, e)
