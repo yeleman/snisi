@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import smtplib
 import logging
+import traceback
 
 from django.core import mail
 from django.conf import settings
@@ -85,6 +86,8 @@ def send_email(recipients, message=None, template=None, context={},
     except smtplib.SMTPException as e:
         # log that error
         logger.error("SMTP Exception: %r".format(e))
+        logger.debug("".join(traceback.format_exc()))
     except Exception as e:
         logger.error("Exception in sending Email: %r".format(e))
+        logger.debug("".join(traceback.format_exc()))
     return (False, e)
