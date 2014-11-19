@@ -43,6 +43,232 @@ class NutritionExcelForm(NutritionRIntegrityChecker, ExcelForm):
             'F4', type_converters.NormalizedIntChoiceList,
             _("Year"), cast_args=YEAR_MAP, sheet=STOCKS),
 
+        # Stocks
+        'plumpy_nut_initial': ExcelFormField(
+            "D8", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_nut_initial').verbose_name, sheet=STOCKS),
+        'plumpy_nut_received': ExcelFormField(
+            "F8", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_nut_received').verbose_name, sheet=STOCKS),
+        'plumpy_nut_used': ExcelFormField(
+            "H8", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_nut_used').verbose_name, sheet=STOCKS),
+        'plumpy_nut_lost': ExcelFormField(
+            "J8", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_nut_lost').verbose_name, sheet=STOCKS),
+        'milk_f75_initial': ExcelFormField(
+            "D9", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f75_initial').verbose_name, sheet=STOCKS),
+        'milk_f75_received': ExcelFormField(
+            "F9", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f75_received').verbose_name, sheet=STOCKS),
+        'milk_f75_used': ExcelFormField(
+            "H9", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f75_used').verbose_name, sheet=STOCKS),
+        'milk_f75_lost': ExcelFormField(
+            "J9", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f75_lost').verbose_name, sheet=STOCKS),
+        'milk_f100_initial': ExcelFormField(
+            "D10", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f100_initial').verbose_name, sheet=STOCKS),
+        'milk_f100_received': ExcelFormField(
+            "F10", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f100_received').verbose_name, sheet=STOCKS),
+        'milk_f100_used': ExcelFormField(
+            "H10", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f100_used').verbose_name, sheet=STOCKS),
+        'milk_f100_lost': ExcelFormField(
+            "J10", int,
+            NutritionStocksR._meta.get_field(
+                'milk_f100_lost').verbose_name, sheet=STOCKS),
+        'resomal_initial': ExcelFormField(
+            "D11", int,
+            NutritionStocksR._meta.get_field(
+                'resomal_initial').verbose_name, sheet=STOCKS),
+        'resomal_received': ExcelFormField(
+            "F11", int,
+            NutritionStocksR._meta.get_field(
+                'resomal_received').verbose_name, sheet=STOCKS),
+        'resomal_used': ExcelFormField(
+            "H11", int,
+            NutritionStocksR._meta.get_field(
+                'resomal_used').verbose_name, sheet=STOCKS),
+        'resomal_lost': ExcelFormField(
+            "J11", int,
+            NutritionStocksR._meta.get_field(
+                'resomal_lost').verbose_name, sheet=STOCKS),
+        'plumpy_sup_initial': ExcelFormField(
+            "D12", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_sup_initial').verbose_name, sheet=STOCKS),
+        'plumpy_sup_received': ExcelFormField(
+            "F12", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_sup_received').verbose_name, sheet=STOCKS),
+        'plumpy_sup_used': ExcelFormField(
+            "H12", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_sup_used').verbose_name, sheet=STOCKS),
+        'plumpy_sup_lost': ExcelFormField(
+            "J12", int,
+            NutritionStocksR._meta.get_field(
+                'plumpy_sup_lost').verbose_name, sheet=STOCKS),
+        'supercereal_initial': ExcelFormField(
+            "D13", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_initial').verbose_name, sheet=STOCKS),
+        'supercereal_received': ExcelFormField(
+            "F13", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_received').verbose_name, sheet=STOCKS),
+        'supercereal_used': ExcelFormField(
+            "H13", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_used').verbose_name, sheet=STOCKS),
+        'supercereal_lost': ExcelFormField(
+            "J13", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_lost').verbose_name, sheet=STOCKS),
+        'supercereal_plus_initial': ExcelFormField(
+            "D14", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_plus_initial').verbose_name, sheet=STOCKS),
+        'supercereal_plus_received': ExcelFormField(
+            "F14", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_plus_received').verbose_name, sheet=STOCKS),
+        'supercereal_plus_used': ExcelFormField(
+            "H14", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_plus_used').verbose_name, sheet=STOCKS),
+        'supercereal_plus_lost': ExcelFormField(
+            "J14", int,
+            NutritionStocksR._meta.get_field(
+                'supercereal_plus_lost').verbose_name, sheet=STOCKS),
+        'oil_initial': ExcelFormField(
+            "D15", int,
+            NutritionStocksR._meta.get_field(
+                'oil_initial').verbose_name, sheet=STOCKS),
+        'oil_received': ExcelFormField(
+            "F15", int,
+            NutritionStocksR._meta.get_field(
+                'oil_received').verbose_name, sheet=STOCKS),
+        'oil_used': ExcelFormField(
+            "H15", int,
+            NutritionStocksR._meta.get_field(
+                'oil_used').verbose_name, sheet=STOCKS),
+        'oil_lost': ExcelFormField(
+            "J15", int,
+            NutritionStocksR._meta.get_field(
+                'oil_lost').verbose_name, sheet=STOCKS),
+        'amoxycilline_125_vials_initial': ExcelFormField(
+            "D16", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_125_vials_initial').verbose_name, sheet=STOCKS),
+        'amoxycilline_125_vials_received': ExcelFormField(
+            "F16", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_125_vials_received').verbose_name, sheet=STOCKS),
+        'amoxycilline_125_vials_used': ExcelFormField(
+            "H16", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_125_vials_used').verbose_name, sheet=STOCKS),
+        'amoxycilline_125_vials_lost': ExcelFormField(
+            "J16", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_125_vials_lost').verbose_name, sheet=STOCKS),
+        'amoxycilline_250_caps_initial': ExcelFormField(
+            "D17", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_250_caps_initial').verbose_name, sheet=STOCKS),
+        'amoxycilline_250_caps_received': ExcelFormField(
+            "F17", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_250_caps_received').verbose_name, sheet=STOCKS),
+        'amoxycilline_250_caps_used': ExcelFormField(
+            "H17", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_250_caps_used').verbose_name, sheet=STOCKS),
+        'amoxycilline_250_caps_lost': ExcelFormField(
+            "J17", int,
+            NutritionStocksR._meta.get_field(
+                'amoxycilline_250_caps_lost').verbose_name, sheet=STOCKS),
+        'albendazole_400_initial': ExcelFormField(
+            "D18", int,
+            NutritionStocksR._meta.get_field(
+                'albendazole_400_initial').verbose_name, sheet=STOCKS),
+        'albendazole_400_received': ExcelFormField(
+            "F18", int,
+            NutritionStocksR._meta.get_field(
+                'albendazole_400_received').verbose_name, sheet=STOCKS),
+        'albendazole_400_used': ExcelFormField(
+            "H18", int,
+            NutritionStocksR._meta.get_field(
+                'albendazole_400_used').verbose_name, sheet=STOCKS),
+        'albendazole_400_lost': ExcelFormField(
+            "J18", int,
+            NutritionStocksR._meta.get_field(
+                'albendazole_400_lost').verbose_name, sheet=STOCKS),
+        'vita_100_injectable_initial': ExcelFormField(
+            "D19", int,
+            NutritionStocksR._meta.get_field(
+                'vita_100_injectable_initial').verbose_name, sheet=STOCKS),
+        'vita_100_injectable_received': ExcelFormField(
+            "F19", int,
+            NutritionStocksR._meta.get_field(
+                'vita_100_injectable_received').verbose_name, sheet=STOCKS),
+        'vita_100_injectable_used': ExcelFormField(
+            "H19", int,
+            NutritionStocksR._meta.get_field(
+                'vita_100_injectable_used').verbose_name, sheet=STOCKS),
+        'vita_100_injectable_lost': ExcelFormField(
+            "J19", int,
+            NutritionStocksR._meta.get_field(
+                'vita_100_injectable_lost').verbose_name, sheet=STOCKS),
+        'vita_200_injectable_initial': ExcelFormField(
+            "D20", int,
+            NutritionStocksR._meta.get_field(
+                'vita_200_injectable_initial').verbose_name, sheet=STOCKS),
+        'vita_200_injectable_received': ExcelFormField(
+            "F20", int,
+            NutritionStocksR._meta.get_field(
+                'vita_200_injectable_received').verbose_name, sheet=STOCKS),
+        'vita_200_injectable_used': ExcelFormField(
+            "H20", int,
+            NutritionStocksR._meta.get_field(
+                'vita_200_injectable_used').verbose_name, sheet=STOCKS),
+        'vita_200_injectable_lost': ExcelFormField(
+            "J20", int,
+            NutritionStocksR._meta.get_field(
+                'vita_200_injectable_lost').verbose_name, sheet=STOCKS),
+        'iron_folic_acid_initial': ExcelFormField(
+            "D21", int,
+            NutritionStocksR._meta.get_field(
+                'iron_folic_acid_initial').verbose_name, sheet=STOCKS),
+        'iron_folic_acid_received': ExcelFormField(
+            "F21", int,
+            NutritionStocksR._meta.get_field(
+                'iron_folic_acid_received').verbose_name, sheet=STOCKS),
+        'iron_folic_acid_used': ExcelFormField(
+            "H21", int,
+            NutritionStocksR._meta.get_field(
+                'iron_folic_acid_used').verbose_name, sheet=STOCKS),
+        'iron_folic_acid_lost': ExcelFormField(
+            "J21", int,
+            NutritionStocksR._meta.get_field(
+                'iron_folic_acid_lost').verbose_name, sheet=STOCKS),
+        
         # URENAM-URENAS
         # URENAM
         'u23o6_total_start_m': ExcelFormField(
@@ -611,232 +837,6 @@ class NutritionExcelForm(NutritionRIntegrityChecker, ExcelForm):
             "R22", int,
             URENINutritionR._meta.get_field(
                 'o59_total_end_f').verbose_name, sheet=URENI),
-
-        # Stocks
-        'plumpy_nut_initial': ExcelFormField(
-            "D8", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_nut_initial').verbose_name, sheet=STOCKS),
-        'plumpy_nut_received': ExcelFormField(
-            "F8", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_nut_received').verbose_name, sheet=STOCKS),
-        'plumpy_nut_used': ExcelFormField(
-            "H8", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_nut_used').verbose_name, sheet=STOCKS),
-        'plumpy_nut_lost': ExcelFormField(
-            "J8", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_nut_lost').verbose_name, sheet=STOCKS),
-        'milk_f75_initial': ExcelFormField(
-            "D9", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f75_initial').verbose_name, sheet=STOCKS),
-        'milk_f75_received': ExcelFormField(
-            "F9", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f75_received').verbose_name, sheet=STOCKS),
-        'milk_f75_used': ExcelFormField(
-            "H9", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f75_used').verbose_name, sheet=STOCKS),
-        'milk_f75_lost': ExcelFormField(
-            "J9", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f75_lost').verbose_name, sheet=STOCKS),
-        'milk_f100_initial': ExcelFormField(
-            "D10", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f100_initial').verbose_name, sheet=STOCKS),
-        'milk_f100_received': ExcelFormField(
-            "F10", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f100_received').verbose_name, sheet=STOCKS),
-        'milk_f100_used': ExcelFormField(
-            "H10", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f100_used').verbose_name, sheet=STOCKS),
-        'milk_f100_lost': ExcelFormField(
-            "J10", int,
-            NutritionStocksR._meta.get_field(
-                'milk_f100_lost').verbose_name, sheet=STOCKS),
-        'resomal_initial': ExcelFormField(
-            "D11", int,
-            NutritionStocksR._meta.get_field(
-                'resomal_initial').verbose_name, sheet=STOCKS),
-        'resomal_received': ExcelFormField(
-            "F11", int,
-            NutritionStocksR._meta.get_field(
-                'resomal_received').verbose_name, sheet=STOCKS),
-        'resomal_used': ExcelFormField(
-            "H11", int,
-            NutritionStocksR._meta.get_field(
-                'resomal_used').verbose_name, sheet=STOCKS),
-        'resomal_lost': ExcelFormField(
-            "J11", int,
-            NutritionStocksR._meta.get_field(
-                'resomal_lost').verbose_name, sheet=STOCKS),
-        'plumpy_sup_initial': ExcelFormField(
-            "D12", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_sup_initial').verbose_name, sheet=STOCKS),
-        'plumpy_sup_received': ExcelFormField(
-            "F12", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_sup_received').verbose_name, sheet=STOCKS),
-        'plumpy_sup_used': ExcelFormField(
-            "H12", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_sup_used').verbose_name, sheet=STOCKS),
-        'plumpy_sup_lost': ExcelFormField(
-            "J12", int,
-            NutritionStocksR._meta.get_field(
-                'plumpy_sup_lost').verbose_name, sheet=STOCKS),
-        'supercereal_initial': ExcelFormField(
-            "D13", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_initial').verbose_name, sheet=STOCKS),
-        'supercereal_received': ExcelFormField(
-            "F13", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_received').verbose_name, sheet=STOCKS),
-        'supercereal_used': ExcelFormField(
-            "H13", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_used').verbose_name, sheet=STOCKS),
-        'supercereal_lost': ExcelFormField(
-            "J13", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_lost').verbose_name, sheet=STOCKS),
-        'supercereal_plus_initial': ExcelFormField(
-            "D14", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_plus_initial').verbose_name, sheet=STOCKS),
-        'supercereal_plus_received': ExcelFormField(
-            "F14", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_plus_received').verbose_name, sheet=STOCKS),
-        'supercereal_plus_used': ExcelFormField(
-            "H14", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_plus_used').verbose_name, sheet=STOCKS),
-        'supercereal_plus_lost': ExcelFormField(
-            "J14", int,
-            NutritionStocksR._meta.get_field(
-                'supercereal_plus_lost').verbose_name, sheet=STOCKS),
-        'oil_initial': ExcelFormField(
-            "D15", int,
-            NutritionStocksR._meta.get_field(
-                'oil_initial').verbose_name, sheet=STOCKS),
-        'oil_received': ExcelFormField(
-            "F15", int,
-            NutritionStocksR._meta.get_field(
-                'oil_received').verbose_name, sheet=STOCKS),
-        'oil_used': ExcelFormField(
-            "H15", int,
-            NutritionStocksR._meta.get_field(
-                'oil_used').verbose_name, sheet=STOCKS),
-        'oil_lost': ExcelFormField(
-            "J15", int,
-            NutritionStocksR._meta.get_field(
-                'oil_lost').verbose_name, sheet=STOCKS),
-        'amoxycilline_125_vials_initial': ExcelFormField(
-            "D16", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_125_vials_initial').verbose_name, sheet=STOCKS),
-        'amoxycilline_125_vials_received': ExcelFormField(
-            "F16", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_125_vials_received').verbose_name, sheet=STOCKS),
-        'amoxycilline_125_vials_used': ExcelFormField(
-            "H16", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_125_vials_used').verbose_name, sheet=STOCKS),
-        'amoxycilline_125_vials_lost': ExcelFormField(
-            "J16", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_125_vials_lost').verbose_name, sheet=STOCKS),
-        'amoxycilline_250_caps_initial': ExcelFormField(
-            "D17", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_250_caps_initial').verbose_name, sheet=STOCKS),
-        'amoxycilline_250_caps_received': ExcelFormField(
-            "F17", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_250_caps_received').verbose_name, sheet=STOCKS),
-        'amoxycilline_250_caps_used': ExcelFormField(
-            "H17", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_250_caps_used').verbose_name, sheet=STOCKS),
-        'amoxycilline_250_caps_lost': ExcelFormField(
-            "J17", int,
-            NutritionStocksR._meta.get_field(
-                'amoxycilline_250_caps_lost').verbose_name, sheet=STOCKS),
-        'albendazole_400_initial': ExcelFormField(
-            "D18", int,
-            NutritionStocksR._meta.get_field(
-                'albendazole_400_initial').verbose_name, sheet=STOCKS),
-        'albendazole_400_received': ExcelFormField(
-            "F18", int,
-            NutritionStocksR._meta.get_field(
-                'albendazole_400_received').verbose_name, sheet=STOCKS),
-        'albendazole_400_used': ExcelFormField(
-            "H18", int,
-            NutritionStocksR._meta.get_field(
-                'albendazole_400_used').verbose_name, sheet=STOCKS),
-        'albendazole_400_lost': ExcelFormField(
-            "J18", int,
-            NutritionStocksR._meta.get_field(
-                'albendazole_400_lost').verbose_name, sheet=STOCKS),
-        'vita_100_injectable_initial': ExcelFormField(
-            "D19", int,
-            NutritionStocksR._meta.get_field(
-                'vita_100_injectable_initial').verbose_name, sheet=STOCKS),
-        'vita_100_injectable_received': ExcelFormField(
-            "F19", int,
-            NutritionStocksR._meta.get_field(
-                'vita_100_injectable_received').verbose_name, sheet=STOCKS),
-        'vita_100_injectable_used': ExcelFormField(
-            "H19", int,
-            NutritionStocksR._meta.get_field(
-                'vita_100_injectable_used').verbose_name, sheet=STOCKS),
-        'vita_100_injectable_lost': ExcelFormField(
-            "J19", int,
-            NutritionStocksR._meta.get_field(
-                'vita_100_injectable_lost').verbose_name, sheet=STOCKS),
-        'vita_200_injectable_initial': ExcelFormField(
-            "D20", int,
-            NutritionStocksR._meta.get_field(
-                'vita_200_injectable_initial').verbose_name, sheet=STOCKS),
-        'vita_200_injectable_received': ExcelFormField(
-            "F20", int,
-            NutritionStocksR._meta.get_field(
-                'vita_200_injectable_received').verbose_name, sheet=STOCKS),
-        'vita_200_injectable_used': ExcelFormField(
-            "H20", int,
-            NutritionStocksR._meta.get_field(
-                'vita_200_injectable_used').verbose_name, sheet=STOCKS),
-        'vita_200_injectable_lost': ExcelFormField(
-            "J20", int,
-            NutritionStocksR._meta.get_field(
-                'vita_200_injectable_lost').verbose_name, sheet=STOCKS),
-        'iron_folic_acid_initial': ExcelFormField(
-            "D21", int,
-            NutritionStocksR._meta.get_field(
-                'iron_folic_acid_initial').verbose_name, sheet=STOCKS),
-        'iron_folic_acid_received': ExcelFormField(
-            "F21", int,
-            NutritionStocksR._meta.get_field(
-                'iron_folic_acid_received').verbose_name, sheet=STOCKS),
-        'iron_folic_acid_used': ExcelFormField(
-            "H21", int,
-            NutritionStocksR._meta.get_field(
-                'iron_folic_acid_used').verbose_name, sheet=STOCKS),
-        'iron_folic_acid_lost': ExcelFormField(
-            "J21", int,
-            NutritionStocksR._meta.get_field(
-                'iron_folic_acid_lost').verbose_name, sheet=STOCKS),
         }
     }
 
