@@ -1,1 +1,1 @@
-{% if report_class and report.receipt %}<a href="{% url 'download_report_xls' report_receipt=report.receipt %}" class="pure-button pure-button-primary"><i class="icon-table"></i> Télécharger {{ report.receipt }}</a>{% endif %}
+{% if report_class and report.receipt %}<a href="{% url 'download_report_xls' report_receipt=report.receipt %}" class="pure-button pure-button-primary"><i class="icon-table"></i> Télécharger<br />{{ report.receipt }}</a>{% endif %}

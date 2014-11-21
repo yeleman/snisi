@@ -13,6 +13,7 @@ from django.utils import timezone
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
 from snisi_tools.misc import class_str
+from snisi_reprohealth import get_domain
 from snisi_reprohealth.integrity import (PFActivitiesRIntegrityChecker,
                                          create_pf_report)
 from snisi_reprohealth.models import PFActivitiesR
@@ -21,6 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 class PfactivitiesExcelForm(PFActivitiesRIntegrityChecker, ExcelForm):
+
+    domain = get_domain()
 
     SERVICES = "Services"
     FINANCIAL = "Financier"

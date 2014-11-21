@@ -187,6 +187,10 @@ class AbstractURENutritionR(SNISIReport):
         return self.total_for('returned')
 
     @property
+    def total_in(self):
+        return self.total_for('total_in')
+
+    @property
     def total_in_m(self):
         return self.total_for('total_in_m')
 

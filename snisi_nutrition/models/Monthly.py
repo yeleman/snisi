@@ -18,6 +18,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
+from snisi_nutrition.xls_export import nutrition_monthly_as_xls
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +120,13 @@ class AbstractNutritionR(SNISIReport):
     @property
     def total_end_f(self):
         return self.total_for('total_end_f')
+
+    def as_xls(self):
+        file_name = "NUT_{entity}.{month}.{year}.xls" \
+                    .format(entity=self.entity.slug,
+                            month=self.period.middle().month,
+                            year=self.period.middle().year)
+        return file_name, nutrition_monthly_as_xls(self)
 
 
 class NutritionR(AbstractNutritionR):

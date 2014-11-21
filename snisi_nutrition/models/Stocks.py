@@ -301,15 +301,15 @@ class AbstractNutritionStocksR(SNISIReport):
 
     @property
     def albendazole_400_balance(self):
-        return self.balance_for('albendazole')
+        return self.balance_for('albendazole_400')
 
     @property
     def albendazole_400_stocked(self):
-        return self.stocked_for('albendazole')
+        return self.stocked_for('albendazole_400')
 
     @property
     def albendazole_400_consumed(self):
-        return self.consumed_for('albendazole')
+        return self.consumed_for('albendazole_400')
 
     # VitA 100K UI Injectable
     vita_100_injectable_initial = models.IntegerField(

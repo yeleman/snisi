@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
 from snisi_tools.misc import class_str
+from snisi_epidemiology import get_domain
 from snisi_epidemiology.integrity import (
     EpidemiologyRIntegrityChecker,
     EpidemiologyRDistrictIntegrityChecker, create_epid_report)
@@ -22,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 class EpidemiologyExcelForm(EpidemiologyRIntegrityChecker, ExcelForm):
+
+    domain = get_domain()
 
     DAY_MAP = range(1, 31)
     MONTH_MAP = range(1, 13)

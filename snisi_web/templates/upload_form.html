@@ -29,7 +29,7 @@
     {% else %}
 
         <h2>Échec, rapport refusé</h2>
-        <p>Votre rapport de routine Paludisme a bien été reçu mais a été <strong class="bright">refusé</strong>.</p>
+        <p>Votre rapport a bien été reçu mais a été <strong class="bright">refusé</strong>.</p>
         <p>En effet, celui-ci contient {{ xlsform.feedbacks|length }} erreur{{ xlsform.feedbacks|length|pluralize }} détaillée{{ xlsform.feedbacks|length|pluralize }} ci-dessous. Corrigez-le{{ xlsform.feedbacks|length|pluralize }} et re-envoyez le fichier.</p>
         <p>En cas de problème, consultez la page de <a href="{% url 'support' %}">support</a>.</p>
         <h2>Liste des erreurs</h2>

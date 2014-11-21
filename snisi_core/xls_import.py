@@ -52,6 +52,7 @@ class ExcelForm(ReportingDataHolder):
 
     _mapping = {None: {}}
     version = None
+    domain = None
 
     def __init__(self, filepath, sheet=None, version=None):
 
@@ -134,3 +135,7 @@ class ExcelForm(ReportingDataHolder):
         self.add_error("“{data}” n'est pas une valeur correcte "
                        "pour le champ “{field}”"
                        .format(data=data, field=field.display_name()))
+
+    @classmethod
+    def get_domain(cls):
+        return cls.domain

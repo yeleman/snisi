@@ -14,6 +14,7 @@ from django.utils import timezone
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
 from snisi_tools.misc import class_str
+from snisi_malaria import get_domain
 from snisi_malaria.models import MalariaR, EpidemioMalariaR
 from snisi_malaria.integrity import (MalariaRSourceReportChecker,
                                      EpidemioMalariaRIntegrityChecker,
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 
 
 class MalariaExcelForm(MalariaRSourceReportChecker, ExcelForm):
+
+    domain = get_domain()
 
     """ Mapping between MalariaReport & Excel Monthly Malaria Routine File """
 
