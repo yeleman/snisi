@@ -145,7 +145,7 @@ def handle_report_upload(excel_form, form, provider):
             sri.check()
             if not sri.is_valid():
                 for feedback in sri.feedbacks:
-                    should_raise = sri.raised == feedback
+                    # should_raise = sri.raised == feedback
                     excel_form.add_feedback(feedback, False)
             else:
                 sr_checkers[sr] = sri

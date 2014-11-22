@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="pf_nutrition" model="snisi_core.role">
+        <field type="CharField" name="slug">pf_nutrition</field>
+        <field type="CharField" name="name">Point Focal Nutrition</field>
+    </object>
+</django-objects>

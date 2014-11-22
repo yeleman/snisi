@@ -18,7 +18,6 @@ from snisi_nutrition.integrity import (
     URENASNutritionRIntegrityChecker,
     URENINutritionRIntegrityChecker,
     StocksNutritionRIntegrityChecker)
-# from snisi_nutrition.models.Monthly import NutritionR
 from snisi_nutrition.models.URENAM import AbstractURENAMNutritionR
 from snisi_nutrition.models.URENAS import AbstractURENASNutritionR
 from snisi_nutrition.models.URENI import AbstractURENINutritionR
