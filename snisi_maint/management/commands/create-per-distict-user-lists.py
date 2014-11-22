@@ -66,7 +66,7 @@ class Command(BaseCommand):
                     'Prénom': provider.first_name,
                     'Role': provider.role,
                     'Localité': provider.location.name,
-                    'Code SNISI': provider.location.slug,
+                    'SNISI': provider.location.slug,
                     'Identifiant': provider.username,
                     'Mot de passe': passwd,
                     })
