@@ -18,11 +18,13 @@ from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.models.Projects import Cluster
 from snisi_tools.auth import can_view_entity
 from snisi_web.utils import entity_browser_context, get_base_url_for_periods
+from snisi_web.decorators import user_role_within
 
 logger = logging.getLogger(__name__)
 
 
 @login_required
+@user_role_within(['charge_sis', 'dtc'])
 def dashboard(request, **kwargs):
 
     now = timezone.now()
