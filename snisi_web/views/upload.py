@@ -54,6 +54,7 @@ def upload_form(request, template_name='upload_form.html'):
 
     context = {}
     excel_form = None
+    handle_report_func = handle_report_upload
 
     if request.method == 'POST':
         form = ExcelUploadForm(request.POST, request.FILES)
@@ -68,7 +69,7 @@ def upload_form(request, template_name='upload_form.html'):
                     handle_report_func = domain.import_from(
                         'upload.handle_report_upload')
                 except:
-                    handle_report_func = handle_report_upload
+                    pass
             excel_form = excel_form_cls(filepath)
 
             new_report, text_message = handle_report_func(
