@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord Nutrition{% endblock %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block content %}
+
+<h2>Tableau de bord Nutrition {{ user }}</h2>
+
+<p>Trouvez ici l'évolution de vos indicateurs de performance Nutrition ainsi que des conseils sur la gestion de vos stocks.</p>
+
+{% include "parts/indicator_widget.html" with table=performance_table id=0 %}
+
+{% endblock %}
+
+{% block onJQready %}
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}

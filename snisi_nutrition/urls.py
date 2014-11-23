@@ -12,6 +12,9 @@ from snisi_web.url_regexp import RGXP_ENTITY, RGXP_PERIOD, RGXP_PERIODS
 urlpatterns = patterns(
     '',
 
+    url(r'^/dashboard/?$', 'snisi_nutrition.views.indicators.dashboard',
+        name='nutrition_dashboard'),
+
     # indicator browser
     url(r'^/view/{entity}/{periods}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),

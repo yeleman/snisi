@@ -5,13 +5,12 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import os
 
-from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.shortcuts import render
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod, Period
@@ -19,10 +18,34 @@ from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.models.Projects import Cluster
 from snisi_tools.auth import can_view_entity
 from snisi_web.utils import entity_browser_context, get_base_url_for_periods
-from snisi_tools.misc import import_path
-from snisi_nutrition.models.Monthly import NutritionR
 
 logger = logging.getLogger(__name__)
+
+
+@login_required
+def dashboard(request, **kwargs):
+
+    now = timezone.now()
+    last_period = MonthPeriod.current().previous() if now.day < 26 else None
+    periods = MonthPeriod.all_from(
+        MonthPeriod.from_url_str("10-2014"), last_period)
+    entity = request.user.location
+
+    context = {
+        'periods': periods,
+        'entity': entity,
+    }
+
+    from snisi_nutrition.indicators import (PerformanceIndicators)
+
+    performance_table = PerformanceIndicators(entity=entity, periods=periods)
+
+    context.update({
+        'performance_table': performance_table,
+    })
+
+    return render(request, kwargs.get('template_name',
+                  'nutrition/dashboard.html'), context)
 
 
 @login_required
