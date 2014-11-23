@@ -7,10 +7,21 @@ from __future__ import (unicode_literals, absolute_import,
 
 from django.conf.urls import patterns, url
 
-from snisi_web.url_regexp import RGXP_ENTITY, RGXP_PERIOD
+from snisi_web.url_regexp import RGXP_ENTITY, RGXP_PERIOD, RGXP_PERIODS
 
 urlpatterns = patterns(
     '',
+
+    # indicator browser
+    url(r'^/view/{entity}/{periods}/?$'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
+    url(r'^/view/{entity}/?$'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
+    url(r'^/view/?$', 'snisi_nutrition.views.indicators.browser'
+        .format(),
+        name='nutrition_view'),
 
     # raw-data browser
     url(r'/{entity}/{period}/?'

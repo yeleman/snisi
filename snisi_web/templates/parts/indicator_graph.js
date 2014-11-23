@@ -77,7 +77,7 @@ hc_graphs.push({
     },
     credits: {
         enabled: true,
-        text: "© PNLP – {{ table.last_period }}",
+        text: "© SNISI – {{ table.last_period }}",
         href: null
     },
 });

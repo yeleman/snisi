@@ -121,6 +121,31 @@ class AbstractNutritionR(SNISIReport):
     def total_end_f(self):
         return self.total_for('total_end_f')
 
+    @property
+    def total_out_resp(self):
+        return self.total_out - self.not_responding
+
+    @property
+    def healed_rate(self):
+        try:
+            return self.healed / self.total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def deceased_rate(self):
+        try:
+            return self.deceased / self.total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def abandon_rate(self):
+        try:
+            return self.abandon / self.total_out_resp
+        except ZeroDivisionError:
+            return 0
+
     def as_xls(self):
         file_name = "NUT_{entity}.{month}.{year}.xls" \
                     .format(entity=self.entity.slug,
