@@ -31,7 +31,7 @@ def get_malaria_template(entity, periods, graph_periods, quarter_num, year):
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
     h1 = ss.ParagraphStyles.Heading1
 
-    header_png = get_resource('malaria', 'img', 'header_malaria_report.png')
+    header_png = get_resource('malaria', 'header_malaria_report.png')
 
     section.append(Paragraph(ss.ParagraphStyles.Normal,
                              pps_center, Image(header_png)))
@@ -358,7 +358,7 @@ def generate_section_rtf(entity, periods,
 
     pps_center = ParagraphPS(alignment=ParagraphPS.CENTER)
 
-    header_png = get_resource('malaria', 'img', 'header_malaria_report.png')
+    header_png = get_resource('malaria', 'header_malaria_report.png')
 
     section.append(Paragraph(ss.ParagraphStyles.Normal,
                              pps_center, Image(header_png)))
