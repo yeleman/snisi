@@ -321,6 +321,8 @@ reversion.register(Provider)
 
 # catch django signals and emit ours
 def on_django_logged_in(sender, user, **kwargs):
+    if not getattr(user, 'username'):
+        return
     logged_in.send(sender=Provider.__class__,
                    provider=Provider.get_or_none(user.username,
                                                  with_inactive=True))
@@ -328,6 +330,8 @@ user_logged_in.connect(on_django_logged_in)
 
 
 def on_django_logged_out(sender, user, **kwargs):
+    if not getattr(user, 'username'):
+        return
     logged_out.send(sender=Provider.__class__,
                     provider=Provider.get_or_none(user.username,
                                                   with_inactive=True))
