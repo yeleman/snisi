@@ -179,7 +179,7 @@ def do_validation(request, report_receipt, **kwargs):
     if domain is not None:
         try:
             do_validation_func = domain.import_from(
-                'validation.do_validation')
+                'validation.do_validation', failsafe=False)
         except:
             pass
 

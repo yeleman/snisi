@@ -67,7 +67,7 @@ def upload_form(request, template_name='upload_form.html'):
                 # Handling of report form might be custom to domain/report
                 try:
                     handle_report_func = domain.import_from(
-                        'upload.handle_report_upload')
+                        'upload.handle_report_upload', failsafe=False)
                 except:
                     pass
             excel_form = excel_form_cls(filepath)
