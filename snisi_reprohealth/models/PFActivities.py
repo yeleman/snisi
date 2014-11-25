@@ -11,7 +11,8 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from django.utils.translation import ugettext_lazy as _
 
-from snisi_core.models.common import pre_save_report, post_save_report
+from snisi_core.models.common import (
+    pre_save_report, post_save_report, agg_field_average)
 from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
@@ -532,12 +533,24 @@ class AggPFActivitiesR(PFActivitiesRIface,
                                .objects \
                                .filter(period=period,
                                        entity__in=entity.get_health_centers())
-        return super(AggPFActivitiesR, cls).create_from(
+        report = super(AggPFActivitiesR, cls).create_from(
             period=period,
             entity=entity,
             created_by=created_by,
             indiv_sources=indiv_sources,
             agg_sources=agg_sources)
+
+        for field in AggPFActivitiesR.data_fields():
+            if field.endswith('_price'):
+                qty = getattr(report, field.replace('_price', '_qty'), 0)
+                revenue = getattr(report,
+                                  field.replace('_price', '_revenue'), 0)
+                try:
+                    price = int(revenue / qty)
+                except ZeroDivisionError:
+                    price = 0
+                setattr(report, field, price)
+        return report
 
     @classmethod
     def start_aggreagted(cls, *args, **kwargs):

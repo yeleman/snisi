@@ -8,6 +8,7 @@ import random
 import logging
 
 import reversion
+import numpy as np
 from django.db import models
 
 from snisi_tools.misc import get_uuid
@@ -143,3 +144,17 @@ class ActiveManager(models.Manager):
     def get_queryset(self):
         return super(ActiveManager, self).get_queryset() \
                                          .filter(is_active=True)
+
+
+def agg_field_average(agg_report, field):
+    logger.debug("agg_field_average on `{}`".format(field))
+    logger.debug("Nb sources: {}".format(agg_report.indiv_sources.count()))
+    values = [getattr(indiv_report, field, 0)
+              for indiv_report in agg_report.indiv_sources.all()]
+    logger.debug(values)
+    value = np.average(values)
+    logger.debug(value)
+    if np.isnan(value):
+        logger.debug("isNaN")
+        return 0
+    return value
