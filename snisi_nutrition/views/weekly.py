@@ -63,7 +63,7 @@ def display_weekly(request,
     root = request.user.location
     cluster = Cluster.get_or_none('nutrition_routine')
 
-    entity = Entity.get_or_none(entity_slug)
+    entity = Entity.get_or_none(entity_slug) or root
 
     # report_cls depends on entity
     try:
@@ -85,25 +85,26 @@ def display_weekly(request,
         must_be_in_cluster=True,
     ))
 
-    weekly_data = []
-    for week_period in nutperiods_for(context['periods']):
-        d = {'week_period': week_period}
-        try:
-            report = report_cls.objects.get(
-                entity=entity, period=week_period)
-        except report_cls.DoesNotExist:
-            continue
-        d.update({'report': report})
-        weekly_data.append(d)
-
-    context.update({'weekly_data': weekly_data})
-
     extended_end, district_agg, region_agg = important_weekly_day_names()
     context.update({
         'day_ext_end': extended_end,
         'day_agg_ds': district_agg,
         'day_agg_rs': region_agg
     })
+
+    if report_cls:
+        weekly_data = []
+        for week_period in nutperiods_for(context['periods']):
+            d = {'week_period': week_period}
+            try:
+                report = report_cls.objects.get(
+                    entity=entity, period=week_period)
+            except report_cls.DoesNotExist:
+                continue
+            d.update({'report': report})
+            weekly_data.append(d)
+
+        context.update({'weekly_data': weekly_data})
 
     return render(request,
                   kwargs.get('template_name', 'nutrition/weekly.html'),
