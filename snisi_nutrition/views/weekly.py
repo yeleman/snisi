@@ -7,15 +7,12 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import datetime
 
-from django.http import Http404
 from django.shortcuts import render
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Entities import Entity
-from snisi_tools.auth import can_view_entity
 from snisi_nutrition.models.Weekly import (
     WeeklyNutritionR, AggWeeklyNutritionR, NutWeekPeriod)
 from snisi_web.utils import entity_periods_context
