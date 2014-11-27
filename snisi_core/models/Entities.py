@@ -123,7 +123,7 @@ class Entity(MPTTModel):
         return self.name.upper()
 
     def display_full_name(self):
-        if self.parent:
+        if self.parent and self.parent.parent:
             if self.type.slug == 'health_center':
                 parent = self.get_health_district()
             else:
@@ -138,12 +138,16 @@ class Entity(MPTTModel):
             code=self.slug, name=self.display_name())
 
     def display_typed_name(self):
-        return ugettext("{type} de {name}").format(
-            type=self.type.name, name=self.name)
+        if self.type.slug != 'country':
+            return ugettext("{type} de {name}").format(
+                type=self.type.name, name=self.name)
+        return self.display_name()
 
     def display_full_typed_name(self):
-        return ugettext("{type} de {name}").format(
-            type=self.type.name, name=self.display_full_name())
+        if self.type.slug != 'country':
+            return ugettext("{type} de {name}").format(
+                type=self.type.name, name=self.display_full_name())
+        return self.display_name()
 
     def parent_level(self):
         if self.parent:

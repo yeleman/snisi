@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    baseURL: '/api/entities/getclusterchildren/nutrition_routine',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    periodBID: 'filter_periodB',
+    url_tmpl: "{% url 'nutrition_weekly' %}/<entity>/<period_str>"
+});
+
+
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}
+
+{% block content %}
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    <legend>Suivi hebdomadaire de la malnutrition</legend>
+    {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" label="De" selected_period=perioda all_periods=all_periods %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" label="À" selected_period=periodb all_periods=all_periods %}
+
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+{% if not entity.casted in cluster.members %}
+<div class="alert">
+<p class="alert alert-warning">{% include "parts/entity_link.html" with entity=entity %} ne fait pas partie du cluster <strong>{{ cluster }}</strong>. Merci de séléctionner une unité sanitaire.</p>
+</div>
+{% else %}
+
+<div class="alert">
+<p class="alert alert-info"><strong>Rappel</strong> : les données hebdomadaire nutrition s'étendent du vendredi matin au jeudi soir. Ces données sont utilisées uniquement pour le suivi et sont donc différentes des rapport PEC mensuels.
+<br />
+Elles sont transmises au plus tard le {{ day_ext_end }} soir puis compilé le {{ day_agg_ds }} matin au niveau district et enfin compilés au niveau région/national le {{ day_agg_rs }} matin.</p>
+</div>
+
+<h3 class="caption"><strong>Suivi hebdomadaire de la malnutrition à </strong> {{ entity.display_full_typed_name }}</h3>
+<div id="graph-cases"></div>
+
+<h3 class="caption"><strong>Suivi décès malnutrition à </strong> {{ entity.display_full_typed_name }}</h3>
+<div id="graph-deaths"></div>
+
+
+<script type="text/javascript">
+{% load snisi %}
+{% load l10n %}
+var PERCENT = "";
+hc_graphs.push({
+    chart: {
+        renderTo: 'graph-cases',
+        zoomType: 'x',
+        spacingRight: 20
+    },
+    legend: {},
+    title: {text: null},
+    xAxis: {
+        type: 'datetime',
+        maxZoom: 1 * 24 * 3600000,
+        dateTimeLabelFormats: {
+            millisecond: '%H:%M:%S.%L',
+            second: '%H:%M:%S',
+            minute: '%H:%M',
+            hour: '%H:%M',
+            day: '%e. %b',
+            week: '%e. %b',
+            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
+            year: '%Y'
+        }
+    },
+    yAxis: {
+        title: {text: "Nombre de cas"},
+        min:0,
+    },
+    series: [
+		// URENI
+        {
+            type: 'column',
+            name: "MAS+",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // URENAS
+        {
+            type: 'column',
+            name: "MAS",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+		// URENAM
+        {
+            type: 'column',
+            name: "MAM",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+    ],
+    tooltip:  {
+        formatter: function() {
+            var s = '';
+            var total = 0;
+            var threshold = 0;
+            $.each(this.points, function(i, point) {
+                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
+                if (point.series.type == 'column') {
+                    total += point.y;
+                } else {
+                    threshold = point.y;
+                }
+            });
+            var diff = total - threshold;
+            s += '<b>Total: ' + total + '</b> ('+ diff +')';
+
+            return s;
+        },
+        shared: true
+    },
+    plotOptions: {
+        column: {
+            stacking: true,
+            animation: false,
+            enableMouseTracking: true,
+            dataLabels: {
+                color: 'black',
+                enabled: false,
+            }
+        }
+    },
+    exporting: {
+        enabled: true,
+    },
+    credits: {
+        enabled: true,
+        text: "© DNS/DN – {{ periodb }}",
+        href: null
+    },
+});
+
+// DECEASED NUMBERS
+hc_graphs.push({
+    chart: {
+        renderTo: 'graph-deaths',
+        zoomType: 'x',
+        spacingRight: 20
+    },
+    legend: {},
+    title: {text: null},
+    xAxis: {
+        type: 'datetime',
+        maxZoom: 1 * 24 * 3600000,
+        dateTimeLabelFormats: {
+            millisecond: '%H:%M:%S.%L',
+            second: '%H:%M:%S',
+            minute: '%H:%M',
+            hour: '%H:%M',
+            day: '%e. %b',
+            week: '%e. %b',
+            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
+            year: '%Y'
+        }
+    },
+    yAxis: {
+        title: {text: "Nombre de décès"},
+        min:0,
+    },
+    series: [
+		// URENI
+        {
+            type: 'column',
+            name: "MAS+",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+        // URENAS
+        {
+            type: 'column',
+            name: "MAS",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+		// URENAM
+        {
+            type: 'column',
+            name: "MAM",
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+        },
+    ],
+    tooltip:  {
+        formatter: function() {
+            var s = '';
+            var total = 0;
+            var threshold = 0;
+            $.each(this.points, function(i, point) {
+                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
+                if (point.series.type == 'column') {
+                    total += point.y;
+                } else {
+                    threshold = point.y;
+                }
+            });
+            var diff = total - threshold;
+            s += '<b>Total: ' + total + '</b> ('+ diff +')';
+
+            return s;
+        },
+        shared: true
+    },
+    plotOptions: {
+        column: {
+            stacking: true,
+            animation: false,
+            enableMouseTracking: true,
+            dataLabels: {
+                color: 'black',
+                enabled: false,
+            }
+        }
+    },
+    exporting: {
+        enabled: true,
+    },
+    credits: {
+        enabled: true,
+        text: "© DNS/DN – {{ periodb }}",
+        href: null
+    },
+});
+</script>
+
+{% endif %}
+{% endblock %}

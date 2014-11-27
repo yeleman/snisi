@@ -15,6 +15,19 @@ urlpatterns = patterns(
     url(r'^/dashboard/?$', 'snisi_nutrition.views.indicators.dashboard',
         name='nutrition_dashboard'),
 
+    # weekly nutrition
+    url(r'^/weekly/{entity}/{periods}/?$'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.weekly.display_weekly',
+        name='nutrition_weekly'),
+    url(r'^/weekly/{entity}/?$'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.weekly.display_weekly',
+        name='nutrition_weekly'),
+    url(r'^/weekly/?$',
+        'snisi_nutrition.views.weekly.display_weekly',
+        name='nutrition_weekly'),
+
     # indicator browser
     url(r'^/view/{entity}/{periods}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
