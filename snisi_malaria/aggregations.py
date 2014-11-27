@@ -157,19 +157,18 @@ def generate_region_country_reports(period,
 
             logger.info("\t\tAt district {}".format(district))
 
-            try:
-                # ack validation (auto)
-                expv = ExpectedValidation.objects.get(
-                    report__entity=district,
-                    report__period=period)
-            except ExpectedValidation.DoesNotExist:
-                continue
-
-            expv.acknowledge_validation(
-                validated=True,
-                validated_by=autobot,
-                validated_on=timezone.now(),
-                auto_validated=True)
+            # ack validation (auto)
+            report = AggMalariaR.objects.get(period=period, entity=district)
+            if not report.validated:
+                try:
+                    expv = ExpectedValidation.objects.get(report=report)
+                    expv.acknowledge_validation(
+                        validated=True,
+                        validated_by=autobot,
+                        validated_on=timezone.now(),
+                        auto_validated=True)
+                except ExpectedValidation.DoesNotExist:
+                    pass
 
         # create AggMalariaR/region
         agg = AggMalariaR.create_from(
@@ -185,6 +184,8 @@ def generate_region_country_reports(period,
             validated_by=autobot,
             validated_on=timezone.now(),
             auto_validated=True)
+
+    logger.info("\tAt {}".format(mali))
 
     # ack expected
     exp = ExpectedReporting.objects.get(
