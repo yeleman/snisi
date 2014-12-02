@@ -94,6 +94,7 @@ def edit_report(request, report_receipt, **kwargs):
                                      .format(report.report_class().slug)})
 
     rcls = report.casted().__class__
+    handle_report_func = handle_report_edition
     ReportFormCls = modelform_factory(model=rcls, fields=report.data_fields())
     domain = rcls.get_domain()
     if domain is not None:
@@ -108,7 +109,7 @@ def edit_report(request, report_receipt, **kwargs):
             handle_report_func = domain.import_from(
                 'validation.handle_report_edition')
         except:
-            handle_report_func = handle_report_edition
+            pass
 
     if request.method == 'POST':
         form = ReportFormCls(request.POST, instance=report)
