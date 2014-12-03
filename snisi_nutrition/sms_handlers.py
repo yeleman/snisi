@@ -165,6 +165,13 @@ def weekly_report(message):
         return reply.error(text_message)
 
 
+def fix_sms_from_v15(stocks_data):
+    nstr = stocks_data
+    while '--1-' in nstr:
+        nstr = nstr.replace('--1-', '-0-', 1)
+    return nstr
+
+
 def monthly_report(message):
 
     """
@@ -189,6 +196,9 @@ def monthly_report(message):
         # we can't process it.
         return reply.error("Le format du SMS est incorrect.")
 
+    # DEBUG FIX
+    arguments['stocks_data'] = fix_sms_from_v15(arguments['stocks_data'])
+
     # convert form-data to int or bool respectively
     try:
         for key, value in arguments.items():
@@ -204,6 +214,8 @@ def monthly_report(message):
                        .format(message.content))
         # failure to convert means non-numeric value which we can't process.
         return reply.error("Les données sont malformées.")
+
+    from pprint import pprint as pp ; pp(arguments)
 
     # check credentials
     try:
