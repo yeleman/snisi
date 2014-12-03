@@ -226,8 +226,6 @@ def monthly_report(message):
         # failure to convert means non-numeric value which we can't process.
         return reply.error("Les données sont malformées.")
 
-    from pprint import pprint as pp ; pp(arguments)
-
     # check credentials
     try:
         provider = Provider.active.get(username=arguments['username'])
