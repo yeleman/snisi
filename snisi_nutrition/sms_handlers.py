@@ -168,6 +168,9 @@ def weekly_report(message):
 def fix_sms_from_v15(stocks_data):
     nstr = stocks_data
 
+    # fix locale on thousands
+    nstr = nstr.replace(',', '')
+
     # head
     if nstr.startswith('-1-'):
         nstr = nstr.replace('-1-', '0-', 1)
