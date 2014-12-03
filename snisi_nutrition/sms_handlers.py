@@ -167,8 +167,19 @@ def weekly_report(message):
 
 def fix_sms_from_v15(stocks_data):
     nstr = stocks_data
+
+    # head
+    if nstr.startswith('-1-'):
+        nstr = nstr.replace('-1-', '0-', 1)
+
+    # body
     while '--1-' in nstr:
         nstr = nstr.replace('--1-', '-0-', 1)
+
+    # tail
+    if nstr.endswith('--1'):
+        nstr = nstr[:-3] + "-0"
+
     return nstr
 
 
