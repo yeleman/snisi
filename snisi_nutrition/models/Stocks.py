@@ -455,7 +455,8 @@ class AbstractNutritionStocksR(SNISIReport):
 class NutritionStocksR(AbstractNutritionStocksR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NUTST-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NUTST-{dow}/{id}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -474,7 +475,8 @@ class AggNutritionStocksR(AbstractNutritionStocksR,
                           PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NUTSTa-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NUTSTa-{dow}/{id}-{rand}"
     INDIVIDUAL_CLS = NutritionStocksR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

@@ -394,11 +394,32 @@ function getMalariaMapManager(options) {
         });
 
         this.indicator_section_select = $('#indicator_section_select');
+        var default_domain = "Tous";
         $.each(this.indicators_list, function (section_name) {
+        	var domain = default_domain;
+        	console.log(section_name);
+        	if (section_name.indexOf("#") != -1) {
+        		var aOs = section_name.split("#");
+        		var domain = aOs[0];
+        		var section_name = aOs[1];
+        	}
+
             var opt = $('<option />');
             opt.attr('value', section_name);
             opt.text(section_name);
-            manager.indicator_section_select.append(opt);
+
+    		var optgroups = manager.indicator_section_select.find("optgroup[label=" + domain +"]");
+    		console.log(optgroups);
+    		if (optgroups.length == 0) {
+    			domain_elem = $('<optgroup />');
+    			domain_elem.attr('label', domain);
+    			manager.indicator_section_select.append(domain_elem);
+    		} else {
+    			console.log("FOUND");
+    			domain_elem = optgroups[0];
+    		}
+    		console.log(domain_elem);
+        	$(domain_elem).append(opt);
         });
         this.indicator_section_select.on('change', function (event) {
             console.log("indicator section select changed");

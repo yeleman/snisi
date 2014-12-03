@@ -394,7 +394,8 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
 class URENAMNutritionR(AbstractURENAMNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NAM-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NAM-{dow}/{id}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -413,7 +414,8 @@ class AggURENAMNutritionR(AbstractURENAMNutritionR,
                           PeriodicAggregatedReportInterface):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NAMa-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NAMa-{dow}/{id}-{rand}"
     INDIVIDUAL_CLS = URENAMNutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

@@ -256,7 +256,7 @@ class AbstractWeeklyNutritionR(SNISIReport):
 class WeeklyNutritionR(AbstractWeeklyNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period}-WNUT/{rand}"
+    RECEIPT_FORMAT = "{period}-WNUT/{id}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -274,7 +274,7 @@ reversion.register(WeeklyNutritionR)
 class AggWeeklyNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period}-WNUTa/{rand}"
+    RECEIPT_FORMAT = "{period}-WNUTa/{id}-{rand}"
     INDIVIDUAL_CLS = WeeklyNutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

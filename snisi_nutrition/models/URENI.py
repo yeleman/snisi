@@ -227,7 +227,8 @@ class AbstractURENINutritionR(AbstractURENutritionR):
 class URENINutritionR(AbstractURENINutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NAS-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NAS-{dow}/{id}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -246,7 +247,8 @@ class AggURENINutritionR(AbstractURENINutritionR,
                          PeriodicAggregatedReportInterface):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period__year_short}{period__month}NASa-{dow}/{rand}"
+    RECEIPT_FORMAT = "{period__year_short}{period__month}" \
+                     "NASa-{dow}/{id}-{rand}"
     INDIVIDUAL_CLS = URENINutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

@@ -17,17 +17,48 @@ from snisi_core.models.Entities import Entity
 from snisi_core.models.Projects import Domain
 from snisi_core.models.Projects import Participation, Cluster
 from snisi_core.models.Periods import MonthPeriod
+from snisi_core.models.Reporting import ExpectedReporting
 from snisi_web.views.tools import withCORS
 from snisi_tools.misc import import_path
 
 
 @login_required
-def webmap(request, reportcls_slug):
+def webmap(request, template_name='map.html'):
     context = {'page_slug': 'map'}
 
-    context.update({'periods': MonthPeriod.objects.all()})
+    # from snisi_malaria.indicators import get_geo_indicators
 
-    return render(request, 'map.html', context)
+    periods = [MonthPeriod.objects.get(identifier=p['period'])
+               for p
+               in ExpectedReporting.objects
+               .filter(period__period_type='month')
+               .order_by('period').values('period').distinct()]
+
+    indicators = {}
+    for domain in Domain.active.all():
+        geo_indic_func = domain.import_from('indicators.get_geo_indicators')
+        if geo_indic_func is not None:
+            # indicators[domain.slug] = geo_indic_func()
+            for k, v in geo_indic_func().items():
+                indicators.update({"{domain}#{section}"
+                                   .format(domain=domain.name, section=k): v})
+
+    years = []
+    months = {}
+    for period in periods:
+        if period.start_on.year not in years:
+            years.append(period.start_on.year)
+        if period.start_on.month not in months.keys():
+            months.update({period.start_on.month:
+                           period.start_on.strftime("%B")})
+
+    context.update({'years': sorted(years),
+                    'months': months,
+                    'indicators': indicators,
+                    'default_year': periods[-1].middle().year,
+                    'default_month': periods[-1].middle().month})
+
+    return render(request, template_name, context)
 
 
 def geojson_data(request, cluster_slug=None, parent_slug='mali'):

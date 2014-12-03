@@ -157,7 +157,7 @@ class AbstractNutritionR(SNISIReport):
 class NutritionR(AbstractNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period}-NUT/{rand}"
+    RECEIPT_FORMAT = "{period}-NUT/{id}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -185,7 +185,7 @@ class AggNutritionR(AbstractNutritionR,
                     PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period}-NUTa/{rand}"
+    RECEIPT_FORMAT = "{period}-NUTa/{id}-{rand}"
     INDIVIDUAL_CLS = NutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 

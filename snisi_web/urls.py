@@ -122,9 +122,10 @@ urlpatterns = patterns(
         'snisi_web.views.raw_data.download_as_excel',
         name='download_report_xls'),
 
-    url(r'map/{reportcls}/?'
-        .format(reportcls=RGXP_REPORTCLS),
-        'snisi_web.views.mapping.webmap', name='map'),
+    url(r'map/?$',
+        'snisi_web.views.mapping.webmap',
+        {'template_name': 'map.html'},
+        name='map'),
 
     # CSN
     url(r'^entities/' + RGXP_ENTITY + '/?$',
