@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 def snisi_sms_handler(message):
 
+    # migration to non-snisi prefixed SMS
+    if message.startswith('snisi '):
+        message.text = message.content[6:]
+        message.save()
+
     logger.debug("Incoming SMS from {}: {}".format(
         message.identity, message.content))
 
