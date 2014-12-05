@@ -37,8 +37,9 @@ def create_nut_weekly_report(provider, expected_reporting, completed_on,
                              integrity_checker, data_source,
                              reportcls=WeeklyNutritionR):
 
-    validation_period = NutWeekDistrictValidationPeriod.find_create_by_date(
-        expected_reporting.period.middle())
+    # validation_period = NutWeekDistrictValidationPeriod.find_create_by_date(
+    #     expected_reporting.period.middle())
+    validation_period = None
 
     return create_period_routine_report(
         provider=provider,
