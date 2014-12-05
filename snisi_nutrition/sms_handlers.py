@@ -43,6 +43,10 @@ KEYWORDS = {
 }
 
 
+def fix_minus_one_sms(text):
+    return "0" if text == "-1" else text
+
+
 def weekly_report(message):
 
     """
@@ -82,6 +86,7 @@ def weekly_report(message):
             elif key in ('username', 'password'):
                 arguments[key] = value.strip()
             else:
+                value = fix_minus_one_sms(value)
                 arguments[key] = int(value)
     except:
         logger.warning("Unable to convert/cast SMS data: {}"
