@@ -9,7 +9,9 @@ from collections import OrderedDict
 
 from django.utils import timezone
 
-from snisi_nutrition.forms import NutritionRForm
+from snisi_web.views.upload import (handle_report_upload as
+    original_handle_report_upload)
+from snisi_nutrition.xls_import import NutritionExcelForm
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_nutrition.integrity import (
     NutritionRIntegrityChecker,
@@ -28,11 +30,10 @@ reportcls_nut = ReportClass.get_or_none(slug='nutrition_monthly_routine')
 logger = logging.getLogger(__name__)
 
 
-def get_form_class_for(rcls):
-    return NutritionRForm
-
-
 def handle_report_upload(excel_form, form, provider):
+
+    if not isinstance(excel_form, NutritionExcelForm):
+        return original_handle_report_upload(excel_form, form, provider)
 
     excel_form.set('submit_time', timezone.now())
     excel_form.set('submitter', provider)
@@ -63,52 +64,6 @@ def handle_report_upload(excel_form, form, provider):
         return None, ("Aucun rapport de routine attendu à "
                       "{entity} pour {period}"
                       .format(entity=entity, period=period))
-
-    # def prepare_checker_with(master_checker, uren_checker, uren):
-
-    #     master_fields = ['entity', 'submit_time', 'submitter']
-
-    #     for field in master_fields:
-    #         uren_checker.set(field, excel_form.get(field))
-
-    #     # feed data holder with sms provided data
-    #     for key, value in master_checker.to_dict().items():
-    #         if not key.startswith(uren):
-    #             continue
-    #         uren_checker.set(key.replace(uren, ''), value)
-
-    #     # check data
-    #     uren_checker.check(has_ureni=entity.has_ureni)
-
-    #     if not uren_checker.is_valid():
-    #         return uren_checker.errors.pop().render(short=True)
-
-    # # check data individually for sub reports
-    # integrity_map = OrderedDict([
-    #     ('urenam', URENAMNutritionRIntegrityChecker),
-    #     ('urenas', URENASNutritionRIntegrityChecker),
-    #     ('ureni', URENINutritionRIntegrityChecker),
-    #     ('stocks', StocksNutritionRIntegrityChecker),
-    # ])
-
-    # sr_checkers = {}
-    # for sr, sr_cls in integrity_map.items():
-    #     if sr == 'stocks' or getattr(entity, 'has_{}'.format(sr), False):
-    #         logger.debug("checking {}".format(sr))
-    #         sri = sr_cls()
-    #         prepare_checker_with(master_checker=excel_form,
-    #                              uren_checker=sri, uren=sr)
-    #         # if error is not None:
-    #         #     return None, error
-    #         if not sri.is_valid():
-    #             for feedback in sri.feedbacks:
-    #                 should_raise = sri.raised == feedback
-    #                 excel_form.add_feedback(feedback, False)
-    #         else:
-    #             sr_checkers[sr] = sri
-
-    # if not excel_form.is_valid():
-    #     return None, None
 
     # check data individually for sub reports
     integrity_map = OrderedDict([

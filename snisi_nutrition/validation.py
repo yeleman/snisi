@@ -9,7 +9,11 @@ from collections import OrderedDict
 
 import reversion
 from django.utils import timezone
+from django.forms.models import modelform_factory
 
+from snisi_web.views.validation import (
+    handle_report_edition as original_handle_report_edition,
+    handle_do_validation)
 from snisi_nutrition.forms import NutritionRForm
 from snisi_core.models.Entities import Entity
 from snisi_nutrition.integrity import (
@@ -18,6 +22,7 @@ from snisi_nutrition.integrity import (
     URENASNutritionRIntegrityChecker,
     URENINutritionRIntegrityChecker,
     StocksNutritionRIntegrityChecker)
+from snisi_nutrition.models.Monthly import NutritionR
 from snisi_nutrition.models.URENAM import AbstractURENAMNutritionR
 from snisi_nutrition.models.URENAS import AbstractURENASNutritionR
 from snisi_nutrition.models.URENI import AbstractURENINutritionR
@@ -27,10 +32,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_form_class_for(rcls):
-    return NutritionRForm
+    if rcls == NutritionR:
+        return NutritionRForm
+    return modelform_factory(model=rcls, fields=rcls.data_fields())
 
 
 def handle_report_edition(report, form, provider):
+
+    if not isinstance(report.casted(), NutritionR):
+        return original_handle_report_edition(report, form, provider)
 
     # now we have well formed and authenticated data.
     # let's check for business-logic errors.
@@ -130,6 +140,10 @@ def handle_report_edition(report, form, provider):
 
 
 def do_validation(report, provider):
+
+    # only for month report
+    if not isinstance(report.casted(), NutritionR):
+        return handle_do_validation(report, provider)
 
     def acknowledge(report, validated_on, provider):
         if report is None:
