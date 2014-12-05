@@ -71,8 +71,8 @@ class Command(BaseCommand):
                 email = entry.get('email') or None
                 maiden_name = entry.get('maiden_name') or None
                 other_names = entry.get('other_names') or None
-                gender = gender_map.get(entry.get('gender').upper(),
-                                        Provider.UNKNOWN)
+                gender = gender_map.get(entry.get('gender').upper()) \
+                    or Provider.UNKNOWN
                 title = entry.get('title') or None
                 position = entry.get('position') or None
                 numbers = []

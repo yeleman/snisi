@@ -138,6 +138,23 @@ def create_provider(first_name, last_name,
                     gender=Provider.UNKNOWN,
                     title=None, position=None,
                     phone_numbers=[]):
+    good_numbers = []
+    for number in phone_numbers:
+        if isinstance(number, (list, tuple)) and len(number) > 1:
+            flotte = bool(number[1])
+            number = number[0]
+        else:
+            flotte = False
+        npn = normalized_phonenumber(number)
+        pnt = PhoneNumberType.from_number(npn, is_flotte=flotte)
+        pn = PhoneNumber.get_or_none(npn)
+        if pn is not None:
+            msg = "Phone number `{}` is already assigned to {}/{}".format(
+                npn, pn.provider, pn.provider.username)
+            logger.error(msg)
+            raise ValueError
+        good_numbers.append((npn, pnt, pnt.priority))
+
     gender = gender if gender in Provider.GENDERS.keys() \
         else Provider.UNKNOWN
     p = Provider.objects.create(
@@ -155,17 +172,10 @@ def create_provider(first_name, last_name,
     passwd = random_password(True)
     p.set_password(passwd)
     p.save()
-    for number in phone_numbers:
-        if isinstance(number, (list, tuple)) and len(number) > 1:
-            flotte = bool(number[1])
-            number = number[0]
-        else:
-            flotte = False
-        npn = normalized_phonenumber(number)
-        pnt = PhoneNumberType.from_number(npn, is_flotte=flotte)
+    for npn, pnt, priority in good_numbers:
         PhoneNumber.objects.create(
             identity=npn,
             category=pnt,
-            priority=pnt.priority,
+            priority=priority,
             provider=p)
     return p, passwd
