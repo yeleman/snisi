@@ -93,19 +93,19 @@ hc_graphs.push({
         {
             type: 'column',
             name: "MAS+",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
         // URENAS
         {
             type: 'column',
             name: "MAS",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
 		// URENAM
         {
             type: 'column',
             name: "MAM",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_cases|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
     ],
     tooltip:  {
@@ -181,19 +181,19 @@ hc_graphs.push({
         {
             type: 'column',
             name: "MAS+",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
         // URENAS
         {
             type: 'column',
             name: "MAS",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
 		// URENAM
         {
             type: 'column',
             name: "MAM",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_deaths|default_if_none:"null"|default:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
     ],
     tooltip:  {
