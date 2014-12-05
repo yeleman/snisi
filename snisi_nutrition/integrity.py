@@ -50,8 +50,8 @@ def create_nut_weekly_report(provider, expected_reporting, completed_on,
         reportcls=reportcls,
         project_brand=PROJECT_BRAND,
         validation_period=validation_period,
-        validating_entity=expected_reporting.entity.get_health_district(),
-        validating_role=validating_role)
+        validating_entity=None,
+        validating_role=None)
 
 
 def create_nut_report(provider, expected_reporting, completed_on,

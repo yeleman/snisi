@@ -389,6 +389,8 @@ def create_period_routine_report(
             validation_period=validation_period,
             validating_entity=validating_entity,
             validating_role=validating_role)
+    else:
+        report.record_validation()
 
     # Add alert to validation Entity?
     for recipient in Provider.active.filter(
