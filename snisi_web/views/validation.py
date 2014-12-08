@@ -101,13 +101,13 @@ def edit_report(request, report_receipt, **kwargs):
         # Report Form Class might be custom based on Report Class
         try:
             ReportFormCls = domain.import_from(
-                'validation.get_form_class_for')(rcls)
+                'validation.get_form_class_for', failsafe=False)(rcls)
         except:
             pass
         # Handling of report form might be custom to domain/report
         try:
             handle_report_func = domain.import_from(
-                'validation.handle_report_edition')
+                'validation.handle_report_edition', failsafe=False)
         except:
             pass
 
