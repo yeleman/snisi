@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 other_names = entry.get('other_names') or None
                 gender = gender_map.get(entry.get('gender').upper()) \
                     or Provider.UNKNOWN
-                title = entry.get('title') or None
+                title = title_map.get(entry.get('title')) or None
                 position = entry.get('position') or None
                 numbers = []
                 flotte = entry.get('flotte') or None
