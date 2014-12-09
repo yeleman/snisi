@@ -557,10 +557,11 @@ class PeriodicAggregatedReportInterface(models.Model):
         blank=True, null=True)
 
     def sources(self):
-        return self.indiv_sources.all() + self.agg_sources.all()
+        return list(self.indiv_sources.all()) + list(self.agg_sources.all())
 
     def direct_sources(self):
-        return self.direct_indiv_sources.all() + self.direct_agg_sources.all()
+        return list(self.direct_indiv_sources.all()) \
+            + list(self.direct_agg_sources.all())
 
     @classmethod
     def update_sources_lists_from(cls, report, instance,
@@ -675,7 +676,7 @@ class PeriodicAggregatedReportInterface(models.Model):
 
     @classmethod
     def start(cls, *args, **kwargs):
-        return cls.start_aggreagted(*args, **kwargs)
+        return cls.start_aggregated(*args, **kwargs)
 
     @classmethod
     def start_aggregated(cls, *args, **kwargs):

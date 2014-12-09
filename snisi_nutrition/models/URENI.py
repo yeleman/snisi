@@ -15,7 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
-                                         PERIODICAL_AGGREGATED)
+                                         PERIODICAL_AGGREGATED,
+                                         SNISIReport)
 from snisi_nutrition.models.Common import AbstractURENutritionR
 
 logger = logging.getLogger(__name__)
@@ -148,6 +149,10 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     def age_groups(cls):
         return ['u6', 'u59o6', 'o59']
 
+    @classmethod
+    def comp_age_groups(cls):
+        return ['u6', 'u59o6']
+
     # 0-6 months
     @property
     def u6_total_start(self):
@@ -228,7 +233,7 @@ class URENINutritionR(AbstractURENINutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period__year_short}{period__month}" \
-                     "NAS-{dow}/{id}-{rand}"
+                     "NI-{dow}/{entity__slug}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -244,11 +249,11 @@ reversion.register(URENINutritionR)
 
 
 class AggURENINutritionR(AbstractURENINutritionR,
-                         PeriodicAggregatedReportInterface):
+                         PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     RECEIPT_FORMAT = "{period__year_short}{period__month}" \
-                     "NASa-{dow}/{id}-{rand}"
+                     "NIa-{dow}/{entity__slug}-{rand}"
     INDIVIDUAL_CLS = URENINutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 
@@ -262,6 +267,37 @@ class AggURENINutritionR(AbstractURENINutritionR,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
+
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (direct)"),
+        blank=True, null=True,
+        related_name='direct_source_agg_%(class)s_reports')
+
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
+
+        return super(cls, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
 
     @classmethod
     def update_instance_with_indiv(cls, report, instance):

@@ -130,8 +130,10 @@ def entity_periods_context(request,
         return period
     perioda = period_from_strid(perioda_str)
     periodb = period_from_strid(periodb_str)
+
     if periodb is None:
-        periodb = period_cls.current()
+        periodb = period_cls.current().previous()
+
     if perioda is None:
         perioda = period_cls.find_create_from(year=periodb.middle().year - 1,
                                               month=periodb.middle().month)
@@ -145,7 +147,7 @@ def entity_periods_context(request,
         periodb = t
         del(t)
 
-    first_period = period_cls.current()
+    first_period = period_cls.current().previous()
     if report_cls is not None:
         try:
             first_period = period_cls.find_create_by_date(
@@ -153,7 +155,8 @@ def entity_periods_context(request,
                                         .period.middle())
         except IndexError:
             pass
-    all_periods = period_cls.all_from(first_period)
+    all_periods = period_cls.all_from(first_period,
+                                      period_cls.current().previous())
     periods = period_cls.all_from(perioda, periodb)
 
     context.update({

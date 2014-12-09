@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
+from collections import OrderedDict
 
 from django.utils import timezone
 from django.shortcuts import render
@@ -18,7 +19,19 @@ from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.models.Projects import Cluster
 from snisi_tools.auth import can_view_entity
 from snisi_web.utils import entity_browser_context, get_base_url_for_periods
+from snisi_web.utils import entity_periods_context
 from snisi_web.decorators import user_role_within
+from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
+from snisi_nutrition.indicators import (TableNouvellesAdmissionsURENIURENAS,
+                                        TableNouvellesAdmissionsURENAM,
+                                        TableCaseloadSAM,
+                                        TableRepartitionURENIURENAS,
+                                        TablePerformanceSAM,
+                                        TablePerformanceMAM,
+                                        GraphRepartitionURENIURENAS,
+                                        GraphNouvellesAdmissionsURENIURENAS,
+                                        GraphPerformanceSAM,
+                                        GraphPerformanceMAM)
 
 logger = logging.getLogger(__name__)
 
@@ -51,107 +64,88 @@ def dashboard(request, **kwargs):
 
 
 @login_required
-def browser(request,
-            entity_slug=None,
-            perioda_str=None,
-            periodb_str=None,
-            section_index='1', sub_section=None, **kwargs):
-
+def indicators_browser(request,
+                       entity_slug=None,
+                       perioda_str=None,
+                       periodb_str=None,
+                       indicators={},
+                       **kwargs):
     context = {}
 
     root = request.user.location
-
     cluster = Cluster.get_or_none('nutrition_routine')
-    report_classes = cluster.domain.import_from(
-        'expected.report_classes_for')(cluster)
+
+    entity = Entity.get_or_none(entity_slug) or root
+
+    # report_cls depends on entity
+    try:
+        report_cls = NutritionR \
+            if entity.type.slug == 'health_center' else AggNutritionR
+    except:
+        report_cls = None
+
+    context.update(entity_periods_context(
+        request=request,
+        root=root,
+        cluster=cluster,
+        view_name='nutrition_weekly',
+        entity_slug=entity_slug,
+        report_cls=report_cls,
+        perioda_str=perioda_str,
+        periodb_str=periodb_str,
+        period_cls=MonthPeriod,
+        must_be_in_cluster=True,
+    ))
+
+    for indic_slug, indic_cls in indicators.items():
+        indicators[indic_slug] = indic_cls(entity=entity,
+                                           periods=context['periods'])
+        context.update({indic_slug: indicators[indic_slug]})
+    context.update({'indicators': indicators})
+
+    return render(request,
+                  kwargs.get('template_name', 'nutrition/indicators.html'),
+                  context)
+
+
+@login_required
+def synthesis_browser(request,
+                      entity_slug=None,
+                      perioda_str=None,
+                      periodb_str=None,
+                      **kwargs):
+
+    if 'template_name' not in kwargs.keys():
+        kwargs.update({'template_name': 'nutrition/synthesis.html'})
 
     entity = Entity.get_or_none(entity_slug)
-    if entity is None:
-        entity = root
+    if entity is not None:
+        if entity.type.slug == 'health_district':
+            indicators = OrderedDict([
+                ('sam_new_cases', TableNouvellesAdmissionsURENIURENAS),
+                ('mam_new_cases', TableNouvellesAdmissionsURENAM),
+                ('sam_caseload', TableCaseloadSAM),
+                ('sam_repartition', TableRepartitionURENIURENAS),
+                ('sam_performance', TablePerformanceSAM),
+                ('mam_performance', TablePerformanceMAM),
+                ('sam_repartition_graph', GraphRepartitionURENIURENAS),
+                # ('sam_new_cases_graph', GraphNouvellesAdmissionsURENIURENAS),
+                ('sam_performance_graph', GraphPerformanceSAM),
+                ('mam_performance_graph', GraphPerformanceMAM),
+            ])
+        elif entity.type.slug == 'health_region':
+            indicators = OrderedDict([
+            ])
+        elif entity.type.slug == 'health_center':
+            indicators = OrderedDict([
+            ])
+        elif entity.type.slug == 'country':
+            indicators = OrderedDict([
+            ])
 
-    if entity is None:
-        raise Http404("Aucune entité pour le code {}".format(entity_slug))
-
-    # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
-
-    def period_from_strid(period_str, reportcls=None):
-        period = None
-        if period_str:
-            try:
-                period = Period.from_url_str(period_str).casted()
-            except:
-                pass
-        if not period and reportcls:
-            period = reportcls.current()
-        return period
-    perioda = period_from_strid(perioda_str, MonthPeriod)
-    periodb = period_from_strid(periodb_str, MonthPeriod)
-
-    if perioda is None or periodb is None:
-        raise Http404("Période incorrecte.")
-
-    if perioda > periodb:
-        t = perioda
-        perioda = periodb
-        periodb = t
-        del(t)
-
-    all_periods = sorted(list(set(
-        [e.period.casted()
-         for e in ExpectedReporting.objects.filter(entity=entity,
-         report_class__in=report_classes)
-         ])), key=lambda x: x.start_on)
-
-    def get_periods(perioda, periodb):
-        periods = []
-        period = perioda
-        while period <= periodb:
-            periods.append(period)
-            period = period.following()
-        return periods
-    periods = get_periods(perioda, periodb)
-
-    context.update({
-        'all_periods': [(p.strid(), p) for p in reversed(all_periods)],
-        'perioda': perioda,
-        'periodb': periodb,
-        'periods': periods,
-        'section_index': section_index,
-        'section': "section{}".format(section_index),
-        'sub_section': sub_section,
-        'base_url': get_base_url_for_periods(
-            view_name='malaria_view', entity=entity,
-            perioda_str=perioda_str or perioda.strid(),
-            periodb_str=periodb_str or periodb.strid())
-    })
-
-    context.update(entity_browser_context(
-        root=root,
-        selected_entity=entity,
-        full_lineage=['country', 'health_region',
-                      'health_district', 'health_center'],
-        cluster=cluster))
-
-    # retrieve Indicator Table
-    from snisi_nutrition.indicators import (PerformanceIndicators,
-                                            FigurePerformanceIndicators,
-                                            TableauPromptitudeRapportage,
-                                            FigurePromptitudeRapportage)
-
-    performance_table = PerformanceIndicators(entity=entity, periods=periods)
-    performance_graph = FigurePerformanceIndicators(
-        entity=entity, periods=periods)
-    ontime_table = TableauPromptitudeRapportage(entity=entity, periods=periods)
-    ontime_graph = FigurePromptitudeRapportage(entity=entity, periods=periods)
-
-    context.update({
-        'performance_table': performance_table,
-        'performance_graph': performance_graph,
-        'ontime_table': ontime_table,
-        'ontime_graph': ontime_graph,
-    })
-
-    return render(request, kwargs.get('template_name',
-                  'nutrition/indicators.html'), context)
+    return indicators_browser(request=request,
+                              entity_slug=entity_slug,
+                              perioda_str=perioda_str,
+                              periodb_str=periodb_str,
+                              indicators=indicators,
+                              **kwargs)

@@ -891,7 +891,7 @@ class AggEpidemioMalariaR(EpidemioMalariaRIFace,
             agg_sources=agg_sources)
 
     @classmethod
-    def start_aggreagted(cls, *args, **kwargs):
+    def start_aggregated(cls, *args, **kwargs):
         rfdict = {}
         for field in ('completion_ok', 'integrity_ok',
                       'arrival_ok', 'auto_validate'):

@@ -37,6 +37,27 @@ class AbstractNutritionR(SNISIReport):
                            self.ureni_report)
             ])
 
+    def sam_total_for(self, field):
+        return sum([
+            getattr(report, 'total_for', lambda x: 0)(field)
+            for report in (self.urenas_report,
+                           self.ureni_report)
+            ])
+
+    def mam_total_for(self, field):
+        return getattr(self.urenam_report, 'total_for', lambda x: 0)(field)
+
+    def sam_comp_total_for(self, field):
+        return sum([
+            getattr(report, 'comp_total_for', lambda x: 0)(field)
+            for report in (self.urenas_report,
+                           self.ureni_report)
+            ])
+
+    def mam_comp_total_for(self, field):
+        return getattr(self.urenam_report,
+                       'comp_total_for', lambda x: 0)(field)
+
     @property
     def total_start(self):
         return self.total_for('total_start')
@@ -121,6 +142,349 @@ class AbstractNutritionR(SNISIReport):
     def total_end_f(self):
         return self.total_for('total_end_f')
 
+    # MAM only
+    @property
+    def mam_total_start(self):
+        return self.mam_total_for('total_start')
+
+    @property
+    def mam_total_start_m(self):
+        return self.mam_total_for('total_start_m')
+
+    @property
+    def mam_total_start_f(self):
+        return self.mam_total_for('total_start_f')
+
+    @property
+    def mam_new_cases(self):
+        return self.mam_total_for('new_cases')
+
+    @property
+    def mam_returned(self):
+        return self.mam_total_for('returned')
+
+    @property
+    def mam_total_in_m(self):
+        return self.mam_total_for('total_in_m')
+
+    @property
+    def mam_total_in_f(self):
+        return self.mam_total_for('total_in_f')
+
+    @property
+    def mam_transferred(self):
+        return self.mam_total_for('transferred')
+
+    @property
+    def mam_grand_total_in(self):
+        return self.mam_total_for('grand_total_in')
+
+    @property
+    def mam_healed(self):
+        return self.mam_total_for('healed')
+
+    @property
+    def mam_deceased(self):
+        return self.mam_total_for('deceased')
+
+    @property
+    def mam_abandon(self):
+        return self.mam_total_for('abandon')
+
+    @property
+    def mam_not_responding(self):
+        return self.mam_total_for('not_responding')
+
+    @property
+    def mam_total_out(self):
+        return self.mam_total_for('total_out')
+
+    @property
+    def mam_total_out_m(self):
+        return self.mam_total_for('total_out_m')
+
+    @property
+    def mam_total_out_f(self):
+        return self.mam_total_for('total_out_f')
+
+    @property
+    def mam_referred(self):
+        return self.mam_total_for('referred')
+
+    @property
+    def mam_grand_total_out(self):
+        return self.mam_total_for('grand_total_out')
+
+    @property
+    def mam_total_end(self):
+        return self.mam_total_for('total_end')
+
+    @property
+    def mam_total_end_m(self):
+        return self.mam_total_for('total_end_m')
+
+    @property
+    def mam_total_end_f(self):
+        return self.mam_total_for('total_end_f')
+
+    # SAM only (SAM/SAM+)
+    @property
+    def sam_total_start(self):
+        return self.sam_total_for('total_start')
+
+    @property
+    def sam_total_start_m(self):
+        return self.sam_total_for('total_start_m')
+
+    @property
+    def sam_total_start_f(self):
+        return self.sam_total_for('total_start_f')
+
+    @property
+    def sam_new_cases(self):
+        return self.sam_total_for('new_cases')
+
+    @property
+    def sam_returned(self):
+        return self.sam_total_for('returned')
+
+    @property
+    def sam_total_in_m(self):
+        return self.sam_total_for('total_in_m')
+
+    @property
+    def sam_total_in_f(self):
+        return self.sam_total_for('total_in_f')
+
+    @property
+    def sam_transferred(self):
+        return self.sam_total_for('transferred')
+
+    @property
+    def sam_grand_total_in(self):
+        return self.sam_total_for('grand_total_in')
+
+    @property
+    def sam_healed(self):
+        return self.sam_total_for('healed')
+
+    @property
+    def sam_deceased(self):
+        return self.sam_total_for('deceased')
+
+    @property
+    def sam_abandon(self):
+        return self.sam_total_for('abandon')
+
+    @property
+    def sam_not_responding(self):
+        return self.sam_total_for('not_responding')
+
+    @property
+    def sam_total_out(self):
+        return self.sam_total_for('total_out')
+
+    @property
+    def sam_total_out_m(self):
+        return self.sam_total_for('total_out_m')
+
+    @property
+    def sam_total_out_f(self):
+        return self.sam_total_for('total_out_f')
+
+    @property
+    def sam_referred(self):
+        return self.sam_total_for('referred')
+
+    @property
+    def sam_grand_total_out(self):
+        return self.sam_total_for('grand_total_out')
+
+    @property
+    def sam_total_end(self):
+        return self.sam_total_for('total_end')
+
+    @property
+    def sam_total_end_m(self):
+        return self.sam_total_for('total_end_m')
+
+    @property
+    def sam_total_end_f(self):
+        return self.sam_total_for('total_end_f')
+
+    # COMPARATIVE VALUES
+    # MAM only
+    @property
+    def mam_comp_total_start(self):
+        return self.mam_comp_total_for('total_start')
+
+    @property
+    def mam_comp_total_start_m(self):
+        return self.mam_comp_total_for('total_start_m')
+
+    @property
+    def mam_comp_total_start_f(self):
+        return self.mam_comp_total_for('total_start_f')
+
+    @property
+    def mam_comp_new_cases(self):
+        return self.mam_comp_total_for('new_cases')
+
+    @property
+    def mam_comp_returned(self):
+        return self.mam_comp_total_for('returned')
+
+    @property
+    def mam_comp_total_in_m(self):
+        return self.mam_comp_total_for('total_in_m')
+
+    @property
+    def mam_comp_total_in_f(self):
+        return self.mam_comp_total_for('total_in_f')
+
+    @property
+    def mam_comp_transferred(self):
+        return self.mam_comp_total_for('transferred')
+
+    @property
+    def mam_comp_grand_total_in(self):
+        return self.mam_comp_total_for('grand_total_in')
+
+    @property
+    def mam_comp_healed(self):
+        return self.mam_comp_total_for('healed')
+
+    @property
+    def mam_comp_deceased(self):
+        return self.mam_comp_total_for('deceased')
+
+    @property
+    def mam_comp_abandon(self):
+        return self.mam_comp_total_for('abandon')
+
+    @property
+    def mam_comp_not_responding(self):
+        return self.mam_comp_total_for('not_responding')
+
+    @property
+    def mam_comp_total_out(self):
+        return self.mam_comp_total_for('total_out')
+
+    @property
+    def mam_comp_total_out_m(self):
+        return self.mam_comp_total_for('total_out_m')
+
+    @property
+    def mam_comp_total_out_f(self):
+        return self.mam_comp_total_for('total_out_f')
+
+    @property
+    def mam_comp_referred(self):
+        return self.mam_comp_total_for('referred')
+
+    @property
+    def mam_comp_grand_total_out(self):
+        return self.mam_comp_total_for('grand_total_out')
+
+    @property
+    def mam_comp_total_end(self):
+        return self.mam_comp_total_for('total_end')
+
+    @property
+    def mam_comp_total_end_m(self):
+        return self.mam_comp_total_for('total_end_m')
+
+    @property
+    def mam_comp_total_end_f(self):
+        return self.mam_comp_total_for('total_end_f')
+
+    # SAM only (SAM/SAM+)
+    @property
+    def sam_comp_total_start(self):
+        return self.sam_comp_total_for('total_start')
+
+    @property
+    def sam_comp_total_start_m(self):
+        return self.sam_comp_total_for('total_start_m')
+
+    @property
+    def sam_comp_total_start_f(self):
+        return self.sam_comp_total_for('total_start_f')
+
+    @property
+    def sam_comp_new_cases(self):
+        return self.sam_comp_total_for('new_cases')
+
+    @property
+    def sam_comp_returned(self):
+        return self.sam_comp_total_for('returned')
+
+    @property
+    def sam_comp_total_in_m(self):
+        return self.sam_comp_total_for('total_in_m')
+
+    @property
+    def sam_comp_total_in_f(self):
+        return self.sam_comp_total_for('total_in_f')
+
+    @property
+    def sam_comp_transferred(self):
+        return self.sam_comp_total_for('transferred')
+
+    @property
+    def sam_comp_grand_total_in(self):
+        return self.sam_comp_total_for('grand_total_in')
+
+    @property
+    def sam_comp_healed(self):
+        return self.sam_comp_total_for('healed')
+
+    @property
+    def sam_comp_deceased(self):
+        return self.sam_comp_total_for('deceased')
+
+    @property
+    def sam_comp_abandon(self):
+        return self.sam_comp_total_for('abandon')
+
+    @property
+    def sam_comp_not_responding(self):
+        return self.sam_comp_total_for('not_responding')
+
+    @property
+    def sam_comp_total_out(self):
+        return self.sam_comp_total_for('total_out')
+
+    @property
+    def sam_comp_total_out_m(self):
+        return self.sam_comp_total_for('total_out_m')
+
+    @property
+    def sam_comp_total_out_f(self):
+        return self.sam_comp_total_for('total_out_f')
+
+    @property
+    def sam_comp_referred(self):
+        return self.sam_comp_total_for('referred')
+
+    @property
+    def sam_comp_grand_total_out(self):
+        return self.sam_comp_total_for('grand_total_out')
+
+    @property
+    def sam_comp_total_end(self):
+        return self.sam_comp_total_for('total_end')
+
+    @property
+    def sam_comp_total_end_m(self):
+        return self.sam_comp_total_for('total_end_m')
+
+    @property
+    def sam_comp_total_end_f(self):
+        return self.sam_comp_total_for('total_end_f')
+
+    ####
+
     @property
     def total_out_resp(self):
         return self.total_out - self.not_responding
@@ -146,6 +510,57 @@ class AbstractNutritionR(SNISIReport):
         except ZeroDivisionError:
             return 0
 
+    # COMP
+    @property
+    def mam_comp_total_out_resp(self):
+        return self.mam_comp_total_out - self.mam_comp_not_responding
+
+    @property
+    def mam_comp_healed_rate(self):
+        try:
+            return self.mam_comp_healed / self.mam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def mam_comp_deceased_rate(self):
+        try:
+            return self.mam_comp_deceased / self.mam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def mam_comp_abandon_rate(self):
+        try:
+            return self.mam_comp_abandon / self.mam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def sam_comp_total_out_resp(self):
+        return self.sam_comp_total_out - self.sam_comp_not_responding
+
+    @property
+    def sam_comp_healed_rate(self):
+        try:
+            return self.sam_comp_healed / self.sam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def sam_comp_deceased_rate(self):
+        try:
+            return self.sam_comp_deceased / self.sam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
+    @property
+    def sam_comp_abandon_rate(self):
+        try:
+            return self.sam_comp_abandon / self.sam_comp_total_out_resp
+        except ZeroDivisionError:
+            return 0
+
     def as_xls(self):
         file_name = "NUT_{entity}.{month}.{year}.xls" \
                     .format(entity=self.entity.slug,
@@ -157,7 +572,7 @@ class AbstractNutritionR(SNISIReport):
 class NutritionR(AbstractNutritionR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
-    RECEIPT_FORMAT = "{period}-NUT/{id}-{rand}"
+    RECEIPT_FORMAT = "{period}-NUT/{entity__slug}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -185,7 +600,7 @@ class AggNutritionR(AbstractNutritionR,
                     PeriodicAggregatedReportInterface, SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
-    RECEIPT_FORMAT = "{period}-NUTa/{id}-{rand}"
+    RECEIPT_FORMAT = "{period}-NUTa/{entity__slug}-{rand}"
     INDIVIDUAL_CLS = NutritionR
     UNIQUE_TOGETHER = [('period', 'entity')]
 
@@ -213,6 +628,12 @@ class AggNutritionR(AbstractNutritionR,
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
 
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (direct)"),
+        blank=True, null=True,
+        related_name='direct_source_agg_%(class)s_reports')
+
     def fill_blank(self):
         # no fields to set data on
         return
@@ -232,6 +653,20 @@ class AggNutritionR(AbstractNutritionR,
                     indiv_sources=None, agg_sources=None):
         # AggNutritionR is specific in that it only holds UREN/STOCKS reports
         # for an entity/period and does not carry data.
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
 
         from snisi_nutrition.models.URENAM import AggURENAMNutritionR
         from snisi_nutrition.models.URENAS import AggURENASNutritionR
@@ -260,7 +695,7 @@ class AggNutritionR(AbstractNutritionR,
 
         # copy status fields from stocks
         for field in tocopy_fields:
-            setattr(report, getattr(stocks_report, field))
+            setattr(report, field, getattr(stocks_report, field))
 
         if entity.has_urenam:
             report.urenam_report = gr(AggURENAMNutritionR)
@@ -277,7 +712,7 @@ class AggNutritionR(AbstractNutritionR,
         return report
 
     @classmethod
-    def start_aggreagted(cls, *args, **kwargs):
+    def start_aggregated(cls, *args, **kwargs):
         rfdict = {}
         for field in ('completion_ok', 'integrity_ok',
                       'arrival_ok', 'auto_validate'):

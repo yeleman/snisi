@@ -553,7 +553,7 @@ class AggPFActivitiesR(PFActivitiesRIface,
         return report
 
     @classmethod
-    def start_aggreagted(cls, *args, **kwargs):
+    def start_aggregated(cls, *args, **kwargs):
         rfdict = {}
         for field in ('completion_ok', 'integrity_ok',
                       'arrival_ok', 'auto_validate'):

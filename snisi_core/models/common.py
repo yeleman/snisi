@@ -23,8 +23,8 @@ def get_temp_receipt(instance):
 def pre_save_report(sender, instance, **kwargs):
     ''' create a temporary Receipt for Report '''
     # this will allow us to detect failure in registration
-    logger.debug("pre_save_report [{}: {}]"
-                 .format(instance.receipt, instance.completion_status))
+    # logger.debug("pre_save_report [{}: {}]"
+    #              .format(instance.receipt, instance.completion_status))
     if not instance.receipt and instance.completion_status \
             == instance.COMPLETE:
         instance.receipt = get_temp_receipt(instance)
@@ -33,15 +33,15 @@ def pre_save_report(sender, instance, **kwargs):
 def pre_save_report_incomplete(sender, instance, **kwargs):
     ''' create a temporary Receipt for Report '''
     # this will allow us to detect failure in registration
-    logger.debug("pre_save_report_incomplete [{}: {}]"
-                 .format(instance.receipt, instance.completion_status))
+    # logger.debug("pre_save_report_incomplete [{}: {}]"
+    #              .format(instance.receipt, instance.completion_status))
     if not instance.receipt:
         instance.receipt = get_temp_receipt(instance)
 
 
 def post_save_report(sender, instance, **kwargs):
     ''' Generates appropriate receipt for Report '''
-    logger.debug("post_save_report [{}]".format(instance.receipt))
+    # logger.debug("post_save_report [{}]".format(instance.receipt))
     if instance.receipt.startswith('uuid:'):
         instance.receipt = sender.generate_receipt(instance)
         instance.save()

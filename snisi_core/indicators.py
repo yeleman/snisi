@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import copy
 import numpy
+import uuid
 from functools import wraps
 
 from py3compat import text_type, implements_to_string
@@ -24,9 +25,9 @@ def humanize_value(data, is_expected=True, is_missing=False,
         return "-"
     t = type(data)
     v = data
-    if t is int:
+    if t is int or t is long:
         v = data
-    if t is float or t is long:
+    if t is float:
         v = "{0:.2f}".format(data)
         if v.endswith('.00'):
             v = int(float(v))
@@ -56,6 +57,10 @@ class Indicator(object):
 
     name = None
 
+    # Fixed Data Reports
+    fixed_period = None
+    fixed_entity = None
+
     # data represent a ratio (percentage)
     is_ratio = False
 
@@ -73,8 +78,8 @@ class Indicator(object):
         self._is_not_expected = False
         self._is_missing = False
 
-        self._period = period
-        self._entity = entity
+        self._period = self.fixed_period or period
+        self._entity = self.fixed_entity or entity
         if expected is None:
             self._expected = self.get_expected_reporting()
         else:
@@ -166,9 +171,11 @@ class Indicator(object):
         except DataNotExpected:
             self._data = None
             self._is_not_expected = True
-        except DataIsMissing:
+        except (DataIsMissing, AttributeError):
             self._data = None
             self._is_missing = True
+        except ZeroDivisionError:
+            self._data = 0
         except Exception as e:
             import traceback
             print(e)
@@ -213,12 +220,19 @@ class Indicator(object):
 class ReportDataMixin(object):
     """ shortcut for indicators which straighly reflects a field in model """
     report_field = None
+    report_sub_field = None
 
     def _compute(self):
+        if self.report_sub_field:
+            return getattr(getattr(self.report, self.report_field),
+                           self.report_sub_field)
         return getattr(self.report, self.report_field)
 
 
 class FakeIndicator(dict):
+
+    is_missing = False
+    is_expected = True
 
     @property
     def data(self):
@@ -233,6 +247,7 @@ class IndicatorTable:
 
     INDICATORS = []
     add_percentage = False  # add % columns for each period
+    is_percentage = False  # values are ratios and should be formatted as %
     add_total = False  # add a total column
     as_percentage = False  # only renders percentages
     multiple_axis = False
@@ -240,6 +255,7 @@ class IndicatorTable:
 
     graph_type = 'column'
     rendering_type = 'table'
+    graph_stacking = False
 
     def __init__(self, entity, periods, **kwargs):
         self.entity = entity
@@ -252,14 +268,35 @@ class IndicatorTable:
         self._data = {}
         self._computed = False
 
+        if not len(self.INDICATORS):
+            self.INDICATORS = self.build_indicators()
+
     def get_descendants(self):
         return [self.entity]
+
+    @property
+    def entities(self):
+        if self.on_descendants:
+            return self.descendants
+        else:
+            return [self.entity]
+
+    def build_indicators(self):
+        return []
+
+    @property
+    def descendants(self):
+        return self._entities
+
+    @property
+    def show_as_percentage(self):
+        return self.as_percentage or self.is_percentage
 
     def compute(self):
         line_index = 0
         for indicator_idx, indicator_cls in enumerate(self.INDICATORS):
 
-            for entity in self._entities:
+            for entity in self.entities:
                 line_sum = 0
                 for period_idx, period in enumerate(self.periods):
                     indicator = indicator_cls(entity=entity,
@@ -288,7 +325,7 @@ class IndicatorTable:
 
     def nb_lines(self):
         if self.on_descendants:
-            return len(self.INDICATORS) * len(self._entities)
+            return len(self.INDICATORS) * len(self.entities)
         return len(self.INDICATORS)
 
     def nb_cols(self):
@@ -334,7 +371,7 @@ class IndicatorTable:
         if is_reference:
             return line_index
 
-        ref_index = line_index - len(self._entities)
+        ref_index = line_index - len(self.entities)
         if ref_index < 0:
             ref_index = 0
         return ref_index
@@ -374,7 +411,7 @@ class IndicatorTable:
     def fixed_line_index(self, line_index):
         if self.on_descendants:
             try:
-                line_index = int(numpy.floor(line_index / len(self._entities)))
+                line_index = int(numpy.floor(line_index / len(self.entities)))
             except:
                 line_index = 0
         if line_index < 0:
@@ -393,6 +430,10 @@ class IndicatorTable:
 
     def total_col_index(self):
         return self.nb_cols() - 1
+
+    def em_lines(self):
+        return [index for index, indic in enumerate(self.INDICATORS)
+                if getattr(indic, '_is_em', False)]
 
     def render_line(self,
                     line_index,
@@ -471,34 +512,52 @@ def ref_is(index=0):
 
         index is the index of the line in the table  """
     def outer_wrapper(func, *args, **kwargs):
-        func._is_reference = False
-        func._reference_index = index
+        nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                     func.__bases__, dict(func.__dict__))
+        nfunc._is_reference = False
+        nfunc._reference_index = index
 
-        @wraps(func)
+        @wraps(nfunc)
         def wrapper(self, *args, **kwargs):
-            return func(*args, **kwargs)
-        return func
+            return nfunc(*args, **kwargs)
+        return nfunc
     return outer_wrapper
 
 
 def is_ref(func):
     """ decorator marking indicator a reference (percent will always be 1) """
-    func._is_reference = True
+    nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                 func.__bases__, dict(func.__dict__))
+    nfunc._is_reference = True
 
-    @wraps(func)
+    @wraps(nfunc)
     def wrapper(self, *args, **kwargs):
-        return func(*args, **kwargs)
-    return func
+        return nfunc(*args, **kwargs)
+    return nfunc
 
 
 def hide(func):
     """ decorator marking indicator a reference (percent will always be 1) """
-    func._is_hidden = True
+    nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                 func.__bases__, dict(func.__dict__))
+    nfunc._is_hidden = True
 
-    @wraps(func)
+    @wraps(nfunc)
     def wrapper(self, *args, **kwargs):
-        return func(*args, **kwargs)
-    return func
+        return nfunc(*args, **kwargs)
+    return nfunc
+
+
+def em(func):
+    """ decorator marking indicator a to be emphased (bold?) """
+    nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                 func.__bases__, dict(func.__dict__))
+    nfunc._is_em = True
+
+    @wraps(nfunc)
+    def wrapper(self, *args, **kwargs):
+        return nfunc(*args, **kwargs)
+    return nfunc
 
 
 def gen_report_indicator(field,

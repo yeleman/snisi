@@ -28,16 +28,28 @@ urlpatterns = patterns(
         'snisi_nutrition.views.weekly.display_weekly',
         name='nutrition_weekly'),
 
-    # indicator browser
-    url(r'^/view/{entity}/{periods}/?$'
+    # synthesis
+    url(r'^/synthesis/{entity}/{periods}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
-        'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
-    url(r'^/view/{entity}/?$'
+        'snisi_nutrition.views.indicators.synthesis_browser',
+        name='nutrition_synthesis'),
+    url(r'^/synthesis/{entity}/?$'
         .format(entity=RGXP_ENTITY),
-        'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
-    url(r'^/view/?$', 'snisi_nutrition.views.indicators.browser'
-        .format(),
-        name='nutrition_view'),
+        'snisi_nutrition.views.indicators.synthesis_browser',
+        name='nutrition_synthesis'),
+    url(r'^/synthesis/?$',
+        'snisi_nutrition.views.indicators.synthesis_browser',
+        name='nutrition_synthesis'),
+
+    # indicator browser
+    # url(r'^/view/{entity}/{periods}/?$'
+    #     .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+    #     'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
+    # url(r'^/view/{entity}/?$'
+    #     .format(entity=RGXP_ENTITY),
+    #     'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
+    # url(r'^/view/?$', 'snisi_nutrition.views.indicators.browser',
+    #     name='nutrition_view'),
 
     # raw-data browser
     url(r'/{entity}/{period}/?'

@@ -20,6 +20,7 @@ hc_graphs.push({
     title: {text: null},
     xAxis: {
         type: 'datetime',
+        maxZoom: 84600 * 1000,
         dateTimeLabelFormats: {
             millisecond: '%H:%M:%S.%L',
             second: '%H:%M:%S',
@@ -34,20 +35,20 @@ hc_graphs.push({
     yAxis: {
         title: {text: null},
         min:0,
-        {% if table.as_percentage %}
+        {% if table.show_as_percentage %}
         max:100,
         {% endif %}
     },
     series: [
         {% for line in table.render_for_graph %}
         {
-            name: '{{ line.label }}',
+            name: "{{ line.label|safe }}",
             data: {% localize off %}[{% for p, data in line.data %}[{{ p.start_on|to_jstimestamp }}, {{ data|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
         {% endfor %}
     ],
     tooltip: {
-        {% if table.as_percentage %}
+        {% if table.show_as_percentage %}
         formatter: function () { return this.series.name + ' : ' + (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%'; }
         {% endif %}
         // formatter: function() { return ''+ this.series.name +': '+ this.y +PERCENT;}
@@ -63,14 +64,17 @@ hc_graphs.push({
         column: {
             animation: false,
             enableMouseTracking: false,
+            {% if table.graph_stacking %}
+            stacking: 'percent',
+            {% endif %}
             dataLabels: {
                 color: 'black',
                 enabled: true,
-                {% if table.as_percentage %}
+                {% if table.show_as_percentage %}
                 formatter: function () { return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%'; }
                 {% endif %}
-            }
-        }
+            },
+        },
     },
     exporting: {
         enabled: true,

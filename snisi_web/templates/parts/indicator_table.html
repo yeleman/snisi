@@ -12,7 +12,7 @@
 {% endif %}
 
 {% for row in table.render_with_labels_human %}
-<tr>{% for col in row %}{% if forloop.counter0 == 0 %}<th>{{ col }}</th>{% else %}<td>{{ col|default_if_none:"-" }}</td>{% endif %}{% endfor %}</tr>
+<tr class="{% if forloop.counter0 in table.em_lines %}indicator-em{% endif %}">{% for col in row %}{% if forloop.counter0 == 0 %}<th>{{ col }}</th>{% else %}<td>{{ col|default_if_none:"-" }}</td>{% endif %}{% endfor %}</tr>
 {% endfor %}
 
 </table>

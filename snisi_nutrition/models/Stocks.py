@@ -65,6 +65,10 @@ class AbstractNutritionStocksR(SNISIReport):
         'iron_folic_acid': _("Caps"),
     }
 
+    def fill_blank(self):
+        for field in self.data_fields():
+            setattr(self, field, 0)
+
     @classmethod
     def input_str(cls, input_slug):
         return cls.INPUTS_LABELS.get(input_slug)
@@ -456,7 +460,7 @@ class NutritionStocksR(AbstractNutritionStocksR):
 
     REPORTING_TYPE = PERIODICAL_SOURCE
     RECEIPT_FORMAT = "{period__year_short}{period__month}" \
-                     "NUTST-{dow}/{id}-{rand}"
+                     "NUTST-{dow}/{entity__slug}-{rand}"
     UNIQUE_TOGETHER = [('period', 'entity')]
 
     class Meta:
@@ -476,7 +480,7 @@ class AggNutritionStocksR(AbstractNutritionStocksR,
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     RECEIPT_FORMAT = "{period__year_short}{period__month}" \
-                     "NUTSTa-{dow}/{id}-{rand}"
+                     "NUTSTa-{dow}/{entity__slug}-{rand}"
     INDIVIDUAL_CLS = NutritionStocksR
     UNIQUE_TOGETHER = [('period', 'entity')]
 
@@ -490,6 +494,37 @@ class AggNutritionStocksR(AbstractNutritionStocksR,
         verbose_name=_(u"Primary. Sources"),
         blank=True, null=True,
         related_name='source_agg_%(class)s_reports')
+
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (direct)"),
+        blank=True, null=True,
+        related_name='direct_source_agg_%(class)s_reports')
+
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
+
+        return super(cls, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
 
     @classmethod
     def update_instance_with_indiv(cls, report, instance):

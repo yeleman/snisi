@@ -318,6 +318,7 @@ def generate_district_reports(period,
                 "nut_urenam_monthly_routine_aggregated"),
             period=period,
             region_validation_period=region_validation_period)
+        logger.info("\t\tsub-report: {}".format(urenam_agg))
 
         # URENAS
         urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
@@ -327,24 +328,27 @@ def generate_district_reports(period,
                 "nut_urenas_monthly_routine_aggregated"),
             period=period,
             region_validation_period=region_validation_period)
+        logger.info("\t\tsub-report: {}".format(urenas_agg))
 
         # URENI
-        urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
+        ureni_exp, ureni_agg, ureni_expv = handle_district_validation(
             district=district,
             report_class=ReportClass.get_or_none("nut_ureni_monthly_routine"),
             report_class_agg=ReportClass.get_or_none(
                 "nut_ureni_monthly_routine_aggregated"),
             period=period,
             region_validation_period=region_validation_period)
+        logger.info("\t\tsub-report: {}".format(ureni_agg))
 
         # STOCKS
-        urenas_exp, urenas_agg, urenas_expv = handle_district_validation(
+        stocks_exp, stocks_agg, stocks_expv = handle_district_validation(
             district=district,
             report_class=ReportClass.get_or_none("nut_stocks_monthly_routine"),
             report_class_agg=ReportClass.get_or_none(
                 "nut_stocks_monthly_routine_aggregated"),
             period=period,
             region_validation_period=region_validation_period)
+        logger.info("\t\tsub-report: {}".format(stocks_agg))
 
         # AggNutritionR
         nut_exp, nut_agg, nut_expv = handle_district_validation(
@@ -354,6 +358,13 @@ def generate_district_reports(period,
                 "nutrition_monthly_routine_aggregated"),
             period=period,
             region_validation_period=region_validation_period)
+
+        nut_agg.urenam_report = urenam_agg
+        nut_agg.urenas_report = urenas_agg
+        nut_agg.ureni_report = ureni_agg
+        nut_agg.stocks_report = stocks_agg
+        nut_agg.save()
+        logger.info("\t\tmaster-report: {}".format(nut_agg))
 
         # send notification to Region
         for recipient in Provider.active.filter(
@@ -409,14 +420,14 @@ def generate_region_country_reports(period,
             period=period)
 
         # URENI
-        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+        ureni_exp, ureni_agg, ureni_expv = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_ureni_monthly_routine_aggregated"),
             period=period)
 
         # STOCKS
-        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+        stocks_exp, stocks_agg, stocks_expv = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_stocks_monthly_routine_aggregated"),
@@ -428,6 +439,11 @@ def generate_region_country_reports(period,
             report_class_agg=ReportClass.get_or_none(
                 "nutrition_monthly_routine_aggregated"),
             period=period)
+        nut_agg.urenam_report = urenam_agg
+        nut_agg.urenas_report = urenas_agg
+        nut_agg.ureni_report = ureni_agg
+        nut_agg.stocks_report = stocks_agg
+        nut_agg.save()
 
     # COUNTRY LEVEL
     country = mali
@@ -447,14 +463,14 @@ def generate_region_country_reports(period,
         period=period)
 
     # URENI
-    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+    ureni_exp, ureni_agg, ureni_expv = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_ureni_monthly_routine_aggregated"),
         period=period)
 
     # STOCKS
-    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+    stocks_exp, stocks_agg, stocks_expv = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_stocks_monthly_routine_aggregated"),
@@ -466,6 +482,11 @@ def generate_region_country_reports(period,
         report_class_agg=ReportClass.get_or_none(
             "nutrition_monthly_routine_aggregated"),
         period=period)
+    nut_agg.urenam_report = urenam_agg
+    nut_agg.urenas_report = urenas_agg
+    nut_agg.ureni_report = ureni_agg
+    nut_agg.stocks_report = stocks_agg
+    nut_agg.save()
 
     # send notification to National level
     for recipient in Provider.active.filter(location__level=0):

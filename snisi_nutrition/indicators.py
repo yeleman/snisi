@@ -4,10 +4,18 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import copy
 
 from snisi_core.indicators import (IndicatorTable, Indicator,
-                                   gen_report_indicator, is_ref, ref_is, hide)
+                                   ReportDataMixin,
+                                   gen_report_indicator,
+                                   is_ref, ref_is, hide, em)
+from snisi_core.models.Entities import Entity
+from snisi_core.models.Projects import Cluster
+from snisi_tools.caching import json_cache_from_cluster
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
+
+cluster = Cluster.get_or_none("nutrition_routine")
 
 
 class NutritionIndicator(Indicator):
@@ -43,98 +51,52 @@ gen_shortcut_agg = lambda field, label=None: gen_report_indicator(
     base_indicator_cls=NutritionIndicator)
 
 
-class HealedRate(NutritionIndicator):
+class SAMHealedRate(NutritionIndicator):
     name = "Taux de guérison"
     is_ratio = True
 
     def _compute(self):
-        return self.report.healed_rate
+        return self.report.sam_comp_healed_rate
 
 
-class DeceasedRate(NutritionIndicator):
+class SAMDeceasedRate(NutritionIndicator):
     name = "Taux de décès"
     is_ratio = True
 
     def _compute(self):
-        return self.report.deceased_rate
+        return self.report.sam_comp_deceased_rate
 
 
-class AbandonRate(NutritionIndicator):
+class SAMAbandonRate(NutritionIndicator):
     name = "Taux d'abandon"
     is_ratio = True
 
     def _compute(self):
-        return self.report.abandon_rate
+        return self.report.sam_comp_abandon_rate
 
 
-class URENIInRate(NutritionIndicator):
-    name = "Taux d'admission URENI"
+class MAMHealedRate(NutritionIndicator):
+    name = "Taux de guérison"
     is_ratio = True
 
     def _compute(self):
-        if not self.report.ureni_report:
-            return 0
-        return (self.report.ureni_report.grand_total_in
-                / self.report.grand_total_in)
+        return self.report.mam_comp_healed_rate
 
 
-class URENASInRate(NutritionIndicator):
-    name = "Taux d'admission URENAS"
+class MAMDeceasedRate(NutritionIndicator):
+    name = "Taux de décès"
     is_ratio = True
 
     def _compute(self):
-        if not self.report.urenas_report:
-            return 0
-        return (self.report.urenas_report.grand_total_in
-                / self.report.grand_total_in)
+        return self.report.mam_comp_deceased_rate
 
 
-class URENAMInRate(NutritionIndicator):
-    name = "Taux d'admission URENAM"
+class MAMAbandonRate(NutritionIndicator):
+    name = "Taux d'abandon"
     is_ratio = True
 
     def _compute(self):
-        if not self.report.urenam_report:
-            return 0
-        return (self.report.urenam_report.grand_total_in
-                / self.report.grand_total_in)
-
-
-class PerformanceIndicators(IndicatorTable):
-    """ """
-
-    name = "Tableau 2"
-    title = " "
-    caption = ("Indicateurs de performance")
-    rendering_type = 'table'
-
-    INDICATORS = [
-        gen_shortcut('total_out_resp', "Nombre de sorties (hors non-rép.)"),
-        gen_shortcut('healed', "Guéris"),
-        HealedRate,
-        gen_shortcut('deceased', "Décès"),
-        DeceasedRate,
-        gen_shortcut('abandon', "Abandon"),
-        AbandonRate,
-        URENIInRate,
-        URENASInRate,
-    ]
-
-
-class FigurePerformanceIndicators(IndicatorTable):
-
-    name = "Figure 2"
-    title = ""
-    caption = ("Évolution des indicateurs de performance")
-    rendering_type = 'graph'
-    graph_type = 'spline'
-    as_percentage = True
-
-    INDICATORS = [
-        HealedRate,
-        DeceasedRate,
-        AbandonRate,
-    ]
+        return self.report.mam_comp_abandon_rate
 
 
 class NbSourceReportsExpected(NutritionIndicator):
@@ -197,3 +159,265 @@ class FigurePromptitudeRapportage(IndicatorTable):
         ref_is(0)(NbSourceReportsArrived),
         ref_is(0)(NbSourceReportsArrivedOnTime),
     ]
+
+
+# SYNTHESE NUT DS
+class NouvellesAdmissionsURENAS(ReportDataMixin, NutritionIndicator):
+
+    report_field = 'urenas_report'
+    report_sub_field = 'comp_new_cases'
+    name = "TOTAL URENAS"
+
+
+class NouvellesAdmissionsURENI(ReportDataMixin, NutritionIndicator):
+
+    report_field = 'ureni_report'
+    report_sub_field = 'comp_new_cases'
+    name = "TOTAL URENI"
+
+
+class NouvellesAdmissionsURENASURENI(NutritionIndicator):
+    name = "TOTAL URENI + URENAS"
+
+    def _compute(self):
+        return sum([
+            getattr(self.report.urenas_report, 'comp_new_cases', 0),
+            getattr(self.report.ureni_report, 'comp_new_cases', 0),
+            ])
+
+
+class NouvellesAdmissionsMAS(NouvellesAdmissionsURENASURENI):
+    name = "Nouvelles admissions 6-59 mois"
+
+
+class NouvellesAdmissionsURENAM(ReportDataMixin, NutritionIndicator):
+
+    report_field = 'urenam_report'
+    report_sub_field = 'comp_new_cases'
+    name = "TOTAL URENAM"
+
+
+def gen_fixed_entity_indicator(entity, field, sub_report=None):
+
+    class GenericReportIndicator(ReportDataMixin, NutritionIndicator):
+        pass
+
+    cls = copy.copy(GenericReportIndicator)
+    cls.__name__ = str("{}_{}_{}".format(sub_report,
+                                         field,
+                                         entity.slug.lower()))
+    if sub_report:
+        cls.report_field = sub_report
+        cls.report_sub_field = field
+    else:
+        cls.report_field = field
+    cls.name = entity.display_name()
+    cls.fixed_entity = entity
+    return cls
+
+
+class IndicatorTableWithEntities(IndicatorTable):
+    def get_descendants(self):
+        return [Entity.get_or_none(e['slug']) for e
+                in json_cache_from_cluster(cluster).get(self.entity.slug)]
+
+
+class TableNouvellesAdmissionsURENIURENAS(IndicatorTableWithEntities):
+
+    name = "Tableau 1.a"
+    title = ""
+    caption = ("NOUVELLES ADMISSIONS 6-59 MOIS - URENI/URENAS")
+    rendering_type = 'table'
+
+    def build_indicators(self):
+
+        descendants = self.get_descendants()
+
+        indicatorsl = []
+
+        # List of all URENI
+        for descendant in descendants:
+            if getattr(descendant, 'has_ureni', False):
+                ind = gen_fixed_entity_indicator(entity=descendant,
+                                                 sub_report='ureni_report',
+                                                 field='comp_new_cases')
+                indicatorsl.append(ind)
+
+        # Total URENI
+        indicatorsl.append(em(NouvellesAdmissionsURENI))
+
+        # List of all URENAS
+        for descendant in descendants:
+            if getattr(descendant, 'has_urenas', False):
+                ind = gen_fixed_entity_indicator(entity=descendant,
+                                                 sub_report='urenas_report',
+                                                 field='comp_new_cases')
+                indicatorsl.append(ind)
+
+        # Total URENAS
+        indicatorsl.append(em(NouvellesAdmissionsURENAS))
+
+        # Total URENI + URENAS
+        indicatorsl.append(em(NouvellesAdmissionsURENASURENI))
+
+        return indicatorsl
+
+
+class TableNouvellesAdmissionsURENAM(IndicatorTableWithEntities):
+
+    name = "Tableau 1.b"
+    title = ""
+    caption = ("NOUVELLES ADMISSIONS 6-59 MOIS - URENAM")
+    rendering_type = 'table'
+
+    def build_indicators(self):
+
+        descendants = self.get_descendants()
+
+        indicatorsl = []
+
+        # List of all URENAM
+        for descendant in descendants:
+            if getattr(descendant, 'has_urenam', False):
+                ind = gen_fixed_entity_indicator(entity=descendant,
+                                                 sub_report='urenam_report',
+                                                 field='comp_new_cases')
+                indicatorsl.append(ind)
+
+        # Total URENAM
+        indicatorsl.append(em(NouvellesAdmissionsURENAM))
+
+        return indicatorsl
+
+
+class TableCaseloadSAM(IndicatorTable):
+
+    name = "Tableau 2"
+    title = ""
+    caption = ("CASELOAD MAS 6-59 MOIS ATTENDU DS")
+    rendering_type = 'table'
+    add_total = True
+
+    INDICATORS = [
+        NouvellesAdmissionsMAS
+    ]
+
+
+class PercentNouvellesAdmissionsURENAS(NouvellesAdmissionsURENAS):
+    name = "% ADMISSIONS URENAS"
+    is_ratio = True
+
+    def _compute(self):
+        return self.report.urenas_report.comp_new_cases \
+            / self.report.sam_comp_new_cases
+
+
+class PercentNouvellesAdmissionsURENI(NouvellesAdmissionsURENI):
+    name = "% ADMISSIONS URENI"
+    is_ratio = True
+
+    def _compute(self):
+        return self.report.ureni_report.comp_new_cases \
+            / self.report.sam_comp_new_cases
+
+
+class TableRepartitionURENIURENAS(IndicatorTable):
+
+    name = "Tableau 3"
+    title = ""
+    caption = ("% ADMISSIONS 6-59 MOIS URENI/URENAS")
+    rendering_type = 'table'
+    add_total = True
+
+    INDICATORS = [
+        PercentNouvellesAdmissionsURENI,
+        PercentNouvellesAdmissionsURENAS,
+    ]
+
+
+class TablePerformanceSAM(IndicatorTable):
+    name = "Tableau 4.a"
+    title = ""
+    caption = ("INDICATEURS PERFORMANCE MAS 6-59 MOIS DS")
+    rendering_type = 'table'
+    add_total = True
+
+    INDICATORS = [
+        SAMDeceasedRate,
+        SAMHealedRate,
+        SAMAbandonRate,
+    ]
+
+
+class TablePerformanceMAM(IndicatorTable):
+    name = "Tableau 4.b"
+    title = ""
+    caption = ("INDICATEURS PERFORMANCE MAM 6-59 MOIS DS")
+    rendering_type = 'table'
+    add_total = True
+
+    INDICATORS = [
+        MAMDeceasedRate,
+        MAMHealedRate,
+        MAMAbandonRate,
+    ]
+
+
+class GraphRepartitionURENIURENAS(TableRepartitionURENIURENAS):
+    name = "Graphique 1"
+    title = ""
+    caption = ("Nouvelles admissions")
+    add_total = False
+    is_percentage = True
+    rendering_type = 'graph'
+    graph_type = 'column'
+    graph_stacking = True
+
+
+class GraphPerformanceSAM(TablePerformanceSAM):
+    name = "Graphique 2.a"
+    title = ""
+    caption = ("Indicateurs de performance MAS")
+    add_total = False
+    is_percentage = True
+    rendering_type = 'graph'
+    graph_type = 'column'
+    graph_stacking = True
+
+
+class GraphPerformanceMAM(TablePerformanceMAM):
+    name = "Graphique 2.b"
+    title = ""
+    caption = ("Indicateurs de performance MAM")
+    add_total = False
+    is_percentage = True
+    rendering_type = 'graph'
+    graph_type = 'column'
+    graph_stacking = True
+
+
+# Montly NUT Snthesis
+
+class GraphNouvellesAdmissionsURENIURENAS(IndicatorTableWithEntities):
+
+    name = "Graphique 2"
+    title = ""
+    caption = ("Nouvelles admissions par URENAS")
+    rendering_type = 'graph'
+    graph_type = 'column'
+
+    def build_indicators(self):
+
+        descendants = self.get_descendants()
+
+        indicatorsl = []
+
+        # List of all URENAS
+        for descendant in descendants:
+            if getattr(descendant, 'has_urenas', False):
+                ind = gen_fixed_entity_indicator(entity=descendant,
+                                                 sub_report='urenas_report',
+                                                 field='comp_new_cases')
+                indicatorsl.append(ind)
+
+        return indicatorsl

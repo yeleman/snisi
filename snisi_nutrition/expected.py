@@ -126,13 +126,15 @@ def create_expected_for(period):
             # URENAM, URENAS, URENI, STOCKS
             for uren, rcls, rcls_agg in report_classes:
 
-                # only create expected if entity has UREN
-                if uren != 'stocks' and not getattr(
-                        entity, 'has_{}'.format(uren), False):
-                    continue
+                if entity.type.slug == 'health_center':
+                    reportcls = rcls
+                    # only create expected if entity has UREN
+                    if uren != 'stocks' and not getattr(
+                            entity, 'has_{}'.format(uren), False):
+                        continue
+                else:
+                    reportcls = rcls_agg
 
-                reportcls = rcls if entity.type.slug == 'health_center' \
-                    else rcls_agg
                 handle_entity(
                     entity=entity,
                     period=period,

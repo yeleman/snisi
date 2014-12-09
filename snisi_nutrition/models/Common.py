@@ -34,6 +34,10 @@ class AbstractURENutritionR(SNISIReport):
         'exsam': "ExMAS",  # URENAM
     }
 
+    def fill_blank(self):
+        for field in self.data_fields():
+            setattr(self, field, 0)
+
     @classmethod
     def uren_str(cls):
         if cls.IS_URENAM:
@@ -168,6 +172,11 @@ class AbstractURENutritionR(SNISIReport):
         return sum([getattr(self, "{}_{}".format(age, field), 0)
                     for age in self.age_groups()])
 
+    # TOTALS FOR COMPARATIVE AGES
+    def comp_total_for(self, field):
+        return sum([getattr(self, "{}_{}".format(age, field), 0)
+                    for age in self.comp_age_groups()])
+
     @property
     def total_start(self):
         return self.total_for('total_start')
@@ -255,3 +264,92 @@ class AbstractURENutritionR(SNISIReport):
     @property
     def total_end_f(self):
         return self.total_for('total_end_f')
+
+    # comparative values
+    @property
+    def comp_total_start(self):
+        return self.comp_total_for('total_start')
+
+    @property
+    def comp_total_start_m(self):
+        return self.comp_total_for('total_start_m')
+
+    @property
+    def comp_total_start_f(self):
+        return self.comp_total_for('total_start_f')
+
+    @property
+    def comp_new_cases(self):
+        return self.comp_total_for('new_cases')
+
+    @property
+    def comp_returned(self):
+        return self.comp_total_for('returned')
+
+    @property
+    def comp_total_in(self):
+        return self.comp_total_for('total_in')
+
+    @property
+    def comp_total_in_m(self):
+        return self.comp_total_for('total_in_m')
+
+    @property
+    def comp_total_in_f(self):
+        return self.comp_total_for('total_in_f')
+
+    @property
+    def comp_transferred(self):
+        return self.comp_total_for('transferred')
+
+    @property
+    def comp_grand_total_in(self):
+        return self.comp_total_for('grand_total_in')
+
+    @property
+    def comp_healed(self):
+        return self.comp_total_for('healed')
+
+    @property
+    def comp_deceased(self):
+        return self.comp_total_for('deceased')
+
+    @property
+    def comp_abandon(self):
+        return self.comp_total_for('abandon')
+
+    @property
+    def comp_not_responding(self):
+        return self.comp_total_for('not_responding')
+
+    @property
+    def comp_total_out(self):
+        return self.comp_total_for('total_out')
+
+    @property
+    def comp_total_out_m(self):
+        return self.comp_total_for('total_out_m')
+
+    @property
+    def comp_total_out_f(self):
+        return self.comp_total_for('total_out_f')
+
+    @property
+    def comp_referred(self):
+        return self.comp_total_for('referred')
+
+    @property
+    def comp_grand_total_out(self):
+        return self.comp_total_for('grand_total_out')
+
+    @property
+    def comp_total_end(self):
+        return self.comp_total_for('total_end')
+
+    @property
+    def comp_total_end_m(self):
+        return self.comp_total_for('total_end_m')
+
+    @property
+    def comp_total_end_f(self):
+        return self.comp_total_for('total_end_f')
