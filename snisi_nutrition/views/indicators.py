@@ -9,16 +9,11 @@ from collections import OrderedDict
 
 from django.utils import timezone
 from django.shortcuts import render
-from django.http import Http404
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
 from snisi_core.models.Entities import Entity
-from snisi_core.models.Periods import MonthPeriod, Period
-from snisi_core.models.Reporting import ExpectedReporting
+from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
-from snisi_tools.auth import can_view_entity
-from snisi_web.utils import entity_browser_context, get_base_url_for_periods
 from snisi_web.utils import entity_periods_context
 from snisi_web.decorators import user_role_within
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
@@ -31,7 +26,9 @@ from snisi_nutrition.indicators import (TableNouvellesAdmissionsURENIURENAS,
                                         GraphRepartitionURENIURENAS,
                                         GraphNouvellesAdmissionsURENIURENAS,
                                         GraphPerformanceSAM,
-                                        GraphPerformanceMAM)
+                                        GraphPerformanceMAM,
+                                        TableauPromptitudeRapportage,
+                                        FigurePromptitudeRapportage)
 
 logger = logging.getLogger(__name__)
 
@@ -51,12 +48,14 @@ def dashboard(request, **kwargs):
         'entity': entity,
     }
 
-    from snisi_nutrition.indicators import (PerformanceIndicators)
-
-    performance_table = PerformanceIndicators(entity=entity, periods=periods)
+    promptness_table = TableauPromptitudeRapportage(entity=entity,
+                                                    periods=periods)
+    promptness_graph = FigurePromptitudeRapportage(entity=entity,
+                                                   periods=periods)
 
     context.update({
-        'performance_table': performance_table,
+        'promptness_table': promptness_table,
+        'promptness_graph': promptness_graph,
     })
 
     return render(request, kwargs.get('template_name',
@@ -119,6 +118,7 @@ def synthesis_browser(request,
         kwargs.update({'template_name': 'nutrition/synthesis.html'})
 
     entity = Entity.get_or_none(entity_slug)
+    indicators = OrderedDict([])
     if entity is not None:
         if entity.type.slug == 'health_district':
             indicators = OrderedDict([
