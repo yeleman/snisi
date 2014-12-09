@@ -220,6 +220,8 @@ class AggURENASNutritionR(AbstractURENASNutritionR,
                     period__start_on__gte=period.start_on,
                     period__end_on__lte=period.end_on) \
                     .filter(entity__in=entity.get_health_centers())
+            else:
+                indiv_sources = []
 
         if agg_sources is None and not len(indiv_sources):
             agg_sources = cls.objects.filter(

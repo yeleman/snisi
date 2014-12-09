@@ -116,6 +116,7 @@ def handle_region_validation(region, report_class_agg, period):
         try:
             # ack validation (auto)
             expv = ExpectedValidation.objects.get(
+                report__report_cls=report_class_agg.cls,
                 report__entity=district,
                 report__period=period)
         except ExpectedValidation.DoesNotExist:
@@ -253,7 +254,7 @@ def generate_weekly_region_country_reports(period, ensure_correct_date=True):
         logger.info("\tAt region {}".format(region))
 
         # AggWeeklyNutritionR
-        nut_exp, nut_agg, nut_expv = handle_region_validation(
+        nut_exp, nut_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nutrition_weekly_routine_aggregated"),
@@ -263,7 +264,7 @@ def generate_weekly_region_country_reports(period, ensure_correct_date=True):
     country = mali
 
     # AggWeeklyNutritionR
-    nut_exp, nut_agg, nut_expv = handle_country_validation(
+    nut_exp, nut_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nutrition_weekly_routine_aggregated"),
@@ -406,35 +407,40 @@ def generate_region_country_reports(period,
         logger.info("\tAt region {}".format(region))
 
         # URENAM
-        urenam_exp, urenam_agg, urenam_expv = handle_region_validation(
+        logger.info("\t\tURENAM")
+        urenam_exp, urenam_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_urenam_monthly_routine_aggregated"),
             period=period)
 
         # URENAS
-        urenas_exp, urenas_agg, urenas_expv = handle_region_validation(
+        logger.info("\t\tURENAS")
+        urenas_exp, urenas_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_urenas_monthly_routine_aggregated"),
             period=period)
 
         # URENI
-        ureni_exp, ureni_agg, ureni_expv = handle_region_validation(
+        logger.info("\t\tURENI")
+        ureni_exp, ureni_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_ureni_monthly_routine_aggregated"),
             period=period)
 
         # STOCKS
-        stocks_exp, stocks_agg, stocks_expv = handle_region_validation(
+        logger.info("\t\tSTOCKS")
+        stocks_exp, stocks_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nut_stocks_monthly_routine_aggregated"),
             period=period)
 
         # AggNutritionR
-        nut_exp, nut_agg, nut_expv = handle_region_validation(
+        logger.info("\t\tMASTER")
+        nut_exp, nut_agg = handle_region_validation(
             region=region,
             report_class_agg=ReportClass.get_or_none(
                 "nutrition_monthly_routine_aggregated"),
@@ -447,37 +453,43 @@ def generate_region_country_reports(period,
 
     # COUNTRY LEVEL
     country = mali
+    logger.info("\tAt {}".format(country))
 
     # URENAM
-    urenam_exp, urenam_agg, urenam_expv = handle_country_validation(
+    logger.info("\t\tURENAM")
+    urenam_exp, urenam_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_urenam_monthly_routine_aggregated"),
         period=period)
 
     # URENAS
-    urenas_exp, urenas_agg, urenas_expv = handle_country_validation(
+    logger.info("\t\tURENAS")
+    urenas_exp, urenas_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_urenas_monthly_routine_aggregated"),
         period=period)
 
     # URENI
-    ureni_exp, ureni_agg, ureni_expv = handle_country_validation(
+    logger.info("\t\tURENI")
+    ureni_exp, ureni_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_ureni_monthly_routine_aggregated"),
         period=period)
 
     # STOCKS
-    stocks_exp, stocks_agg, stocks_expv = handle_country_validation(
+    logger.info("\t\tSTOCKS")
+    stocks_exp, stocks_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nut_stocks_monthly_routine_aggregated"),
         period=period)
 
     # AggNutritionR
-    nut_exp, nut_agg, nut_expv = handle_country_validation(
+    logger.info("\t\tMASTER")
+    nut_exp, nut_agg = handle_country_validation(
         country=country,
         report_class_agg=ReportClass.get_or_none(
             "nutrition_monthly_routine_aggregated"),

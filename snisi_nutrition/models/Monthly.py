@@ -660,6 +660,8 @@ class AggNutritionR(AbstractNutritionR,
                     period__start_on__gte=period.start_on,
                     period__end_on__lte=period.end_on) \
                     .filter(entity__in=entity.get_health_centers())
+            else:
+                indiv_sources = []
 
         if agg_sources is None and not len(indiv_sources):
             agg_sources = cls.objects.filter(
@@ -697,11 +699,11 @@ class AggNutritionR(AbstractNutritionR,
         for field in tocopy_fields:
             setattr(report, field, getattr(stocks_report, field))
 
-        if entity.has_urenam:
+        if getattr(entity, 'has_urenam', False):
             report.urenam_report = gr(AggURENAMNutritionR)
-        if entity.has_urenas:
+        if getattr(entity, 'has_urenas', False):
             report.urenas_report = gr(AggURENASNutritionR)
-        if entity.has_ureni:
+        if getattr(entity, 'has_ureni', False):
             report.ureni_report = gr(AggURENINutritionR)
         report.stocks_report = stocks_report
 
