@@ -231,6 +231,16 @@ class ReportIntegrityChecker(ReportingDataHolder):
         if provider.username == 'autobot':
             return
 
+        if options.get('allowed_roles') \
+                and provider.role.slug in options.get('allowed_roles'):
+            if provider.location.casted() == entity:
+                return
+            else:
+                self.add_error("Vous ne pouvez pas envoyer de rapport "
+                               "de routine pour {entity}."
+                               .format(entity=entity),
+                               blocking=True, field='created_by')
+
         # provider must be DTC or Charge_SIS
         # if DTC, he must be from very same Entity
         # if Charge_SIS, he must be from a district

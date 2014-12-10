@@ -157,6 +157,7 @@ class WeeklyNutritionRIntegrityChecker(RoutineIntegrityInterface,
         # self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
 
 
@@ -174,6 +175,7 @@ class NutritionRIntegrityChecker(RoutineIntegrityInterface,
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
 
 
@@ -267,6 +269,7 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
 
 
@@ -288,6 +291,7 @@ class URENASNutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
 
 
@@ -309,6 +313,7 @@ class URENINutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
 
 
@@ -351,4 +356,5 @@ class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
         self.chk_expected_arrival(**options)
+        options.update({'allowed_roles': ['charge_nut']})
         self.chk_provider_permission(**options)
