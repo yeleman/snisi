@@ -131,6 +131,17 @@ def can_view_entity(provider, entity):
     return entity in provider.location.get_types(entity.type.slug)
 
 
+def reset_password_for(username):
+    p = Provider.get_or_none(username)
+    if p is None:
+        raise ValueError("Username `{}` is not an active Provider"
+                         .format(username))
+    passwd = random_password(True)
+    p.set_password(passwd)
+    p.save()
+    return passwd
+
+
 def create_provider(first_name, last_name,
                     role, location,
                     email=None,
