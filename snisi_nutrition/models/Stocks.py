@@ -12,6 +12,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from snisi_tools.misc import get_not_none
 from snisi_core.models.Entities import Entity
 from snisi_core.models.common import pre_save_report, post_save_report
 from snisi_core.models.Reporting import (SNISIReport,
@@ -395,13 +396,13 @@ class AbstractNutritionStocksR(SNISIReport):
 
     @classmethod
     def consumed_for_dict(cls, data, field):
-        return sum([data.get('{}_used'.format(field), 0),
-                    data.get('{}_lost'.format(field), 0)])
+        return sum([get_not_none(data, '{}_used'.format(field), 0),
+                    get_not_none(data, '{}_lost'.format(field), 0)])
 
     @classmethod
     def stocked_for_dict(cls, data, field):
-        return sum([data.get('{}_initial'.format(field), 0),
-                    data.get('{}_received'.format(field), 0)])
+        return sum([get_not_none(data, '{}_initial'.format(field), 0),
+                    get_not_none(data, '{}_received'.format(field), 0)])
 
     @classmethod
     def balance_for_dict(cls, data, field):

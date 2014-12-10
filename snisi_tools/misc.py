@@ -155,3 +155,7 @@ def get_resource(domain_slug, *file_paths):
     from snisi_core.models.Projects import Domain
     domain = Domain.get_or_none(domain_slug)
     return os.path.join(domain.module_path, 'resources', *file_paths)
+
+
+def get_not_none(dict, key, default):
+    return dict.get(key, default) or 0
