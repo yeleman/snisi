@@ -13,7 +13,7 @@
     <button type="submit" class="pure-button pure-button-primary">Afficher</button>
 </div>
 
-<h1>Rapports statistiques URENI/URENAS entre {{ perioda }} et {{ periodb }} – DS {{ entity }}</h1>
+<h1>{{ entity.display_typed_name }} – Rapports statistiques URENI/URENAS – {{ perioda }} à {{ periodb }}</h1>
 
 <table class="pure-table center report-table shrink-input">
 <thead>
@@ -41,7 +41,7 @@
 		{% with report=expected.arrived_report %}
 
 		<tr><th colspan="11">URENI – {{ period }}</th></tr>
-		{% for sreport in report.sources|sort_sources %}
+		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.ureni_report %}
 		<tr>
 			<td rowspan="4" class="left">{{ sreport.entity.name }}</td>
@@ -145,7 +145,7 @@
 		</tr>
 
 		<tr><th colspan="11">URENAS – {{ period }}</th></tr>
-		{% for sreport in report.sources|sort_sources %}
+		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.urenas_report %}
 		<tr>
 			<td rowspan="3" class="left">{{ sreport.entity.name }}</td>
@@ -281,7 +281,7 @@
 </tbody>
 </table>
 
-<h1>GRAND TOTAL URENI/URENAS {{ perioda }} – {{ periodb }} à {{ entity }}</h1>
+<h1>{{ entity.display_typed_name }} – GRAND TOTAL URENI/URENAS – {{ perioda }} à {{ periodb }}</h1>
 <table class="pure-table center report-table shrink-input">
 <thead>
 <tr>
