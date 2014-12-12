@@ -44,6 +44,13 @@ class AbstractNutritionR(SNISIReport):
                            self.ureni_report)
             ])
 
+    def sam_total_for_age(self, age, field):
+        return sum([
+            getattr(report, '{}_{}'.format(age, field), 0)
+            for report in (self.urenas_report,
+                           self.ureni_report)
+            ])
+
     def mam_total_for(self, field):
         return getattr(self.urenam_report, 'total_for', lambda x: 0)(field)
 
@@ -257,6 +264,10 @@ class AbstractNutritionR(SNISIReport):
         return self.sam_total_for('total_in_f')
 
     @property
+    def sam_total_in(self):
+        return self.sam_total_for('total_in')
+
+    @property
     def sam_transferred(self):
         return self.sam_total_for('transferred')
 
@@ -311,6 +322,18 @@ class AbstractNutritionR(SNISIReport):
     @property
     def sam_total_end_f(self):
         return self.sam_total_for('total_end_f')
+
+    @property
+    def sam_healed_rate(self):
+        return self.performance_indicator_for('sam_', 'healed')
+
+    @property
+    def sam_deceased_rate(self):
+        return self.performance_indicator_for('sam_', 'deceased')
+
+    @property
+    def sam_abandon_rate(self):
+        return self.performance_indicator_for('sam_', 'abandon')
 
     # COMPARATIVE VALUES
     # MAM only
@@ -483,6 +506,289 @@ class AbstractNutritionR(SNISIReport):
     def sam_comp_total_end_f(self):
         return self.sam_comp_total_for('total_end_f')
 
+    # SAM WITH AGES (SAM/SAM+)
+    @property
+    def sam_u6_total_start(self):
+        return self.sam_total_for_age('u6', 'total_start')
+
+    @property
+    def sam_u6_total_start_m(self):
+        return self.sam_total_for_age('u6', 'total_start_m')
+
+    @property
+    def sam_u6_total_start_f(self):
+        return self.sam_total_for_age('u6', 'total_start_f')
+
+    @property
+    def sam_u6_new_cases(self):
+        return self.sam_total_for_age('u6', 'new_cases')
+
+    @property
+    def sam_u6_returned(self):
+        return self.sam_total_for_age('u6', 'returned')
+
+    @property
+    def sam_u6_total_in_m(self):
+        return self.sam_total_for_age('u6', 'total_in_m')
+
+    @property
+    def sam_u6_total_in_f(self):
+        return self.sam_total_for_age('u6', 'total_in_f')
+
+    @property
+    def sam_u6_total_in(self):
+        return self.sam_total_for_age('u6', 'total_in')
+
+    @property
+    def sam_u6_transferred(self):
+        return self.sam_total_for_age('u6', 'transferred')
+
+    @property
+    def sam_u6_grand_total_in(self):
+        return self.sam_total_for_age('u6', 'grand_total_in')
+
+    @property
+    def sam_u6_healed(self):
+        return self.sam_total_for_age('u6', 'healed')
+
+    @property
+    def sam_u6_deceased(self):
+        return self.sam_total_for_age('u6', 'deceased')
+
+    @property
+    def sam_u6_abandon(self):
+        return self.sam_total_for_age('u6', 'abandon')
+
+    @property
+    def sam_u6_not_responding(self):
+        return self.sam_total_for_age('u6', 'not_responding')
+
+    @property
+    def sam_u6_total_out(self):
+        return self.sam_total_for_age('u6', 'total_out')
+
+    @property
+    def sam_u6_total_out_m(self):
+        return self.sam_total_for_age('u6', 'total_out_m')
+
+    @property
+    def sam_u6_total_out_f(self):
+        return self.sam_total_for_age('u6', 'total_out_f')
+
+    @property
+    def sam_u6_referred(self):
+        return self.sam_total_for_age('u6', 'referred')
+
+    @property
+    def sam_u6_grand_total_out(self):
+        return self.sam_total_for_age('u6', 'grand_total_out')
+
+    @property
+    def sam_u6_total_end(self):
+        return self.sam_total_for_age('u6', 'total_end')
+
+    @property
+    def sam_u6_total_end_m(self):
+        return self.sam_total_for_age('u6', 'total_end_m')
+
+    @property
+    def sam_u6_total_end_f(self):
+        return self.sam_total_for_age('u6', 'total_end_f')
+
+    @property
+    def sam_u6_healed_rate(self):
+        return self.performance_indicator_for('sam_u6_', 'healed')
+
+    @property
+    def sam_u6_deceased_rate(self):
+        return self.performance_indicator_for('sam_u6_', 'deceased')
+
+    @property
+    def sam_u6_abandon_rate(self):
+        return self.performance_indicator_for('sam_u6_', 'abandon')
+
+    # SAM AGE 2
+    @property
+    def sam_u59o6_total_start(self):
+        return self.sam_total_for_age('u59o6', 'total_start')
+
+    @property
+    def sam_u59o6_total_start_m(self):
+        return self.sam_total_for_age('u59o6', 'total_start_m')
+
+    @property
+    def sam_u59o6_total_start_f(self):
+        return self.sam_total_for_age('u59o6', 'total_start_f')
+
+    @property
+    def sam_u59o6_new_cases(self):
+        return self.sam_total_for_age('u59o6', 'new_cases')
+
+    @property
+    def sam_u59o6_returned(self):
+        return self.sam_total_for_age('u59o6', 'returned')
+
+    @property
+    def sam_u59o6_total_in_m(self):
+        return self.sam_total_for_age('u59o6', 'total_in_m')
+
+    @property
+    def sam_u59o6_total_in_f(self):
+        return self.sam_total_for_age('u59o6', 'total_in_f')
+
+    @property
+    def sam_u59o6_total_in(self):
+        return self.sam_total_for_age('u59o6', 'total_in')
+
+    @property
+    def sam_u59o6_transferred(self):
+        return self.sam_total_for_age('u59o6', 'transferred')
+
+    @property
+    def sam_u59o6_grand_total_in(self):
+        return self.sam_total_for_age('u59o6', 'grand_total_in')
+
+    @property
+    def sam_u59o6_healed(self):
+        return self.sam_total_for_age('u59o6', 'healed')
+
+    @property
+    def sam_u59o6_deceased(self):
+        return self.sam_total_for_age('u59o6', 'deceased')
+
+    @property
+    def sam_u59o6_abandon(self):
+        return self.sam_total_for_age('u59o6', 'abandon')
+
+    @property
+    def sam_u59o6_not_responding(self):
+        return self.sam_total_for_age('u59o6', 'not_responding')
+
+    @property
+    def sam_u59o6_total_out(self):
+        return self.sam_total_for_age('u59o6', 'total_out')
+
+    @property
+    def sam_u59o6_total_out_m(self):
+        return self.sam_total_for_age('u59o6', 'total_out_m')
+
+    @property
+    def sam_u59o6_total_out_f(self):
+        return self.sam_total_for_age('u59o6', 'total_out_f')
+
+    @property
+    def sam_u59o6_referred(self):
+        return self.sam_total_for_age('u59o6', 'referred')
+
+    @property
+    def sam_u59o6_grand_total_out(self):
+        return self.sam_total_for_age('u59o6', 'grand_total_out')
+
+    @property
+    def sam_u59o6_total_end(self):
+        return self.sam_total_for_age('u59o6', 'total_end')
+
+    @property
+    def sam_u59o6_total_end_m(self):
+        return self.sam_total_for_age('u59o6', 'total_end_m')
+
+    @property
+    def sam_u59o6_total_end_f(self):
+        return self.sam_total_for_age('u59o6', 'total_end_f')
+
+    @property
+    def sam_u59o6_healed_rate(self):
+        return self.performance_indicator_for('sam_u59o6_', 'healed')
+
+    @property
+    def sam_u59o6_deceased_rate(self):
+        return self.performance_indicator_for('sam_u59o6_', 'deceased')
+
+    @property
+    def sam_u59o6_abandon_rate(self):
+        return self.performance_indicator_for('sam_u59o6_', 'abandon')
+
+    # SAM AGE 3
+    @property
+    def sam_o59_total_start(self):
+        return self.sam_total_for_age('o59', 'total_start')
+
+    @property
+    def sam_o59_total_start_m(self):
+        return self.sam_total_for_age('o59', 'total_start_m')
+
+    @property
+    def sam_o59_total_start_f(self):
+        return self.sam_total_for_age('o59', 'total_start_f')
+
+    @property
+    def sam_o59_new_cases(self):
+        return self.sam_total_for_age('o59', 'new_cases')
+
+    @property
+    def sam_o59_returned(self):
+        return self.sam_total_for_age('o59', 'returned')
+
+    @property
+    def sam_o59_total_in_m(self):
+        return self.sam_total_for_age('o59', 'total_in_m')
+
+    @property
+    def sam_o59_total_in_f(self):
+        return self.sam_total_for_age('o59', 'total_in_f')
+
+    @property
+    def sam_o59_total_in(self):
+        return self.sam_total_for_age('o59', 'total_in')
+
+    @property
+    def sam_o59_transferred(self):
+        return self.sam_total_for_age('o59', 'transferred')
+
+    @property
+    def sam_o59_grand_total_in(self):
+        return self.sam_total_for_age('o59', 'grand_total_in')
+
+    @property
+    def sam_o59_healed(self):
+        return self.sam_total_for_age('o59', 'healed')
+
+    @property
+    def sam_o59_deceased(self):
+        return self.sam_total_for_age('o59', 'deceased')
+
+    @property
+    def sam_o59_abandon(self):
+        return self.sam_total_for_age('o59', 'abandon')
+
+    @property
+    def sam_o59_not_responding(self):
+        return self.sam_total_for_age('o59', 'not_responding')
+
+    @property
+    def sam_o59_total_out(self):
+        return self.sam_total_for_age('o59', 'total_out')
+
+    @property
+    def sam_o59_grand_total_out(self):
+        return self.sam_total_for_age('o59', 'grand_total_out')
+
+    @property
+    def sam_o59_total_end(self):
+        return self.sam_total_for_age('o59', 'total_end')
+
+    @property
+    def sam_o59_healed_rate(self):
+        return self.performance_indicator_for('sam_o59_', 'healed')
+
+    @property
+    def sam_o59_deceased_rate(self):
+        return self.performance_indicator_for('sam_o59_', 'deceased')
+
+    @property
+    def sam_o59_abandon_rate(self):
+        return self.performance_indicator_for('sam_o59_', 'abandon')
+
     ####
 
     @property
@@ -510,54 +816,20 @@ class AbstractNutritionR(SNISIReport):
         except ZeroDivisionError:
             return 0
 
-    # COMP
-    @property
-    def mam_comp_total_out_resp(self):
-        return self.mam_comp_total_out - self.mam_comp_not_responding
+    # sum of out reasons except not resp.
+    def total_performance_for(self, prefix):
+        tof = '{}total_out'.format(prefix) \
+            if prefix is not None else 'total_out'
+        nof = '{}not_responding'.format(prefix) \
+            if prefix is not None else 'not_responding'
+        return getattr(self, tof, 0) - getattr(self, nof, 0)
 
-    @property
-    def mam_comp_healed_rate(self):
+    # rate of indicator (healed, deceased, abandon)
+    def performance_indicator_for(self, prefix, field):
+        f = '{}{}'.format(prefix, field) \
+            if prefix != 'all' else '{}'.format(field)
         try:
-            return self.mam_comp_healed / self.mam_comp_total_out_resp
-        except ZeroDivisionError:
-            return 0
-
-    @property
-    def mam_comp_deceased_rate(self):
-        try:
-            return self.mam_comp_deceased / self.mam_comp_total_out_resp
-        except ZeroDivisionError:
-            return 0
-
-    @property
-    def mam_comp_abandon_rate(self):
-        try:
-            return self.mam_comp_abandon / self.mam_comp_total_out_resp
-        except ZeroDivisionError:
-            return 0
-
-    @property
-    def sam_comp_total_out_resp(self):
-        return self.sam_comp_total_out - self.sam_comp_not_responding
-
-    @property
-    def sam_comp_healed_rate(self):
-        try:
-            return self.sam_comp_healed / self.sam_comp_total_out_resp
-        except ZeroDivisionError:
-            return 0
-
-    @property
-    def sam_comp_deceased_rate(self):
-        try:
-            return self.sam_comp_deceased / self.sam_comp_total_out_resp
-        except ZeroDivisionError:
-            return 0
-
-    @property
-    def sam_comp_abandon_rate(self):
-        try:
-            return self.sam_comp_abandon / self.sam_comp_total_out_resp
+            return getattr(self, f) / self.total_performance_for(prefix)
         except ZeroDivisionError:
             return 0
 

@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
+from snisi_core.models.Reporting import ExpectedReporting
 from snisi_web.utils import entity_periods_context
 from snisi_web.decorators import user_role_within
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
@@ -60,6 +61,60 @@ def dashboard(request, **kwargs):
 
     return render(request, kwargs.get('template_name',
                   'nutrition/dashboard.html'), context)
+
+
+@login_required
+def overview_mam(request, entity_slug=None, period_str=None, **kwargs):
+    context = {}
+    return render(request,
+                  kwargs.get('template_name', 'nutrition/overview.html'),
+                  context)
+
+
+@login_required
+def overview_sam(request, entity_slug=None,
+                 perioda_str=None, periodb_str=None, **kwargs):
+    context = {}
+
+    root = request.user.location
+    cluster = Cluster.get_or_none('nutrition_routine')
+    report_classes = cluster.domain \
+        .import_from('expected.report_classes_for')(cluster)
+
+    entity = Entity.get_or_none(entity_slug) or root
+
+    # report_cls depends on entity
+    try:
+        report_cls = NutritionR \
+            if entity.type.slug == 'health_center' else AggNutritionR
+    except:
+        report_cls = None
+
+    context.update(entity_periods_context(
+        request=request,
+        root=root,
+        cluster=cluster,
+        view_name='nutrition_overview_sam',
+        entity_slug=entity_slug,
+        report_cls=report_cls,
+        perioda_str=perioda_str,
+        periodb_str=periodb_str,
+        period_cls=MonthPeriod,
+        must_be_in_cluster=True,
+    ))
+
+    # if entity.type.slug == 'health_district':
+    periods_expecteds = [
+        (period, ExpectedReporting.objects.filter(
+            period=period, entity=context['entity'],
+            report_class__in=report_classes).last())
+        for period in context['periods']
+    ]
+    context.update({'periods_expecteds': periods_expecteds})
+
+    return render(request,
+                  kwargs.get('template_name', 'nutrition/overview_sam.html'),
+                  context)
 
 
 @login_required

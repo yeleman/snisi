@@ -102,7 +102,8 @@ def entity_periods_context(request,
                            period_cls=MonthPeriod,
                            must_be_in_cluster=False,
                            full_lineage=['country', 'health_region',
-                                         'health_district', 'health_center']):
+                                         'health_district', 'health_center'],
+                           single_period=False):
     context = {}
 
     entity = Entity.get_or_none(entity_slug)
@@ -159,16 +160,24 @@ def entity_periods_context(request,
                                       period_cls.current().previous())
     periods = period_cls.all_from(perioda, periodb)
 
+    if single_period:
+        base_url = get_base_url_for_period(
+            view_name=view_name, entity=entity, period_str=perioda_str)
+    else:
+        base_url = get_base_url_for_periods(
+            view_name=view_name, entity=entity,
+            perioda_str=perioda_str or perioda.strid(),
+            periodb_str=periodb_str or periodb.strid())
+
     context.update({
         'all_periods': [(p.strid(), p) for p in reversed(all_periods)],
         'perioda': perioda,
         'periodb': periodb,
         'periods': periods,
         'cluster': cluster,
-        'base_url': get_base_url_for_periods(
-            view_name=view_name, entity=entity,
-            perioda_str=perioda_str or perioda.strid(),
-            periodb_str=periodb_str or periodb.strid())
+        'base_url': base_url,
+        'view_name': view_name
+
     })
 
     context.update(entity_browser_context(

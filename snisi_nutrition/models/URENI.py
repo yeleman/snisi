@@ -178,6 +178,18 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     def u6_total_end(self):
         return self.age_sum_for('u6', ['total_end_m', 'total_end_f'])
 
+    @property
+    def u6_healed_rate(self):
+        return self.performance_indicator_for('u6', 'healed')
+
+    @property
+    def u6_deceased_rate(self):
+        return self.performance_indicator_for('u6', 'deceased')
+
+    @property
+    def u6_abandon_rate(self):
+        return self.performance_indicator_for('u6', 'abandon')
+
     # 6-59 months
     @property
     def u59o6_total_start(self):
@@ -203,6 +215,18 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     def u59o6_total_end(self):
         return self.age_sum_for('u59o6', ['total_end_m', 'total_end_f'])
 
+    @property
+    def u59o6_healed_rate(self):
+        return self.performance_indicator_for('u59o6', 'healed')
+
+    @property
+    def u59o6_deceased_rate(self):
+        return self.performance_indicator_for('u59o6', 'deceased')
+
+    @property
+    def u59o6_abandon_rate(self):
+        return self.performance_indicator_for('u59o6', 'abandon')
+
     # Over 59 months
     @property
     def o59_total_start(self):
@@ -227,6 +251,18 @@ class AbstractURENINutritionR(AbstractURENutritionR):
     @property
     def o59_total_end(self):
         return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
+
+    @property
+    def o59_healed_rate(self):
+        return self.performance_indicator_for('o59', 'healed')
+
+    @property
+    def o59_deceased_rate(self):
+        return self.performance_indicator_for('o59', 'deceased')
+
+    @property
+    def o59_abandon_rate(self):
+        return self.performance_indicator_for('o59', 'abandon')
 
 
 class URENINutritionR(AbstractURENINutritionR):

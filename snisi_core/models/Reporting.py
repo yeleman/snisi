@@ -563,6 +563,23 @@ class PeriodicAggregatedReportInterface(models.Model):
         return list(self.direct_indiv_sources.all()) \
             + list(self.direct_agg_sources.all())
 
+    def arrived_entities(self):
+        return [r.entity.casted() for r in self.sources()]
+
+    def expected_entities(self):
+        report_classes = [self.report_class(), self.report_class(True)]
+        sl = ['health_area', 'region', 'cercle', 'commune', 'vfq']
+        return [exp.entity.casted()
+                for exp in ExpectedReporting.objects.filter(
+                    period=self.period, report_class__in=report_classes,
+                    entity__slug__in=[
+                        e.slug for e in
+                        self.entity.casted().get_natural_children(sl)])]
+
+    def missing_entities(self):
+        return [entity for entity in self.expected_entities()
+                if entity not in self.arrived_entities()]
+
     @classmethod
     def update_sources_lists_from(cls, report, instance,
                                   instance_is_agg=False):

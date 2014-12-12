@@ -90,6 +90,22 @@ class AbstractURENutritionR(SNISIReport):
         return sum([getattr(self, '{}_{}'.format(age, field))
                     for field in fields])
 
+    # sum of out reasons except not resp.
+    def total_performance_for(self, age):
+        tof = '{}_total_out'.format(age) if age != 'all' else 'total_out'
+        nof = '{}_not_responding'.format(age) \
+            if age != 'all' else 'not_responding'
+        return getattr(self, tof, 0) - getattr(self, nof, 0)
+
+    # rate of indicator (healed, deceased, abandon)
+    def performance_indicator_for(self, age, field):
+        f = '{}_{}'.format(age, field) \
+            if age != 'all' else '{}'.format(field)
+        try:
+            return getattr(self, f) / self.total_performance_for(age)
+        except ZeroDivisionError:
+            return 0
+
     # common helpers for integrity checks
     @classmethod
     def age_sum_for_dict(cls, data, age, fields):
@@ -265,6 +281,18 @@ class AbstractURENutritionR(SNISIReport):
     def total_end_f(self):
         return self.total_for('total_end_f')
 
+    @property
+    def healed_rate(self):
+        return self.performance_indicator_for('all', 'healed')
+
+    @property
+    def deceased_rate(self):
+        return self.performance_indicator_for('all', 'deceased')
+
+    @property
+    def abandon_rate(self):
+        return self.performance_indicator_for('all', 'abandon')
+
     # comparative values
     @property
     def comp_total_start(self):
@@ -353,3 +381,15 @@ class AbstractURENutritionR(SNISIReport):
     @property
     def comp_total_end_f(self):
         return self.comp_total_for('total_end_f')
+
+    @property
+    def comp_healed_rate(self):
+        return self.performance_indicator_for('comp', 'healed')
+
+    @property
+    def comp_deceased_rate(self):
+        return self.performance_indicator_for('comp', 'deceased')
+
+    @property
+    def comp_abandon_rate(self):
+        return self.performance_indicator_for('comp', 'abandon')

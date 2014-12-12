@@ -571,10 +571,9 @@ function registerReportBrowserFilter(entity_browser, new_path) {
             period_strid = "";
         var entity_slug = entity_browser.getEntitySlug();
         console.log(entity_slug);
-        // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
-        new_path = new_path.replace('<reportcls_slug>', reportcls_slug)
-                           .replace('<entity_slug>', entity_slug)
-                           .replace('<period_strid>', period_strid);
+        new_path = new_path.replace('<reportcls>', reportcls_slug)
+                           .replace('<entity>', entity_slug)
+                           .replace('<period_str>', period_strid);
         window.location = new_path;
     });
 }
@@ -622,6 +621,7 @@ function emulate_click_on(jQElem) {
         jQElem[0].dispatchEvent(e);
     } catch (exception) {}
 }
+
 
 function getEntitiesBrowser (options) {
 
