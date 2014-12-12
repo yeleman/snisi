@@ -126,6 +126,17 @@ class Command(BaseCommand):
                 p.location = Entity.get_or_none(entry.get('location'))
                 p.save()
                 logger.info("MOVED,{}".format(p))
+            elif entry.get('action') == 'enable':
+                p = Provider.get_or_none(entry.get('username'),
+                                         with_inactive=True)
+                p.is_active = True
+                p.save()
+                logger.info("ENABLED,{}".format(p))
+            elif entry.get('action') == 'delete':
+                p = Provider.get_or_none(entry.get('username'),
+                                         with_inactive=True)
+                p.delete()
+                logger.info("DELETED,{}".format(entry.get('username')))
             elif entry.get('action') == 'update':
                 p = Provider.get_or_none(entry.get('username'))
                 numbers = []
