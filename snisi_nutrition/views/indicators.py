@@ -65,17 +65,13 @@ def dashboard(request, **kwargs):
 
 
 @login_required
-def overview_mam(request, entity_slug=None, period_str=None, **kwargs):
-    context = {}
-    return render(request,
-                  kwargs.get('template_name', 'nutrition/overview.html'),
-                  context)
-
-
-@login_required
-def overview_sam(request, entity_slug=None,
-                 perioda_str=None, periodb_str=None, **kwargs):
-    context = {}
+def overview_generic(request, entity_slug=None,
+                     perioda_str=None, periodb_str=None,
+                     is_sam=False, is_mam=False, **kwargs):
+    context = {
+        'is_sam': is_sam,
+        'is_mam': is_mam
+    }
 
     root = request.user.location
     cluster = Cluster.get_or_none('nutrition_routine')
@@ -91,17 +87,21 @@ def overview_sam(request, entity_slug=None,
     except:
         report_cls = None
 
+    view_name = 'nutrition_overview_sam' \
+        if is_sam else 'nutrition_overview_mam'
+
     context.update(entity_periods_context(
         request=request,
         root=root,
         cluster=cluster,
-        view_name='nutrition_overview_sam',
+        view_name=view_name,
         entity_slug=entity_slug,
         report_cls=report_cls,
         perioda_str=perioda_str,
         periodb_str=periodb_str,
         period_cls=MonthPeriod,
         must_be_in_cluster=True,
+        full_lineage=['country', 'health_region', 'health_district'],
     ))
 
     # if entity.type.slug == 'health_district':
@@ -115,12 +115,35 @@ def overview_sam(request, entity_slug=None,
 
     total_table = generate_sum_data_table_for(entity=context['entity'],
                                               periods=context['periods'])
-    from pprint import pprint as pp ; pp(total_table)
     context.update({'total_table': total_table})
 
     return render(request,
-                  kwargs.get('template_name', 'nutrition/overview_sam.html'),
+                  kwargs.get('template_name', 'nutrition/overview.html'),
                   context)
+
+
+@login_required
+def overview_mam(request, entity_slug=None,
+                 perioda_str=None, periodb_str=None, **kwargs):
+    return overview_generic(request,
+                            entity_slug=entity_slug,
+                            perioda_str=perioda_str,
+                            periodb_str=periodb_str,
+                            is_sam=False,
+                            is_mam=True,
+                            **kwargs)
+
+
+@login_required
+def overview_sam(request, entity_slug=None,
+                 perioda_str=None, periodb_str=None, **kwargs):
+    return overview_generic(request,
+                            entity_slug=entity_slug,
+                            perioda_str=perioda_str,
+                            periodb_str=periodb_str,
+                            is_sam=True,
+                            is_mam=False,
+                            **kwargs)
 
 
 @login_required

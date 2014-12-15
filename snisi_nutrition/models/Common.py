@@ -82,6 +82,10 @@ class AbstractURENutritionR(SNISIReport):
 
     @classmethod
     def all_uren_fields(cls):
+        return cls.uren_fields_with_calc() + cls.aged_uren_fields_with_calc()
+
+    @classmethod
+    def uren_fields_with_calc(cls):
         return [
             'total_start_m', 'total_start_f',
             'total_start',
@@ -95,7 +99,14 @@ class AbstractURENutritionR(SNISIReport):
             'total_out',
             'referred',
             'grand_total_out',
-            'total_end_m', 'total_end_f', 'total_end']
+            'total_end_m', 'total_end_f', 'total_end',
+            'healed_rate', 'deceased_rate', 'abandon_rate']
+
+    @classmethod
+    def aged_uren_fields_with_calc(cls):
+        return ["{a}_{f}".format(a=age, f=field)
+                for age in cls.age_groups()
+                for field in cls.uren_fields_with_calc()]
 
     # overriden
     @classmethod

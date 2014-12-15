@@ -100,6 +100,7 @@ def entity_periods_context(request,
                            perioda_str=None,
                            periodb_str=None,
                            period_cls=MonthPeriod,
+                           assume_previous=True,
                            must_be_in_cluster=False,
                            full_lineage=['country', 'health_region',
                                          'health_district', 'health_center'],
@@ -109,13 +110,13 @@ def entity_periods_context(request,
     entity = Entity.get_or_none(entity_slug)
 
     if entity is None:
-        entity = root
+        entity = root.casted()
 
     if entity is None:
         raise Http404("Aucune entité pour le code {}".format(entity_slug))
 
-    if must_be_in_cluster and entity not in cluster.members():
-        entity = cluster.members()[-1]
+    if must_be_in_cluster and (entity not in cluster.members()):
+        entity = cluster.members()[-1].casted()
 
     # check permissions on this entity and raise 403
     if not can_view_entity(request.user, entity):
@@ -148,7 +149,12 @@ def entity_periods_context(request,
         periodb = t
         del(t)
 
-    first_period = period_cls.current().previous()
+    current_period = period_cls.current()
+
+    if assume_previous:
+        current_period = current_period.previous()
+
+    first_period = current_period
     if report_cls is not None:
         try:
             first_period = period_cls.find_create_by_date(
@@ -156,8 +162,7 @@ def entity_periods_context(request,
                                         .period.middle())
         except IndexError:
             pass
-    all_periods = period_cls.all_from(first_period,
-                                      period_cls.current().previous())
+    all_periods = period_cls.all_from(first_period, current_period)
     periods = period_cls.all_from(perioda, periodb)
 
     if single_period:

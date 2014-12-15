@@ -18,6 +18,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PeriodicAggregatedReportInterface,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
+from snisi_nutrition.models.Common import AbstractURENutritionR
 from snisi_nutrition.xls_export import nutrition_monthly_as_xls
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,14 @@ class AbstractNutritionR(SNISIReport):
     def mam_comp_total_for(self, field):
         return getattr(self.urenam_report,
                        'comp_total_for', lambda x: 0)(field)
+
+    @classmethod
+    def all_uren_fields(cls):
+        prefixes = ['', 'mam_', 'sam_', 'mam_comp_', 'sam_comp_',
+                    'sam_u6_', 'sam_u59o6_', 'sam_o59_']
+        uren_fields = AbstractURENutritionR.uren_fields_with_calc()
+        return ["{p}{f}".format(p=prefix, f=field)
+                for prefix in prefixes for field in uren_fields]
 
     @property
     def total_start(self):
