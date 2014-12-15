@@ -43,6 +43,11 @@ class Command(BaseCommand):
         input_csv_file = open(options.get('filename'), 'r')
         csv_reader = csv.DictReader(input_csv_file, fieldnames=headers)
 
+        has_matrix = {
+            'y': True,
+            'n': False
+        }
+
         for entry in csv_reader:
             if csv_reader.line_num == 1:
                 continue
@@ -74,10 +79,33 @@ class Command(BaseCommand):
             elif entry.get('action') == 'update':
                 entity = Entity.get_or_none(entry.get('slug'))
                 logger.info("Updating {}".format(entity))
+                if entry.get('name'):
+                    entity.name = entry.get('name').upper()
+                    entity.save()
+                if entry.get('type'):
+                    etype = EntityType.get_or_none(entry.get('type'))
+                    entity.type = etype
+                    entity.save()
+                if entry.get('parent'):
+                    parent = Entity.get_or_none(entry.get('parent'))
+                    entity.parent = parent
+                    entity.save()
                 # update main_entity ?
                 if entry.get('main_entity'):
                     main_entity = Entity.get_or_none(entry.get('main_entity'))
                     entity.main_entity = main_entity
+                    entity.save()
+                if entry.get('has_urenam'):
+                    entity.has_urenam = has_matrix.get(
+                        entry.get('has_urenam').lower(), False)
+                    entity.save()
+                if entry.get('has_urenas'):
+                    entity.has_urenas = has_matrix.get(
+                        entry.get('has_urenas').lower(), False)
+                    entity.save()
+                if entry.get('has_ureni'):
+                    entity.has_ureni = has_matrix.get(
+                        entry.get('has_ureni').lower(), False)
                     entity.save()
 
         logger.info("Done")
