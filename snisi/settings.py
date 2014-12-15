@@ -54,6 +54,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
+            'formatter': 'default',
             'filename': os.path.join(ROOT_DIR, 'debug.log'),
         },
     },
@@ -77,6 +78,15 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
+        }
+    },
+    'formatters': {
+        'brief': {
+            'format': '%(asctime)s %(message)s'
+        },
+        'default': {
+            'format': '%(asctime)s %(levelname)-8s %(name)-15s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         }
     }
 }
