@@ -30,6 +30,7 @@ from snisi_nutrition.indicators import (TableNouvellesAdmissionsURENIURENAS,
                                         GraphPerformanceMAM,
                                         TableauPromptitudeRapportage,
                                         FigurePromptitudeRapportage)
+from snisi_nutrition.utils import generate_sum_data_table_for
 
 logger = logging.getLogger(__name__)
 
@@ -111,6 +112,11 @@ def overview_sam(request, entity_slug=None,
         for period in context['periods']
     ]
     context.update({'periods_expecteds': periods_expecteds})
+
+    total_table = generate_sum_data_table_for(entity=context['entity'],
+                                              periods=context['periods'])
+    from pprint import pprint as pp ; pp(total_table)
+    context.update({'total_table': total_table})
 
     return render(request,
                   kwargs.get('template_name', 'nutrition/overview_sam.html'),

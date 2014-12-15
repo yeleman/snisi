@@ -80,6 +80,23 @@ class AbstractURENutritionR(SNISIReport):
 
         return list(set(fields))
 
+    @classmethod
+    def all_uren_fields(cls):
+        return [
+            'total_start_m', 'total_start_f',
+            'total_start',
+            'new_cases', 'returned',
+            'total_in_m', 'total_in_f',
+            'total_in',
+            'transferred',
+            'grand_total_in',
+            'healed', 'deceased', 'abandon', 'not_responding',
+            'total_out_m', 'total_out_f',
+            'total_out',
+            'referred',
+            'grand_total_out',
+            'total_end_m', 'total_end_f', 'total_end']
+
     # overriden
     @classmethod
     def age_groups(cls):
