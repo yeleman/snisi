@@ -100,21 +100,23 @@ def entity_periods_context(request,
                            perioda_str=None,
                            periodb_str=None,
                            period_cls=MonthPeriod,
+                           assume_previous=True,
                            must_be_in_cluster=False,
                            full_lineage=['country', 'health_region',
-                                         'health_district', 'health_center']):
+                                         'health_district', 'health_center'],
+                           single_period=False):
     context = {}
 
     entity = Entity.get_or_none(entity_slug)
 
     if entity is None:
-        entity = root
+        entity = root.casted()
 
     if entity is None:
         raise Http404("Aucune entité pour le code {}".format(entity_slug))
 
-    if must_be_in_cluster and entity not in cluster.members():
-        entity = cluster.members()[-1]
+    if must_be_in_cluster and (entity not in cluster.members()):
+        entity = cluster.members()[-1].casted()
 
     # check permissions on this entity and raise 403
     if not can_view_entity(request.user, entity):
@@ -147,7 +149,12 @@ def entity_periods_context(request,
         periodb = t
         del(t)
 
-    first_period = period_cls.current().previous()
+    current_period = period_cls.current()
+
+    if assume_previous:
+        current_period = current_period.previous()
+
+    first_period = current_period
     if report_cls is not None:
         try:
             first_period = period_cls.find_create_by_date(
@@ -155,9 +162,17 @@ def entity_periods_context(request,
                                         .period.middle())
         except IndexError:
             pass
-    all_periods = period_cls.all_from(first_period,
-                                      period_cls.current().previous())
+    all_periods = period_cls.all_from(first_period, current_period)
     periods = period_cls.all_from(perioda, periodb)
+
+    if single_period:
+        base_url = get_base_url_for_period(
+            view_name=view_name, entity=entity, period_str=perioda_str)
+    else:
+        base_url = get_base_url_for_periods(
+            view_name=view_name, entity=entity,
+            perioda_str=perioda_str or perioda.strid(),
+            periodb_str=periodb_str or periodb.strid())
 
     context.update({
         'all_periods': [(p.strid(), p) for p in reversed(all_periods)],
@@ -165,10 +180,9 @@ def entity_periods_context(request,
         'periodb': periodb,
         'periods': periods,
         'cluster': cluster,
-        'base_url': get_base_url_for_periods(
-            view_name=view_name, entity=entity,
-            perioda_str=perioda_str or perioda.strid(),
-            periodb_str=periodb_str or periodb.strid())
+        'base_url': base_url,
+        'view_name': view_name
+
     })
 
     context.update(entity_browser_context(

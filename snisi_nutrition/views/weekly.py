@@ -82,6 +82,7 @@ def display_weekly(request,
         perioda_str=perioda_str,
         periodb_str=periodb_str,
         period_cls=MonthPeriod,
+        assume_previous=False,
         must_be_in_cluster=True,
     ))
 

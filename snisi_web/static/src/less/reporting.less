@@ -20,6 +20,8 @@ table.pure-table {
     color: @text-table-head;
     font-weight: normal;
     /*text-transform: uppercase;*/
+    vertical-align: middle;
+    text-align: center;
 }
 
 
@@ -87,4 +89,18 @@ tr.indicator-em {
 tr.indicator-em * {
     font-weight: bold;
     color: black;
+}
+
+.pure-table tr.highlight-row, .pure-table tr.highlight-row td {
+	background-color: darken(@background-table-even, 50%);
+	
+	color: white;
+}
+
+.pure-table.report-table.first-col-left tr td:first-of-type {
+    text-align: left;
+}
+
+.pure-table td.left {
+	text-align: left;	
 }

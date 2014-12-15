@@ -283,3 +283,13 @@ def getter(obj, key):
 @register.filter(name='yesno')
 def yesno(val):
     return _("Yes") if bool(val) else _("No")
+
+
+@register.filter(name='sort_sources')
+def sort_sources(slist):
+    return sorted(slist, key=lambda r: r.entity.name)
+
+
+@register.filter(name='percent')
+def percent_format(number):
+    return "{}%".format(number_format(number * 100))

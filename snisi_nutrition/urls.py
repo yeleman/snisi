@@ -41,15 +41,31 @@ urlpatterns = patterns(
         'snisi_nutrition.views.indicators.synthesis_browser',
         name='nutrition_synthesis'),
 
-    # indicator browser
-    # url(r'^/view/{entity}/{periods}/?$'
-    #     .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
-    #     'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
-    # url(r'^/view/{entity}/?$'
-    #     .format(entity=RGXP_ENTITY),
-    #     'snisi_nutrition.views.indicators.browser', name='nutrition_view'),
-    # url(r'^/view/?$', 'snisi_nutrition.views.indicators.browser',
-    #     name='nutrition_view'),
+    # MAM Overview
+    url(r'/overview_mam/{entity}/{periods}/?'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.indicators.overview_mam',
+        name='nutrition_overview_mam'),
+    url(r'/overview_mam/{entity}/?'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.indicators.overview_mam',
+        name='nutrition_overview_mam'),
+    url(r'/overview_mam/?',
+        'snisi_nutrition.views.indicators.overview_mam',
+        name='nutrition_overview_mam'),
+
+    # SAM Overview
+    url(r'/overview_sam/{entity}/{periods}/?'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.indicators.overview_sam',
+        name='nutrition_overview_sam'),
+    url(r'/overview_sam/{entity}/?'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.indicators.overview_sam',
+        name='nutrition_overview_sam'),
+    url(r'/overview_sam/?',
+        'snisi_nutrition.views.indicators.overview_sam',
+        name='nutrition_overview_sam'),
 
     # raw-data browser
     url(r'/{entity}/{period}/?'

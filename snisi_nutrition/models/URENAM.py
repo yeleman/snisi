@@ -223,6 +223,18 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     def u23o6_total_end(self):
         return self.age_sum_for('u23o6', ['total_end_m', 'total_end_f'])
 
+    @property
+    def u23o6_healed_rate(self):
+        return self.performance_indicator_for('u23o6', 'healed')
+
+    @property
+    def u23o6_deceased_rate(self):
+        return self.performance_indicator_for('u23o6', 'deceased')
+
+    @property
+    def u23o6_abandon_rate(self):
+        return self.performance_indicator_for('u23o6', 'abandon')
+
     # 23-59 months
     @property
     def u59o23_total_start(self):
@@ -253,7 +265,19 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     def u59o23_total_end(self):
         return self.age_sum_for('u59o23', ['total_end_m', 'total_end_f'])
 
-        # 59+ months
+    @property
+    def u59o23_healed_rate(self):
+        return self.performance_indicator_for('u59o23', 'healed')
+
+    @property
+    def u59o23_deceased_rate(self):
+        return self.performance_indicator_for('u59o23', 'deceased')
+
+    @property
+    def u59o23_abandon_rate(self):
+        return self.performance_indicator_for('u59o23', 'abandon')
+
+    # 59+ months
     @property
     def o59_total_start(self):
         return self.age_sum_for('o59', ['total_start_m', 'total_start_f'])
@@ -282,6 +306,18 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def o59_total_end(self):
         return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
+
+    @property
+    def o59_healed_rate(self):
+        return self.performance_indicator_for('o59', 'healed')
+
+    @property
+    def o59_deceased_rate(self):
+        return self.performance_indicator_for('o59', 'deceased')
+
+    @property
+    def o59_abandon_rate(self):
+        return self.performance_indicator_for('o59', 'abandon')
 
     # Pregnant & Breast Feeding Women
     @property
@@ -328,6 +364,18 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def pw_total_end(self):
         return self.age_sum_for('pw', ['total_end_m', 'total_end_f'])
+
+    @property
+    def pw_healed_rate(self):
+        return self.performance_indicator_for('pw', 'healed')
+
+    @property
+    def pw_deceased_rate(self):
+        return self.performance_indicator_for('pw', 'deceased')
+
+    @property
+    def pw_abandon_rate(self):
+        return self.performance_indicator_for('pw', 'abandon')
 
     # Former SAM
     @property
@@ -390,6 +438,18 @@ class AbstractURENAMNutritionR(AbstractURENutritionR):
     @property
     def exsam_total_end(self):
         return self.age_sum_for('exsam', ['total_end_m', 'total_end_f'])
+
+    @property
+    def exsam_healed_rate(self):
+        return self.performance_indicator_for('exsam', 'healed')
+
+    @property
+    def exsam_deceased_rate(self):
+        return self.performance_indicator_for('exsam', 'deceased')
+
+    @property
+    def exsam_abandon_rate(self):
+        return self.performance_indicator_for('exsam', 'abandon')
 
     def fill_blank(self):
         for field in self.data_fields():

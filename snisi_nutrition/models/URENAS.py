@@ -131,6 +131,18 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
     def u59o6_total_end(self):
         return self.age_sum_for('u59o6', ['total_end_m', 'total_end_f'])
 
+    @property
+    def u59o6_healed_rate(self):
+        return self.performance_indicator_for('u59o6', 'healed')
+
+    @property
+    def u59o6_deceased_rate(self):
+        return self.performance_indicator_for('u59o6', 'deceased')
+
+    @property
+    def u59o6_abandon_rate(self):
+        return self.performance_indicator_for('u59o6', 'abandon')
+
     # Over 59 months
     @property
     def o59_total_start(self):
@@ -155,6 +167,18 @@ class AbstractURENASNutritionR(AbstractURENutritionR):
     @property
     def o59_total_end(self):
         return self.age_sum_for('o59', ['total_end_m', 'total_end_f'])
+
+    @property
+    def o59_healed_rate(self):
+        return self.performance_indicator_for('o59', 'healed')
+
+    @property
+    def o59_deceased_rate(self):
+        return self.performance_indicator_for('o59', 'deceased')
+
+    @property
+    def o59_abandon_rate(self):
+        return self.performance_indicator_for('o59', 'abandon')
 
     @classmethod
     def age_groups(cls):

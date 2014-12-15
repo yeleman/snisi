@@ -80,6 +80,34 @@ class AbstractURENutritionR(SNISIReport):
 
         return list(set(fields))
 
+    @classmethod
+    def all_uren_fields(cls):
+        return cls.uren_fields_with_calc() + cls.aged_uren_fields_with_calc()
+
+    @classmethod
+    def uren_fields_with_calc(cls):
+        return [
+            'total_start_m', 'total_start_f',
+            'total_start',
+            'new_cases', 'returned',
+            'total_in_m', 'total_in_f',
+            'total_in',
+            'transferred',
+            'grand_total_in',
+            'healed', 'deceased', 'abandon', 'not_responding',
+            'total_out_m', 'total_out_f',
+            'total_out',
+            'referred',
+            'grand_total_out',
+            'total_end_m', 'total_end_f', 'total_end',
+            'healed_rate', 'deceased_rate', 'abandon_rate']
+
+    @classmethod
+    def aged_uren_fields_with_calc(cls):
+        return ["{a}_{f}".format(a=age, f=field)
+                for age in cls.age_groups()
+                for field in cls.uren_fields_with_calc()]
+
     # overriden
     @classmethod
     def age_groups(cls):
@@ -89,6 +117,22 @@ class AbstractURENutritionR(SNISIReport):
     def age_sum_for(self, age, fields):
         return sum([getattr(self, '{}_{}'.format(age, field))
                     for field in fields])
+
+    # sum of out reasons except not resp.
+    def total_performance_for(self, age):
+        tof = '{}_total_out'.format(age) if age != 'all' else 'total_out'
+        nof = '{}_not_responding'.format(age) \
+            if age != 'all' else 'not_responding'
+        return getattr(self, tof, 0) - getattr(self, nof, 0)
+
+    # rate of indicator (healed, deceased, abandon)
+    def performance_indicator_for(self, age, field):
+        f = '{}_{}'.format(age, field) \
+            if age != 'all' else '{}'.format(field)
+        try:
+            return getattr(self, f) / self.total_performance_for(age)
+        except ZeroDivisionError:
+            return 0
 
     # common helpers for integrity checks
     @classmethod
@@ -265,6 +309,18 @@ class AbstractURENutritionR(SNISIReport):
     def total_end_f(self):
         return self.total_for('total_end_f')
 
+    @property
+    def healed_rate(self):
+        return self.performance_indicator_for('all', 'healed')
+
+    @property
+    def deceased_rate(self):
+        return self.performance_indicator_for('all', 'deceased')
+
+    @property
+    def abandon_rate(self):
+        return self.performance_indicator_for('all', 'abandon')
+
     # comparative values
     @property
     def comp_total_start(self):
@@ -353,3 +409,15 @@ class AbstractURENutritionR(SNISIReport):
     @property
     def comp_total_end_f(self):
         return self.comp_total_for('total_end_f')
+
+    @property
+    def comp_healed_rate(self):
+        return self.performance_indicator_for('comp', 'healed')
+
+    @property
+    def comp_deceased_rate(self):
+        return self.performance_indicator_for('comp', 'deceased')
+
+    @property
+    def comp_abandon_rate(self):
+        return self.performance_indicator_for('comp', 'abandon')
