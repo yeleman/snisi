@@ -1,0 +1,92 @@
+{% load snisi %}
+<div class="indicatorwrapper">
+<h3 class="caption"><strong>{{ table.name }}.</strong> {{ table.caption }}</h3>
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+	<th rowspan="2">DISTRICT</th>
+	<th rowspan="2">RAPPORTS</th>
+	{% for period in periods %}
+	<th>{{ period }}</th>
+	{% endfor %}
+	<th colspan="2">TOTAL</th>
+</tr>
+</thead>
+<tbody>
+{% for entity_slug, edata in entities_periods.items %}
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<th rowspan="7">{{ edata.entity.name }}</th>
+	<td class="left">Guéris</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_healed }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">Décès</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_abandon }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">Abandons</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_deceased }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">Total</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_out_base }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">% guérison</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_healed_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">% abandon</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_abandon_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">% décès</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_comp_deceased_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>

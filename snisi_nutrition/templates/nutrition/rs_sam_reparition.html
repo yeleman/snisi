@@ -1,0 +1,42 @@
+{% load snisi %}
+<div class="indicatorwrapper">
+<h3 class="caption"><strong>{{ table.name }}.</strong> {{ table.caption }}</h3>
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+	<th rowspan="2">DISTRICT</th>
+	<th rowspan="2">RAPPORTS</th>
+	{% for period in periods %}
+	<th>{{ period }}</th>
+	{% endfor %}
+	<th colspan="2">TOTAL</th>
+</tr>
+</thead>
+<tbody>
+{% for entity_slug, edata in entities_periods.items %}
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<th rowspan="2">{{ edata.entity.name }}</th>
+	<td class="left">% Admissions URENI</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_ureni_comp_new_cases_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">% admissions URENAS</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td>{{ pdata.sam_urenas_comp_new_cases_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>

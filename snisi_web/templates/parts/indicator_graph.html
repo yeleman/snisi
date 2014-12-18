@@ -2,4 +2,4 @@
 {% if table.graph_type == 'spline' %}<div class="chart {{ table.graph_type }}">{% endif %}
 <div id="widget_{{ id }}"></div>
 {% if table.graph_type == 'spline' %}</div>{% endif %}
-<script type="text/javascript">{% include "parts/indicator_graph.js" with table=table id=id %}</script>
+<script type="text/javascript">{% if table.is_entity_indicator %}{% include "parts/entity_indicator_graph.js" with table=table id=id %}{% else %}{% include "parts/indicator_graph.js" with table=table id=id %}{% endif %}</script>

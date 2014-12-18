@@ -430,6 +430,22 @@ class AbstractNutritionR(SNISIReport):
     def mam_comp_total_end_f(self):
         return self.mam_comp_total_for('total_end_f')
 
+    @property
+    def mam_comp_out_base(self):
+        return self.total_performance_for('mam_comp_')
+
+    @property
+    def mam_comp_healed_rate(self):
+        return self.performance_indicator_for('mam_comp_', 'healed')
+
+    @property
+    def mam_comp_deceased_rate(self):
+        return self.performance_indicator_for('mam_comp_', 'deceased')
+
+    @property
+    def mam_comp_abandon_rate(self):
+        return self.performance_indicator_for('mam_comp_', 'abandon')
+
     # SAM only (SAM/SAM+)
     @property
     def sam_comp_total_start(self):
@@ -514,6 +530,22 @@ class AbstractNutritionR(SNISIReport):
     @property
     def sam_comp_total_end_f(self):
         return self.sam_comp_total_for('total_end_f')
+
+    @property
+    def sam_comp_healed_rate(self):
+        return self.performance_indicator_for('sam_comp_', 'healed')
+
+    @property
+    def sam_comp_deceased_rate(self):
+        return self.performance_indicator_for('sam_comp_', 'deceased')
+
+    @property
+    def sam_comp_abandon_rate(self):
+        return self.performance_indicator_for('sam_comp_', 'abandon')
+
+    @property
+    def sam_comp_out_base(self):
+        return self.total_performance_for('sam_comp_')
 
     # SAM WITH AGES (SAM/SAM+)
     @property
@@ -922,12 +954,12 @@ class AggNutritionR(AbstractNutritionR,
     @classmethod
     def update_instance_with_indiv(cls, report, instance):
         # no data update
-        cls.update_instance_with_indiv_meta(report, instance)
+        pass
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
         # no data update
-        cls.update_instance_with_agg_meta(report, instance)
+        pass
 
     @classmethod
     def create_from(cls, period, entity, created_by,
@@ -994,23 +1026,23 @@ class AggNutritionR(AbstractNutritionR,
 
         return report
 
-    @classmethod
-    def start_aggregated(cls, *args, **kwargs):
-        rfdict = {}
-        for field in ('completion_ok', 'integrity_ok',
-                      'arrival_ok', 'auto_validate'):
-            if field in kwargs:
-                rfdict.update({field: kwargs.get(field)})
-                del kwargs[field]
-        report = cls.start_report(*args, **kwargs)
-        report.fill_blank()
+    # @classmethod
+    # def start_aggregated(cls, *args, **kwargs):
+    #     rfdict = {}
+    #     for field in ('completion_ok', 'integrity_ok',
+    #                   'arrival_ok', 'auto_validate'):
+    #         if field in kwargs:
+    #             rfdict.update({field: kwargs.get(field)})
+    #             del kwargs[field]
+    #     report = cls.start_report(*args, **kwargs)
+    #     report.fill_blank()
 
-        # only agg
-        if hasattr(report, 'set_reporting_status_fields'):
-            report.set_reporting_status_fields(**rfdict)
-        if hasattr(report, 'update_expected_reportings_number'):
-            report.update_expected_reportings_number()
-        return report
+    #     # only agg
+    #     if hasattr(report, 'set_reporting_status_fields'):
+    #         report.set_reporting_status_fields(**rfdict)
+    #     if hasattr(report, 'update_expected_reportings_number'):
+    #         report.update_expected_reportings_number()
+    #     return report
 
 
 receiver(pre_save, sender=AggNutritionR)(pre_save_report)

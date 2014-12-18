@@ -97,6 +97,7 @@ def create_periodic_agg_report_from(cls, period, entity,
     # create empty
     agg_report = cls.start(entity=entity, period=period, created_by=created_by)
     agg_report.fill_blank()
+    agg_report.init_meta_fields()
 
     # find list of sources
     if indiv_cls is not None and indiv_sources is None:
@@ -131,6 +132,8 @@ def create_periodic_agg_report_from(cls, period, entity,
         elif isinstance(source, cls):
             cls.update_instance_with_agg(agg_report, source)
             cls.update_instance_with_agg_meta(agg_report, source)
+
+    agg_report.update_expected_reportings_number()
 
     with reversion.create_revision():
         agg_report.save()

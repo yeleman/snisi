@@ -530,18 +530,12 @@ class AggURENAMNutritionR(AbstractURENAMNutritionR,
 
     @classmethod
     def update_instance_with_indiv(cls, report, instance):
-
-        cls.update_instance_with_indiv_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
-
-        cls.update_instance_with_agg_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))

@@ -433,7 +433,8 @@ class AbstractNutritionStocksR(SNISIReport):
         e = Entity.get_or_none(self.entity.slug)
         lines = []
         for inp in self.inputs():
-            if not e.has_ureni and inp in self.inputs(ureni_only=True):
+            if not getattr(e, 'has_ureni', False) \
+                    and inp in self.inputs(ureni_only=True):
                 continue
 
             d = {'label': self.input_str(inp),
@@ -531,18 +532,12 @@ class AggNutritionStocksR(AbstractNutritionStocksR,
 
     @classmethod
     def update_instance_with_indiv(cls, report, instance):
-
-        cls.update_instance_with_indiv_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
-
-        cls.update_instance_with_agg_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))

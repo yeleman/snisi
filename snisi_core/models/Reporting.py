@@ -607,14 +607,15 @@ class PeriodicAggregatedReportInterface(models.Model):
                 if indirect_instance not in report.agg_sources.all():
                     report.agg_sources.add(indirect_instance)
 
+    def init_meta_fields(self):
+        for field in self.PERIODIC_AGG_MIXIN_FIELDS:
+            if getattr(self, field) is None:
+                setattr(self, field, 0)
+
     @classmethod
     def update_instance_with_indiv_meta(cls, report, instance):
         def _update(field):
             setattr(report, field, getattr(report, field, 0) + 1)
-
-        for field in cls.PERIODIC_AGG_MIXIN_FIELDS:
-            if getattr(report, field) is None:
-                setattr(report, field, 0)
 
         _update('nb_source_reports_arrived')
 

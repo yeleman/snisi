@@ -256,6 +256,7 @@ class IndicatorTable:
     graph_type = 'column'
     rendering_type = 'table'
     graph_stacking = False
+    is_entity_indicator = False
 
     def __init__(self, entity, periods, **kwargs):
         self.entity = entity
@@ -573,3 +574,120 @@ def gen_report_indicator(field,
     cls.name = name if name is not None else report_cls.field_name(field) \
         if report_cls is not None else None
     return cls
+
+
+class SummaryForEntitiesTable(object):
+    """ Special IndicatorTable adapatation for Graph over children's
+
+        Not a complete drop-in replacement.
+        Instead of looping through periods to display per-entity
+        variation of data over time
+
+        it loops through entities (health children is default)
+        and displays a sum of data for the periods """
+
+    name = None
+    title = None
+    caption = None
+    rendering_type = 'graph'
+    graph_type = 'column'
+    is_entity_indicator = True
+    INDICATORS = []
+
+    def __init__(self, entity, periods, **kwargs):
+        self.entity = entity
+        self.periods = periods
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+        self._entities = self.get_descendants()
+        self._data = {}
+        self._computed = False
+
+    # override plz
+    def get_descendants(self):
+        return sorted(self.entity.casted().get_health_children(),
+                      key=lambda x: x.name)
+
+    @property
+    def entities(self):
+        return self._entities
+
+    def compute(self):
+        for indicator_idx, indicator_cls in enumerate(self.INDICATORS):
+            for entity_idx, entity in enumerate(self.entities):
+                self._data[(indicator_idx, entity_idx)] = \
+                    self.compute_data_for(
+                        entity=entity, periods=self.periods,
+                        indicator_cls=indicator_cls)
+
+        self._computed = True
+        return self._data
+
+    def compute_data_for(cls, entity, periods, indicator_cls):
+        return FakeIndicator({
+            'data': cls.compute_sum_data_for(entity, periods, indicator_cls)})
+
+    def compute_sum_data_for(cls, entity, periods, indicator_cls):
+        return sum([d for d in [
+            indicator_cls(entity=entity, period=period).data
+            for period in periods
+        ] if d is not None])
+
+    @property
+    def computed(self):
+        return self._computed
+
+    @property
+    def data(self):
+        if self.computed:
+            return self._data
+        return self.compute()
+
+    def data_for(self, lidx, cidx):
+        return self.data[(lidx, cidx)]
+
+    def nb_lines(self):
+        return len(self.INDICATORS)
+
+    def nb_cols(self):
+        return len(self.entities)
+
+    def get_column_label_for(self, idx):
+        return self.entities[idx].name
+
+    def get_column_for(self, idx):
+        return self.entities[idx]
+
+    def get_line_label_for(self, idx):
+        return self.INDICATORS[idx].name
+
+    def render_line(self, line_index):
+        cols = []
+        for column_index in range(0, self.nb_cols()):
+            indic = self.data_for(line_index, column_index)
+            data = getattr(indic, 'data')
+
+            cols.append((self.get_column_for(column_index), data))
+            # cols.append(data)
+
+        return cols
+
+    def render_for_graph(self):
+        return [
+            {'label': self.get_line_label_for(idx),
+             'data': self.render_line(idx)}
+            for idx in range(0, self.nb_lines())
+        ]
+
+    @property
+    def show_as_percentage(self):
+        return self.is_percentage
+
+    def last_period(self):
+        try:
+            return self.periods[-1]
+        except IndexError:
+            return None
+

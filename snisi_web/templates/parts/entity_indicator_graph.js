@@ -19,18 +19,11 @@ hc_graphs.push({
     legend: {},
     title: {text: null},
     xAxis: {
-        type: 'datetime',
-        maxZoom: 84600 * 1000,
-        dateTimeLabelFormats: {
-            millisecond: '%H:%M:%S.%L',
-            second: '%H:%M:%S',
-            minute: '%H:%M',
-            hour: '%H:%M',
-            day: '%e. %b',
-            week: '%e. %b',
-            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
-            year: '%Y'
-        }
+    	categories: [
+    		{% for entity in table.entities %}
+    		"{{ entity.name }}",
+    		{% endfor %}
+        ]
     },
     yAxis: {
         title: {text: null},
@@ -43,7 +36,7 @@ hc_graphs.push({
         {% for line in table.render_for_graph %}
         {
             name: "{{ line.label|safe }}",
-            data: {% localize off %}[{% for p, data in line.data %}[{{ p.start_on|to_jstimestamp }}, {{ data|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
+            data: {% localize off %}[{% for entity, data in line.data %}{{ data|default_if_none:"null" }},{% endfor %}]{% endlocalize %}
         },
         {% endfor %}
     ],
