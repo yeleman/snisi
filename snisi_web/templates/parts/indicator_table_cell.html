@@ -1,0 +1,1 @@
+{% if forloop.counter0 == 0 %}<th>{{ column.human }}</th>{% else %}<td{% if column.raise_class %} class="{{ column.get_class }}"{% endif %}>{{ column.human|default_if_none:"-" }}</td>{% endif %}

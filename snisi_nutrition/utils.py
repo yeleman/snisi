@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 from collections import OrderedDict
 
+from snisi_core.indicators import Indicator
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_core.models.Entities import Entity
 from snisi_nutrition.models.URENI import AggURENINutritionR, URENINutritionR
@@ -171,6 +172,24 @@ def generate_entity_period_matrix(entity, period):
         except ZeroDivisionError:
             return 0
 
+    def gc(value, slug):
+        good = Indicator.GOOD
+        warning = Indicator.WARNING
+        bad = Indicator.BAD
+        if slug == 'caseload':
+            return good if value >= 0.5 else warning
+        elif slug == 'healed':
+            return good if value >= 0.75 else bad
+        elif slug == 'deceased':
+            return good if value < 0.10 else bad
+        elif slug == 'abandon':
+            return good if value < 0.15 else bad
+        elif slug == 'ureni':
+            return good if value >= 0.10 and value <= 0.20 else bad
+        elif slug == 'urenas':
+            return good if value >= 0.80 and value <= 0.90 else bad
+        return ''
+
     if not expecteds.count() or (not is_total and expected is None):
         return {'expected': None}
 
@@ -204,36 +223,56 @@ def generate_entity_period_matrix(entity, period):
     data['sam_comp_new_cases'] = get(report, None, 'sam_comp_new_cases')
     # TODO: FIX CASELOAD
     data['sam_comp_caseload_treated'] = pc(data['sam_comp_new_cases'], 100)
+    data['sam_comp_caseload_treated_class'] = gc(
+        data['sam_comp_caseload_treated'], 'caseload')
 
     data['sam_ureni_comp_new_cases'] = get(report, 'ureni', 'comp_new_cases')
     data['sam_urenas_comp_new_cases'] = get(report, 'urenas', 'comp_new_cases')
     data['sam_comp_new_cases'] = get(report, None, 'sam_comp_new_cases')
     data['sam_ureni_comp_new_cases_rate'] = pc(
         data['sam_ureni_comp_new_cases'], data['sam_comp_new_cases'])
+    data['sam_ureni_comp_new_cases_rate_class'] = gc(
+        data['sam_ureni_comp_new_cases_rate'], 'ureni')
     data['sam_urenas_comp_new_cases_rate'] = pc(
         data['sam_urenas_comp_new_cases'], data['sam_comp_new_cases'])
+    data['sam_urenas_comp_new_cases_rate_class'] = gc(
+        data['sam_urenas_comp_new_cases_rate'], 'urenas')
 
     data['sam_comp_healed'] = get(report, None, 'sam_comp_healed')
     data['sam_comp_abandon'] = get(report, None, 'sam_comp_abandon')
     data['sam_comp_deceased'] = get(report, None, 'sam_comp_deceased')
     data['sam_comp_out_base'] = get(report, None, 'sam_comp_out_base')
     data['sam_comp_healed_rate'] = get(report, None, 'sam_comp_healed_rate')
+    data['sam_comp_healed_rate_class'] = gc(
+        data['sam_comp_healed_rate'], 'healed')
     data['sam_comp_abandon_rate'] = get(report, None, 'sam_comp_abandon_rate')
+    data['sam_comp_abandon_rate_class'] = gc(
+        data['sam_comp_abandon_rate'], 'abandon')
     data['sam_comp_deceased_rate'] = get(report, None,
                                          'sam_comp_deceased_rate')
+    data['sam_comp_deceased_rate_class'] = gc(
+        data['sam_comp_deceased_rate'], 'deceased')
 
     data['mam_comp_new_cases'] = get(report, None, 'mam_comp_new_cases')
     # TODO: FIX CASELOAD
     data['mam_comp_caseload_treated'] = pc(data['mam_comp_new_cases'], 100)
+    data['mam_comp_caseload_treated_class'] = gc(
+        data['mam_comp_caseload_treated'], 'caseload')
 
     data['mam_comp_healed'] = get(report, None, 'mam_comp_healed')
     data['mam_comp_abandon'] = get(report, None, 'mam_comp_abandon')
     data['mam_comp_deceased'] = get(report, None, 'mam_comp_deceased')
     data['mam_comp_out_base'] = get(report, None, 'mam_comp_out_base')
     data['mam_comp_healed_rate'] = get(report, None, 'mam_comp_healed_rate')
+    data['mam_comp_healed_rate_class'] = gc(
+        data['mam_comp_healed_rate'], 'healed')
     data['mam_comp_abandon_rate'] = get(report, None, 'mam_comp_abandon_rate')
+    data['mam_comp_abandon_rate_class'] = gc(
+        data['mam_comp_abandon_rate'], 'abandon')
     data['mam_comp_deceased_rate'] = get(report, None,
                                          'mam_comp_deceased_rate')
+    data['mam_comp_deceased_rate_class'] = gc(
+        data['mam_comp_deceased_rate'], 'deceased')
 
     return data
 

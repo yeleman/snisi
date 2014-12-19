@@ -11,9 +11,15 @@
 </tr>
 {% endif %}
 
+{% if table.use_advanced_rendering %}
+{% for row in table.render_with_labels_raw %}
+<tr class="{% if forloop.counter0 in table.em_lines %}indicator-em{% endif %}">{% for col in row %}{% include "parts/indicator_table_cell.html" with column=col %}{% endfor %}</tr>
+{% endfor %}
+{% else %}
 {% for row in table.render_with_labels_human %}
 <tr class="{% if forloop.counter0 in table.em_lines %}indicator-em{% endif %}">{% for col in row %}{% if forloop.counter0 == 0 %}<th>{{ col }}</th>{% else %}<td>{{ col|default_if_none:"-" }}</td>{% endif %}{% endfor %}</tr>
 {% endfor %}
+{% endif %}
 
 </table>
 </div>

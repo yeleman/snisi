@@ -51,6 +51,10 @@ class DataIsMissing(Exception):
 @implements_to_string
 class Indicator(object):
 
+    GOOD = 'indicator-good'
+    WARNING = 'indicator-warning'
+    BAD = 'indicator-bad'
+
     SNISI_INDICATOR = True
     INDIVIDUAL_CLS = SNISIReport
     AGGREGATED_CLS = SNISIReport
@@ -70,6 +74,13 @@ class Indicator(object):
 
     # data can be represented as Y/N value
     is_yesno = False
+
+    # whether indicator has a meta value for CSS
+    raise_class = False
+
+    CLONABLE_PROPS = [
+        'is_ratio', 'is_yesno', 'raise_class', 'get_class',
+        'is_geo_friendly', 'geo_section']
 
     def __init__(self, period=None, entity=None, expected=None):
 
@@ -96,6 +107,15 @@ class Indicator(object):
         if qsa.count() == 1:
             return qsa.get()
         return None
+
+    def get_fake(self, adict):
+        ind = FakeIndicator(adict)
+        for prop in self.CLONABLE_PROPS:
+            setattr(ind, prop, getattr(self, prop))
+        return ind
+
+    def get_class(self):
+        return ""
 
     @classmethod
     def clone_from(cls, indicator_instance):
@@ -257,6 +277,7 @@ class IndicatorTable:
     rendering_type = 'table'
     graph_stacking = False
     is_entity_indicator = False
+    use_advanced_rendering = False
 
     def __init__(self, entity, periods, **kwargs):
         self.entity = entity
@@ -349,7 +370,7 @@ class IndicatorTable:
                  for col in range(0, self.nb_cols() - 1)
                  if not self.data_for(line_index, col).is_missing
                  and self.data_for(line_index, col).is_expected])
-        return FakeIndicator({
+        return self.data_for(line_index, col).get_fake({
             'human': humanize_value(d),
             'data': d
         })
@@ -436,14 +457,23 @@ class IndicatorTable:
         return [index for index, indic in enumerate(self.INDICATORS)
                 if getattr(indic, '_is_em', False)]
 
+    def get_line_label_as_indic_for(self, line_index):
+        return FakeIndicator({
+            'data': self.get_line_label_for(line_index),
+            'human': self.get_line_label_for(line_index)})
+
     def render_line(self,
                     line_index,
                     as_human=False,
                     with_labels=False,
-                    as_period_tuple=False):
+                    as_period_tuple=False,
+                    as_indic=False):
         cols = []
         if with_labels:
-            cols.append(self.get_line_label_for(line_index))
+            if as_indic:
+                cols.append(self.get_line_label_as_indic_for(line_index))
+            else:
+                cols.append(self.get_line_label_for(line_index))
         for column_index in range(0, self.nb_cols()):
             indic = self.data_for(line_index, column_index)
 
@@ -462,6 +492,8 @@ class IndicatorTable:
             # on series with dated values
             if as_period_tuple:
                 cols.append((self.get_period_for(column_index), data))
+            elif as_indic:
+                cols.append(indic)
             else:
                 cols.append(data)
 
@@ -478,11 +510,12 @@ class IndicatorTable:
 
         return cols
 
-    def render(self, as_human=False, with_labels=False):
+    def render(self, as_human=False, with_labels=False, as_indic=False):
         lines = []
         for line_index in range(0, self.nb_lines()):
             lines.append(self.render_line(line_index,
                                           as_human=as_human,
+                                          as_indic=as_indic,
                                           with_labels=with_labels))
         return lines
 
@@ -491,6 +524,9 @@ class IndicatorTable:
 
     def render_with_labels_human(self, as_human=True):
         return self.render(as_human=as_human, with_labels=True)
+
+    def render_with_labels_raw(self):
+        return self.render(as_human=False, with_labels=True, as_indic=True)
 
     def last_period(self):
         try:

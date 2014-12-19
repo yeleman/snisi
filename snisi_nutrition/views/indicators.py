@@ -286,9 +286,6 @@ def synthesis_browser(request,
                     ('mam_performance_ds_graph', MAMPerformanceByDS),
                     ('mam_caseload_treated_ds_graph', MAMCaseloadTreatedByDS),
                 ]
-
-        elif entity.type.slug == 'health_center':
-            pass
         elif entity.type.slug == 'country':
             pass
 

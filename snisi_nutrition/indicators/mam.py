@@ -19,25 +19,37 @@ logger = logging.getLogger(__name__)
 class MAMHealedRate(NutritionIndicator):
     name = "Taux de guérison"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.mam_comp_healed_rate
+
+    def get_class(self):
+        return self.GOOD if self.data >= 75 else self.BAD
 
 
 class MAMDeceasedRate(NutritionIndicator):
     name = "Taux de décès"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.mam_comp_deceased_rate
+
+    def get_class(self):
+        return self.GOOD if self.data < 10 else self.BAD
 
 
 class MAMAbandonRate(NutritionIndicator):
     name = "Taux d'abandon"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.mam_comp_abandon_rate
+
+    def get_class(self):
+        return self.GOOD if self.data < 15 else self.BAD
 
 
 class MAMNewCases(ReportDataMixin, NutritionIndicator):
@@ -53,10 +65,14 @@ class URENAMNewCases(MAMNewCases):
 
 class MAMCaseloadTreated(NutritionIndicator):
     name = "% Caseload MAM traité"
+    raise_class = True
 
     def _compute(self):
         # TODO: FIX CASELOAD
         return 28
+
+    def get_class(self):
+        return self.GOOD if self.data >= 50 else self.WARNING
 
 
 # TABLES AND GRAPHS
@@ -117,6 +133,8 @@ class MAMPerformanceTable(IndicatorTable):
     caption = ("INDICATEURS PERFORMANCE 6-59 MOIS DS")
     rendering_type = 'table'
     add_total = True
+    is_percentage = True
+    use_advanced_rendering = True
 
     INDICATORS = [
         MAMDeceasedRate,

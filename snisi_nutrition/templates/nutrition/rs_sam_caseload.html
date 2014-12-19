@@ -31,7 +31,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_comp_caseload_treated|percent }}</td>
+			<td class="{{ pdata.sam_comp_caseload_treated_class }}">{{ pdata.sam_comp_caseload_treated|percent }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>

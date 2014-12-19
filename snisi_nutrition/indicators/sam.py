@@ -18,25 +18,37 @@ logger = logging.getLogger(__name__)
 class SAMHealedRate(NutritionIndicator):
     name = "Taux de guérison"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.sam_comp_healed_rate
+
+    def get_class(self):
+        return self.GOOD if self.data >= 75 else self.BAD
 
 
 class SAMDeceasedRate(NutritionIndicator):
     name = "Taux de décès"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.sam_comp_deceased_rate
+
+    def get_class(self):
+        return self.GOOD if self.data < 10 else self.BAD
 
 
 class SAMAbandonRate(NutritionIndicator):
     name = "Taux d'abandon"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.sam_comp_abandon_rate
+
+    def get_class(self):
+        return self.GOOD if self.data < 15 else self.BAD
 
 
 # SYNTHESE NUT DS
@@ -70,32 +82,42 @@ class SAMNewCases(URENASNewCasesURENI):
 
 class SAMCaseloadTreated(NutritionIndicator):
     name = "% Caseload MAS traité"
+    raise_class = True
 
     def _compute(self):
         # TODO: FIX CASELOAD
         return 32
 
+    def get_class(self):
+        return self.GOOD if self.data >= 50 else self.WARNING
+
 
 class URENASNewCasesRate(URENASNewCases):
     name = "% ADMISSIONS URENAS"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.urenas_report.comp_new_cases \
             / self.report.sam_comp_new_cases
 
+    def get_class(self):
+        return self.GOOD if self.data >= 80 and self.data <= 90 \
+            else self.BAD
+
 
 class URENINewCasesRate(URENINewCases):
     name = "% ADMISSIONS URENI"
     is_ratio = True
+    raise_class = True
 
     def _compute(self):
         return self.report.ureni_report.comp_new_cases \
             / self.report.sam_comp_new_cases
 
-###
-##
-###
+    def get_class(self):
+        return self.GOOD if self.data >= 10 and self.data <= 20 \
+            else self.BAD
 
 
 class URENIURENASNewCasesTable(IndicatorTableWithEntities):
@@ -170,6 +192,7 @@ class SAMCaseloadTable(IndicatorTable):
     caption = ("CASELOAD MAS 6-59 MOIS ATTENDU")
     rendering_type = 'table'
     add_total = True
+    use_advanced_rendering = True
 
     INDICATORS = [
         SAMNewCases,
@@ -183,6 +206,7 @@ class URENIURENASRepartitionTable(IndicatorTable):
     caption = ("% ADMISSIONS URENI/URENAS 6-59 MOIS")
     rendering_type = 'table'
     add_total = True
+    use_advanced_rendering = True
 
     INDICATORS = [
         URENINewCasesRate,
@@ -195,6 +219,7 @@ class SAMPerformanceTable(IndicatorTable):
     caption = ("INDICATEURS PERFORMANCE 6-59 MOIS")
     rendering_type = 'table'
     add_total = True
+    use_advanced_rendering = True
 
     INDICATORS = [
         SAMDeceasedRate,
