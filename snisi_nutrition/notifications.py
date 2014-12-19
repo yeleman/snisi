@@ -13,6 +13,11 @@ from snisi_core.models.Providers import Provider
 from snisi_nutrition import PROJECT_BRAND, ROUTINE_EXTENDED_REPORTING_END_DAY
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Reporting import ExpectedReporting
+from snisi_nutrition.models.Monthly import NutritionR
+from snisi_nutrition.indicators.mam import (
+    MAMHealedRate, MAMDeceasedRate, MAMAbandonRate)
+from snisi_nutrition.indicators.sam import (
+    SAMHealedRate, SAMDeceasedRate, SAMAbandonRate)
 
 
 logger = logging.getLogger(__name__)
@@ -24,6 +29,70 @@ def get_expected_source_reports(period):
         period=period,
         entity__type__slug='health_center',
         completion_status__in=('', ExpectedReporting.COMPLETION_MISSING))
+
+
+def get_performance_text(report):
+    indicators = {'mam': None, 'mas': None}
+
+    if report.entity.casted().has_urenam:
+        indicators['mam'] = {
+            'healed': MAMHealedRate(entity=report.entity,
+                                    period=report.period),
+            'abandon': MAMAbandonRate(entity=report.entity,
+                                      period=report.period),
+            'deceased': MAMDeceasedRate(entity=report.entity,
+                                        period=report.period),
+        }
+
+    if report.entity.casted().has_urenas \
+            or report.entity.casted().has_ureni:
+        indicators['sam'] = {
+            'healed': SAMHealedRate(entity=report.entity,
+                                    period=report.period),
+            'abandon': SAMAbandonRate(entity=report.entity,
+                                      period=report.period),
+            'deceased': SAMDeceasedRate(entity=report.entity,
+                                        period=report.period),
+        }
+
+    # no indicator to talk about
+    if indicators['mam'] is None and indicators['sam'] is None:
+        return 4
+
+    nb_bad_indic = sum(
+        [1 for idict in indicators.values()
+         if idict is not None
+         for indic in idict.values()
+         if indic.get_class() != indic.GOOD])
+
+    if nb_bad_indic == 0:
+        return 3
+
+    umap = {
+        'mam': "MAM",
+        'sam': "MAS"
+    }
+
+    imap = {
+        'healed': "Tx guérison",
+        'abandon': "Tx abandon",
+        'deceased': "Tx décès"
+    }
+
+    indic_list = []
+    for uren, udict in indicators.items():
+        if udict is None:
+            continue
+        for key, indic in udict.items():
+            if not indic.get_class() == indic.GOOD:
+                indic_list.append("{u}/{i}: {v}"
+                                  .format(u=umap.get(uren),
+                                          i=imap.get(key),
+                                          v=indic.human))
+    return ("Attention, {nb} indicateur(s) de performance non satisfaisant "
+            "concernant votre rapport mensuel: {l}"
+            .format(nb=nb_bad_indic,
+                    l=" - ".join(indic_list)))
 
 
 def end_of_reporting_period_notifications(period):
@@ -75,3 +144,24 @@ def end_of_extended_reporting_period_notifications(period):
                     period=period,
                     periodf=period.following(),
                     entity=exp.entity))
+
+
+def performance_indicators_notifications(period):
+
+    # send warning message to DTC with poor performance
+    for report in NutritionR.objects.filter(
+            report_class__slug='nutrition_monthly_routine', period=period):
+
+        text = get_performance_text(report)
+        if text is None:
+            continue
+
+        for recipient in Provider.active.filter(location=report.entity):
+            logger.debug("Sending notif to {}".format(recipient))
+
+            Notification.create(
+                provider=recipient,
+                deliver=Notification.SOON,
+                expirate_on=period.following().end_on,
+                category=PROJECT_BRAND,
+                text=text)
