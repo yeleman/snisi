@@ -159,14 +159,14 @@ def generate_entity_period_matrix(entity, period):
 
         if not is_total:
             if sub_report is None:
-                return getattr(r, field, 0)
+                return getattr(r, field, 0) or 0
             return getattr(getattr(r, '{}_report'.format(sub_report)),
-                           field, 0)
+                           field, 0) or 0
 
         if sub_report is None:
-            return sum([getattr(report, field, 0) for report in reports])
+            return sum([getattr(report, field, 0) or 0 for report in reports])
         return sum([getattr(getattr(report, '{}_report'.format(sub_report)),
-                            field, 0) for report in reports])
+                            field, 0) or 0 for report in reports])
 
     def pc(a, b):
         try:
