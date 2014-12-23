@@ -7,9 +7,9 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_nutrition.indicators.sam import (
-    SAMHealedRate, SAMDeceasedRate, SAMAbandonRate)
+    SAMHealedRate, SAMDeceasedRate, SAMAbandonRate, SAMCaseloadTreatedRate)
 from snisi_nutrition.indicators.mam import (
-    MAMHealedRate, MAMDeceasedRate, MAMAbandonRate)
+    MAMHealedRate, MAMDeceasedRate, MAMAbandonRate, MAMCaseloadTreatedRate)
 
 logger = logging.getLogger(__name__)
 

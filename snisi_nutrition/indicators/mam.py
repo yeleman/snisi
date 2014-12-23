@@ -7,10 +7,13 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_core.indicators import (
-    IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin)
+    IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin,
+    DataIsMissing)
 from snisi_nutrition.indicators.common import (
     IndicatorTableWithEntities,
     NutritionIndicator, shoudl_show, gen_fixed_entity_indicator)
+from snisi_nutrition.models.Caseload import ExpectedCaseload
+from snisi_nutrition.utils import get_caseload_completion_for
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +23,8 @@ class MAMHealedRate(NutritionIndicator):
     name = "Taux de guérison"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAM"
 
     def _compute(self):
         return self.report.mam_comp_healed_rate
@@ -32,6 +37,8 @@ class MAMDeceasedRate(NutritionIndicator):
     name = "Taux de décès"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAM"
 
     def _compute(self):
         return self.report.mam_comp_deceased_rate
@@ -44,6 +51,8 @@ class MAMAbandonRate(NutritionIndicator):
     name = "Taux d'abandon"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAM"
 
     def _compute(self):
         return self.report.mam_comp_abandon_rate
@@ -63,16 +72,48 @@ class URENAMNewCases(MAMNewCases):
     name = "TOTAL URENAM"
 
 
-class MAMCaseloadTreated(NutritionIndicator):
-    name = "% Caseload MAM traité"
-    raise_class = True
+class MAMCaseloadExpected(NutritionIndicator):
+    name = "Caseload MAM attendu"
 
     def _compute(self):
-        # TODO: FIX CASELOAD
-        return 28
+        try:
+            return ExpectedCaseload.get_or_none_from(
+                year=self.period.start_on.year,
+                entity_slug=self.entity.slug).u59o6_mam
+        except:
+            raise DataIsMissing
+
+
+class MAMCaseloadTreated(NutritionIndicator):
+    name = "Caseload MAM traité"
+
+    def _compute(self):
+        return get_caseload_completion_for(period=self.period,
+                                           entity=self.entity,
+                                           uren='mam')
+
+
+class MAMCaseloadTreatedRate(NutritionIndicator):
+    name = "% Caseload MAM traité"
+    raise_class = True
+    is_ratio = True
+    is_geo_friendly = True
+    geo_section = "Performances MAM"
+
+    def _compute(self):
+        expected = MAMCaseloadExpected(
+            entity=self.entity,
+            period=self.period).data
+        treated = MAMCaseloadTreated(
+            entity=self.entity,
+            period=self.period).data
+        try:
+            return treated / expected
+        except:
+            return 0
 
     def get_class(self):
-        return self.GOOD if self.data >= 50 else self.WARNING
+        return self.GOOD if self.data >= .50 else self.WARNING
 
 
 # TABLES AND GRAPHS
@@ -188,9 +229,10 @@ class MAMCaseloadTreatedGraph(IndicatorTable):
     caption = ("% CASELOAD MAM TRAITÉ")
     rendering_type = 'graph'
     graph_type = 'column'
+    is_percentage = True
 
     INDICATORS = [
-        MAMCaseloadTreated
+        MAMCaseloadTreatedRate
     ]
 
 
@@ -229,5 +271,5 @@ class MAMCaseloadTreatedByDS(SummaryForEntitiesTable):
     is_percentage = True
 
     INDICATORS = [
-        MAMCaseloadTreated
+        MAMCaseloadTreatedRate
     ]

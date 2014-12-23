@@ -9,18 +9,35 @@ from collections import OrderedDict
 
 from snisi_core.indicators import Indicator
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
+from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Entities import Entity
 from snisi_nutrition.models.URENI import AggURENINutritionR, URENINutritionR
 from snisi_nutrition.models.URENAS import AggURENASNutritionR, URENASNutritionR
 from snisi_nutrition.models.URENAM import AggURENAMNutritionR, URENAMNutritionR
 from snisi_nutrition.models.Stocks import AggNutritionStocksR, NutritionStocksR
 from snisi_nutrition.models.Monthly import AggNutritionR, NutritionR
+from snisi_nutrition.models.Caseload import ExpectedCaseload
 
 logger = logging.getLogger(__name__)
 report_classes = [
     ReportClass.get_or_none("nutrition_monthly_routine"),
     ReportClass.get_or_none("nutrition_monthly_routine_aggregated")]
 sort_by_name = lambda x: x.name
+
+
+def compute_sum_value(entity, periods, field, sub_report=None):
+
+    rcls = NutritionR if entity.type.slug == 'health_center' else AggNutritionR
+    reports = rcls.objects.filter(
+        entity=entity, period__in=periods)
+
+    def get(sub_report, field):
+        if sub_report is None:
+            return sum([getattr(r, field, 0) for r in reports])
+        return sum([getattr(getattr(r, '{}_report'.format(sub_report)),
+                            field, 0) for r in reports])
+
+    return get(sub_report, field)
 
 
 def generate_sum_data_for(entity, periods):
@@ -223,8 +240,10 @@ def generate_entity_period_matrix(entity, period):
         data['urenam_nb_arrived'], data['urenam_nb_expected'])
 
     data['sam_comp_new_cases'] = get(report, None, 'sam_comp_new_cases')
-    # TODO: FIX CASELOAD
-    data['sam_comp_caseload_treated'] = pc(data['sam_comp_new_cases'], 100)
+    data['sam_comp_caseload_expected'] = get_caseload_expected_for(
+        period=period, entity=entity, uren='sam')
+    data['sam_comp_caseload_treated'] = pc(
+        data['sam_comp_new_cases'], data['sam_comp_caseload_expected'])
     data['sam_comp_caseload_treated_class'] = gc(
         data['sam_comp_caseload_treated'], 'caseload')
 
@@ -256,8 +275,11 @@ def generate_entity_period_matrix(entity, period):
         data['sam_comp_deceased_rate'], 'deceased')
 
     data['mam_comp_new_cases'] = get(report, None, 'mam_comp_new_cases')
-    # TODO: FIX CASELOAD
-    data['mam_comp_caseload_treated'] = pc(data['mam_comp_new_cases'], 100)
+
+    data['mam_comp_caseload_expected'] = get_caseload_expected_for(
+        period=period, entity=entity, uren='mam')
+    data['mam_comp_caseload_treated'] = pc(
+        data['mam_comp_new_cases'], data['mam_comp_caseload_expected'])
     data['mam_comp_caseload_treated_class'] = gc(
         data['mam_comp_caseload_treated'], 'caseload')
 
@@ -298,3 +320,18 @@ def generate_entities_periods_matrix(entity, periods):
     ] + [
         (entity.slug, generate_entity_periods_matrix(entity, periods))
     ])
+
+
+def get_caseload_completion_for(period, entity, uren):
+    periods = MonthPeriod.all_from(
+        MonthPeriod.find_create_from(period.middle().year, 1, 1), period)
+    field = '{}_comp_new_cases'.format(uren)
+    return compute_sum_value(entity=entity, periods=periods, field=field)
+
+
+def get_caseload_expected_for(period, entity, uren):
+    if isinstance(period, list):
+        period = period[-1]
+    return getattr(ExpectedCaseload.get_or_none_from(
+        year=period.start_on.year,
+        entity_slug=entity.slug), 'u59o6_{}'.format(uren), 0)

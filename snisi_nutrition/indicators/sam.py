@@ -7,10 +7,13 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_core.indicators import (
-    IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin)
+    IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin,
+    DataIsMissing)
 from snisi_nutrition.indicators.common import (
     IndicatorTableWithEntities,
     NutritionIndicator, shoudl_show, gen_fixed_entity_indicator)
+from snisi_nutrition.models.Caseload import ExpectedCaseload
+from snisi_nutrition.utils import get_caseload_completion_for
 
 logger = logging.getLogger(__name__)
 
@@ -86,16 +89,48 @@ class SAMNewCases(URENASNewCasesURENI):
     name = "Nouvelles admissions MAS 6-59 mois"
 
 
-class SAMCaseloadTreated(NutritionIndicator):
-    name = "% Caseload MAS traité"
-    raise_class = True
+class SAMCaseloadExpected(NutritionIndicator):
+    name = "Caseload MAS attendu"
 
     def _compute(self):
-        # TODO: FIX CASELOAD
-        return 32
+        try:
+            return ExpectedCaseload.get_or_none_from(
+                year=self.period.start_on.year,
+                entity_slug=self.entity.slug).u59o6_sam
+        except:
+            raise DataIsMissing
+
+
+class SAMCaseloadTreated(NutritionIndicator):
+    name = "Caseload MAS traité"
+
+    def _compute(self):
+        return get_caseload_completion_for(period=self.period,
+                                           entity=self.entity,
+                                           uren='sam')
+
+
+class SAMCaseloadTreatedRate(NutritionIndicator):
+    name = "% Caseload MAS traité"
+    raise_class = True
+    is_ratio = True
+    is_geo_friendly = True
+    geo_section = "Performances MAS"
+
+    def _compute(self):
+        expected = SAMCaseloadExpected(
+            entity=self.entity,
+            period=self.period).data
+        treated = SAMCaseloadTreated(
+            entity=self.entity,
+            period=self.period).data
+        try:
+            return treated / expected
+        except:
+            return 0
 
     def get_class(self):
-        return self.GOOD if self.data >= 50 else self.WARNING
+        return self.GOOD if self.data >= .50 else self.WARNING
 
 
 class URENASNewCasesRate(URENASNewCases):
@@ -334,9 +369,10 @@ class SAMCaseloadTreatedGraph(IndicatorTable):
     caption = ("% CASELOAD MAS TRAITÉ")
     rendering_type = 'graph'
     graph_type = 'column'
+    is_percentage = True
 
     INDICATORS = [
-        SAMCaseloadTreated
+        SAMCaseloadTreatedRate
     ]
 
 
@@ -389,5 +425,5 @@ class SAMCaseloadTreatedByDS(SummaryForEntitiesTable):
     is_percentage = True
 
     INDICATORS = [
-        SAMCaseloadTreated
+        SAMCaseloadTreatedRate
     ]

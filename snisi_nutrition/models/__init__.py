@@ -14,3 +14,4 @@ from snisi_nutrition.models.URENAS import URENASNutritionR, AggURENASNutritionR
 from snisi_nutrition.models.URENI import URENINutritionR, AggURENINutritionR
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 from snisi_nutrition.models.Stocks import NutritionStocksR, AggNutritionStocksR
+from snisi_nutrition.models.Caseload import ExpectedCaseload
