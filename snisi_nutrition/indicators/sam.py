@@ -19,6 +19,8 @@ class SAMHealedRate(NutritionIndicator):
     name = "Taux de guérison"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAS"
 
     def _compute(self):
         return self.report.sam_comp_healed_rate
@@ -31,6 +33,8 @@ class SAMDeceasedRate(NutritionIndicator):
     name = "Taux de décès"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAS"
 
     def _compute(self):
         return self.report.sam_comp_deceased_rate
@@ -43,6 +47,8 @@ class SAMAbandonRate(NutritionIndicator):
     name = "Taux d'abandon"
     is_ratio = True
     raise_class = True
+    is_geo_friendly = True
+    geo_section = "Performances MAS"
 
     def _compute(self):
         return self.report.sam_comp_abandon_rate

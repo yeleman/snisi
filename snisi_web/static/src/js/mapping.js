@@ -124,6 +124,7 @@ function getMalariaMapManager(options) {
         this.mapID = options.mapID || "map";
         this.indicator_api_url = options.indicator_api_url || "/api/malaria/indicators";
         this.geojson_api_url = options.geojson_api_url || "/api/malaria/geojson/";
+        this.default_region = options.default_region || "2732";
 
         // Internet Explorer needs tiles on same domain.
         if (navigator.userAgent.match(/Trident/)) {
@@ -1091,6 +1092,7 @@ function getMalariaMapManager(options) {
 
     MalariaMapManager.prototype.updateZoom = function () {
         var layer;
+        var bounds = null;
         if (this.isDistrict()) {
             layer = this.getDistrictLayer(this.current_district);
         } else {
@@ -1101,7 +1103,17 @@ function getMalariaMapManager(options) {
             	layer = this.districts_layer;
             }
         }
-        this.zoomTo(layer);
+        if (this.current_region == "SSH3") {
+			var southWest = L.latLng(12.833226023521243, -5.515136718749999),
+				northEast = L.latLng(16.1724728083975, -0.9118652343749999);
+			bounds = L.latLngBounds(southWest, northEast);
+		}
+				
+        if (bounds) {
+        	this.map.fitBounds(bounds);
+        } else {
+        	this.zoomTo(layer);
+        }
     };
 
     MalariaMapManager.prototype.switchRegion = function(region_slug) {
@@ -1186,7 +1198,7 @@ function getMalariaMapManager(options) {
                 manager._prepareTabBar();
 
                 // display default region
-                manager.switchRegion("2732");
+                manager.switchRegion(manager.default_region);
 
                 // launch callback
                 if (callback !== undefined) {

@@ -15,6 +15,11 @@ urlpatterns = patterns(
     url(r'^/dashboard/?$', 'snisi_nutrition.views.indicators.dashboard',
         name='nutrition_dashboard'),
 
+    url(r'/map/?$',
+        'snisi_nutrition.views.mapping.nutrition_map',
+        {'template_name': 'nutrition/map.html'},
+        name='nutrition_map'),
+
     # weekly nutrition
     url(r'^/weekly/{entity}/{periods}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
