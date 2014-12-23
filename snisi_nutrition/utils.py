@@ -154,6 +154,8 @@ def generate_entity_period_matrix(entity, period):
             report = None
 
     def get(r, sub_report, field):
+        if r is None:
+            return 0
 
         if not is_total:
             if sub_report is None:
