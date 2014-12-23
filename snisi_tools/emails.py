@@ -10,9 +10,10 @@ import traceback
 
 from django.core import mail
 from django.conf import settings
-from django.template import loader, Context
+from django.template import loader, RequestContext
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
+from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +54,8 @@ def send_email(recipients, message=None, template=None, context={},
 
     # build email body. rendered template has priority
     if template:
-        email_msg = loader.get_template(template).render(Context(context))
+        email_msg = loader.get_template(template).render(RequestContext(
+            HttpRequest(), context))
     else:
         email_msg = message
 
@@ -65,7 +67,8 @@ def send_email(recipients, message=None, template=None, context={},
     # build email subject. rendered template has priority
     if title_template:
         email_subject = loader.get_template(title_template) \
-                              .render(Context(context))
+                              .render(RequestContext(HttpRequest(),
+                                                     context))
     elif title is not None:
         email_subject = title
 

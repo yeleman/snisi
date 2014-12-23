@@ -14,6 +14,8 @@ from snisi_core.models.Providers import Provider
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Numbers import PhoneNumber, PhoneNumberType
+from snisi_tools.misc import get_full_url
+from snisi_tools.emails import send_email
 from snisi_tools.numbers import normalized_phonenumber
 
 logger = logging.getLogger(__name__)
@@ -190,3 +192,14 @@ def create_provider(first_name, last_name,
             priority=priority,
             provider=p)
     return p, passwd
+
+
+def send_new_account_email(provider, password, creator=None):
+    return send_email(
+        recipients=provider.email,
+        context={'provider': provider,
+                 'creator': creator,
+                 'password': password,
+                 'url': get_full_url()},
+        template='emails/new_account.txt',
+        title_template='emails/title.new_account.txt')

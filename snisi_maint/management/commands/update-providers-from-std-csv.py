@@ -13,7 +13,7 @@ from py3compat import PY2
 
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Roles import Role
-from snisi_tools.auth import create_provider
+from snisi_tools.auth import create_provider, send_new_account_email
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Numbers import PhoneNumber, PhoneNumberType
 from snisi_tools.numbers import normalized_phonenumber
@@ -58,7 +58,7 @@ class Command(BaseCommand):
         headers = ['action', 'gender', 'title', 'last_name', 'maiden_name',
                    'first_name', 'other_names', 'role', 'location', 'email',
                    'position', 'flotte', 'orange', 'malitel', 'username',
-                   'comment']
+                   'comment', 'send_mail']
         input_csv_file = open(options.get('filename'), 'r')
         csv_reader = csv.DictReader(input_csv_file, fieldnames=headers)
 
@@ -77,6 +77,7 @@ class Command(BaseCommand):
                 role = entry.get('role') or None
                 location = entry.get('location') or None
                 email = entry.get('email') or None
+                send_mail = bool(entry.get('send_mail') or False)
                 maiden_name = entry.get('maiden_name') or None
                 other_names = entry.get('other_names') or None
                 gender = gender_map.get(entry.get('gender').upper()) \
@@ -112,6 +113,9 @@ class Command(BaseCommand):
                     title=title,
                     position=position,
                     phone_numbers=numbers)
+
+                if send_mail:
+                    send_new_account_email(provider=p, password=passwd)
 
                 logger.info("CREATED,{},{},{}".format(p.username, passwd, p))
 

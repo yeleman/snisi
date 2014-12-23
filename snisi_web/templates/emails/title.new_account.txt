@@ -1,1 +1,1 @@
-[{{ brand_short }}] Vos identifiants pour le {{ brand_full }}
+[{{ brand_short|safe }}] Vos identifiants pour le {{ brand_full|safe }}

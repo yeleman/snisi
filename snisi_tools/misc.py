@@ -9,6 +9,8 @@ import uuid
 import os
 
 from django.apps import apps
+from django.conf import settings
+from django.contrib.sites.models import get_current_site
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,7 @@ def import_path(name, failsafe=False):
     try:
         return _imp(name)
     except (ImportError, AttributeError) as exp:
-        logger.debug("Failed to import {}: {}".format(name, exp))
+        # logger.debug("Failed to import {}: {}".format(name, exp))
         if failsafe:
             return None
         raise exp
@@ -159,3 +161,11 @@ def get_resource(domain_slug, *file_paths):
 
 def get_not_none(dict, key, default):
     return dict.get(key, default) or 0
+
+
+def get_full_url(request=None, path=''):
+    if path.startswith('/'):
+        path = path[1:]
+    return 'http{ssl}://{domain}/{path}'.format(
+        domain=get_current_site(request).domain,
+        path=path, ssl="s" if settings.USE_HTTPS else '')
