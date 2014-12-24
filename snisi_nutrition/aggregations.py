@@ -152,7 +152,7 @@ def handle_country_validation(country, report_class_agg, period):
 
     # ack expected
     exp = ExpectedReporting.objects.get(
-        report_class=rclass,
+        report_class=report_class_agg,
         entity=country,
         period=period)
 
@@ -179,6 +179,8 @@ def handle_country_validation(country, report_class_agg, period):
 
 def generate_weekly_district_reports(period, ensure_correct_date=True):
 
+    logger.debug("generate_weekly_district_reports {}".format(period))
+
     logger.info("Switching to {}".format(period))
 
     region_validation_period = NutWeekRegionValidationPeriod \
@@ -191,7 +193,9 @@ def generate_weekly_district_reports(period, ensure_correct_date=True):
         if not now.date() == district_agg_day.date():
             logger.error("Not allowed to generate district agg "
                          "outside the next Sunday")
-            return
+            return False
+
+    logger.debug("OK to process district reports")
 
     districts = get_districts()
 
@@ -235,6 +239,8 @@ def generate_weekly_district_reports(period, ensure_correct_date=True):
 
 def generate_weekly_region_country_reports(period, ensure_correct_date=True):
 
+    logger.debug("generate_weekly_region_country_reports {}".format(period))
+
     logger.info("Switching to {}".format(period))
 
     if ensure_correct_date:
@@ -244,7 +250,7 @@ def generate_weekly_region_country_reports(period, ensure_correct_date=True):
         if not now.date() == region_agg_day.date():
             logger.error("Not allowed to generate district agg "
                          "outside the next Monday")
-            return
+            return False
 
     regions = get_regions()
 
@@ -262,6 +268,8 @@ def generate_weekly_region_country_reports(period, ensure_correct_date=True):
 
     # COUNTRY LEVEL
     country = mali
+
+    logger.info("\tAt {}".format(mali))
 
     # AggWeeklyNutritionR
     nut_exp, nut_agg = handle_country_validation(
@@ -297,7 +305,7 @@ def generate_district_reports(period,
                 or not now.day == ROUTINE_DISTRICT_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 16th of the following period")
-            return
+            return False
 
     districts = get_districts()
 
@@ -397,7 +405,7 @@ def generate_region_country_reports(period,
                 or not now.day == ROUTINE_REGION_AGG_DAY:
             logger.error("Not allowed to generate district agg "
                          "outside the 26th of the following period")
-            return
+            return False
 
     regions = get_regions()
 

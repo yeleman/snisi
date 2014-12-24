@@ -149,8 +149,7 @@ def end_of_extended_reporting_period_notifications(period):
 def performance_indicators_notifications(period):
 
     # send warning message to DTC with poor performance
-    for report in NutritionR.objects.filter(
-            report_class__slug='nutrition_monthly_routine', period=period):
+    for report in NutritionR.objects.filter(period=period):
 
         text = get_performance_text(report)
         if text is None:

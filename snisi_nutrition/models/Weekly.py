@@ -216,17 +216,26 @@ class AbstractWeeklyNutritionR(SNISIReport):
         app_label = 'snisi_nutrition'
         abstract = True
 
-    urenam_screening = models.IntegerField(_("MAM Screening"))
-    urenam_cases = models.IntegerField(_("MAM Cases"))
-    urenam_deaths = models.IntegerField(_("MAM Deaths"))
+    urenam_screening = models.PositiveIntegerField(
+        _("MAM Screening"), default=0)
+    urenam_cases = models.PositiveIntegerField(
+        _("MAM Cases"), default=0)
+    urenam_deaths = models.PositiveIntegerField(
+        _("MAM Deaths"), default=0)
 
-    urenas_screening = models.IntegerField(_("SAM Screening"))
-    urenas_cases = models.IntegerField(_("SAM Cases"))
-    urenas_deaths = models.IntegerField(_("SAM Deaths"))
+    urenas_screening = models.PositiveIntegerField(
+        _("SAM Screening"), default=0)
+    urenas_cases = models.PositiveIntegerField(
+        _("SAM Cases"), default=0)
+    urenas_deaths = models.PositiveIntegerField(
+        _("SAM Deaths"), default=0)
 
-    ureni_screening = models.IntegerField(_("SAM+ Screening"))
-    ureni_cases = models.IntegerField(_("SAM+ Cases"))
-    ureni_deaths = models.IntegerField(_("SAM+ Deaths"))
+    ureni_screening = models.PositiveIntegerField(
+        _("SAM+ Screening"), default=0)
+    ureni_cases = models.PositiveIntegerField(
+        _("SAM+ Cases"), default=0)
+    ureni_deaths = models.PositiveIntegerField(
+        _("SAM+ Deaths"), default=0)
 
     def screening_fields(self):
         return [field for field in self.data_fields()
@@ -271,7 +280,9 @@ receiver(post_save, sender=WeeklyNutritionR)(post_save_report)
 reversion.register(WeeklyNutritionR)
 
 
-class AggWeeklyNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
+class AggWeeklyNutritionR(AbstractWeeklyNutritionR,
+                          PeriodicAggregatedReportInterface,
+                          SNISIReport):
 
     REPORTING_TYPE = PERIODICAL_AGGREGATED
     RECEIPT_FORMAT = "{period}-WNUTa/{entity__slug}-{rand}"
@@ -297,22 +308,42 @@ class AggWeeklyNutritionR(PeriodicAggregatedReportInterface, SNISIReport):
 
     @classmethod
     def update_instance_with_indiv(cls, report, instance):
-
-        cls.update_instance_with_indiv_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))
 
     @classmethod
     def update_instance_with_agg(cls, report, instance):
-
-        cls.update_instance_with_agg_meta(report, instance)
-
         for field in cls.data_fields():
             setattr(report, field,
                     getattr(report, field, 0) + getattr(instance, field, 0))
 
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+            else:
+                indiv_sources = []
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
+
+        return super(cls, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
 
 receiver(pre_save, sender=AggWeeklyNutritionR)(pre_save_report)
 receiver(post_save, sender=AggWeeklyNutritionR)(post_save_report)

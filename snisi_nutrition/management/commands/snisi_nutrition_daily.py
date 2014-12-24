@@ -38,6 +38,7 @@ class Command(BaseCommand):
         logger.info("snisi_nutrition daily-checkups")
 
         now = timezone.now()
+        today = now.date()
         day = now.day
         period = MonthPeriod.current().previous()
 
@@ -56,14 +57,25 @@ class Command(BaseCommand):
                 generate_weekly_region_country_reports,
         }
 
-        def handle_category(category):
+        def handle_category(category, custom_period=None):
+            if custom_period is None:
+                custom_period = period
             slug = "{domain}_{period}_{category}".format(
-                domain=DOMAIN_SLUG, period=period.strid(), category=category)
+                domain=DOMAIN_SLUG,
+                period=custom_period.strid(),
+                category=category)
             task, created = PeriodicTask.get_or_create(slug, category)
 
             if task.can_trigger():
-                category_matrix.get(category)(period)
-                task.trigger()
+                try:
+                    if category_matrix.get(category)(custom_period) \
+                            is not False:
+                        task.trigger()
+                except Exception as e:
+                    logger.error("Exception raised during aggregation.")
+                    logger.exception(e)
+            else:
+                logger.debug("{} already triggered".format(task))
 
         # Monthly reports
         # On 6th
@@ -105,19 +117,18 @@ class Command(BaseCommand):
                     if p.end_on < now]
 
         for wperiod in wperiods:
-
             # validate all HC reports
             # create aggregated for district
             # create expected-validation for district
             # send notification to regions
-            if wperiod.end_on + datetime.timedelta(
-                    days=ROUTINE_DISTRICT_AGG_DAYS_DELTA) < now:
-                handle_category("end_of_weekly_district_period")
+            if (wperiod.end_on + datetime.timedelta(
+                    days=ROUTINE_DISTRICT_AGG_DAYS_DELTA)).date() <= today:
+                handle_category("end_of_weekly_district_period", wperiod)
 
             # validate all district reports
             # create aggregated for region
             # create aggregated for country
             # send notification to central/national
-            if wperiod.end_on + datetime.timedelta(
-                    days=ROUTINE_REGION_AGG_DAYS_DELTA) < now:
-                handle_category("end_of_weekly_region_period")
+            if (wperiod.end_on + datetime.timedelta(
+                    days=ROUTINE_REGION_AGG_DAYS_DELTA)).date() <= today:
+                handle_category("end_of_weekly_region_period", wperiod)
