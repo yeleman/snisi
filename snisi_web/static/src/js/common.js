@@ -47,7 +47,7 @@ function registerNotificationsCloseButton() {
 
 function registerReportBrowserFilter(entity_browser, new_path) {
     if (new_path === null || new_path === undefined) {
-        new_path = "/data/<reportcls_slug>/<entity_slug>/<period_strid>";
+        new_path = "/data/<reportcls>/<entity>/<period_str>";
         // var new_path = "/data/"+ reportcls_slug +"/"+ entity_slug +"/" + period_strid;
     }
 
