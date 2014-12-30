@@ -38,6 +38,7 @@
                     <li><a href="{% url 'validation' %}"><i class="icon-check"></i> Validation rapports</a></li>
                     <li><a href="{% url 'entities_list' %}"><i class="icon-h-sigh"></i> Carte sanitaire SNISI</a></li>
                 </ul>
+                {% if user.is_tech %}
                 <a class="pure-menu-heading">Monitoring</a>
                 <ul>
                     <li><a href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
@@ -45,6 +46,7 @@
                     <li><a class="pure-button-disabled" href="#">Collecte (par localité)</a></li>
                     <li><a href="{% url 'admin_add_provider' %}">Création compte</a></li>
                 </ul>
+                {% endif %}
                 <a class="pure-menu-heading">PALUDISME</a>
                 <ul>
                     <li><a href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
