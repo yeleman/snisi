@@ -315,6 +315,22 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     def last_actions(self):
         return Action.last_for(self, limit=10)
 
+    @property
+    def is_tech(self):
+        return self.role.slug in ('snisi_tech', 'snisi_admin')
+
+    @property
+    def is_admin(self):
+        return self.role.slug in ('snisi_admin')
+
+    def disable(self):
+        self.is_active = False
+        self.save()
+
+    def enable(self):
+        self.is_active = True
+        self.save()
+
 
 reversion.register(Provider)
 

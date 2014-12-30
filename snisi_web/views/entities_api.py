@@ -6,11 +6,22 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Projects import Cluster
 from snisi_tools.caching import json_cache_from_cluster
+
+
+def get_detail(request, entity_slug=None):
+    """ json results for passed entity """
+
+    entity = Entity.get_or_none(entity_slug)
+    if entity is None:
+        data = None
+    else:
+        data = entity.to_dict()
+    return JsonResponse(data)
 
 
 def get_children(request, parent_slug=None, type_slug=None):

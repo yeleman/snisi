@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django import forms
 
+from snisi_web.decorators import user_role_within
 from snisi_tools.misc import get_from_snisi_apps, import_path
 
 
@@ -50,6 +51,7 @@ class ExcelUploadForm(forms.Form):
 
 
 @login_required
+@user_role_within(['charge_sis', 'dtc'])
 def upload_form(request, template_name='upload_form.html'):
 
     context = {}

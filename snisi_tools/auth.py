@@ -203,3 +203,16 @@ def send_new_account_email(provider, password, creator=None):
                  'url': get_full_url()},
         template='emails/new_account.txt',
         title_template='emails/title.new_account.txt')
+
+
+def get_new_roles_for(requester):
+    if not isinstance(requester, Provider):
+        return []
+
+    qs = Role.objects.all()
+    if requester.role.slug == 'snisi_admin':
+        return qs
+    elif requester.role.slug == 'snisi_tech':
+        return qs.exclude(slug__in=['snisi_tech',
+                                    'snisi_admin', 'validation_bot'])
+    return []

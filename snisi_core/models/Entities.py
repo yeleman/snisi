@@ -113,6 +113,7 @@ class Entity(MPTTModel):
                 'display_typed_name': self.display_typed_name(),
                 'display_code_name': self.display_code_name(),
                 'display_full_name': self.display_full_name(),
+                'display_full_typed_name': self.display_full_typed_name(),
                 'type': self.type.slug,
                 'parent': getattr(self.parent, 'slug', None),
                 'latitude': self.latitude,

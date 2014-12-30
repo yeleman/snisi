@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% block title %}Création de compte{% endblock %}
+
+{% block content %}
+
+<p class="alert alert-warning"><i class="icon-attention"></i> Avant de créer un compte SNISI, merci de vérifier <a href="{% url 'addressbook' %}">dans l'annuaire</a> si la personne n'a pas déjà un compte. Il n'est <strong>pas possible de supprimer un compte</strong>!</p>
+
+{% pure_form form csrf_token=csrf_token legend="Création utilisateur SNISI" submit_text="Ajouter" %}
+
+{% endblock %}
+
+{% block onJQready %}
+{% include "admin_role_location.js" %}
+$('#id_role').on('change', role_location_change);
+$('#id_location').on('change', role_location_change);
+registerEntitySlugAutoQuery('#id_location', '#id_location_name', function () {
+$('#id_role').change();	
+});
+{% endblock %}

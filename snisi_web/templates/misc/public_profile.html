@@ -29,4 +29,24 @@
 	<li>{{ action.label|capfirst }} le {{ action.on }}</li>
 	{% endfor %}
 </ul>
+
+{% endblock %}
+
+{% block admin %}
+Déplacement : {% pure_form form csrf_token=csrf_token submit_text="Déplacer" pure_class="inline" extra_class="pure-form-full-inline" %} | 
+<a id="reset_button" href="{% url 'admin_reset_password' username=provider.username %}" class="pure-button pure-button-warning" data-must-confirm="true" data-confirm-text="Êtes vous sûr de vouloir réinitialiser le mot de passe de «{{ provider}}»">Réinitialiser mot de passe</a> | <a id="disable_button" href="{% if provider.is_active %}{% url 'admin_disable_provider' username=provider.username %}{% else %}{% url 'admin_enable_provider' username=provider.username %}{% endif %}" class="pure-button pure-button-danger {%if not user.is_admin and not provider.is_active %}pure-button-disabled{% endif %}" data-must-confirm="true" data-confirm-text="Êtes vous sûr de vouloir {% if provider.is_active %}dés{% endif %}activer le compte de «{{ provider}}»" {%if not user.is_admin and not provider.is_active %}disabled="disabled"{% endif %}>{% if provider.is_active %}Désactiver{% else %}Activer{% endif %}</a>
+
+{% endblock %}
+
+{% block onJQready %}
+$('#id_location_name').hide();
+$('label[for="location_name"]').hide();
+
+{% include "admin_role_location.js" %}
+$('#id_role').on('change', role_location_change);
+$('#id_location').on('change', role_location_change);
+registerEntitySlugAutoQuery('#id_location', '#id_location_name', function () {
+$('#id_role').change();	
+});
+
 {% endblock %}

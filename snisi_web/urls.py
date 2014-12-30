@@ -52,6 +52,21 @@ urlpatterns = patterns(
         TemplateView.as_view(template_name="fondasms_tester.html"),
         name='fondasms_tester'),
 
+    # Admin pages
+    url(r'^admin/add_provider/?$',
+        'snisi_web.views.admin.add_provider',
+        {'template_name': 'admin/add_provider.html'},
+        name='admin_add_provider'),
+    url(r'^admin/reset_password/(?P<username>[a-zA-Z0-9\_\-]+)?$',
+        'snisi_web.views.admin.reset_password',
+        name='admin_reset_password'),
+    url(r'^admin/disable_provider/(?P<username>[a-zA-Z0-9\_\-]+)?$',
+        'snisi_web.views.admin.disable_provider',
+        name='admin_disable_provider'),
+    url(r'^admin/enable_provider/(?P<username>[a-zA-Z0-9\_\-]+)?$',
+        'snisi_web.views.admin.enable_provider',
+        name='admin_enable_provider'),
+
 
     # SNISI
     url(r'^$', 'snisi_web.views.dashboard.user_dashboard', name='home'),
@@ -74,6 +89,11 @@ urlpatterns = patterns(
         name='periodic_source_monitoring'),
 
     # Entities API
+    url(r'^api/entity/'
+        '(?P<entity_slug>[A-Za-z0-9\_]{3,4})/?$',
+        'snisi_web.views.entities_api.get_detail',
+        name='api_entity_detail'),
+
     url(r'^api/entities/getchildren/'
         '(?P<parent_slug>[A-Za-z0-9\_]{3,4})'
         '/(?P<type_slug>[a-zA-Z0-9\-\_]+)/?$',

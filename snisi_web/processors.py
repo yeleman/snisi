@@ -26,4 +26,7 @@ def default_context(*args, **kwargs):
         if dflt_ctx is not None:
             context.update(dflt_ctx())
 
+    if 'has_admin' not in context.keys():
+        context.update({'has_admin': False})
+
     return context

@@ -12,4 +12,8 @@
         <field type="CharField" name="slug">tt_tso</field>
         <field type="CharField" name="name">TSO</field>
     </object>
+    <object pk="pf_mtn" model="snisi_core.role">
+        <field type="CharField" name="slug">pf_mtn</field>
+        <field type="CharField" name="name">Point Focal MTN</field>
+    </object>
 </django-objects>

@@ -524,8 +524,15 @@ function main() {
     });
 
     $('[data-must-confirm]').on('click', function (e) {
+    	e.preventDefault();
+    	var aLink = $(e.currentTarget);
+    	if (aLink.attr('disabled')) {
+    		return;
+    	}
         var confirmText = $(this).data('confirm-text') || "Êtes vous sûr de vouloir continuer ?";
-        return confirm(confirmText.replace("---", '\r\n'));
+        if (confirm(confirmText.replace("---", '\r\n'))) {
+        	window.location = aLink.attr('href');
+        }
     });
 
     $('[data-reset-form]').on('click', function (e) {
@@ -620,6 +627,55 @@ function emulate_click_on(jQElem) {
     try {
         jQElem[0].dispatchEvent(e);
     } catch (exception) {}
+}
+
+
+function registerEntitySlugAutoQuery(code_selector, text_selector, callback) {
+	console.log("registerEntitySlugAutoQuery");
+	var incorrect_text = "Code SNISI incorrect.";
+	// $(code_selector).data('toggle', 'alwaystop');
+	// $(code_selector).data('content', '-');
+	$(code_selector).on('change', function (e) {
+		var slug = $(this).val().trim();
+		$(text_selector).data('entity_type', '');
+		$(text_selector).val(slug + ': ...');
+		if (slug.length >= 4) {
+			var text = slug + ': ';
+			$.get('/api/entity/' + slug)
+				.success(function (data) {
+					if (data === null) {
+						text += incorrect_text;
+					} else {
+						text += data['display_full_typed_name'];
+					}
+					$(code_selector).data('entity_type', data['type']);
+					$(code_selector).data('entity_name', text);
+					$(code_selector).data('content', text);
+
+					$(text_selector).data('entity_type', data['type']);
+					$(text_selector).val(text);
+					if (callback !== undefined) {
+						callback();
+						$(code_selector).attr('title', text);
+						// $(code_selector).popover({trigger:'focus', placement: 'top', html:true});
+					} else {
+						$(code_selector).attr('title', text);
+						// $(code_selector).popover({trigger:'focus', placement: 'top', html:true});
+					}
+				})
+				.fail(function (err_msg) {
+					text += incorrect_text;
+					$(code_selector).data('entity_type', '');
+					$(code_selector).data('entity_name', text);
+					$(code_selector).data('content', text);
+
+					$(text_selector).data('entity_type', '');
+					$(text_selector).val(text);
+				});
+		}
+	});
+	// trigger initialy
+	$(code_selector).change();
 }
 
 

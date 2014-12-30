@@ -35,43 +35,54 @@ def phone_number_formatter(number):
 
 
 @register.filter(name='pureform')
-def format_pure_form(form):
+def format_pure_form(form, pure_class='aligned'):
     output = ''
 
     if form.non_field_errors():
-        output += non_field_errors(form)
+        output += non_field_errors(form, pure_class)
 
     for field in form:
         if not field.is_hidden:
-            output += pure_field_group(field)
+            output += pure_field_group(field, pure_class)
     return mark_safe(output)
 
 
 @register.filter(name='purenonfielderrors')
-def non_field_errors(form):
+def non_field_errors(form, pure_class='aligned'):
     output = ''
     if not form.non_field_errors():
         return mark_safe(output)
     output += '<div class="pure-control-group alert alert-danger">\n'
     output += '<label for="__errors__">Erreurs</label>\n'
     output += '<div class="pure-help-inline" name="__errors__">\n'
+    output += '<ul class="alert ">\n'
     for error in form.non_field_errors():
-        output += '<p class="alert alert-danger">{}</p>\n'.format(error)
+        output += '<li class="alert-danger">{}</li>\n'.format(error)
+    output += '</ul>\n'
     output += '</div>\n'
     output += '</div>\n'
     return mark_safe(output)
 
 
 @register.filter(name='purefieldgroup')
-def pure_field_group(field):
+def pure_field_group(field, pure_class='aligned'):
 
     # default size with CSS class
     if 'class' not in field.field.widget.attrs:
         field.field.widget.attrs.update({'class': 'pure-input-1-2'})
 
+    if pure_class == 'inline':
+        field.field.widget.attrs.update({'class': 'pure-input'})
+    else:
+        field.field.widget.attrs.update({'class': 'pure-input-1-2'})
+
+    divcls = 'pure-control-group' if pure_class != 'inline' \
+        else 'pure-control-group-inline'
+
     # field group wrapper with danger
-    output = '<div class="pure-control-group{alertcls}">\n'.format(
-        alertcls=' alert alert-danger' if field.errors else '')
+    output = '<div class="{divcls} {alertcls}">\n'.format(
+        divcls=divcls,
+        alertcls='alert alert-danger' if field.errors else '')
     output += pure_field_label(field)
     output += '\n'
     output += pure_field(field)
@@ -109,13 +120,14 @@ def pure_field(field):
 def pure_form(form, method='POST',
               action=None,
               pure_class='aligned',
+              extra_class='',
               csrf_token=None,
               legend=None,
               submit_text="Envoyer",
               with_file=False):
     output = ''
     legend_tag = '<legend>{}</legend>\n'.format(legend) if legend else ''
-    form_content = format_pure_form(form)
+    form_content = format_pure_form(form, pure_class)
 
     if pure_class == 'inline':
         form_content = form_content.rsplit('</div>', 1)[0]
@@ -135,7 +147,8 @@ def pure_form(form, method='POST',
         file_support = ''
 
     output += ('<form method="{method}" action="{action}" '
-               'class="pure-form pure-form-{pure_class}"{file_support}>\n'
+               'class="pure-form pure-form-{pure_class} {extra_class}'
+               '"{file_support}>\n'
                '<input type="hidden" name="csrfmiddlewaretoken" '
                'value="{csrf_token}"/>\n'
                '{legend_tag}'
@@ -149,6 +162,7 @@ def pure_form(form, method='POST',
         csrf_token=csrf_token or CsrfTokenNode().render(),
         legend_tag=legend_tag,
         pure_class=pure_class or 'aligned',
+        extra_class=extra_class or '',
         file_support=file_support,
         submit_block=submit_block,
         form_content=form_content)

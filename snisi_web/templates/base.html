@@ -3,7 +3,7 @@
 <!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html> <!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +43,7 @@
                     <li><a href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte données occasionnelles</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte (par localité)</a></li>
-                    <li><a class="pure-button-disabled" href="#">Gestion Utilisateurs</a></li>
+                    <li><a href="{% url 'admin_add_provider' %}">Création compte</a></li>
                 </ul>
                 <a class="pure-menu-heading">PALUDISME</a>
                 <ul>
@@ -56,12 +56,12 @@
                 </ul>
                 <a class="pure-menu-heading" href="{% url 'nutrition_dashboard' %}">NUTRITION</a>
                 <ul>
-                    <li><a class="" href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
-                    <li><a class="" href="{% url 'nutrition_raw_data' %}">Rapports Sources</a></li>
-                    <li><a class="" href="{% url 'nutrition_overview_sam' %}">Rapports MAS</a></li>
-                    <li><a class="" href="{% url 'nutrition_overview_mam' %}">Rapports MAM</a></li>
-                    <li><a class="" href="{% url 'nutrition_synthesis_sam' %}">Synthèse NUT MAS</a></li>
-                    <li><a class="" href="{% url 'nutrition_synthesis_mam' %}">Synthèse NUT MAM</a></li>
+                    <li><a href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
+                    <li><a href="{% url 'nutrition_raw_data' %}">Rapports Sources</a></li>
+                    <li><a href="{% url 'nutrition_overview_sam' %}">Rapports MAS</a></li>
+                    <li><a href="{% url 'nutrition_overview_mam' %}">Rapports MAM</a></li>
+                    <li><a href="{% url 'nutrition_synthesis_sam' %}">Synthèse NUT MAS</a></li>
+                    <li><a href="{% url 'nutrition_synthesis_mam' %}">Synthèse NUT MAM</a></li>
                     <li><a href="{% url 'nutrition_map' %}">Cartographie</a></li>
                 </ul>
                 <a class="pure-menu-heading">CÉCITÉ</a>
@@ -77,9 +77,9 @@
                 </ul>
                 <a class="pure-menu-heading">SANTÉ REPRODUCTION</a>
                 <ul>
-                    <li><a class="" href="{% url 'msipf_raw_data' %}">Données brutes MSI/PF</a></li>
+                    <li><a href="{% url 'msipf_raw_data' %}">Données brutes MSI/PF</a></li>
                     <li><a class="pure-button-disabled" href="#">Données brutes FNUAP</a></li>
-                    <li><a class="" href="{% url 'msipf_dashboard' %}">Données analysées</a></li>
+                    <li><a href="{% url 'msipf_dashboard' %}">Données analysées</a></li>
                 </ul>
                 <a class="pure-menu-heading">VACCINATION</a>
                 <ul>
@@ -99,7 +99,7 @@
 
             <section class="content">
                 {% if messages %}
-                <div id="notifications" class="">
+                <div id="notifications">
                 {% for message in messages %}
                     <p class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %}">{{ message|linebreaksbr }}<i class="icon-cancel close-notif-button"></i></p>
                 {% endfor %}
@@ -112,6 +112,12 @@
                     {% endblock %}
                 </div>
             </section>
+
+            {% if user.is_tech and has_admin %}
+			<section class="admin-only">
+				<div class="alert alert-warning">ADMIN&nbsp;|&nbsp;{% block admin %}{% endblock %}</div>
+			</section>
+			{% endif %}
 
             <footer>
                 <div class="pure-menu pure-menu-open pure-menu-horizontal footer-menu">

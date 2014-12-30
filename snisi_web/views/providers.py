@@ -17,6 +17,7 @@ from snisi_core.models.Providers import Provider
 from snisi_core.models.Numbers import PhoneNumberType, PhoneNumber
 from snisi_tools.numbers import (phonenumber_repr, normalized_phonenumber,
                                  phonenumber_cleaned, operator_from_malinumber)
+from snisi_web.views.admin import ProviderRoleLocationForm
 
 
 class PhoneNumberForm(forms.Form):
@@ -166,10 +167,42 @@ def edit_profile(request, **kwargs):
 
 @login_required
 def public_profile(request, username, **kwargs):
-    context = {}
+    context = {'has_admin': True}
 
-    context.update({'provider': Provider.get_or_none(username,
-                                                     with_inactive=True)})
+    provider = Provider.get_or_none(username, with_inactive=True)
+    context.update({'provider': provider})
+
+    # admin
+    if request.method == 'POST':
+        previous_role = provider.role
+        previous_location = provider.location.casted()
+        form = ProviderRoleLocationForm(request.POST,
+                                        instance=provider,
+                                        requester=request.user)
+        if form.is_valid():
+            if form.cleaned_data['location'] == previous_location \
+                    and form.cleaned_data['role'] == previous_role:
+                messages.warning(request,
+                                 _("New role and location are identical to "
+                                   "previous ones. No change made."))
+            else:
+                provider.role = form.cleaned_data['role']
+                provider.location = form.cleaned_data['location']
+                provider.save()
+                messages.success(request,
+                                 _("{provider} has been moved from “{prole} at"
+                                   " {plocation}” to “{role} at {location}”.")
+                                 .format(provider=provider.get_full_name(),
+                                         prole=previous_role,
+                                         plocation=previous_location,
+                                         role=provider.role,
+                                         location=provider.location))
+
+            return redirect('public_profile', username=username)
+    else:
+        form = ProviderRoleLocationForm(instance=provider,
+                                        requester=request.user)
+    context.update({'form': form})
 
     return render(request,
                   kwargs.get('template_name', "misc/public_profile.html"),

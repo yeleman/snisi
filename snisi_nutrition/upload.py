@@ -9,12 +9,11 @@ from collections import OrderedDict
 
 from django.utils import timezone
 
-from snisi_web.views.upload import (handle_report_upload as
-    original_handle_report_upload)
+from snisi_web.views.upload import (
+    handle_report_upload as original_handle_report_upload)
 from snisi_nutrition.xls_import import NutritionExcelForm
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
 from snisi_nutrition.integrity import (
-    NutritionRIntegrityChecker,
     create_nut_report,
     URENAMNutritionRIntegrityChecker,
     URENASNutritionRIntegrityChecker,

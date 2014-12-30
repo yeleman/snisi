@@ -36,12 +36,4 @@
         <field type="CharField" name="slug">validation_bot</field>
         <field type="CharField" name="name">Robot Validation</field>
     </object>
-    <object pk="pf_mtn" model="snisi_core.role">
-        <field type="CharField" name="slug">pf_mtn</field>
-        <field type="CharField" name="name">Point Focal MTN</field>
-    </object>
-    <object pk="pf_palu" model="snisi_core.role">
-        <field type="CharField" name="slug">pf_palu</field>
-        <field type="CharField" name="name">Point Focal Paludisme</field>
-    </object>
 </django-objects>
