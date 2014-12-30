@@ -21,7 +21,7 @@ def get_detail(request, entity_slug=None):
         data = None
     else:
         data = entity.to_dict()
-    return JsonResponse(data)
+    return JsonResponse(data, safe=False)
 
 
 def get_children(request, parent_slug=None, type_slug=None):

@@ -633,44 +633,49 @@ function emulate_click_on(jQElem) {
 function registerEntitySlugAutoQuery(code_selector, text_selector, callback) {
 	console.log("registerEntitySlugAutoQuery");
 	var incorrect_text = "Code SNISI incorrect.";
-	// $(code_selector).data('toggle', 'alwaystop');
-	// $(code_selector).data('content', '-');
+
 	$(code_selector).on('change', function (e) {
 		var slug = $(this).val().trim();
+		if (slug.toLowerCase() == 'mali') {
+			slug = slug.toLowerCase();
+		} else {
+			slug = slug.toUpperCase();
+		}
 		$(text_selector).data('entity_type', '');
 		$(text_selector).val(slug + ': ...');
+
+		function update_text(text, entity_type) {
+			$(code_selector).data('entity_type', entity_type);
+			$(code_selector).data('entity_name', text);
+			$(code_selector).attr('title', text);
+
+			$(text_selector).data('entity_type', entity_type);
+			$(text_selector).val(text);
+		}
+
 		if (slug.length >= 4) {
 			var text = slug + ': ';
 			$.get('/api/entity/' + slug)
 				.success(function (data) {
 					if (data === null) {
+						console.log("nuuuuuul");
 						text += incorrect_text;
+						update_text(text, '');
+						return;
 					} else {
+						console.log("NOT NULL");
+						console.log(data);
 						text += data['display_full_typed_name'];
 					}
-					$(code_selector).data('entity_type', data['type']);
-					$(code_selector).data('entity_name', text);
-					$(code_selector).data('content', text);
-
-					$(text_selector).data('entity_type', data['type']);
-					$(text_selector).val(text);
+					update_text(text, data['type']);
+					
 					if (callback !== undefined) {
 						callback();
-						$(code_selector).attr('title', text);
-						// $(code_selector).popover({trigger:'focus', placement: 'top', html:true});
-					} else {
-						$(code_selector).attr('title', text);
-						// $(code_selector).popover({trigger:'focus', placement: 'top', html:true});
 					}
 				})
 				.fail(function (err_msg) {
 					text += incorrect_text;
-					$(code_selector).data('entity_type', '');
-					$(code_selector).data('entity_name', text);
-					$(code_selector).data('content', text);
-
-					$(text_selector).data('entity_type', '');
-					$(text_selector).val(text);
+					update_text(text, '');
 				});
 		}
 	});
