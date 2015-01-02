@@ -15,7 +15,7 @@ from snisi_web.decorators import user_role_within
 
 
 @login_required
-@user_role_within(['snisi_tech'])
+@user_role_within(['snisi_tech', 'snisi_admin'])
 def periodic_source_dashboard(request, **kwargs):
     context = {}
 

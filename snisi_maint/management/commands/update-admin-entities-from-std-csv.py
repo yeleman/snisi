@@ -12,7 +12,7 @@ from optparse import make_option
 from py3compat import PY2
 
 from snisi_core.models.Entities import (
-    Entity, HealthEntity, AdministrativeEntity, EntityType)
+    Entity, AdministrativeEntity, EntityType)
 
 if PY2:
     import unicodecsv as csv
