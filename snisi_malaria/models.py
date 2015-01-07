@@ -120,12 +120,11 @@ class MalariaRIface(object):
     def get_expected_reportings(self, with_source=True, with_agg=True):
         erl = []
         if with_source:
-            if self.entity.type.slug == 'health_district':
-                erl += ExpectedReporting.objects.filter(
-                    report_class=self.report_class(for_source=True),
-                    period=self.period,
-                    entity__slug__in=[e.slug for e in
-                                      self.entity.get_health_centers()])
+            erl += ExpectedReporting.objects.filter(
+                report_class=self.report_class(for_source=True),
+                period=self.period,
+                entity__slug__in=[e.slug for e in
+                                  self.entity.get_health_centers()])
         if with_agg:
             erl += ExpectedReporting.objects.filter(
                 report_class=self.report_class(for_source=False),
