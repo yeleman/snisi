@@ -76,6 +76,11 @@ class Command(BaseCommand):
                 logger.info("Disabling {}".format(entity))
                 entity.active = False
                 entity.save()
+            elif entry.get('action') == 'enable':
+                entity = Entity.get_or_none(entry.get('slug'))
+                logger.info("Enabling {}".format(entity))
+                entity.active = True
+                entity.save()
             elif entry.get('action') == 'update':
                 entity = Entity.get_or_none(entry.get('slug'))
                 logger.info("Updating {}".format(entity))
