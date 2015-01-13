@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from django.core.management.base import BaseCommand
+from django.core.management import call_command
 
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting)
@@ -28,5 +29,9 @@ class Command(BaseCommand):
                 period__in=periods, entity__slug__in=entity_slugs):
             logger.debug(exp)
             exp.delete()
+
+        logger.info("Launching update file to disable entities")
+        call_command("update-entities-from-std-csv",
+                     filename="../janvier-updates.csv")
 
         logger.info("done.")
