@@ -11,14 +11,14 @@ function main() {
     });
 
     $('[data-must-confirm]').on('click', function (e) {
-    	e.preventDefault();
     	var aLink = $(e.currentTarget);
     	if (aLink.attr('disabled')) {
+    		e.preventDefault();
     		return;
     	}
         var confirmText = $(this).data('confirm-text') || "Êtes vous sûr de vouloir continuer ?";
-        if (confirm(confirmText.replace("---", '\r\n'))) {
-        	window.location = aLink.attr('href');
+        if (!confirm(confirmText.replace("---", '\r\n'))) {
+        	e.preventDefault();
         }
     });
 

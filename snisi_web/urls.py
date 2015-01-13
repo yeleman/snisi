@@ -11,8 +11,7 @@ from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 from django.http import HttpResponse
 
-from snisi_web.url_regexp import (RGXP_REPORTCLS,
-                                  RGXP_CLUSTER, RGXP_ENTITY,
+from snisi_web.url_regexp import (RGXP_CLUSTER, RGXP_ENTITY,
                                   RGXP_RECEIPT,
                                   RGXP_PERIOD)
 from snisi_malaria import urls as malaria_urls
