@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-20 10:03+0000\n"
-"PO-Revision-Date: 2014-09-20 10:05-0000\n"
+"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"PO-Revision-Date: 2015-01-14 09:45-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
@@ -19,218 +19,209 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:77
+#: integrity.py:87
 #, python-brace-format
 msgid "{field_name}: ({case}) number case lower than ({death}) number death"
 msgstr ""
 "{field_name}: Nombre de cas ({case}) inférieur au nombre de décès ({death})."
 
-#: integrity.py:88
+#: integrity.py:98 integrity.py:237 integrity.py:352
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"
 
-#: models.py:38
+#: integrity.py:169
+#, python-brace-format
+#| msgid "{field_name}: ({case}) number case lower than ({death}) number death"
+msgid ""
+"{field_name} ({hc}): ({case}) number case lower than ({death}) number death"
+msgstr ""
+"{field_name} ({hc}): Nombre de cas ({case}) inférieur au nombre de décès "
+"({death})."
+
+#: integrity.py:247
+#, python-brace-format
+#| msgid "Missing data for {f}"
+msgid "Missing data for {f}/{row}"
+msgstr "Données manquantes pour {f}/{row}"
+
+#: models.py:39
 msgid "Week Period"
 msgstr "Période semaine"
 
-#: models.py:39
+#: models.py:40
 msgid "Week Periods"
 msgstr "Périodes semaine"
 
-#: models.py:83
+#: models.py:84
 msgid "Week Reporting Period"
 msgstr "Période rapportage semaine"
 
-#: models.py:84
+#: models.py:85
 msgid "Week Reporting Periods"
 msgstr "Périodes rapportage semaine"
 
-#: models.py:118
+#: models.py:119
 msgid "Week District Validation Period"
 msgstr "Période validation district semaine"
 
-#: models.py:119
+#: models.py:120
 msgid "Week District Validation Periods"
 msgstr "Périodes validation district semaine"
 
-#: models.py:153
+#: models.py:154
 msgid "Week Region Validation Period"
 msgstr "Période validation région semaine"
 
-#: models.py:154
+#: models.py:155
 msgid "Week Region Validation Periods"
 msgstr "Périodes validation région semaine"
 
-#: models.py:185
+#: models.py:186
 msgid "Ebola"
 msgstr "Ébola"
 
-#: models.py:186
+#: models.py:187
 msgid "AFP"
 msgstr "Paralysie flasque aiguë"
 
-#: models.py:187
+#: models.py:188
 msgid "Influenza A H1N1"
 msgstr "Grippe A H1N1"
 
-#: models.py:188
+#: models.py:189
 msgid "Cholera"
 msgstr "Choléra"
 
-#: models.py:189
+#: models.py:190
 msgid "Red Diarrhea"
 msgstr "Diarrhée rouge"
 
-#: models.py:190
+#: models.py:191
 msgid "Measles"
 msgstr "Rougeole"
 
-#: models.py:191
+#: models.py:192
 msgid "Yellow Fever"
 msgstr "Fièvre jaune"
 
-#: models.py:192
+#: models.py:193
 msgid "NNT"
 msgstr "TNN"
 
-#: models.py:193
+#: models.py:194
 msgid "Meningitis"
 msgstr "Méningite"
 
-#: models.py:194
+#: models.py:195
 msgid "Rabies"
 msgstr "Rage"
 
-#: models.py:195
+#: models.py:196
 msgid "Acute Measles Diarrhea"
 msgstr "Rougeole aiguë et diarrhée"
 
-#: models.py:196
+#: models.py:197
 msgid "Other Notifiable Diseases"
 msgstr "Maladie à déclaration obligatoire"
 
-#: models.py:199
-#| msgid "Ebola cases"
+#: models.py:200
 msgid "Suspected Ebola cases"
 msgstr "Cas suspects Ébola"
 
-#: models.py:200
-#| msgid "Ebola death"
+#: models.py:201
 msgid "Suspected Ebola death"
 msgstr "Décès suspects Ébola"
 
-#: models.py:203
-#| msgid "AFP cases"
+#: models.py:204
 msgid "Suspected AFP cases"
 msgstr "Cas suspects paralysie flasque aiguë"
 
-#: models.py:205
-#| msgid "AFP death"
+#: models.py:206
 msgid "Suspected AFP death"
 msgstr "Décès suspects paralysie flasque aiguë"
 
-#: models.py:208
-#| msgid "Influenza A H1N1 cases"
+#: models.py:209
 msgid "Suspected Influenza A H1N1 cases"
 msgstr "Cas suspects grippe A H1N1"
 
-#: models.py:210
-#| msgid "Influenza A H1N1 death"
+#: models.py:211
 msgid "Suspected Influenza A H1N1 death"
 msgstr "Décès suspects grippe A H1N1"
 
-#: models.py:212
-#| msgid "Cholera cases"
+#: models.py:213
 msgid "Suspected Cholera cases"
 msgstr "Cas suspects choléra"
 
-#: models.py:213
-#| msgid "Cholera death"
+#: models.py:214
 msgid "Suspected Cholera death"
 msgstr "Décès suspects choléra"
 
-#: models.py:215
-#| msgid "Red Diarrhea cases"
+#: models.py:216
 msgid "Suspected Red Diarrhea cases"
 msgstr "Cas suspects diarrhée rouge"
 
-#: models.py:216
-#| msgid "Red Diarrhea death"
+#: models.py:217
 msgid "Suspected Red Diarrhea death"
 msgstr "Décès suspects diarrhée rouge"
 
-#: models.py:218
-#| msgid "Measles cases"
+#: models.py:219
 msgid "Suspected Measles cases"
 msgstr "Cas suspects rougeole"
 
-#: models.py:219
-#| msgid "Measles death"
+#: models.py:220
 msgid "Suspected Measles death"
 msgstr "Décès suspects rougeole"
 
-#: models.py:221
-#| msgid "Yellow Fever cases"
+#: models.py:222
 msgid "Suspected Yellow Fever cases"
 msgstr "Cas suspects fièvre jaune"
 
-#: models.py:222
-#| msgid "Yellow Fever death"
+#: models.py:223
 msgid "Suspected Yellow Fever death"
 msgstr "Décès suspects fièvre jaune"
 
-#: models.py:224
-#| msgid "NNT cases"
+#: models.py:225
 msgid "Suspected NNT cases"
 msgstr "Cas suspects TNN"
 
-#: models.py:225
-#| msgid "NNT death"
+#: models.py:226
 msgid "Suspected NNT death"
 msgstr "Décès suspects TNN"
 
-#: models.py:227
-#| msgid "Meningitis cases"
+#: models.py:228
 msgid "Suspected Meningitis cases"
 msgstr "Cas suspects méningite"
 
-#: models.py:228
-#| msgid "Meningitis death"
+#: models.py:229
 msgid "Suspected Meningitis death"
 msgstr "Décès suspect méningite"
 
-#: models.py:230
-#| msgid "Rabies cases"
+#: models.py:231
 msgid "Suspected Rabies cases"
 msgstr "Cas suspects rage"
 
-#: models.py:231
-#| msgid "Rabies death"
+#: models.py:232
 msgid "Suspected Rabies death"
 msgstr "Décès suspects rage"
 
-#: models.py:234
-#| msgid "Acute Measles Diarrhea cases"
+#: models.py:235
 msgid "Suspected Acute Measles Diarrhea cases"
 msgstr "Cas suspects rougeole aiguë et diarrhée"
 
-#: models.py:236
-#| msgid "Acute Measles Diarrhea death"
+#: models.py:237
 msgid "Suspected Acute Measles Diarrhea death"
 msgstr "Décès suspects rougeole aiguë et diarrhée"
 
-#: models.py:239
-#| msgid "Other Notifiable Diseases cases"
+#: models.py:240
 msgid "Suspected Other Notifiable Diseases cases"
 msgstr "Autres cas suspects de maladie à déclaration obligatoire"
 
-#: models.py:241
-#| msgid "Other Notifiable Diseases death"
+#: models.py:242
 msgid "Suspected Other Notifiable Diseases death"
 msgstr "Autres décès suspects maladie à déclaration obligatoire"
 
-#: models.py:293
+#: models.py:294
 #, python-brace-format
 msgid "{cscom} / {period} / {receipt}"
 msgstr "{cscom} / {period} / {receipt}"
@@ -243,30 +234,67 @@ msgstr "Rapport épidémiologie"
 msgid "Epidemiology Reports"
 msgstr "Rapports épidémiologie"
 
-#: models.py:380
+#: models.py:379
 msgid "Aggregated Epidemiology Report"
 msgstr "Rapport épidémiologie agrégé"
 
-#: models.py:381
+#: models.py:380
 msgid "Aggregated Epidemiology Reports"
 msgstr "Rapports épidémiologie agrégés"
 
-#: models.py:384
+#: models.py:383
 msgid "Primary. Sources"
 msgstr "Sources primaires"
 
-#: xls_import.py:30
+#: models.py:407
+#| msgid "Epidemiology Report"
+msgid "Epidemiology Alert"
+msgstr "Alerte épidémiologie"
+
+#: models.py:408
+#| msgid "Epidemiology Reports"
+msgid "Epidemiology Alerts"
+msgstr "Alerte épidémiologie"
+
+#: models.py:411
+msgid "Disease"
+msgstr "Maladie"
+
+#: models.py:412
+#| msgid "Suspected AFP cases"
+msgid "Suspected cases"
+msgstr "Cas suspects"
+
+#: models.py:413
+msgid "Confirmed cases"
+msgstr "Cas confirmés"
+
+#: models.py:414
+msgid "Deaths"
+msgstr "Décès"
+
+#: xls_import.py:34 xls_import.py:144 xls_import.py:153 xls_import.py:238
+#: xls_import.py:323 xls_import.py:408 xls_import.py:493 xls_import.py:578
+#: xls_import.py:663 xls_import.py:748 xls_import.py:833 xls_import.py:918
+#: xls_import.py:1003 xls_import.py:1088 xls_import.py:1173 xls_import.py:1258
+#: xls_import.py:1343 xls_import.py:1428 xls_import.py:1513 xls_import.py:1598
+#: xls_import.py:1683 xls_import.py:1768 xls_import.py:1853 xls_import.py:1938
+#: xls_import.py:2023 xls_import.py:2108 xls_import.py:2193 xls_import.py:2278
+#: xls_import.py:2363 xls_import.py:2448 xls_import.py:2533 xls_import.py:2618
+#: xls_import.py:2703 xls_import.py:2788 xls_import.py:2873 xls_import.py:2958
+#: xls_import.py:3043 xls_import.py:3128 xls_import.py:3213 xls_import.py:3298
+#: xls_import.py:3383 xls_import.py:3468
 msgid "Health Center"
 msgstr "Centre de santé"
 
-#: xls_import.py:32
+#: xls_import.py:36 xls_import.py:146
 msgid "Day"
 msgstr "Jour"
 
-#: xls_import.py:34
+#: xls_import.py:38 xls_import.py:148
 msgid "Month"
 msgstr "Mois"
 
-#: xls_import.py:36
+#: xls_import.py:40 xls_import.py:150
 msgid "Year"
 msgstr "Année"

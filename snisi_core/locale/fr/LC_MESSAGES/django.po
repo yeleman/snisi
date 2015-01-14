@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-04 17:43+0000\n"
+"POT-Creation-Date: 2015-01-14 09:28+0000\n"
 "PO-Revision-Date: 2014-09-04 17:44-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -221,37 +221,37 @@ msgstr "{provider} {label} le {date}"
 msgid "{label} on {date}"
 msgstr "{label} le {date}"
 
-#: models/Entities.py:38
+#: models/Entities.py:37
 msgid "Entity Type"
 msgstr "Type d'entité"
 
-#: models/Entities.py:39
+#: models/Entities.py:38
 msgid "Entity Types"
 msgstr "Types d'entités"
 
-#: models/Entities.py:41 models/Entities.py:63 models/Reporting.py:737
+#: models/Entities.py:40 models/Entities.py:62 models/Reporting.py:754
 #: models/Roles.py:23
 msgid "Slug"
 msgstr "Code"
 
-#: models/Entities.py:42 models/Entities.py:64 models/Reporting.py:738
+#: models/Entities.py:41 models/Entities.py:63 models/Reporting.py:755
 #: models/Roles.py:24
 msgid "Name"
 msgstr "Nom"
 
-#: models/Entities.py:60
+#: models/Entities.py:59
 msgid "Entity"
 msgstr "Entité"
 
-#: models/Entities.py:61
+#: models/Entities.py:60
 msgid "Entities"
 msgstr "Entités"
 
-#: models/Entities.py:66 models/Periods.py:121
+#: models/Entities.py:65 models/Periods.py:111
 msgid "Type"
 msgstr "Type"
 
-#: models/Entities.py:69
+#: models/Entities.py:68
 msgid "Parent"
 msgstr "Parent"
 
@@ -265,41 +265,41 @@ msgstr "{name}/{parent}"
 msgid "{name} ({code})"
 msgstr "{name} ({code})"
 
-#: models/Entities.py:142 models/Entities.py:146
+#: models/Entities.py:143 models/Entities.py:149
 #, python-brace-format
 msgid "{type} de {name}"
 msgstr "{type} de {name}"
 
-#: models/Entities.py:538
+#: models/Entities.py:543
 msgid "Health Entity"
 msgstr "Entité sanitaire"
 
-#: models/Entities.py:539
+#: models/Entities.py:544
 msgid "Health Entities"
 msgstr "Entités sanitaires"
 
-#: models/Entities.py:551
+#: models/Entities.py:559
 msgid "Admin. Entity"
 msgstr "Entité administrative"
 
-#: models/Entities.py:552
+#: models/Entities.py:560
 msgid "Admin. Entities"
 msgstr "Entités administratives"
 
 #: models/FixedWeekPeriods.py:54 models/FixedWeekPeriods.py:99
 #: models/FixedWeekPeriods.py:144 models/FixedWeekPeriods.py:189
-#: models/ReportingPeriods.py:38 models/ReportingPeriods.py:138
-#: models/ReportingPeriods.py:187 models/ReportingPeriods.py:236
-#: models/ReportingPeriods.py:285 models/ReportingPeriods.py:334
+#: models/ReportingPeriods.py:39 models/ReportingPeriods.py:141
+#: models/ReportingPeriods.py:194 models/ReportingPeriods.py:247
+#: models/ReportingPeriods.py:300 models/ReportingPeriods.py:353
 msgid "Monthly Reporting Period"
 msgstr "Période de rapportage mensuel"
 
 #: models/FixedWeekPeriods.py:55 models/FixedWeekPeriods.py:100
 #: models/FixedWeekPeriods.py:145 models/FixedWeekPeriods.py:190
-#: models/FixedWeekPeriods.py:236 models/ReportingPeriods.py:39
-#: models/ReportingPeriods.py:139 models/ReportingPeriods.py:188
-#: models/ReportingPeriods.py:237 models/ReportingPeriods.py:286
-#: models/ReportingPeriods.py:335
+#: models/FixedWeekPeriods.py:236 models/ReportingPeriods.py:40
+#: models/ReportingPeriods.py:142 models/ReportingPeriods.py:195
+#: models/ReportingPeriods.py:248 models/ReportingPeriods.py:301
+#: models/ReportingPeriods.py:354
 msgid "Monthly Reporting Periods"
 msgstr "Périodes de rapportage mensuel"
 
@@ -357,15 +357,15 @@ msgstr "29+ F Y"
 msgid "29th + F Y"
 msgstr "29+ F Y"
 
-#: models/Groups.py:18
+#: models/Groups.py:20
 msgid "Group"
 msgstr "Group"
 
-#: models/Groups.py:19
+#: models/Groups.py:21
 msgid "Groups"
 msgstr "Groups"
 
-#: models/Groups.py:22 models/Projects.py:66 models/Projects.py:105
+#: models/Groups.py:28 models/Projects.py:66 models/Projects.py:105
 #, python-brace-format
 msgid "{name}"
 msgstr "{name}"
@@ -494,158 +494,158 @@ msgstr "Tâches périodiques"
 msgid "{}{}"
 msgstr "{}{}"
 
-#: models/Periods.py:94 models/Periods.py:575 models/Periods.py:613
-#: models/Periods.py:659 models/Periods.py:705 models/Periods.py:811
+#: models/Periods.py:84 models/Periods.py:554 models/Periods.py:592
+#: models/Periods.py:638 models/Periods.py:684 models/Periods.py:790
 msgid "Period"
 msgstr "Période"
 
-#: models/Periods.py:95 models/Periods.py:576 models/Periods.py:614
-#: models/Periods.py:660 models/Periods.py:706 models/Periods.py:812
+#: models/Periods.py:85 models/Periods.py:555 models/Periods.py:593
+#: models/Periods.py:639 models/Periods.py:685 models/Periods.py:791
 msgid "Periods"
 msgstr "Périodes"
 
-#: models/Periods.py:106
+#: models/Periods.py:96
 msgid "Day"
 msgstr "Jour"
 
-#: models/Periods.py:107
+#: models/Periods.py:97
 msgid "Week"
 msgstr "Semaine"
 
-#: models/Periods.py:108
+#: models/Periods.py:98
 msgid "Month"
 msgstr "Mois"
 
-#: models/Periods.py:109
+#: models/Periods.py:99
 msgid "Quarter"
 msgstr "Trimestre"
 
-#: models/Periods.py:110
+#: models/Periods.py:100
 msgid "Semester"
 msgstr "Semestre"
 
-#: models/Periods.py:111
+#: models/Periods.py:101
 msgid "Year"
 msgstr "Année"
 
-#: models/Periods.py:112
+#: models/Periods.py:102
 msgid "Custom"
 msgstr "Personnalisée"
 
-#: models/Periods.py:116
+#: models/Periods.py:106
 msgid "Start On"
 msgstr "Du"
 
-#: models/Periods.py:117
+#: models/Periods.py:107
 msgid "End On"
 msgstr "Au"
 
-#: models/Periods.py:265
+#: models/Periods.py:255
 msgid "c"
 msgstr "c"
 
 #. Translators: Django's date format for DayPeriod.name()
-#: models/Periods.py:586
+#: models/Periods.py:565
 msgid "m/d/Y"
 msgstr "m/d/Y"
 
 #. Translators: Django's date format for DayPeriod.full_name()
-#: models/Periods.py:590
+#: models/Periods.py:569
 msgid "F d Y"
 msgstr "F d Y"
 
 #. Translators: Django's date format for WeekPeriod.name()
-#: models/Periods.py:628
+#: models/Periods.py:607
 msgid "W/Y"
 msgstr "W/Y"
 
-#: models/Periods.py:633
+#: models/Periods.py:612
 msgid "W"
 msgstr "W"
 
-#: models/Periods.py:634
+#: models/Periods.py:613
 msgid "d"
 msgstr "d"
 
-#: models/Periods.py:635
+#: models/Periods.py:614
 msgid "d F Y"
 msgstr "d F Y"
 
 #. Translators: Week Full name representation: weeknum, start and end
-#: models/Periods.py:632
+#: models/Periods.py:611
 #, python-format
 msgid "Week %(weeknum)s (%(start)s to %(end)s)"
 msgstr "Semaine %(weeknum)s (%(start)s au %(end)s)"
 
 #. Translators: Django's date template format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/Periods.py:674 models/Periods.py:678 models/Periods.py:770
-#: models/ReportingPeriods.py:153 models/ReportingPeriods.py:157
-#: models/ReportingPeriods.py:202 models/ReportingPeriods.py:206
-#: models/ReportingPeriods.py:251 models/ReportingPeriods.py:255
-#: models/ReportingPeriods.py:300 models/ReportingPeriods.py:304
-#: models/ReportingPeriods.py:349 models/ReportingPeriods.py:353
-#: models/ReportingPeriods.py:398 models/ReportingPeriods.py:402
-#: models/ReportingPeriods.py:447 models/ReportingPeriods.py:451
-#: models/ReportingPeriods.py:496 models/ReportingPeriods.py:500
-#: models/ReportingPeriods.py:545 models/ReportingPeriods.py:549
-#: models/ReportingPeriods.py:594 models/ReportingPeriods.py:598
+#: models/Periods.py:653 models/Periods.py:657 models/Periods.py:749
+#: models/ReportingPeriods.py:157 models/ReportingPeriods.py:162
+#: models/ReportingPeriods.py:210 models/ReportingPeriods.py:215
+#: models/ReportingPeriods.py:263 models/ReportingPeriods.py:268
+#: models/ReportingPeriods.py:316 models/ReportingPeriods.py:321
+#: models/ReportingPeriods.py:369 models/ReportingPeriods.py:374
+#: models/ReportingPeriods.py:422 models/ReportingPeriods.py:427
+#: models/ReportingPeriods.py:475 models/ReportingPeriods.py:480
+#: models/ReportingPeriods.py:528 models/ReportingPeriods.py:533
+#: models/ReportingPeriods.py:581 models/ReportingPeriods.py:586
+#: models/ReportingPeriods.py:634 models/ReportingPeriods.py:639
 msgid "F Y"
 msgstr "F Y"
 
 #. Translators: django date format for accomp Quarter in Quarter.name()
-#: models/Periods.py:732 models/Periods.py:768
+#: models/Periods.py:711 models/Periods.py:747
 msgid "Y"
 msgstr "Y"
 
 #. Translators: Quarter.name() repr using Quarter number and other
-#: models/Periods.py:734
+#: models/Periods.py:713
 #, python-format
 msgid "Q%(quarter)s.%(year)s"
 msgstr "T%(quarter)s.%(year)s"
 
 #. Translators: suffix for 1st
-#: models/Periods.py:748
+#: models/Periods.py:727
 msgid "st"
 msgstr "er"
 
 #. Translators: suffix for 2nd
-#: models/Periods.py:751
+#: models/Periods.py:730
 msgid "nd"
 msgstr "ème"
 
 #. Translators: suffix for 3rd
-#: models/Periods.py:754
+#: models/Periods.py:733
 msgid "rd"
 msgstr "ème"
 
 #. Translators: suffix for 4th
 #. Translators: suffix for 5th
-#: models/Periods.py:757 models/Periods.py:760
+#: models/Periods.py:736 models/Periods.py:739
 msgid "th"
 msgstr "ème"
 
 #. Translators: Django's date format for YearPeriod.name()
-#: models/Periods.py:769 models/Periods.py:822
+#: models/Periods.py:748 models/Periods.py:801
 msgid "F"
 msgstr "F"
 
-#: models/Periods.py:849
+#: models/Periods.py:828
 msgid "Fixed Days Period"
 msgstr "Période à jours fixe"
 
-#: models/Periods.py:850
+#: models/Periods.py:829
 msgid "Fixed Days Periods"
 msgstr "Périodes à jours fixe"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/Periods.py:857
+#: models/Periods.py:836
 #, python-brace-format
 msgid "{sd}-{ed} F Y"
 msgstr "{sd}-{ed} F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/Periods.py:862
+#: models/Periods.py:841
 #, python-brace-format
 msgid "{sd} to {ed} F Y"
 msgstr "{sd} au {ed} F Y"
@@ -856,231 +856,231 @@ msgstr "Occasionnel source"
 msgid "Occasional Aggregated"
 msgstr "Occasionnel agrégé"
 
-#: models/Reporting.py:114 models/Reporting.py:812
+#: models/Reporting.py:105 models/Reporting.py:829
 msgid "Complete"
 msgstr "Complet"
 
-#: models/Reporting.py:115
+#: models/Reporting.py:106
 msgid "Incomplete"
 msgstr "Incomplet"
 
-#: models/Reporting.py:123
+#: models/Reporting.py:114
 msgid "Not Checked"
 msgstr "Non vérifié"
 
-#: models/Reporting.py:124
+#: models/Reporting.py:115
 msgid "Incorrect"
 msgstr "Incorrect"
 
-#: models/Reporting.py:125
+#: models/Reporting.py:116
 msgid "Correct"
 msgstr "Correct"
 
-#: models/Reporting.py:133
+#: models/Reporting.py:124
 msgid "Arrived On Time"
 msgstr "Arrivé à temps"
 
-#: models/Reporting.py:134
+#: models/Reporting.py:125
 msgid "Arrived Late"
 msgstr "Arrivé en retard"
 
-#: models/Reporting.py:135
+#: models/Reporting.py:126
 msgid "N/A"
 msgstr "N/A"
 
-#: models/Reporting.py:143
+#: models/Reporting.py:134
 msgid "Not Validated"
 msgstr "Non validé"
 
-#: models/Reporting.py:144
+#: models/Reporting.py:135
 msgid "Validated"
 msgstr "Validé"
 
-#: models/Reporting.py:145
+#: models/Reporting.py:136
 msgid "Refused"
 msgstr "Refusé"
 
-#: models/Reporting.py:146
+#: models/Reporting.py:137
 msgid "N/a"
 msgstr "N/a"
 
-#: models/Reporting.py:171
+#: models/Reporting.py:162
 msgid "Created By"
 msgstr "Créé par"
 
-#: models/Reporting.py:174
+#: models/Reporting.py:165
 msgid "Created On"
 msgstr "Créé le"
 
-#: models/Reporting.py:179
+#: models/Reporting.py:170
 msgid "Modified By"
 msgstr "Modifié par"
 
-#: models/Reporting.py:183
+#: models/Reporting.py:174
 msgid "Modified On"
 msgstr "Modifié le"
 
-#: models/Reporting.py:204
+#: models/Reporting.py:195
 msgid "Validated By"
 msgstr "Validé par"
 
-#: models/Reporting.py:523
+#: models/Reporting.py:521
 msgid "Aggr. Sources (all)"
 msgstr "Sources agrégés (toutes)"
 
-#: models/Reporting.py:531
+#: models/Reporting.py:529
 msgid "Aggr. Sources (direct)"
 msgstr "Source agrégés (directes)"
 
-#: models/Reporting.py:733
+#: models/Reporting.py:750
 msgid "Report Class"
 msgstr "Classe de rapport"
 
-#: models/Reporting.py:734
+#: models/Reporting.py:751
 msgid "Report Classes"
 msgstr "Classes de rapport"
 
-#: models/Reporting.py:739
+#: models/Reporting.py:756
 msgid "cls"
 msgstr "Classe (code)"
 
-#: models/Reporting.py:740
+#: models/Reporting.py:757
 msgid "Period Type"
 msgstr "Type de période"
 
-#: models/Reporting.py:792
+#: models/Reporting.py:809
 msgid "Expected Report"
 msgstr "Rapport Attendu"
 
-#: models/Reporting.py:793
+#: models/Reporting.py:810
 msgid "Expected Reports"
 msgstr "Rapports Attendus"
 
-#: models/Reporting.py:805
+#: models/Reporting.py:822
 msgid "Single"
 msgstr "Un seul"
 
-#: models/Reporting.py:806
+#: models/Reporting.py:823
 msgid "1+"
 msgstr "1+"
 
-#: models/Reporting.py:807
+#: models/Reporting.py:824
 msgid "0+"
 msgstr "0+"
 
-#: models/Reporting.py:808
+#: models/Reporting.py:825
 msgid "Multiple"
 msgstr "Multiple"
 
-#: models/Reporting.py:813
+#: models/Reporting.py:830
 msgid "Matching"
 msgstr "Correspond"
 
-#: models/Reporting.py:814
+#: models/Reporting.py:831
 msgid "Missing"
 msgstr "Manquant"
 
-#: models/Reporting.py:964
+#: models/Reporting.py:981
 msgid "Expected Validation"
 msgstr "Validation Attendue"
 
-#: models/Reporting.py:965
+#: models/Reporting.py:982
 msgid "Expected Validations"
 msgstr "Validations Attendues"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ReportingPeriods.py:53
+#: models/ReportingPeriods.py:54
 msgid "1-5 F Y"
 msgstr "1-5 F Y"
 
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:57
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:58
 msgid "1st to 5th F Y"
 msgstr "1er au 5 F Y"
 
-#: models/ReportingPeriods.py:88 models/ReportingPeriods.py:383
-#: models/ReportingPeriods.py:432 models/ReportingPeriods.py:481
-#: models/ReportingPeriods.py:530 models/ReportingPeriods.py:579
+#: models/ReportingPeriods.py:90 models/ReportingPeriods.py:406
+#: models/ReportingPeriods.py:459 models/ReportingPeriods.py:512
+#: models/ReportingPeriods.py:565 models/ReportingPeriods.py:618
 msgid "Monthly Extended Reporting Period"
 msgstr "Période de rapportage mensuel étendue"
 
-#: models/ReportingPeriods.py:89
+#: models/ReportingPeriods.py:91
 msgid "Monthly Extended Reporting Periods"
 msgstr "Périodes de rapportage mensuel étendues"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ReportingPeriods.py:103
+#: models/ReportingPeriods.py:105
 msgid "6-10 F Y"
 msgstr "6-10 F Y"
 
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:107
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:109
 msgid "6th to 10th F Y"
 msgstr "6 au 10 F Y"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:153 models/ReportingPeriods.py:157
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:156 models/ReportingPeriods.py:161
 msgid "W1/RP {}"
 msgstr "W1/RP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:202 models/ReportingPeriods.py:206
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:209 models/ReportingPeriods.py:214
 msgid "W2/RP {}"
 msgstr "W2/RP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:251 models/ReportingPeriods.py:255
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:262 models/ReportingPeriods.py:267
 msgid "W3/RP {}"
 msgstr "W3/RP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:300 models/ReportingPeriods.py:304
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:315 models/ReportingPeriods.py:320
 msgid "W4/RP {}"
 msgstr "W4/RP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:349 models/ReportingPeriods.py:353
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:368 models/ReportingPeriods.py:373
 msgid "W5/RP {}"
 msgstr "W5/RP {}"
 
-#: models/ReportingPeriods.py:384 models/ReportingPeriods.py:433
-#: models/ReportingPeriods.py:482 models/ReportingPeriods.py:531
-#: models/ReportingPeriods.py:580
+#: models/ReportingPeriods.py:407 models/ReportingPeriods.py:460
+#: models/ReportingPeriods.py:513 models/ReportingPeriods.py:566
+#: models/ReportingPeriods.py:619
 msgid "Monthly ExtendedReporting Periods"
 msgstr "Périodes de rapportage mensuel étendues"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:398 models/ReportingPeriods.py:402
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:421 models/ReportingPeriods.py:426
 msgid "W1/ERP {}"
 msgstr "W1/ERP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:447 models/ReportingPeriods.py:451
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:474 models/ReportingPeriods.py:479
 msgid "W2/ERP {}"
 msgstr "W2/ERP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:496 models/ReportingPeriods.py:500
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:527 models/ReportingPeriods.py:532
 msgid "W3/ERP {}"
 msgstr "W3/ERP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:545 models/ReportingPeriods.py:549
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:580 models/ReportingPeriods.py:585
 msgid "W4/ERP {}"
 msgstr "W4/ERP {}"
 
-#. Translators: Django's date template format for MonthPeriod.name()
-#. Translators: Django's date template format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:594 models/ReportingPeriods.py:598
+#. Translators: Django's date tmpl format for MonthPeriod.name()
+#. Translators: Django's date tmpl format for MonthPeriod.full_name()
+#: models/ReportingPeriods.py:633 models/ReportingPeriods.py:638
 msgid "W5/ERP {}"
 msgstr "W5/ERP {}"
 
