@@ -37,6 +37,7 @@ def create_expected_for(period):
 
     expected_dict = {
         'period': period,
+        'completion_status': ExpectedReporting.COMPLETION_MISSING,
         'within_period': False,
         'within_entity': False,
         'reporting_role': dtc,

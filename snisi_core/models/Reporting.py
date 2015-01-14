@@ -846,7 +846,8 @@ class ExpectedReporting(models.Model):
     amount_expected = models.CharField(max_length=30,
                                        choices=REPORTING_NUMBERS.items())
     completion_status = models.CharField(max_length=30,
-                                         choices=REPORTING_COMPLETION.items())
+                                         choices=REPORTING_COMPLETION.items(),
+                                         default=COMPLETION_MISSING)
     arrived_reports = models.ManyToManyField(
         'SNISIReport', blank=True, null=True,
         related_name='expected_reportings')

@@ -57,6 +57,7 @@ def handle_entity(entity,
         'reporting_role': reporting_role,
         'reporting_period': reporting_period,
         'extended_reporting_period': extended_reporting_period,
+        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     })
 
     finddict = copy.copy(edict)
@@ -97,7 +98,8 @@ def create_expected_for(period):
         'reporting_role': dtc,
         'reporting_period': None,
         'extended_reporting_period': None,
-        'amount_expected': ExpectedReporting.EXPECTED_SINGLE
+        'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
+        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     report_classes = [

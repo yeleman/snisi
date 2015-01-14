@@ -42,7 +42,8 @@ def create_expected_for(period):
         'report_class': mission_report_class,
         'reporting_period': None,
         'extended_reporting_period': None,
-        'amount_expected': ExpectedReporting.EXPECTED_ZEROPLUS
+        'amount_expected': ExpectedReporting.EXPECTED_ZEROPLUS,
+        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     # snisi_malaria only work with those periods

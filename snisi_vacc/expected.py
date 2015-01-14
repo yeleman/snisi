@@ -44,7 +44,8 @@ def create_expected_for(period):
         'reporting_role': dtc,
         'reporting_period': None,
         'extended_reporting_period': None,
-        'amount_expected': ExpectedReporting.EXPECTED_SINGLE
+        'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
+        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     # snisi_reprohealth only work with those periods
