@@ -60,10 +60,12 @@
                 <ul>
                     <li><a href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
                     <li><a href="{% url 'nutrition_raw_data' %}">Rapports Sources</a></li>
+                    {% if user.location.level <= 2 %}
                     <li><a href="{% url 'nutrition_overview_sam' %}">Rapports MAS</a></li>
                     <li><a href="{% url 'nutrition_overview_mam' %}">Rapports MAM</a></li>
                     <li><a href="{% url 'nutrition_synthesis_sam' %}">Synthèse NUT MAS</a></li>
                     <li><a href="{% url 'nutrition_synthesis_mam' %}">Synthèse NUT MAM</a></li>
+                    {% endif %}
                     <li><a href="{% url 'nutrition_map' %}">Cartographie</a></li>
                 </ul>
                 <a class="pure-menu-heading">CÉCITÉ</a>

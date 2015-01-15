@@ -16,7 +16,7 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Reporting import ExpectedReporting
 from snisi_web.utils import entity_periods_context
-from snisi_web.decorators import user_role_within
+from snisi_web.decorators import user_role_within, user_location_level_below
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 from snisi_nutrition.indicators.common import (
     PromptnessReportingTable, PromptnessReportingFigure, RSCompletionTable)
@@ -71,6 +71,7 @@ def dashboard(request, **kwargs):
 
 
 @login_required
+@user_location_level_below(2)
 def overview_generic(request, entity_slug=None,
                      perioda_str=None, periodb_str=None,
                      is_sam=False, is_mam=False, **kwargs):
