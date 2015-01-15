@@ -386,6 +386,10 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
         return self.arrival_status == self.ON_TIME
 
     @property
+    def correct(self):
+        return self.integrity_status == self.CORRECT
+
+    @property
     def complete(self):
         return self.completion_status == self.COMPLETE
 
@@ -715,8 +719,62 @@ class PeriodicAggregatedReportInterface(models.Model):
         return report
 
     def update_expected_reportings_number(self):
-        self.nb_source_reports_expected = \
-            len(self.get_expected_reportings(with_source=True, with_agg=False))
+        source_expecteds = self.get_expected_reportings(
+            with_source=True, with_agg=False)
+        source_arrived_reports = [r for e in source_expecteds
+                                  for r in e.arrived_reports.all()
+                                  if e.satisfied]
+        self.nb_source_reports_expected = len(source_expecteds)
+
+        # nb_source_reports_expected
+        self.nb_source_reports_arrived = len([
+            e for e in source_expecteds if e.satisfied])
+
+        # nb_source_reports_arrived
+        self.nb_source_reports_arrived = len(source_arrived_reports)
+
+        # nb_source_reports_arrived_on_time
+        self.nb_source_reports_arrived_on_time = sum([
+            1 for r in source_arrived_reports if r.on_time])
+
+        # nb_source_reports_arrived_correct
+        self.nb_source_reports_arrived_correct = sum([
+            1 for r in source_arrived_reports if r.correct])
+
+        # nb_source_reports_arrived_complete
+        self.nb_source_reports_arrived_complete = sum([
+            1 for r in source_arrived_reports if r.complete])
+
+        # nb_source_reports_altered
+        self.nb_source_reports_altered = sum([
+            1 for r in source_arrived_reports if r.altered(only_data=True)])
+
+        # nb_source_reports_validated
+        self.nb_source_reports_validated = sum([
+            1 for r in source_arrived_reports if r.validated])
+
+        # nb_source_reports_auto_validated
+        self.nb_source_reports_auto_validated = sum([
+            1 for r in source_arrived_reports if r.auto_validated])
+
+        agg_expecteds = self.get_expected_reportings(
+            with_source=False, with_agg=True)
+
+        agg_arrived_reports = [r for e in agg_expecteds
+                               for r in e.arrived_reports.all()
+                               if e.satisfied]
+
+        # nb_agg_reports_altered
+        self.nb_agg_reports_altered = sum([
+            1 for r in agg_arrived_reports if r.altered(only_data=True)])
+
+        # nb_agg_reports_validated
+        self.nb_agg_reports_validated = sum([
+            1 for r in agg_arrived_reports if r.validated])
+
+        # nb_agg_reports_auto_validated
+        self.nb_agg_reports_auto_validated = sum([
+            1 for r in agg_arrived_reports if r.auto_validated])
 
     def set_reporting_status_fields(self,
                                     completion_ok=True,
