@@ -45,6 +45,7 @@ def display_epidemio(request,
         periodb_str=periodb_str,
         period_cls=MonthPeriod,
         must_be_in_cluster=True,
+        assume_previous=False,
     ))
 
     period_classes = [
