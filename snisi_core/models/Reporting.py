@@ -719,8 +719,9 @@ class PeriodicAggregatedReportInterface(models.Model):
         return report
 
     def update_expected_reportings_number(self):
-        source_expecteds = self.get_expected_reportings(
+        source_expecteds = [e for e in self.get_expected_reportings(
             with_source=True, with_agg=False)
+            if e.entity.type.slug == 'health_center']
         source_arrived_reports = [r for e in source_expecteds
                                   for r in e.arrived_reports.all()
                                   if e.satisfied]
@@ -775,6 +776,8 @@ class PeriodicAggregatedReportInterface(models.Model):
         # nb_agg_reports_auto_validated
         self.nb_agg_reports_auto_validated = sum([
             1 for r in agg_arrived_reports if r.auto_validated])
+
+        self.save()
 
     def set_reporting_status_fields(self,
                                     completion_ok=True,

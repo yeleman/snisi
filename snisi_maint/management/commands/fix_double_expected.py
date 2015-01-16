@@ -7,8 +7,8 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
+from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import ExpectedReporting
 
 logger = logging.getLogger(__name__)
@@ -18,13 +18,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        now = timezone.now()
+        december = MonthPeriod.from_url_str('12-2014')
+
+        bads = ExpectedReporting.objects.filter(
+            period=december, completion_status='')
+        logger.info("DELETING {} bads".format(bads.count()))
+        bads.delete()
 
         for exp in ExpectedReporting.objects.filter(
-                reporting_period__end_on__gte=now,
-                completion_status=u''):
+                period=december,
+                completion_status=ExpectedReporting.COMPLETION_MISSING):
 
-            logger.info(exp)
+            # logger.info(exp)
 
             params = {
                 'report_class': exp.report_class,
@@ -41,7 +46,7 @@ class Command(BaseCommand):
 
                 'amount_expected': exp.amount_expected,
 
-                'completion_status': ExpectedReporting.COMPLETION_MISSING,
+                'completion_status': ExpectedReporting.COMPLETION_COMPLETE,
             }
 
             if not ExpectedReporting.objects.filter(**params).count():
@@ -52,7 +57,7 @@ class Command(BaseCommand):
             good = ExpectedReporting.objects.filter(**params).get()
 
             if not exp.satisfied and not exp.arrived_reports.count():
-                logger.info(". DELETETIN exp: {}".format(exp))
+                logger.info(". DELETING exp: {}".format(exp))
                 exp.delete()
             else:
                 logger.info("CAN'T DELETE EXP as satisfied: {}".format(exp))
