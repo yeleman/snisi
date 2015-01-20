@@ -56,3 +56,12 @@ class PeriodicTask(models.Model):
         self.triggered_on = timezone.now()
         self.save()
         return True
+
+    # debug only
+    def untrigger(self):
+        if not self.triggered:
+            return False
+        self.triggered = False
+        self.triggered_on = None
+        self.save()
+        return True
