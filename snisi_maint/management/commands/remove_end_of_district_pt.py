@@ -26,9 +26,5 @@ class Command(BaseCommand):
             if not pt.slug.endswith(regexp):
                 continue
 
-            # skipping nutrition
-            if pt.slug == 'nutrition_12-2014_end_of_district_period':
-                continue
-
             logger.info("Untriggering {}".format(pt))
             pt.untrigger()
