@@ -43,7 +43,6 @@ def create_expected_for(period):
         'reporting_period': None,
         'extended_reporting_period': None,
         'amount_expected': ExpectedReporting.EXPECTED_ZEROPLUS,
-        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     # snisi_malaria only work with those periods
@@ -68,6 +67,9 @@ def create_expected_for(period):
                 created_list.append(e)
             else:
                 logger.debug("Exists already: {}".format(e))
+            if not e.completion_status:
+                e.completion_status = ExpectedReporting.COMPLETION_MISSING
+                e.save()
 
     return created_list
 

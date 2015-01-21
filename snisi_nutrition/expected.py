@@ -57,7 +57,6 @@ def handle_entity(entity,
         'reporting_role': reporting_role,
         'reporting_period': reporting_period,
         'extended_reporting_period': extended_reporting_period,
-        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     })
 
     finddict = copy.copy(edict)
@@ -77,6 +76,9 @@ def handle_entity(entity,
             != edict['extended_reporting_period']:
         e.extended_reporting_period \
             = edict['extended_reporting_period']
+        e.save()
+    if not e.completion_status:
+        e.completion_status = ExpectedReporting.COMPLETION_MISSING
         e.save()
 
 
@@ -99,7 +101,6 @@ def create_expected_for(period):
         'reporting_period': None,
         'extended_reporting_period': None,
         'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
-        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     report_classes = [

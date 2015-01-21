@@ -45,7 +45,6 @@ def create_expected_for(period):
         'reporting_period': None,
         'extended_reporting_period': None,
         'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
-        'completion_status': ExpectedReporting.COMPLETION_MISSING,
     }
 
     # snisi_reprohealth only work with those periods
@@ -92,6 +91,9 @@ def create_expected_for(period):
                     edict['extended_reporting_period']:
                 e.extended_reporting_period = \
                     edict['extended_reporting_period']
+                e.save()
+            if not e.completion_status:
+                e.completion_status = ExpectedReporting.COMPLETION_MISSING
                 e.save()
 
     return created_list

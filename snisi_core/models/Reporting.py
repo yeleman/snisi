@@ -914,6 +914,16 @@ class ExpectedReporting(models.Model):
         related_name='expected_reportings')
     updated_on = models.DateTimeField(default=timezone.now)
 
+    def to_dict(self):
+        fields = ['report_class', 'reporting_role',
+                  'period', 'within_period',
+                  'entity', 'within_entity',
+                  'reporting_period',
+                  'extended_reporting_period',
+                  'amount_expected',
+                  'completion_status']
+        return {field: getattr(self, field) for field in fields}
+
     def clone(self, save=False, **kwargs):
         fields = ['report_class', 'reporting_role',
                   'period', 'within_period',

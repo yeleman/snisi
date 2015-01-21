@@ -37,7 +37,6 @@ def create_expected_for(period):
 
     expected_dict = {
         'period': period,
-        'completion_status': ExpectedReporting.COMPLETION_MISSING,
         'within_period': False,
         'within_entity': False,
         'reporting_role': dtc,
@@ -90,6 +89,9 @@ def create_expected_for(period):
                     != edict['extended_reporting_period']:
                 e.extended_reporting_period \
                     = edict['extended_reporting_period']
+                e.save()
+            if not e.completion_status:
+                e.completion_status = ExpectedReporting.COMPLETION_MISSING
                 e.save()
 
     return created_list
