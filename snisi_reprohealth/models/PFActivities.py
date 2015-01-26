@@ -553,24 +553,6 @@ class AggPFActivitiesR(PFActivitiesRIface,
         return report
 
     @classmethod
-    def start_aggregated(cls, *args, **kwargs):
-        rfdict = {}
-        for field in ('completion_ok', 'integrity_ok',
-                      'arrival_ok', 'auto_validate'):
-            if field in kwargs:
-                rfdict.update({field: kwargs.get(field)})
-                del kwargs[field]
-        report = cls.start_report(*args, **kwargs)
-        report.fill_blank()
-
-        # only agg
-        if hasattr(report, 'set_reporting_status_fields'):
-            report.set_reporting_status_fields(**rfdict)
-        if hasattr(report, 'update_expected_reportings_number'):
-            report.update_expected_reportings_number()
-        return report
-
-    @classmethod
     def update_instance_with_indiv(cls, report, instance):
         for field in instance.data_fields():
             if field.endswith('_observation'):

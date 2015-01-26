@@ -114,24 +114,6 @@ class AggVaccCovR(VaccCovRIface,
         symmetrical=False)
 
     @classmethod
-    def start_aggregated(cls, *args, **kwargs):
-        rfdict = {}
-        for field in ('completion_ok', 'integrity_ok',
-                      'arrival_ok', 'auto_validate'):
-            if field in kwargs:
-                rfdict.update({field: kwargs.get(field)})
-                del kwargs[field]
-        report = cls.start_report(*args, **kwargs)
-        report.fill_blank()
-
-        # only agg
-        if hasattr(report, 'set_reporting_status_fields'):
-            report.set_reporting_status_fields(**rfdict)
-        if hasattr(report, 'update_expected_reportings_number'):
-            report.update_expected_reportings_number()
-        return report
-
-    @classmethod
     def create_from(cls, period, entity, created_by,
                     indiv_sources=None, agg_sources=None):
         if indiv_sources is None and entity.type.slug == 'health_district':

@@ -117,13 +117,6 @@ def create_periodic_agg_report_from(cls, period, entity,
     # save to allow m2m
     agg_report.save()
 
-    # # keep a record of all sources
-    # for report in indiv_sources:
-    #     agg_report.direct_indiv_sources.add(report)
-
-    # for report in agg_sources:
-    #     agg_report.direct_agg_sources.add(report)
-
     # loop on all sources
     for source in sources:
         if isinstance(source, indiv_cls):
