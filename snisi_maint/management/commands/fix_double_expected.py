@@ -18,15 +18,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        december = MonthPeriod.from_url_str('12-2014')
+        start = MonthPeriod.from_url_str('12-2014').start_on
+        end = MonthPeriod.from_url_str('01-2015').end_on
 
         bads = ExpectedReporting.objects.filter(
-            period=december, completion_status='')
+            period__start_on__gte=start,
+            period__end_on__lte=end,
+            completion_status='')
         logger.info("DELETING {} bads".format(bads.count()))
         bads.delete()
 
         for exp in ExpectedReporting.objects.filter(
-                period=december,
+                period__start_on__gte=start,
+                period__end_on__lte=end,
                 completion_status=ExpectedReporting.COMPLETION_MISSING):
 
             # logger.info(exp)
@@ -46,15 +50,19 @@ class Command(BaseCommand):
 
                 'amount_expected': exp.amount_expected,
 
-                'completion_status': ExpectedReporting.COMPLETION_COMPLETE,
+                'completion_status__in': (
+                    ExpectedReporting.COMPLETION_COMPLETE,
+                    ExpectedReporting.COMPLETION_MATCHING),
             }
 
-            if not ExpectedReporting.objects.filter(**params).count():
+            filter = ExpectedReporting.objects.filter(**params)
+
+            if not filter.count():
                 # no duplicates on this one.
                 logger.info("... No duplicate")
                 continue
 
-            good = ExpectedReporting.objects.filter(**params).get()
+            good = filter.get()
 
             if not exp.satisfied and not exp.arrived_reports.count():
                 logger.info(". DELETING exp: {}".format(exp))
