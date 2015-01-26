@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         logger.info("Issue #61. Wrong counts in Agg meta")
 
-        december = MonthPeriod.from_url_str("11-2014")
+        december = MonthPeriod.from_url_str("12-2014")
 
         for report in SNISIReport.objects.filter(period=december):
             report = report.casted()
