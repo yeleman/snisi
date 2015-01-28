@@ -34,7 +34,7 @@ class NumberOfHealthUnitsInTime(MalariaIndicator):
     def _compute(self):
         if self.is_hc():
             if self.expected and self.expected.satisfied \
-                    and self.report.ON_TIME:
+                    and self.report.on_time:
                 return 1
             else:
                 return 0
@@ -42,7 +42,7 @@ class NumberOfHealthUnitsInTime(MalariaIndicator):
             return sum([1 for r in MalariaR.objects.filter(
                 period=self.period,
                 entity__slug__in=descendants_slugs(cluster, self.entity.slug))
-                if r.ON_TIME])
+                if r.on_time])
             return self.report.nb_source_reports_arrived_on_time
         elif self.expected:
             raise DataIsMissing
