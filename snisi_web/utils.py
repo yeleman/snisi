@@ -58,6 +58,14 @@ def entity_browser_context(root,
     selected_data = get_slug_path_from(selected_entity, full_lineage)
     # new lineage (list of type_slug) from root
     lineage = full_lineage[full_lineage.index(root.type.slug) + 1:]
+    if root_children:
+        children = root_children
+    else:
+        if not lineage:
+            children = []
+        else:
+            children = getattr(
+                root, 'get_{}s'.format(lineage[0]), lambda: [])(),
     return {
         'root': root,
         'full_lineage': full_lineage,
@@ -65,8 +73,7 @@ def entity_browser_context(root,
         'entity': selected_entity,
         'lineage_data': [selected_data.get(ts) for ts in lineage],
         # children of the first element
-        'children': root_children if root_children
-        else getattr(root, 'get_{}s'.format(lineage[0]), lambda: [])(),
+        'children': children
     }
 
 
