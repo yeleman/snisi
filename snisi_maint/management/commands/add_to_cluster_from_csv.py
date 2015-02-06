@@ -50,11 +50,13 @@ class Command(BaseCommand):
 
         cluster = Cluster.get_or_none(options.get('cluster_slug'))
         if cluster is None:
-            logger.error("Cluster `{}` does not exist.".format(options.get('cluster_slug')))
+            logger.error("Cluster `{}` does not exist."
+                         .format(options.get('cluster_slug')))
             return
 
         if not os.path.exists(options.get('filename') or ""):
-            logger.error("CSV file `{}` does not exist.".format(options.get('filename')))
+            logger.error("CSV file `{}` does not exist."
+                         .format(options.get('filename')))
             return
 
         headers = ['SNISI', 'Name']
@@ -62,7 +64,8 @@ class Command(BaseCommand):
         csv_reader = csv.DictReader(input_csv_file, fieldnames=headers)
 
         try:
-            modified_on = datetime.datetime(*[int(e) for e in options.get('start_date', '').split('-')])
+            modified_on = datetime.datetime(
+                *[int(e) for e in options.get('start_date', '').split('-')])
         except:
             modified_on = timezone.now()
 
@@ -72,7 +75,8 @@ class Command(BaseCommand):
 
             entity = Entity.get_or_none(entry.get('SNISI'))
             if entity is None:
-                logger.warning("Entity `{}` does not exist.".format(entry.get('SNISI')))
+                logger.warning("Entity `{}` does not exist."
+                               .format(entry.get('SNISI')))
                 continue
 
             p, created = Participation.objects.get_or_create(
