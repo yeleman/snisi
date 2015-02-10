@@ -376,7 +376,6 @@ def generate_section_rtf(entity, periods,
             indic_periods = graph_periods
         else:
             indic_periods = periods
-        print(indicator_cls)
         indicator_table = indicator_cls(entity=entity, periods=indic_periods)
         widgets = widgets_for_indicator(doc, indicator_table,
                                         break_before=break_before)

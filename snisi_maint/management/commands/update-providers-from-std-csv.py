@@ -12,6 +12,7 @@ from optparse import make_option
 from py3compat import PY2
 
 from snisi_core.models.Providers import Provider
+from snisi_core.models.Privileges import Accreditation, Privilege
 from snisi_core.models.Roles import Role
 from snisi_tools.auth import create_provider, send_new_account_email
 from snisi_core.models.Entities import Entity
@@ -56,7 +57,8 @@ class Command(BaseCommand):
             return
 
         headers = ['action', 'gender', 'title', 'last_name', 'maiden_name',
-                   'first_name', 'other_names', 'role', 'location', 'email',
+                   'first_name', 'other_names', 'role', 'location',
+                   'privilege', 'privilege_location', 'email',
                    'position', 'flotte', 'orange', 'malitel', 'username',
                    'comment', 'send_mail']
         input_csv_file = open(options.get('filename'), 'r')
@@ -76,6 +78,8 @@ class Command(BaseCommand):
                 last_name = entry.get('last_name') or None
                 role = entry.get('role') or None
                 location = entry.get('location') or None
+                privilege = entry.get('privilege') or None
+                privilege_location = entry.get('privilege_location') or None
                 email = entry.get('email') or None
                 send_mail = bool(entry.get('send_mail') or False)
                 maiden_name = entry.get('maiden_name') or None
@@ -114,6 +118,15 @@ class Command(BaseCommand):
                     position=position,
                     phone_numbers=numbers)
 
+                if privilege and privilege_location:
+                    priv = Privilege.get_or_none(privilege)
+                    priv_loc = Entity.get_or_none(privilege_location)
+                    if priv and priv_loc:
+                        Accreditation.objects.get_or_create(
+                            privilege=priv,
+                            provider=p,
+                            location=priv_loc)
+
                 if send_mail:
                     send_new_account_email(provider=p, password=passwd)
 
@@ -124,23 +137,27 @@ class Command(BaseCommand):
                 p.is_active = False
                 p.save()
                 logger.info("DISABLED,{}".format(p))
+
             elif entry.get('action') == 'move':
                 p = Provider.get_or_none(entry.get('username'))
                 p.role = Role.get_or_none(entry.get('role'))
                 p.location = Entity.get_or_none(entry.get('location'))
                 p.save()
                 logger.info("MOVED,{}".format(p))
+
             elif entry.get('action') == 'enable':
                 p = Provider.get_or_none(entry.get('username'),
                                          with_inactive=True)
                 p.is_active = True
                 p.save()
                 logger.info("ENABLED,{}".format(p))
+
             elif entry.get('action') == 'delete':
                 p = Provider.get_or_none(entry.get('username'),
                                          with_inactive=True)
                 p.delete()
                 logger.info("DELETED,{}".format(entry.get('username')))
+
             elif entry.get('action') == 'update':
                 p = Provider.get_or_none(entry.get('username'))
                 numbers = []
@@ -191,5 +208,38 @@ class Command(BaseCommand):
                             provider=p)
 
                 logger.info("UPDATED,{}".format(p))
+
+            elif entry.get('action') == 'add privilege':
+                p = Provider.get_or_none(entry.get('username'))
+                privilege = entry.get('privilege') or None
+                privilege_location = entry.get('privilege_location') or None
+
+                if p and privilege and privilege_location:
+                    priv = Privilege.get_or_none(privilege)
+                    priv_loc = Entity.get_or_none(privilege_location)
+                    if priv and priv_loc:
+                        Accreditation.objects.get_or_create(
+                            privilege=priv,
+                            provider=p,
+                            location=priv_loc)
+                        logger.info("ADDED PRIVILEGE,{}".format(p))
+
+            elif entry.get('action') == 'remove privilege':
+                p = Provider.get_or_none(entry.get('username'))
+                privilege = entry.get('privilege') or None
+                privilege_location = entry.get('privilege_location') or None
+
+                if p and privilege and privilege_location:
+                    priv = Privilege.get_or_none(privilege)
+                    priv_loc = Entity.get_or_none(privilege_location)
+                    if priv and priv_loc:
+                        qs = Accreditation.objects.filter(
+                            privilege=priv,
+                            provider=p,
+                            location=priv_loc)
+                        if qs.count():
+                            acc = qs.get()
+                            acc.delete()
+                            logger.info("REMOVED PRIVILEGE,{}".format(p))
 
         logger.info("Done")

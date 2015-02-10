@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import logging
 import json
 import datetime
 
@@ -13,6 +14,8 @@ from django.utils.timezone import utc
 
 from snisi_core.models.Entities import HealthEntity, Entity
 from snisi_core.models.Projects import Participation, Cluster
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -44,11 +47,11 @@ class Command(BaseCommand):
         moptio_start = datetime.datetime(2013, 12, 20).replace(tzinfo=utc)
 
         if options.get('clear'):
-            print("Removing all malaria participations...")
+            logger.info("Removing all malaria participations...")
             Participation.objects.filter(cluster=routine_cluster).delete()
             Participation.objects.filter(cluster=routine_cluster_sms).delete()
 
-        print("Creating Participation...")
+        logger.info("Creating Participation...")
 
         for new, old in matrix['new_old'].items():
             cls = Entity if new == 'mali' else HealthEntity

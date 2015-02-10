@@ -71,16 +71,19 @@ class Command(BaseCommand):
                 if entry.get('has_ureni') == 'y':
                     entity.has_ureni = True
                 entity.save()
+
             elif entry.get('action') == 'disable':
                 entity = Entity.get_or_none(entry.get('slug'))
                 logger.info("Disabling {}".format(entity))
                 entity.active = False
                 entity.save()
+
             elif entry.get('action') == 'enable':
                 entity = Entity.get_or_none(entry.get('slug'))
                 logger.info("Enabling {}".format(entity))
                 entity.active = True
                 entity.save()
+
             elif entry.get('action') == 'update':
                 entity = Entity.get_or_none(entry.get('slug'))
                 logger.info("Updating {}".format(entity))

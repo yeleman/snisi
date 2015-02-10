@@ -129,7 +129,6 @@ def get_indicator(module, member):
 
 
 def get_geo_indicators():
-    print(__package__)
     indicators = {}
     # section = get_section("map")
     section = import_path('snisi_vacc.indicators')

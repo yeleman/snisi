@@ -131,7 +131,6 @@ def graph_for_indicator(document, indicator_table):
         image = Image(f.name)
     except:
         logger.error("Failed to create image")
-        print(highcharts)
         raise
         return Paragraph("Erreur")
 
