@@ -1,4 +1,4 @@
-{% load staticfiles %}<!doctype html>
+{% load staticfiles %}{% load snisi %}<!doctype html>
 <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
@@ -38,7 +38,8 @@
                     <li><a href="{% url 'validation' %}"><i class="icon-check"></i> Validation rapports</a></li>
                     <li><a href="{% url 'entities_list' %}"><i class="icon-h-sigh"></i> Carte sanitaire SNISI</a></li>
                 </ul>
-                {% if user.is_tech %}
+                
+                {% if user|allowed_to:"monitor" %}
                 <a class="pure-menu-heading">Monitoring</a>
                 <ul>
                     <li><a href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
@@ -47,6 +48,8 @@
                     <li><a href="{% url 'admin_add_provider' %}">Création compte</a></li>
                 </ul>
                 {% endif %}
+                
+                {% if user|allowed_to_home:"access_malaria" %}
                 <a class="pure-menu-heading">PALUDISME</a>
                 <ul>
                     <li><a href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
@@ -56,6 +59,9 @@
                     <li><a href="{% url 'malaria_quarter_report' %}">Rapports trimestriels</a></li>
                     <li><a href="{% url 'malaria_custom' %}">Analyse personnalisée</a></li>
                 </ul>
+                {% endif %}
+                
+                {% if user|allowed_to_home:"access_nutrition" %}
                 <a class="pure-menu-heading" href="{% url 'nutrition_dashboard' %}">NUTRITION</a>
                 <ul>
                     <li><a href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
@@ -68,32 +74,48 @@
                     {% endif %}
                     <li><a href="{% url 'nutrition_map' %}">Cartographie</a></li>
                 </ul>
+                {% endif %}
+               
+                {% if user|allowed_to_home:"access_trachoma" %}
                 <a class="pure-menu-heading">CÉCITÉ</a>
                 <ul>
                     <li><a href="{% url 'trachoma_missions' %}">Données brutes</a></li>
                     <li><a href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
                 </ul>
+                {% endif %}
+
+                {% if user|allowed_to_home:"access_epidemiology" %}
                 <a class="pure-menu-heading"><abbr title="Surveillance Intégrée des Maladies et de la Riposte">SMIR</abbr> <span class="label label-{{ mado_level }}">{{ mado_nb_cases }}</span></a>
                 <ul>
                     <li><a href="{% url 'epidemio_dashboard' %}">Suivi temps-réel</a></li>
                     <li><a href="{% url 'epidemio_raw_data' %}">Données brutes</a></li>
                     <li><a href="{% url 'epidemio_indicators' %}">Données analysées</a></li>
                 </ul>
+                {% endif %}
+
+                {% if user|allowed_to_home:"access_reprohealth" %}
                 <a class="pure-menu-heading">SANTÉ REPRODUCTION</a>
                 <ul>
                     <li><a href="{% url 'msipf_raw_data' %}">Données brutes MSI/PF</a></li>
                     <li><a class="pure-button-disabled" href="#">Données brutes FNUAP</a></li>
                     <li><a href="{% url 'msipf_dashboard' %}">Données analysées</a></li>
                 </ul>
+                {% endif %}
+
+                {% if user|allowed_to_home:"access_vacc" %}
                 <a class="pure-menu-heading">VACCINATION</a>
                 <ul>
                     <li><a href="{% url 'vacc_map' %}">Cartographie</a></li>
                 </ul>
+                {% endif %}
+
+                {% if user|allowed_to_home:"access_bednets" %}
                 <a class="pure-menu-heading pure-button-disabled">MOUSTIQUAIRES</a>
                 <ul>
                     <li><a class="pure-button-disabled" href="#">Données brutes</a></li>
                     <li><a class="pure-button-disabled" href="#">Données analysées</a></li>
                 </ul>
+                {% endif %}
             </div>
         </div>
 

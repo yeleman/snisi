@@ -197,9 +197,8 @@ class Indicator(object):
         except ZeroDivisionError:
             self._data = 0
         except Exception as e:
-            import traceback
-            print(e)
-            print("".join(traceback.format_exc()))
+            logger.error(e)
+            logger.exception(e)
             raise e
 
         self._computed = True

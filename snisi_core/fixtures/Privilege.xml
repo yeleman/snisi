@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="dc_monitor" model="snisi_core.privilege">
+        <field type="CharField" name="name">Moniteur Collecte</field>
+    </object>
+    <object pk="pf_nut" model="snisi_core.privilege">
+        <field type="CharField" name="name">Point Focal NUT</field>
+    </object>
+</django-objects>

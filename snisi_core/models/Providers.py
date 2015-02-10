@@ -23,6 +23,7 @@ from snisi_core.models.common import ActiveManager
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Numbers import PhoneNumber
+from snisi_core.models.Privileges import Privilege
 
 
 class ProviderManager(UserManager):
@@ -105,6 +106,11 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     access_since = models.DateTimeField(default=timezone.now,
                                         verbose_name=_("Access Since"))
 
+    privileges = models.ManyToManyField(Privilege,
+                                        through='Accreditation',
+                                        through_fields=('provider',
+                                                        'privilege'))
+
     email = models.EmailField(_("email address"), blank=True, null=True)
     is_staff = models.BooleanField(
         _("staff status"), default=False,
@@ -122,6 +128,30 @@ class Provider(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name()
+
+    def has_privilege(self, slug, at=None, include_children=False):
+        qs = self.privileges.filter(privilege__slug=slug)
+        if at is not None:
+            if include_children:
+                ancestors = [at.slug] + [e.slug for e in at.get_ancestors()]
+                qs = qs.filter(location__slug__in=ancestors)
+            else:
+                qs = qs.filter(location__slug=at.slug)
+        return bool(qs.count())
+
+    @property
+    def privileges_dict(self):
+        from snisi_core.models.Privileges import Accreditation
+        return {
+            acc.privilege.slug: acc.location
+            for acc in Accreditation.objects.filter(provider=self)
+        }
+
+    @property
+    def accreditations(self):
+        from snisi_core.models.Privileges import Accreditation
+        return Accreditation.objects.filter(
+            provider=self)
 
     @classmethod
     def get_or_none(cls, username, with_inactive=False):

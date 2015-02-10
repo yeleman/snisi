@@ -12,7 +12,7 @@ from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_monthly_routine_report,
                                   RoutineIntegrityInterface)
 from snisi_core.models.Roles import Role
-from snisi_reprohealth import PROJECT_BRAND
+from snisi_reprohealth import PROJECT_BRAND, get_domain
 from snisi_reprohealth.models.PFActivities import PFActivitiesR
 from snisi_core.models.Reporting import ReportClass
 
@@ -36,7 +36,7 @@ def create_pf_report(provider, expected_reporting, completed_on,
 
 class PFActivitiesRIntegrityChecker(RoutineIntegrityInterface,
                                     ReportIntegrityChecker):
-
+    DOMAIN = get_domain()
     report_class = reportcls_pf
     validating_role = validating_role
 

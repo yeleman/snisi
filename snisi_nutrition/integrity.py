@@ -13,7 +13,7 @@ from snisi_core.integrity import (ReportIntegrityChecker,
                                   create_period_routine_report,
                                   RoutineIntegrityInterface)
 from snisi_core.models.Roles import Role
-from snisi_nutrition import PROJECT_BRAND
+from snisi_nutrition import PROJECT_BRAND, get_domain
 from snisi_nutrition.models.Monthly import NutritionR
 from snisi_nutrition.models.URENAM import URENAMNutritionR
 from snisi_nutrition.models.URENAS import URENASNutritionR
@@ -136,6 +136,7 @@ def create_nut_report(provider, expected_reporting, completed_on,
 class WeeklyNutritionRIntegrityChecker(RoutineIntegrityInterface,
                                        ReportIntegrityChecker):
 
+    DOMAIN = get_domain()
     report_class = reportcls_weekly
     validating_role = validating_role
     period_class = NutWeekPeriod
@@ -164,6 +165,7 @@ class WeeklyNutritionRIntegrityChecker(RoutineIntegrityInterface,
 class NutritionRIntegrityChecker(RoutineIntegrityInterface,
                                  ReportIntegrityChecker):
 
+    DOMAIN = get_domain()
     report_class = reportcls_monthly
     validating_role = validating_role
 
@@ -182,6 +184,7 @@ class NutritionRIntegrityChecker(RoutineIntegrityInterface,
 class NutritionURENCommonChecks(RoutineIntegrityInterface,
                                 ReportIntegrityChecker):
 
+    DOMAIN = get_domain()
     is_urenam = False
     is_urenas = False
     is_ureni = False
@@ -319,6 +322,7 @@ class URENINutritionRIntegrityChecker(NutritionURENCommonChecks):
 
 class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
                                        ReportIntegrityChecker):
+    DOMAIN = get_domain()
     report_class = reportcls_stocks
     validating_role = validating_role
 

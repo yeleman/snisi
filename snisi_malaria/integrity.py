@@ -27,10 +27,10 @@ from snisi_malaria.models import (MalariaR,
 from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation)
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
+from snisi_malaria import get_domain, PROJECT_BRAND
 
 logger = logging.getLogger(__name__)
 validating_role = Role.objects.get(slug='charge_sis')
-PROJECT_BRAND = "PNLP"
 
 
 def can_submit_malaria_report(provider, entity):
@@ -132,6 +132,8 @@ def create_report(provider, expected_reporting, completed_on,
 
 
 class MalariaRIntegrityChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
 
     def _check_completeness(self, **options):
         for field in MalariaR.data_fields():
@@ -452,6 +454,8 @@ def create_epidemio_report(provider, expected_reporting, completed_on,
 
 
 class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
 
     def nb_days_for_week(self, year, month, week):
         nb_day_in_month = self.nb_days_for_month(year, month)

@@ -20,7 +20,7 @@ from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import ExpectedReporting, SNISIReport
 from snisi_core.models.Roles import Role
 from snisi_core.models.Reporting import ReportClass
-from snisi_epidemiology import PROJECT_BRAND
+from snisi_epidemiology import PROJECT_BRAND, get_domain
 from snisi_epidemiology.models import (EpidemiologyR, EpiWeekPeriod,
                                        EpiWeekDistrictValidationPeriod,
                                        EpidemiologyAlertR)
@@ -55,6 +55,7 @@ def create_epid_report(provider, expected_reporting, completed_on,
 
 class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
                                     ReportIntegrityChecker):
+    DOMAIN = get_domain()
     report_class = reportcls_epidemio
     validating_role = validating_role
     period_class = EpiWeekPeriod
@@ -122,6 +123,7 @@ class EpidemiologyRIntegrityChecker(RoutineIntegrityInterface,
 
 class EpidemiologyRDistrictIntegrityChecker(RoutineIntegrityInterface,
                                             ReportIntegrityChecker):
+    DOMAIN = get_domain()
     report_class = reportcls_epidemio_agg
     validating_role = validating_role
     period_class = EpiWeekPeriod
@@ -343,6 +345,7 @@ def create_epialert_report(provider, expected_reporting, completed_on,
 
 class EpidemiologyAlertRIntegrityChecker(ReportIntegrityChecker):
 
+    DOMAIN = get_domain()
     report_class = reportcls_epidemio_alert
     validating_role = validating_role
 

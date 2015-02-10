@@ -23,7 +23,7 @@ from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation)
 from snisi_core.integrity import ReportIntegrityChecker
 from snisi_tools.datetime import parse_date_string
-from snisi_trachoma import PROJECT_BRAND
+from snisi_trachoma import PROJECT_BRAND, get_domain
 
 logger = logging.getLogger(__name__)
 reportcls_visit = ReportClass.objects.get(slug='ttbacklog_visit')
@@ -32,6 +32,8 @@ validating_role = Role.objects.get(slug='charge_sis')
 
 
 class TTBacklogMissionStartChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
 
     def _check_completeness(self, **options):
         fields = ['district', 'submitter', 'submit_time', 'started_on',
@@ -199,6 +201,8 @@ def create_mission_report(provider, expected_reporting, completed_on,
 
 
 class TTBacklogVisitChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
 
     def _check_completeness(self, **options):
         fields = ['consultation_male', 'consultation_female',
@@ -466,6 +470,8 @@ def create_visit_report(provider, expected_reporting, completed_on,
 
 
 class TTBacklogMissionEndChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
 
     def _check_completeness(self, **options):
         for field in ['district', 'ended_on', 'submit_time', 'submitter']:

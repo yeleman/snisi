@@ -19,6 +19,7 @@ from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Reporting import (SNISIReport,
                                          ExpectedReporting, ExpectedValidation)
+from snisi_core.permissions import provider_is_allowed
 
 logger = logging.getLogger(__name__)
 
@@ -221,6 +222,18 @@ class ReportIntegrityChecker(ReportingDataHolder):
                            field='hc', blocking=True)
 
     def chk_provider_permission(self, **options):
+        domain = self.DOMAIN
+        provider = self.get('submitter')
+        entity = Entity.get_or_none(self.get('entity').slug)
+        slug = "create-report_{}".format(domain)
+
+        if not provider_is_allowed(provider, slug, location=entity):
+            self.add_error("Vous ne pouvez pas envoyer de rapport "
+                           "de routine pour {entity}."
+                           .format(entity=entity),
+                           blocking=True, field='created_by')
+
+    def chk_provider_permission_old(self, **options):
         # check permission to submit report.
         provider = self.get('submitter')
         entity = Entity.get_or_none(self.get('entity').slug)

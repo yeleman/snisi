@@ -13,7 +13,7 @@ from snisi_core.integrity import (ReportIntegrityChecker,
                                   RoutineIntegrityInterface)
 
 from snisi_core.models.Roles import Role
-from snisi_vacc import PROJECT_BRAND
+from snisi_vacc import PROJECT_BRAND, get_domain
 from snisi_vacc.models import VaccCovR
 from snisi_core.models.Reporting import ReportClass
 
@@ -38,6 +38,7 @@ def create_pev_report(provider, expected_reporting, completed_on,
 class VaccCovRIntegrityChecker(RoutineIntegrityInterface,
                                ReportIntegrityChecker):
 
+    DOMAIN = get_domain()
     report_class = reportcls_pev
     validating_role = validating_role
 

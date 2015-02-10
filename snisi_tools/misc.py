@@ -8,6 +8,7 @@ import logging
 import uuid
 import os
 
+from py3compat import text_type
 from django.apps import apps
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
@@ -169,3 +170,25 @@ def get_full_url(request=None, path=''):
     return 'http{ssl}://{domain}/{path}'.format(
         domain=get_current_site(request).domain,
         path=path, ssl="s" if settings.USE_HTTPS else '')
+
+
+def split_or(value, output_len, max_split=-1, char=None,
+             reverse=False, default=None):
+    func = text_type.rsplit if reverse else text_type.split
+    array = func(value, char, max_split)
+    if len(array) == output_len:
+        return array
+    elif len(array) > output_len:
+        return array[:output_len]
+    else:
+        return array + [default for x in range(output_len - len(array))]
+
+
+def split_or_none(value, output_len, max_split=-1, char=None, reverse=False):
+    return split_or(value, output_len, max_split=-1, char=None,
+                    reverse=False)
+
+
+def rsplit_or_none(value, output_len, max_split=-1, char=None):
+    return split_or_none(value, output_len,
+                         max_split=max_split, char=char, reverse=True)

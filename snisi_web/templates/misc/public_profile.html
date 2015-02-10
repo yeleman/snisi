@@ -15,6 +15,14 @@
     {% if provider.email %}<li><i class="icon-mail-alt"></i> <a href="mailto:{{ provider.email }}">{{ provider.email }}</a></li>{% endif %}
     {% if provider.location %}<li>{% include "parts/entity_link.html" with entity=provider.location %}</li>{% endif %}
     <li>Dernière connexion : {{ provider.last_login }}</li>
+    {% if provider.privileges.count %}
+    <li>Privilèges</li>
+    <ul>
+    	{% for acc in provider.accreditations.all %}
+    	<li>{{ acc }}</li>
+    	{% endfor %}
+    </ul>
+    {% endif %}
 </ul>
 
 <ol>

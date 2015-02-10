@@ -51,16 +51,6 @@ class PhoneNumberTypeAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name', 'priority')
 
 
-# class ProviderModificationForm(UserChangeForm):
-#     class Meta:
-#         model = Provider
-
-
-# class ProviderCreationForm(UserCreationForm):
-#     class Meta:
-#         model = Provider
-
-
 class ProviderAdmin(UserAdmin):
     # form = ProviderModificationForm
     # add_form = ProviderCreationForm
