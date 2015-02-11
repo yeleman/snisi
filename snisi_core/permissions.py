@@ -103,7 +103,7 @@ def default_permissions(prole, plocation, privileges,
 
 def provider_is_allowed_at_home(provider, slug):
     return provider_is_allowed(provider=provider, slug=slug,
-                               location=provider.location)
+                               location=getattr(provider, 'location', None))
 
 
 def provider_allowed_or_denied(provider, slug, location=None):
