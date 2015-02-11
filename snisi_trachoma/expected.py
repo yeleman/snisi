@@ -52,7 +52,7 @@ def create_expected_for(period):
 
     if period.__class__ == MonthPeriod:
 
-        for entity in trachoma_cluster.members():
+        for entity in trachoma_cluster.members(only_active=True):
 
             edict = copy.copy(expected_dict)
             edict.update({

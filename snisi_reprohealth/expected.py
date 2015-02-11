@@ -55,7 +55,7 @@ def create_expected_for(period):
         extended_reporting_period = DefaultMonthlyExtendedReportingPeriod \
             .find_create_by_date(period.following().middle())
 
-        for entity in routine_cluster.members():
+        for entity in routine_cluster.members(only_active=True):
 
             # report class is based on indiv/agg
             reportcls = reportcls_pf \

@@ -77,7 +77,7 @@ def create_expected_for(period):
         extended_reporting_period = DefaultMonthlyExtendedReportingPeriod \
             .find_create_by_date(period.following().middle())
 
-        for entity in routine_cluster.members():
+        for entity in routine_cluster.members(only_active=True):
 
             # report class is based on indiv/agg
             reportcls = indiv_report_class \
@@ -134,7 +134,7 @@ def create_expected_for(period):
             logger.debug("Generating DayPeriod Expecteds for {}"
                          .format(day_period))
 
-            for entity in epidemio_cluster.members():
+            for entity in epidemio_cluster.members(only_active=True):
 
                 edict = copy.copy(expected_dict)
                 edict.update({
@@ -217,7 +217,7 @@ def create_expected_for(period):
             reportcls_slug = week_slug_matrix.get(weekcls)
             logger.debug("ReportClass slug: {}".format(reportcls_slug))
 
-            for entity in epidemio_cluster.members():
+            for entity in epidemio_cluster.members(only_active=True):
 
                 edict = copy.copy(expected_dict)
                 edict.update({

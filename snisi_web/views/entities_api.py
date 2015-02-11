@@ -56,9 +56,9 @@ def get_epidemio_children(request,
     cluster = Cluster.get_or_none('malaria_weekly_epidemiology')
 
     def filter_func(e):
-        if e.casted() in cluster.members():
+        if e.casted() in cluster.members(only_active=True):
             return True
-        for m in cluster.members():
+        for m in cluster.members(only_active=True):
             if e.slug in [a.slug for a in m.get_ancestors()]:
                 return True
         return False

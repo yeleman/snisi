@@ -57,7 +57,7 @@ def create_expected_for(period):
         current_month = period.following()
         reporting_period = current_month
 
-        for entity in routine_cluster.members():
+        for entity in routine_cluster.members(only_active=True):
             if entity.type.slug not in ('health_center', 'health_district'):
                 continue
 
@@ -108,7 +108,7 @@ def create_expected_for(period):
             reporting_period = EpiWeekReportingPeriod.find_create_by_date(
                 wperiod.middle())
 
-            for entity in routine_cluster.members():
+            for entity in routine_cluster.members(only_active=True):
 
                 # report class is based on indiv/agg
                 reportcls = reportcls_epi \

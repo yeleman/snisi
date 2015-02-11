@@ -30,7 +30,7 @@ def generate_json_cache_from_cluster_members(cluster, skip_slugs=[]):
     all_entities = []
     # get list of members
     # for each member, get list of ancestors
-    for member in cluster.members():
+    for member in cluster.members(only_active=True):
         for ancestor in member.get_ancestors():
             if ancestor.type.slug in skip_slugs:
                 continue
