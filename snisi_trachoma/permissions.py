@@ -25,7 +25,7 @@ def provider_is_allowed(prole, plocation, privileges,
         if action == 'create-report':
 
             # District based
-            if plocation == plocation.get_health_disctrict():
+            if plocation == plocation.get_health_district():
 
                 # can upload report for villages within district and district
                 if action in ('create-report'):

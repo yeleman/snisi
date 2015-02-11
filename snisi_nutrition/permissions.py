@@ -30,7 +30,7 @@ def provider_is_allowed(prole, plocation, privileges,
         pf_nut_location = privileges.get('pf_nut')
 
         # ensure at district
-        if not pf_nut_location == pf_nut_location.get_health_disctrict():
+        if not pf_nut_location == pf_nut_location.get_health_district():
             return
 
         # can view data from the district
@@ -46,15 +46,15 @@ def provider_is_allowed(prole, plocation, privileges,
 
             # can edit and validate districts reports
             if action in ('edit-report', 'validate-report'):
-                return location in plocation.get_health_disctricts()
+                return location in plocation.get_health_districts()
 
             # can view data from the district
             if action in ('access', 'download'):
                 return location in plocation.get_health_centers() \
-                    + plocation.get_health_disctricts() + [plocation]
+                    + plocation.get_health_districts() + [plocation]
 
         # District based
-        elif plocation == plocation.get_health_disctrict():
+        elif plocation == plocation.get_health_district():
 
             # can upload report for HC within district
             if action in ('create-report', 'edit-report', 'validate-report'):

@@ -29,7 +29,7 @@ def provider_is_allowed(prole, plocation, privileges,
     if prole == 'charge_sis':
 
         # District based
-        if plocation == plocation.get_health_disctrict():
+        if plocation == plocation.get_health_district():
 
             # can upload report for HC within district
             if action in ('create-report'):
