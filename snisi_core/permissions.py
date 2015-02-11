@@ -97,7 +97,7 @@ def default_permissions(prole, plocation, privileges,
     # all roles can see data within their area
     # can view data
     if action in ('access', 'download'):
-        if location in plocation.get_health_descendants() + [plocation]:
+        if plocation in location.get_ancestors(include_self=True):
             return True
 
 
