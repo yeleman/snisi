@@ -33,7 +33,13 @@ def provider_is_allowed(provider, slug, location=None):
             * monitor (for snisi-tech only)
             * manage (for snisi-admin only) """
 
-    if not isinstance(provider, Provider):
+    # not a provider or AnonymousUser
+    if not isinstance(provider, Provider) or not provider.is_authenticated():
+        return False
+
+    # not properly configured provider
+    if not getattr(provider, 'role', None) or \
+            not getattr(provider, 'location', None):
         return False
 
     prole = provider.role.slug
