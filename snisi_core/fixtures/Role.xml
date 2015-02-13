@@ -24,6 +24,10 @@
         <field type="CharField" name="slug">partner</field>
         <field type="CharField" name="name">Partenaire</field>
     </object>
+    <object pk="charge_sis" model="snisi_core.role">
+        <field type="CharField" name="slug">medecin_chef</field>
+        <field type="CharField" name="name">Médecin Chef</field>
+    </object>
     <object pk="snisi_admin" model="snisi_core.role">
         <field type="CharField" name="slug">snisi_admin</field>
         <field type="CharField" name="name">Admin SNISI</field>

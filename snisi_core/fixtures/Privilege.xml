@@ -6,4 +6,7 @@
     <object pk="pf_nut" model="snisi_core.privilege">
         <field type="CharField" name="name">Point Focal NUT</field>
     </object>
+    <object pk="supervisor" model="snisi_core.privilege">
+        <field type="CharField" name="name">Superviseur</field>
+    </object>
 </django-objects>
