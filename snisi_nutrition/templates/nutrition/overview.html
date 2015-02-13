@@ -6,9 +6,9 @@
 <div id="entity_periods_filter" class="pure-form" method="POST">
     {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
 
-    {% include "parts/periods_filter.html" with selectID="filter_periodA" selected_period=period all_periods=all_periods %}
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" selected_period=perioda all_periods=all_periods %}
 
-    {% include "parts/periods_filter.html" with selectID="filter_periodB" selected_period=period all_periods=all_periods %}
+    {% include "parts/periods_filter.html" with selectID="filter_periodB" selected_period=periodb all_periods=all_periods %}
 
     <button type="submit" class="pure-button pure-button-primary">Afficher</button>
 </div>
