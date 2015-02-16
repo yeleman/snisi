@@ -19,78 +19,93 @@
 <thead>
 <tr>
 	<th>STRUCTURE</th>
-	<th>TRANCHES D'ÂGE</th>
+	<th>ÂGE</th>
 	<th>DÉBUT MOIS</th>
-	<th>ADMISSIONS</th>
-	<th>ADMISSIONS GÉNÉRALES</th>
-	<th>SORTIES</th>
-	<th>SORTIES GÉNÉRALES</th>
-	<th>TOTAL FIN DE MOIS</th>
-	<th>TAUX GUÉRISONS</th>
-	<th>TAUX DÉCÈS</th>
-	<th>TAUX ABANDONS</th>
+	<th>NOUV. ADM.</th>
+	<th>RÉ-ADM.</th>
+	<th>TR. URENI</th>
+	<th>ADM. GLE</th>
+	<th>GUÉRIS</th>
+	<th>DÉCÈS</th>
+	<th>ABAND.</th>
+	<th>NON-RÉP</th>
+	<th>RÉF/TRF</th>
+	<th>SORTIES GLE</th>
+	<th>FIN MOIS</th>
 </tr>
 </thead>
 <tbody>
 {% for period, expected in periods_expecteds %}
 
 	{% if not expected.arrived_report %}
-	<tr><th>{{ period }}</th><td colspan="10" class="nodata"></td></tr>
+	<tr><th>{{ period }}</th><td colspan="13" class="nodata"></td></tr>
 
 	{% else %}
 		{% with report=expected.arrived_report %}
 		{% if is_sam %}
-		<tr><th colspan="11">URENI – {{ period }}</th></tr>
+		<tr><th colspan="14">URENI – {{ period }}</th></tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.ureni_report %}
 		<tr>
 			<td rowspan="4" class="left">{{ sreport.entity.name }}</td>
 			<td>0-6m</td>
 			<td>{{ sreport.ureni_report.u6_total_start }}</td>
-			<td>{{ sreport.ureni_report.u6_total_in }}</td>
+			<td>{{ sreport.ureni_report.u6_new_cases }}</td>
+			<td>{{ sreport.ureni_report.u6_returned }}</td>
+			<td>{{ sreport.ureni_report.u6_transferred }}</td>
 			<td>{{ sreport.ureni_report.u6_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.u6_total_out }}</td>
+			<td>{{ sreport.ureni_report.u6_healed }}</td>
+			<td>{{ sreport.ureni_report.u6_deceased }}</td>
+			<td>{{ sreport.ureni_report.u6_abandon }}</td>
+			<td>{{ sreport.ureni_report.u6_not_responding }}</td>
+			<td>{{ sreport.ureni_report.u6_referred }}</td>
 			<td>{{ sreport.ureni_report.u6_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.u6_total_end }}</td>
-			<td>{{ sreport.ureni_report.u6_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u6_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>6-59m</td>
 			<td>{{ sreport.ureni_report.u59o6_total_start }}</td>
-			<td>{{ sreport.ureni_report.u59o6_total_in }}</td>
+			<td>{{ sreport.ureni_report.u59o6_new_cases }}</td>
+			<td>{{ sreport.ureni_report.u59o6_returned }}</td>
+			<td>{{ sreport.ureni_report.u59o6_transferred }}</td>
 			<td>{{ sreport.ureni_report.u59o6_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.u59o6_total_out }}</td>
+			<td>{{ sreport.ureni_report.u59o6_healed }}</td>
+			<td>{{ sreport.ureni_report.u59o6_deceased }}</td>
+			<td>{{ sreport.ureni_report.u59o6_abandon }}</td>
+			<td>{{ sreport.ureni_report.u59o6_not_responding }}</td>
+			<td>{{ sreport.ureni_report.u59o6_referred }}</td>
 			<td>{{ sreport.ureni_report.u59o6_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.u59o6_total_end }}</td>
-			<td>{{ sreport.ureni_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.ureni_report.o59_total_start }}</td>
-			<td>{{ sreport.ureni_report.o59_total_in }}</td>
+			<td>{{ sreport.ureni_report.o59_new_cases }}</td>
+			<td>{{ sreport.ureni_report.o59_returned }}</td>
+			<td>{{ sreport.ureni_report.o59_transferred }}</td>
 			<td>{{ sreport.ureni_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.o59_total_out }}</td>
+			<td>{{ sreport.ureni_report.o59_healed }}</td>
+			<td>{{ sreport.ureni_report.o59_deceased }}</td>
+			<td>{{ sreport.ureni_report.o59_abandon }}</td>
+			<td>{{ sreport.ureni_report.o59_not_responding }}</td>
+			<td>{{ sreport.ureni_report.o59_referred }}</td>
 			<td>{{ sreport.ureni_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.o59_total_end }}</td>
-			<td>{{ sreport.ureni_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.ureni_report.total_start }}</td>
-			<td>{{ sreport.ureni_report.total_in }}</td>
+			<td>{{ sreport.ureni_report.new_cases }}</td>
+			<td>{{ sreport.ureni_report.returned }}</td>
+			<td>{{ sreport.ureni_report.transferred }}</td>
 			<td>{{ sreport.ureni_report.grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.total_out }}</td>
+			<td>{{ sreport.ureni_report.healed }}</td>
+			<td>{{ sreport.ureni_report.deceased }}</td>
+			<td>{{ sreport.ureni_report.abandon }}</td>
+			<td>{{ sreport.ureni_report.not_responding }}</td>
+			<td>{{ sreport.ureni_report.referred }}</td>
 			<td>{{ sreport.ureni_report.grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.total_end }}</td>
-			<td>{{ sreport.ureni_report.healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
@@ -98,260 +113,320 @@
 			<td rowspan="4" class="left">TOTAL URENI</td>
 			<td>0-6m</td>
 			<td>{{ report.ureni_report.u6_total_start }}</td>
-			<td>{{ report.ureni_report.u6_total_in }}</td>
+			<td>{{ report.ureni_report.u6_new_cases }}</td>
+			<td>{{ report.ureni_report.u6_returned }}</td>
+			<td>{{ report.ureni_report.u6_transferred }}</td>
 			<td>{{ report.ureni_report.u6_grand_total_in }}</td>
-			<td>{{ report.ureni_report.u6_total_out }}</td>
+			<td>{{ report.ureni_report.u6_healed }}</td>
+			<td>{{ report.ureni_report.u6_deceased }}</td>
+			<td>{{ report.ureni_report.u6_abandon }}</td>
+			<td>{{ report.ureni_report.u6_not_responding }}</td>
+			<td>{{ report.ureni_report.u6_referred }}</td>
 			<td>{{ report.ureni_report.u6_grand_total_out }}</td>
 			<td>{{ report.ureni_report.u6_total_end }}</td>
-			<td>{{ report.ureni_report.u6_healed_rate|percent }}</td>
-			<td>{{ report.ureni_report.u6_deceased_rate|percent }}</td>
-			<td>{{ report.ureni_report.u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>6-59m</td>
 			<td>{{ report.ureni_report.u59o6_total_start }}</td>
-			<td>{{ report.ureni_report.u59o6_total_in }}</td>
+			<td>{{ report.ureni_report.u59o6_new_cases }}</td>
+			<td>{{ report.ureni_report.u59o6_returned }}</td>
+			<td>{{ report.ureni_report.u59o6_transferred }}</td>
 			<td>{{ report.ureni_report.u59o6_grand_total_in }}</td>
-			<td>{{ report.ureni_report.u59o6_total_out }}</td>
+			<td>{{ report.ureni_report.u59o6_healed }}</td>
+			<td>{{ report.ureni_report.u59o6_deceased }}</td>
+			<td>{{ report.ureni_report.u59o6_abandon }}</td>
+			<td>{{ report.ureni_report.u59o6_not_responding }}</td>
+			<td>{{ report.ureni_report.u59o6_referred }}</td>
 			<td>{{ report.ureni_report.u59o6_grand_total_out }}</td>
 			<td>{{ report.ureni_report.u59o6_total_end }}</td>
-			<td>{{ report.ureni_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ report.ureni_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ report.ureni_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ report.ureni_report.o59_total_start }}</td>
-			<td>{{ report.ureni_report.o59_total_in }}</td>
+			<td>{{ report.ureni_report.o59_new_cases }}</td>
+			<td>{{ report.ureni_report.o59_returned }}</td>
+			<td>{{ report.ureni_report.o59_transferred }}</td>
 			<td>{{ report.ureni_report.o59_grand_total_in }}</td>
-			<td>{{ report.ureni_report.o59_total_out }}</td>
+			<td>{{ report.ureni_report.o59_healed }}</td>
+			<td>{{ report.ureni_report.o59_deceased }}</td>
+			<td>{{ report.ureni_report.o59_abandon }}</td>
+			<td>{{ report.ureni_report.o59_not_responding }}</td>
+			<td>{{ report.ureni_report.o59_referred }}</td>
 			<td>{{ report.ureni_report.o59_grand_total_out }}</td>
 			<td>{{ report.ureni_report.o59_total_end }}</td>
-			<td>{{ report.ureni_report.o59_healed_rate|percent }}</td>
-			<td>{{ report.ureni_report.o59_deceased_rate|percent }}</td>
-			<td>{{ report.ureni_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ report.ureni_report.total_start }}</td>
-			<td>{{ report.ureni_report.total_in }}</td>
+			<td>{{ report.ureni_report.new_cases }}</td>
+			<td>{{ report.ureni_report.returned }}</td>
+			<td>{{ report.ureni_report.transferred }}</td>
 			<td>{{ report.ureni_report.grand_total_in }}</td>
-			<td>{{ report.ureni_report.total_out }}</td>
+			<td>{{ report.ureni_report.healed }}</td>
+			<td>{{ report.ureni_report.deceased }}</td>
+			<td>{{ report.ureni_report.abandon }}</td>
+			<td>{{ report.ureni_report.not_responding }}</td>
+			<td>{{ report.ureni_report.referred }}</td>
 			<td>{{ report.ureni_report.grand_total_out }}</td>
 			<td>{{ report.ureni_report.total_end }}</td>
-			<td>{{ report.ureni_report.healed_rate|percent }}</td>
-			<td>{{ report.ureni_report.deceased_rate|percent }}</td>
-			<td>{{ report.ureni_report.abandon_rate|percent }}</td>
 		</tr>
 
-		<tr><th colspan="11">URENAS – {{ period }}</th></tr>
+		<tr><th colspan="14">URENAS – {{ period }}</th></tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.urenas_report %}
 		<tr>
 			<td rowspan="3" class="left">{{ sreport.entity.name }}</td>
 			<td>6-59m</td>
 			<td>{{ sreport.urenas_report.u59o6_total_start }}</td>
-			<td>{{ sreport.urenas_report.u59o6_total_in }}</td>
+			<td>{{ sreport.urenas_report.u59o6_new_cases }}</td>
+			<td>{{ sreport.urenas_report.u59o6_returned }}</td>
+			<td>{{ sreport.urenas_report.u59o6_transferred }}</td>
 			<td>{{ sreport.urenas_report.u59o6_grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.u59o6_total_out }}</td>
+			<td>{{ sreport.urenas_report.u59o6_healed }}</td>
+			<td>{{ sreport.urenas_report.u59o6_deceased }}</td>
+			<td>{{ sreport.urenas_report.u59o6_abandon }}</td>
+			<td>{{ sreport.urenas_report.u59o6_not_responding }}</td>
+			<td>{{ sreport.urenas_report.u59o6_referred }}</td>
 			<td>{{ sreport.urenas_report.u59o6_grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.u59o6_total_end }}</td>
-			<td>{{ sreport.urenas_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.urenas_report.o59_total_start }}</td>
-			<td>{{ sreport.urenas_report.o59_total_in }}</td>
+			<td>{{ sreport.urenas_report.o59_new_cases }}</td>
+			<td>{{ sreport.urenas_report.o59_returned }}</td>
+			<td>{{ sreport.urenas_report.o59_transferred }}</td>
 			<td>{{ sreport.urenas_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.o59_total_out }}</td>
+			<td>{{ sreport.urenas_report.o59_healed }}</td>
+			<td>{{ sreport.urenas_report.o59_deceased }}</td>
+			<td>{{ sreport.urenas_report.o59_abandon }}</td>
+			<td>{{ sreport.urenas_report.o59_not_responding }}</td>
+			<td>{{ sreport.urenas_report.o59_referred }}</td>
 			<td>{{ sreport.urenas_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.o59_total_end }}</td>
-			<td>{{ sreport.urenas_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.urenas_report.total_start }}</td>
-			<td>{{ sreport.urenas_report.total_in }}</td>
+			<td>{{ sreport.urenas_report.new_cases }}</td>
+			<td>{{ sreport.urenas_report.returned }}</td>
+			<td>{{ sreport.urenas_report.transferred }}</td>
 			<td>{{ sreport.urenas_report.grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.total_out }}</td>
+			<td>{{ sreport.urenas_report.healed }}</td>
+			<td>{{ sreport.urenas_report.deceased }}</td>
+			<td>{{ sreport.urenas_report.abandon }}</td>
+			<td>{{ sreport.urenas_report.not_responding }}</td>
+			<td>{{ sreport.urenas_report.referred }}</td>
 			<td>{{ sreport.urenas_report.grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.total_end }}</td>
-			<td>{{ sreport.urenas_report.healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
 		{% for entity in report.missing_entities %}
-		<tr><td class="left">{{ entity }}</td><td colspan="11" class="nodata"></td></tr>
+		<tr><td class="left">{{ entity }}</td><td colspan="14" class="nodata"></td></tr>
 		{% endfor %}
 		<tr class="highlight-row">
 			<td rowspan="3" class="left">TOTAL URENAS</td>
 			<td>6-59m</td>
 			<td>{{ report.urenas_report.u59o6_total_start }}</td>
-			<td>{{ report.urenas_report.u59o6_total_in }}</td>
+			<td>{{ report.urenas_report.u59o6_new_cases }}</td>
+			<td>{{ report.urenas_report.u59o6_returned }}</td>
+			<td>{{ report.urenas_report.u59o6_transferred }}</td>
 			<td>{{ report.urenas_report.u59o6_grand_total_in }}</td>
-			<td>{{ report.urenas_report.u59o6_total_out }}</td>
+			<td>{{ report.urenas_report.u59o6_healed }}</td>
+			<td>{{ report.urenas_report.u59o6_deceased }}</td>
+			<td>{{ report.urenas_report.u59o6_abandon }}</td>
+			<td>{{ report.urenas_report.u59o6_not_responding }}</td>
+			<td>{{ report.urenas_report.u59o6_referred }}</td>
 			<td>{{ report.urenas_report.u59o6_grand_total_out }}</td>
 			<td>{{ report.urenas_report.u59o6_total_end }}</td>
-			<td>{{ report.urenas_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ report.urenas_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ report.urenas_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ report.urenas_report.o59_total_start }}</td>
-			<td>{{ report.urenas_report.o59_total_in }}</td>
+			<td>{{ report.urenas_report.o59_new_cases }}</td>
+			<td>{{ report.urenas_report.o59_returned }}</td>
+			<td>{{ report.urenas_report.o59_transferred }}</td>
 			<td>{{ report.urenas_report.o59_grand_total_in }}</td>
-			<td>{{ report.urenas_report.o59_total_out }}</td>
+			<td>{{ report.urenas_report.o59_healed }}</td>
+			<td>{{ report.urenas_report.o59_deceased }}</td>
+			<td>{{ report.urenas_report.o59_abandon }}</td>
+			<td>{{ report.urenas_report.o59_not_responding }}</td>
+			<td>{{ report.urenas_report.o59_referred }}</td>
 			<td>{{ report.urenas_report.o59_grand_total_out }}</td>
 			<td>{{ report.urenas_report.o59_total_end }}</td>
-			<td>{{ report.urenas_report.o59_healed_rate|percent }}</td>
-			<td>{{ report.urenas_report.o59_deceased_rate|percent }}</td>
-			<td>{{ report.urenas_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ report.urenas_report.total_start }}</td>
-			<td>{{ report.urenas_report.total_in }}</td>
+			<td>{{ report.urenas_report.new_cases }}</td>
+			<td>{{ report.urenas_report.returned }}</td>
+			<td>{{ report.urenas_report.transferred }}</td>
 			<td>{{ report.urenas_report.grand_total_in }}</td>
-			<td>{{ report.urenas_report.total_out }}</td>
+			<td>{{ report.urenas_report.healed }}</td>
+			<td>{{ report.urenas_report.deceased }}</td>
+			<td>{{ report.urenas_report.abandon }}</td>
+			<td>{{ report.urenas_report.not_responding }}</td>
+			<td>{{ report.urenas_report.referred }}</td>
 			<td>{{ report.urenas_report.grand_total_out }}</td>
 			<td>{{ report.urenas_report.total_end }}</td>
-			<td>{{ report.urenas_report.healed_rate|percent }}</td>
-			<td>{{ report.urenas_report.deceased_rate|percent }}</td>
-			<td>{{ report.urenas_report.abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td rowspan="4" class="left">TOTAL URENI + URENAS</td>
 			<td>0-6m</td>
 			<td>{{ report.sam_u6_total_start }}</td>
-			<td>{{ report.sam_u6_total_in }}</td>
+			<td>{{ report.sam_u6_new_cases }}</td>
+			<td>{{ report.sam_u6_returned }}</td>
+			<td>{{ report.sam_u6_transferred }}</td>
 			<td>{{ report.sam_u6_grand_total_in }}</td>
-			<td>{{ report.sam_u6_total_out }}</td>
+			<td>{{ report.sam_u6_healed }}</td>
+			<td>{{ report.sam_u6_deceased }}</td>
+			<td>{{ report.sam_u6_abandon }}</td>
+			<td>{{ report.sam_u6_not_responding }}</td>
+			<td>{{ report.sam_u6_referred }}</td>
 			<td>{{ report.sam_u6_grand_total_out }}</td>
 			<td>{{ report.sam_u6_total_end }}</td>
-			<td>{{ report.sam_u6_healed_rate|percent }}</td>
-			<td>{{ report.sam_u6_deceased_rate|percent }}</td>
-			<td>{{ report.sam_u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>6-59m</td>
 			<td>{{ report.sam_u59o6_total_start }}</td>
-			<td>{{ report.sam_u59o6_total_in }}</td>
+			<td>{{ report.sam_u59o6_new_cases }}</td>
+			<td>{{ report.sam_u59o6_returned }}</td>
+			<td>{{ report.sam_u59o6_transferred }}</td>
 			<td>{{ report.sam_u59o6_grand_total_in }}</td>
-			<td>{{ report.sam_u59o6_total_out }}</td>
+			<td>{{ report.sam_u59o6_healed }}</td>
+			<td>{{ report.sam_u59o6_deceased }}</td>
+			<td>{{ report.sam_u59o6_abandon }}</td>
+			<td>{{ report.sam_u59o6_not_responding }}</td>
+			<td>{{ report.sam_u59o6_referred }}</td>
 			<td>{{ report.sam_u59o6_grand_total_out }}</td>
 			<td>{{ report.sam_u59o6_total_end }}</td>
-			<td>{{ report.sam_u59o6_healed_rate|percent }}</td>
-			<td>{{ report.sam_u59o6_deceased_rate|percent }}</td>
-			<td>{{ report.sam_u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ report.sam_o59_total_start }}</td>
-			<td>{{ report.sam_o59_total_in }}</td>
+			<td>{{ report.sam_o59_new_cases }}</td>
+			<td>{{ report.sam_o59_returned }}</td>
+			<td>{{ report.sam_o59_transferred }}</td>
 			<td>{{ report.sam_o59_grand_total_in }}</td>
-			<td>{{ report.sam_o59_total_out }}</td>
+			<td>{{ report.sam_o59_healed }}</td>
+			<td>{{ report.sam_o59_deceased }}</td>
+			<td>{{ report.sam_o59_abandon }}</td>
+			<td>{{ report.sam_o59_not_responding }}</td>
+			<td>{{ report.sam_o59_referred }}</td>
 			<td>{{ report.sam_o59_grand_total_out }}</td>
 			<td>{{ report.sam_o59_total_end }}</td>
-			<td>{{ report.sam_o59_healed_rate|percent }}</td>
-			<td>{{ report.sam_o59_deceased_rate|percent }}</td>
-			<td>{{ report.sam_o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ report.sam_total_start }}</td>
-			<td>{{ report.sam_total_in }}</td>
+			<td>{{ report.sam_new_cases }}</td>
+			<td>{{ report.sam_returned }}</td>
+			<td>{{ report.sam_transferred }}</td>
 			<td>{{ report.sam_grand_total_in }}</td>
-			<td>{{ report.sam_total_out }}</td>
+			<td>{{ report.sam_healed }}</td>
+			<td>{{ report.sam_deceased }}</td>
+			<td>{{ report.sam_abandon }}</td>
+			<td>{{ report.sam_not_responding }}</td>
+			<td>{{ report.sam_referred }}</td>
 			<td>{{ report.sam_grand_total_out }}</td>
 			<td>{{ report.sam_total_end }}</td>
-			<td>{{ report.sam_healed_rate|percent }}</td>
-			<td>{{ report.sam_deceased_rate|percent }}</td>
-			<td>{{ report.sam_abandon_rate|percent }}</td>
 		</tr>
 		{% else %}
 		
-		<tr><th colspan="11">URENAM – {{ period }}</th></tr>
+		<tr><th colspan="14">URENAM – {{ period }}</th></tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.urenam_report %}
 		<tr>
 			<td rowspan="6" class="left">{{ sreport.entity.name }}</td>
 			<td>6-23m</td>
 			<td>{{ sreport.urenam_report.u23o6_total_start }}</td>
-			<td>{{ sreport.urenam_report.u23o6_total_in }}</td>
+			<td>{{ sreport.urenam_report.u23o6_new_cases }}</td>
+			<td>{{ sreport.urenam_report.u23o6_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.u23o6_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.u23o6_total_out }}</td>
+			<td>{{ sreport.urenam_report.u23o6_healed }}</td>
+			<td>{{ sreport.urenam_report.u23o6_deceased }}</td>
+			<td>{{ sreport.urenam_report.u23o6_abandon }}</td>
+			<td>{{ sreport.urenam_report.u23o6_not_responding }}</td>
+			<td>{{ sreport.urenam_report.u23o6_referred }}</td>
 			<td>{{ sreport.urenam_report.u23o6_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.u23o6_total_end }}</td>
-			<td>{{ sreport.urenam_report.u23o6_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u23o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u23o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>24-59m</td>
 			<td>{{ sreport.urenam_report.u59o23_total_start }}</td>
-			<td>{{ sreport.urenam_report.u59o23_total_in }}</td>
+			<td>{{ sreport.urenam_report.u59o23_new_cases }}</td>
+			<td>{{ sreport.urenam_report.u59o23_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.u59o23_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.u59o23_total_out }}</td>
+			<td>{{ sreport.urenam_report.u59o23_healed }}</td>
+			<td>{{ sreport.urenam_report.u59o23_deceased }}</td>
+			<td>{{ sreport.urenam_report.u59o23_abandon }}</td>
+			<td>{{ sreport.urenam_report.u59o23_not_responding }}</td>
+			<td>{{ sreport.urenam_report.u59o23_referred }}</td>
 			<td>{{ sreport.urenam_report.u59o23_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.u59o23_total_end }}</td>
-			<td>{{ sreport.urenam_report.u59o23_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u59o23_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u59o23_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.urenam_report.o59_total_start }}</td>
-			<td>{{ sreport.urenam_report.o59_total_in }}</td>
+			<td>{{ sreport.urenam_report.o59_new_cases }}</td>
+			<td>{{ sreport.urenam_report.o59_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.o59_total_out }}</td>
+			<td>{{ sreport.urenam_report.o59_healed }}</td>
+			<td>{{ sreport.urenam_report.o59_deceased }}</td>
+			<td>{{ sreport.urenam_report.o59_abandon }}</td>
+			<td>{{ sreport.urenam_report.o59_not_responding }}</td>
+			<td>{{ sreport.urenam_report.o59_referred }}</td>
 			<td>{{ sreport.urenam_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.o59_total_end }}</td>
-			<td>{{ sreport.urenam_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>FE/FA</td>
 			<td>{{ sreport.urenam_report.pw_total_start }}</td>
-			<td>{{ sreport.urenam_report.pw_total_in }}</td>
+			<td>{{ sreport.urenam_report.pw_new_cases }}</td>
+			<td>{{ sreport.urenam_report.pw_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.pw_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.pw_total_out }}</td>
+			<td>{{ sreport.urenam_report.pw_healed }}</td>
+			<td>{{ sreport.urenam_report.pw_deceased }}</td>
+			<td>{{ sreport.urenam_report.pw_abandon }}</td>
+			<td>{{ sreport.urenam_report.pw_not_responding }}</td>
+			<td>{{ sreport.urenam_report.pw_referred }}</td>
 			<td>{{ sreport.urenam_report.pw_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.pw_total_end }}</td>
-			<td>{{ sreport.urenam_report.pw_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.pw_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.pw_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>Ex MAS</td>
 			<td>{{ sreport.urenam_report.exsam_total_start }}</td>
-			<td>{{ sreport.urenam_report.exsam_total_in }}</td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.exsam_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.exsam_total_out }}</td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.exsam_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.exsam_total_end }}</td>
-			<td>{{ sreport.urenam_report.exsam_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.exsam_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.exsam_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.urenam_report.total_start }}</td>
-			<td>{{ sreport.urenam_report.total_in }}</td>
+			<td>{{ sreport.urenam_report.new_cases }}</td>
+			<td>{{ sreport.urenam_report.returned }}</td>
+			<td>{{ sreport.urenam_report.transferred }}</td>
 			<td>{{ sreport.urenam_report.grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.total_out }}</td>
+			<td>{{ sreport.urenam_report.healed }}</td>
+			<td>{{ sreport.urenam_report.deceased }}</td>
+			<td>{{ sreport.urenam_report.abandon }}</td>
+			<td>{{ sreport.urenam_report.not_responding }}</td>
+			<td>{{ sreport.urenam_report.referred }}</td>
 			<td>{{ sreport.urenam_report.grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.total_end }}</td>
-			<td>{{ sreport.urenam_report.healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
@@ -359,74 +434,92 @@
 			<td rowspan="6" class="left">TOTAL URENAM</td>
 			<td>6-23m</td>
 			<td>{{ report.urenam_report.u23o6_total_start }}</td>
-			<td>{{ report.urenam_report.u23o6_total_in }}</td>
+			<td>{{ report.urenam_report.u23o6_new_cases }}</td>
+			<td>{{ report.urenam_report.u23o6_returned }}</td>
+			<td>{{ report.urenam_report.u23o6_transferred }}</td>
 			<td>{{ report.urenam_report.u23o6_grand_total_in }}</td>
-			<td>{{ report.urenam_report.u23o6_total_out }}</td>
+			<td>{{ report.urenam_report.u23o6_healed }}</td>
+			<td>{{ report.urenam_report.u23o6_deceased }}</td>
+			<td>{{ report.urenam_report.u23o6_abandon }}</td>
+			<td>{{ report.urenam_report.u23o6_not_responding }}</td>
+			<td>{{ report.urenam_report.u23o6_referred }}</td>
 			<td>{{ report.urenam_report.u23o6_grand_total_out }}</td>
 			<td>{{ report.urenam_report.u23o6_total_end }}</td>
-			<td>{{ report.urenam_report.u23o6_healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.u23o6_deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.u23o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>24-59m</td>
 			<td>{{ report.urenam_report.u59o23_total_start }}</td>
-			<td>{{ report.urenam_report.u59o23_total_in }}</td>
+			<td>{{ report.urenam_report.u59o23_new_cases }}</td>
+			<td>{{ report.urenam_report.u59o23_returned }}</td>
+			<td>{{ report.urenam_report.u59o23_transferred }}</td>
 			<td>{{ report.urenam_report.u59o23_grand_total_in }}</td>
-			<td>{{ report.urenam_report.u59o23_total_out }}</td>
+			<td>{{ report.urenam_report.u59o23_healed }}</td>
+			<td>{{ report.urenam_report.u59o23_deceased }}</td>
+			<td>{{ report.urenam_report.u59o23_abandon }}</td>
+			<td>{{ report.urenam_report.u59o23_not_responding }}</td>
+			<td>{{ report.urenam_report.u59o23_referred }}</td>
 			<td>{{ report.urenam_report.u59o23_grand_total_out }}</td>
 			<td>{{ report.urenam_report.u59o23_total_end }}</td>
-			<td>{{ report.urenam_report.u59o23_healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.u59o23_deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.u59o23_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ report.urenam_report.o59_total_start }}</td>
-			<td>{{ report.urenam_report.o59_total_in }}</td>
+			<td>{{ report.urenam_report.o59_new_cases }}</td>
+			<td>{{ report.urenam_report.o59_returned }}</td>
+			<td>{{ report.urenam_report.o59_transferred }}</td>
 			<td>{{ report.urenam_report.o59_grand_total_in }}</td>
-			<td>{{ report.urenam_report.o59_total_out }}</td>
+			<td>{{ report.urenam_report.o59_healed }}</td>
+			<td>{{ report.urenam_report.o59_deceased }}</td>
+			<td>{{ report.urenam_report.o59_abandon }}</td>
+			<td>{{ report.urenam_report.o59_not_responding }}</td>
+			<td>{{ report.urenam_report.o59_referred }}</td>
 			<td>{{ report.urenam_report.o59_grand_total_out }}</td>
 			<td>{{ report.urenam_report.o59_total_end }}</td>
-			<td>{{ report.urenam_report.o59_healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.o59_deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>FE/FA</td>
 			<td>{{ report.urenam_report.pw_total_start }}</td>
-			<td>{{ report.urenam_report.pw_total_in }}</td>
+			<td>{{ report.urenam_report.pw_new_cases }}</td>
+			<td>{{ report.urenam_report.pw_returned }}</td>
+			<td>{{ report.urenam_report.pw_transferred }}</td>
 			<td>{{ report.urenam_report.pw_grand_total_in }}</td>
-			<td>{{ report.urenam_report.pw_total_out }}</td>
+			<td>{{ report.urenam_report.pw_healed }}</td>
+			<td>{{ report.urenam_report.pw_deceased }}</td>
+			<td>{{ report.urenam_report.pw_abandon }}</td>
+			<td>{{ report.urenam_report.pw_not_responding }}</td>
+			<td>{{ report.urenam_report.pw_referred }}</td>
 			<td>{{ report.urenam_report.pw_grand_total_out }}</td>
 			<td>{{ report.urenam_report.pw_total_end }}</td>
-			<td>{{ report.urenam_report.pw_healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.pw_deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.pw_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>Ex MAS</td>
 			<td>{{ report.urenam_report.exsam_total_start }}</td>
-			<td>{{ report.urenam_report.exsam_total_in }}</td>
+			<td>{{ report.urenam_report.exsam_new_cases }}</td>
+			<td>{{ report.urenam_report.exsam_returned }}</td>
+			<td>{{ report.urenam_report.exsam_transferred }}</td>
 			<td>{{ report.urenam_report.exsam_grand_total_in }}</td>
-			<td>{{ report.urenam_report.exsam_total_out }}</td>
+			<td>{{ report.urenam_report.exsam_healed }}</td>
+			<td>{{ report.urenam_report.exsam_deceased }}</td>
+			<td>{{ report.urenam_report.exsam_abandon }}</td>
+			<td>{{ report.urenam_report.exsam_not_responding }}</td>
+			<td>{{ report.urenam_report.exsam_referred }}</td>
 			<td>{{ report.urenam_report.exsam_grand_total_out }}</td>
 			<td>{{ report.urenam_report.exsam_total_end }}</td>
-			<td>{{ report.urenam_report.exsam_healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.exsam_deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.exsam_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ report.urenam_report.total_start }}</td>
-			<td>{{ report.urenam_report.total_in }}</td>
+			<td>{{ report.urenam_report.new_cases }}</td>
+			<td>{{ report.urenam_report.returned }}</td>
+			<td>{{ report.urenam_report.transferred }}</td>
 			<td>{{ report.urenam_report.grand_total_in }}</td>
-			<td>{{ report.urenam_report.total_out }}</td>
+			<td>{{ report.urenam_report.healed }}</td>
+			<td>{{ report.urenam_report.deceased }}</td>
+			<td>{{ report.urenam_report.abandon }}</td>
+			<td>{{ report.urenam_report.not_responding }}</td>
+			<td>{{ report.urenam_report.referred }}</td>
 			<td>{{ report.urenam_report.grand_total_out }}</td>
 			<td>{{ report.urenam_report.total_end }}</td>
-			<td>{{ report.urenam_report.healed_rate|percent }}</td>
-			<td>{{ report.urenam_report.deceased_rate|percent }}</td>
-			<td>{{ report.urenam_report.abandon_rate|percent }}</td>
 		</tr>
 
 		{% endif %}
@@ -443,71 +536,86 @@
 <thead>
 <tr>
 	<th>STRUCTURE</th>
-	<th>TRANCHES D'ÂGE</th>
+	<th>ÂGE</th>
 	<th>DÉBUT MOIS</th>
-	<th>ADMISSIONS</th>
-	<th>ADMISSIONS GÉNÉRALES</th>
-	<th>SORTIES</th>
-	<th>SORTIES GÉNÉRALES</th>
-	<th>TOTAL FIN DE MOIS</th>
-	<th>TAUX GUÉRISONS</th>
-	<th>TAUX DÉCÈS</th>
-	<th>TAUX ABANDONS</th>
+	<th>NOUV. ADM.</th>
+	<th>RÉ-ADM.</th>
+	<th>TR. URENI</th>
+	<th>ADM. GLE</th>
+	<th>GUÉRIS</th>
+	<th>DÉCÈS</th>
+	<th>ABAND.</th>
+	<th>NON-RÉP</th>
+	<th>RÉF/TRF</th>
+	<th>SORTIES GLE</th>
+	<th>FIN MOIS</th>
 </tr>
 </thead>
 <tbody>
 		{% if is_sam %}
-		<tr><th colspan="11">URENI</th></tr>
+		<tr><th colspan="14">URENI</th></tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.ureni_report %}
 		<tr>
 			<td rowspan="4" class="left">{{ sreport.entity.name }}</td>
 			<td>0-6m</td>
 			<td>{{ sreport.ureni_report.u6_total_start }}</td>
-			<td>{{ sreport.ureni_report.u6_total_in }}</td>
+			<td>{{ sreport.ureni_report.u6_new_cases }}</td>
+			<td>{{ sreport.ureni_report.u6_returned }}</td>
+			<td>{{ sreport.ureni_report.u6_transferred }}</td>
 			<td>{{ sreport.ureni_report.u6_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.u6_total_out }}</td>
+			<td>{{ sreport.ureni_report.u6_healed }}</td>
+			<td>{{ sreport.ureni_report.u6_deceased }}</td>
+			<td>{{ sreport.ureni_report.u6_abandon }}</td>
+			<td>{{ sreport.ureni_report.u6_not_responding }}</td>
+			<td>{{ sreport.ureni_report.u6_referred }}</td>
 			<td>{{ sreport.ureni_report.u6_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.u6_total_end }}</td>
-			<td>{{ sreport.ureni_report.u6_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u6_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>6-59m</td>
 			<td>{{ sreport.ureni_report.u59o6_total_start }}</td>
-			<td>{{ sreport.ureni_report.u59o6_total_in }}</td>
+			<td>{{ sreport.ureni_report.u59o6_new_cases }}</td>
+			<td>{{ sreport.ureni_report.u59o6_returned }}</td>
+			<td>{{ sreport.ureni_report.u59o6_transferred }}</td>
 			<td>{{ sreport.ureni_report.u59o6_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.u59o6_total_out }}</td>
+			<td>{{ sreport.ureni_report.u59o6_healed }}</td>
+			<td>{{ sreport.ureni_report.u59o6_deceased }}</td>
+			<td>{{ sreport.ureni_report.u59o6_abandon }}</td>
+			<td>{{ sreport.ureni_report.u59o6_not_responding }}</td>
+			<td>{{ sreport.ureni_report.u59o6_referred }}</td>
 			<td>{{ sreport.ureni_report.u59o6_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.u59o6_total_end }}</td>
-			<td>{{ sreport.ureni_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.ureni_report.o59_total_start }}</td>
-			<td>{{ sreport.ureni_report.o59_total_in }}</td>
+			<td>{{ sreport.ureni_report.o59_new_cases }}</td>
+			<td>{{ sreport.ureni_report.o59_returned }}</td>
+			<td>{{ sreport.ureni_report.o59_transferred }}</td>
 			<td>{{ sreport.ureni_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.o59_total_out }}</td>
+			<td>{{ sreport.ureni_report.o59_healed }}</td>
+			<td>{{ sreport.ureni_report.o59_deceased }}</td>
+			<td>{{ sreport.ureni_report.o59_abandon }}</td>
+			<td>{{ sreport.ureni_report.o59_not_responding }}</td>
+			<td>{{ sreport.ureni_report.o59_referred }}</td>
 			<td>{{ sreport.ureni_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.o59_total_end }}</td>
-			<td>{{ sreport.ureni_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.ureni_report.total_start }}</td>
-			<td>{{ sreport.ureni_report.total_in }}</td>
+			<td>{{ sreport.ureni_report.new_cases }}</td>
+			<td>{{ sreport.ureni_report.returned }}</td>
+			<td>{{ sreport.ureni_report.transferred }}</td>
 			<td>{{ sreport.ureni_report.grand_total_in }}</td>
-			<td>{{ sreport.ureni_report.total_out }}</td>
+			<td>{{ sreport.ureni_report.healed }}</td>
+			<td>{{ sreport.ureni_report.deceased }}</td>
+			<td>{{ sreport.ureni_report.abandon }}</td>
+			<td>{{ sreport.ureni_report.not_responding }}</td>
+			<td>{{ sreport.ureni_report.referred }}</td>
 			<td>{{ sreport.ureni_report.grand_total_out }}</td>
 			<td>{{ sreport.ureni_report.total_end }}</td>
-			<td>{{ sreport.ureni_report.healed_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.ureni_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
@@ -515,91 +623,112 @@
 			<td rowspan="4" class="left">TOTAL URENI</td>
 			<td>0-6m</td>
 			<td>{{ total_table.ureni_report.u6_total_start }}</td>
-			<td>{{ total_table.ureni_report.u6_total_in }}</td>
+			<td>{{ total_table.ureni_report.u6_new_cases }}</td>
+			<td>{{ total_table.ureni_report.u6_returned }}</td>
+			<td>{{ total_table.ureni_report.u6_transferred }}</td>
 			<td>{{ total_table.ureni_report.u6_grand_total_in }}</td>
-			<td>{{ total_table.ureni_report.u6_total_out }}</td>
+			<td>{{ total_table.ureni_report.u6_healed }}</td>
+			<td>{{ total_table.ureni_report.u6_deceased }}</td>
+			<td>{{ total_table.ureni_report.u6_abandon }}</td>
+			<td>{{ total_table.ureni_report.u6_not_responding }}</td>
+			<td>{{ total_table.ureni_report.u6_referred }}</td>
 			<td>{{ total_table.ureni_report.u6_grand_total_out }}</td>
 			<td>{{ total_table.ureni_report.u6_total_end }}</td>
-			<td>{{ total_table.ureni_report.u6_healed_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.u6_deceased_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>6-59m</td>
 			<td>{{ total_table.ureni_report.u59o6_total_start }}</td>
-			<td>{{ total_table.ureni_report.u59o6_total_in }}</td>
+			<td>{{ total_table.ureni_report.u59o6_new_cases }}</td>
+			<td>{{ total_table.ureni_report.u59o6_returned }}</td>
+			<td>{{ total_table.ureni_report.u59o6_transferred }}</td>
 			<td>{{ total_table.ureni_report.u59o6_grand_total_in }}</td>
-			<td>{{ total_table.ureni_report.u59o6_total_out }}</td>
+			<td>{{ total_table.ureni_report.u59o6_healed }}</td>
+			<td>{{ total_table.ureni_report.u59o6_deceased }}</td>
+			<td>{{ total_table.ureni_report.u59o6_abandon }}</td>
+			<td>{{ total_table.ureni_report.u59o6_not_responding }}</td>
+			<td>{{ total_table.ureni_report.u59o6_referred }}</td>
 			<td>{{ total_table.ureni_report.u59o6_grand_total_out }}</td>
 			<td>{{ total_table.ureni_report.u59o6_total_end }}</td>
-			<td>{{ total_table.ureni_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ total_table.ureni_report.o59_total_start }}</td>
-			<td>{{ total_table.ureni_report.o59_total_in }}</td>
+			<td>{{ total_table.ureni_report.o59_new_cases }}</td>
+			<td>{{ total_table.ureni_report.o59_returned }}</td>
+			<td>{{ total_table.ureni_report.o59_transferred }}</td>
 			<td>{{ total_table.ureni_report.o59_grand_total_in }}</td>
-			<td>{{ total_table.ureni_report.o59_total_out }}</td>
+			<td>{{ total_table.ureni_report.o59_healed }}</td>
+			<td>{{ total_table.ureni_report.o59_deceased }}</td>
+			<td>{{ total_table.ureni_report.o59_abandon }}</td>
+			<td>{{ total_table.ureni_report.o59_not_responding }}</td>
+			<td>{{ total_table.ureni_report.o59_referred }}</td>
 			<td>{{ total_table.ureni_report.o59_grand_total_out }}</td>
 			<td>{{ total_table.ureni_report.o59_total_end }}</td>
-			<td>{{ total_table.ureni_report.o59_healed_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.o59_deceased_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ total_table.ureni_report.total_start }}</td>
-			<td>{{ total_table.ureni_report.total_in }}</td>
+			<td>{{ total_table.ureni_report.new_cases }}</td>
+			<td>{{ total_table.ureni_report.returned }}</td>
+			<td>{{ total_table.ureni_report.transferred }}</td>
 			<td>{{ total_table.ureni_report.grand_total_in }}</td>
-			<td>{{ total_table.ureni_report.total_out }}</td>
+			<td>{{ total_table.ureni_report.healed }}</td>
+			<td>{{ total_table.ureni_report.deceased }}</td>
+			<td>{{ total_table.ureni_report.abandon }}</td>
+			<td>{{ total_table.ureni_report.not_responding }}</td>
+			<td>{{ total_table.ureni_report.referred }}</td>
 			<td>{{ total_table.ureni_report.grand_total_out }}</td>
 			<td>{{ total_table.ureni_report.total_end }}</td>
-			<td>{{ total_table.ureni_report.healed_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.deceased_rate|percent }}</td>
-			<td>{{ total_table.ureni_report.abandon_rate|percent }}</td>
 		</tr>
 
-		<tr><th colspan="11">URENAS</th></tr>
+		<tr><th colspan="14">URENAS</th></tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.urenas_report %}
 		<tr>
 			<td rowspan="3" class="left">{{ sreport.entity.name }}</td>
 			<td>6-59m</td>
 			<td>{{ sreport.urenas_report.u59o6_total_start }}</td>
-			<td>{{ sreport.urenas_report.u59o6_total_in }}</td>
+			<td>{{ sreport.urenas_report.u59o6_new_cases }}</td>
+			<td>{{ sreport.urenas_report.u59o6_returned }}</td>
+			<td>{{ sreport.urenas_report.u59o6_transferred }}</td>
 			<td>{{ sreport.urenas_report.u59o6_grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.u59o6_total_out }}</td>
+			<td>{{ sreport.urenas_report.u59o6_healed }}</td>
+			<td>{{ sreport.urenas_report.u59o6_deceased }}</td>
+			<td>{{ sreport.urenas_report.u59o6_abandon }}</td>
+			<td>{{ sreport.urenas_report.u59o6_not_responding }}</td>
+			<td>{{ sreport.urenas_report.u59o6_referred }}</td>
 			<td>{{ sreport.urenas_report.u59o6_grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.u59o6_total_end }}</td>
-			<td>{{ sreport.urenas_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.urenas_report.o59_total_start }}</td>
-			<td>{{ sreport.urenas_report.o59_total_in }}</td>
+			<td>{{ sreport.urenas_report.o59_new_cases }}</td>
+			<td>{{ sreport.urenas_report.o59_returned }}</td>
+			<td>{{ sreport.urenas_report.o59_transferred }}</td>
 			<td>{{ sreport.urenas_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.o59_total_out }}</td>
+			<td>{{ sreport.urenas_report.o59_healed }}</td>
+			<td>{{ sreport.urenas_report.o59_deceased }}</td>
+			<td>{{ sreport.urenas_report.o59_abandon }}</td>
+			<td>{{ sreport.urenas_report.o59_not_responding }}</td>
+			<td>{{ sreport.urenas_report.o59_referred }}</td>
 			<td>{{ sreport.urenas_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.o59_total_end }}</td>
-			<td>{{ sreport.urenas_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.urenas_report.total_start }}</td>
-			<td>{{ sreport.urenas_report.total_in }}</td>
+			<td>{{ sreport.urenas_report.new_cases }}</td>
+			<td>{{ sreport.urenas_report.returned }}</td>
+			<td>{{ sreport.urenas_report.transferred }}</td>
 			<td>{{ sreport.urenas_report.grand_total_in }}</td>
-			<td>{{ sreport.urenas_report.total_out }}</td>
+			<td>{{ sreport.urenas_report.healed }}</td>
+			<td>{{ sreport.urenas_report.deceased }}</td>
+			<td>{{ sreport.urenas_report.abandon }}</td>
+			<td>{{ sreport.urenas_report.not_responding }}</td>
+			<td>{{ sreport.urenas_report.referred }}</td>
 			<td>{{ sreport.urenas_report.grand_total_out }}</td>
 			<td>{{ sreport.urenas_report.total_end }}</td>
-			<td>{{ sreport.urenas_report.healed_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.urenas_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
@@ -608,165 +737,204 @@
 			<td rowspan="3" class="left">TOTAL URENAS</td>
 			<td>6-59m</td>
 			<td>{{ total_table.urenas_report.u59o6_total_start }}</td>
-			<td>{{ total_table.urenas_report.u59o6_total_in }}</td>
+			<td>{{ total_table.urenas_report.u59o6_new_cases }}</td>
+			<td>{{ total_table.urenas_report.u59o6_returned }}</td>
+			<td>{{ total_table.urenas_report.u59o6_transferred }}</td>
 			<td>{{ total_table.urenas_report.u59o6_grand_total_in }}</td>
-			<td>{{ total_table.urenas_report.u59o6_total_out }}</td>
+			<td>{{ total_table.urenas_report.u59o6_healed }}</td>
+			<td>{{ total_table.urenas_report.u59o6_deceased }}</td>
+			<td>{{ total_table.urenas_report.u59o6_abandon }}</td>
+			<td>{{ total_table.urenas_report.u59o6_not_responding }}</td>
+			<td>{{ total_table.urenas_report.u59o6_referred }}</td>
 			<td>{{ total_table.urenas_report.u59o6_grand_total_out }}</td>
 			<td>{{ total_table.urenas_report.u59o6_total_end }}</td>
-			<td>{{ total_table.urenas_report.u59o6_healed_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.u59o6_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ total_table.urenas_report.o59_total_start }}</td>
-			<td>{{ total_table.urenas_report.o59_total_in }}</td>
+			<td>{{ total_table.urenas_report.o59_new_cases }}</td>
+			<td>{{ total_table.urenas_report.o59_returned }}</td>
+			<td>{{ total_table.urenas_report.o59_transferred }}</td>
 			<td>{{ total_table.urenas_report.o59_grand_total_in }}</td>
-			<td>{{ total_table.urenas_report.o59_total_out }}</td>
+			<td>{{ total_table.urenas_report.o59_healed }}</td>
+			<td>{{ total_table.urenas_report.o59_deceased }}</td>
+			<td>{{ total_table.urenas_report.o59_abandon }}</td>
+			<td>{{ total_table.urenas_report.o59_not_responding }}</td>
+			<td>{{ total_table.urenas_report.o59_referred }}</td>
 			<td>{{ total_table.urenas_report.o59_grand_total_out }}</td>
 			<td>{{ total_table.urenas_report.o59_total_end }}</td>
-			<td>{{ total_table.urenas_report.o59_healed_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.o59_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ total_table.urenas_report.total_start }}</td>
-			<td>{{ total_table.urenas_report.total_in }}</td>
+			<td>{{ total_table.urenas_report.new_cases }}</td>
+			<td>{{ total_table.urenas_report.returned }}</td>
+			<td>{{ total_table.urenas_report.transferred }}</td>
 			<td>{{ total_table.urenas_report.grand_total_in }}</td>
-			<td>{{ total_table.urenas_report.total_out }}</td>
+			<td>{{ total_table.urenas_report.healed }}</td>
+			<td>{{ total_table.urenas_report.deceased }}</td>
+			<td>{{ total_table.urenas_report.abandon }}</td>
+			<td>{{ total_table.urenas_report.not_responding }}</td>
+			<td>{{ total_table.urenas_report.referred }}</td>
 			<td>{{ total_table.urenas_report.grand_total_out }}</td>
 			<td>{{ total_table.urenas_report.total_end }}</td>
-			<td>{{ total_table.urenas_report.healed_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.deceased_rate|percent }}</td>
-			<td>{{ total_table.urenas_report.abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td rowspan="4" class="left">TOTAL URENI + URENAS</td>
 			<td>0-6m</td>
 			<td>{{ total_table.sam_u6_total_start }}</td>
-			<td>{{ total_table.sam_u6_total_in }}</td>
+			<td>{{ total_table.sam_u6_new_cases }}</td>
+			<td>{{ total_table.sam_u6_returned }}</td>
+			<td>{{ total_table.sam_u6_transferred }}</td>
 			<td>{{ total_table.sam_u6_grand_total_in }}</td>
-			<td>{{ total_table.sam_u6_total_out }}</td>
+			<td>{{ total_table.sam_u6_healed }}</td>
+			<td>{{ total_table.sam_u6_deceased }}</td>
+			<td>{{ total_table.sam_u6_abandon }}</td>
+			<td>{{ total_table.sam_u6_not_responding }}</td>
+			<td>{{ total_table.sam_u6_referred }}</td>
 			<td>{{ total_table.sam_u6_grand_total_out }}</td>
 			<td>{{ total_table.sam_u6_total_end }}</td>
-			<td>{{ total_table.sam_u6_healed_rate|percent }}</td>
-			<td>{{ total_table.sam_u6_deceased_rate|percent }}</td>
-			<td>{{ total_table.sam_u6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>6-59m</td>
 			<td>{{ total_table.sam_u59o6_total_start }}</td>
-			<td>{{ total_table.sam_u59o6_total_in }}</td>
+			<td>{{ total_table.sam_u59o6_new_cases }}</td>
+			<td>{{ total_table.sam_u59o6_returned }}</td>
+			<td>{{ total_table.sam_u59o6_transferred }}</td>
 			<td>{{ total_table.sam_u59o6_grand_total_in }}</td>
-			<td>{{ total_table.sam_u59o6_total_out }}</td>
+			<td>{{ total_table.sam_u59o6_healed }}</td>
+			<td>{{ total_table.sam_u59o6_deceased }}</td>
+			<td>{{ total_table.sam_u59o6_abandon }}</td>
+			<td>{{ total_table.sam_u59o6_not_responding }}</td>
+			<td>{{ total_table.sam_u59o6_referred }}</td>
 			<td>{{ total_table.sam_u59o6_grand_total_out }}</td>
 			<td>{{ total_table.sam_u59o6_total_end }}</td>
-			<td>{{ total_table.sam_u59o6_healed_rate|percent }}</td>
-			<td>{{ total_table.sam_u59o6_deceased_rate|percent }}</td>
-			<td>{{ total_table.sam_u59o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ total_table.sam_o59_total_start }}</td>
-			<td>{{ total_table.sam_o59_total_in }}</td>
+			<td>{{ total_table.sam_o59_new_cases }}</td>
+			<td>{{ total_table.sam_o59_returned }}</td>
+			<td>{{ total_table.sam_o59_transferred }}</td>
 			<td>{{ total_table.sam_o59_grand_total_in }}</td>
-			<td>{{ total_table.sam_o59_total_out }}</td>
+			<td>{{ total_table.sam_o59_healed }}</td>
+			<td>{{ total_table.sam_o59_deceased }}</td>
+			<td>{{ total_table.sam_o59_abandon }}</td>
+			<td>{{ total_table.sam_o59_not_responding }}</td>
+			<td>{{ total_table.sam_o59_referred }}</td>
 			<td>{{ total_table.sam_o59_grand_total_out }}</td>
 			<td>{{ total_table.sam_o59_total_end }}</td>
-			<td>{{ total_table.sam_o59_healed_rate|percent }}</td>
-			<td>{{ total_table.sam_o59_deceased_rate|percent }}</td>
-			<td>{{ total_table.sam_o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ total_table.sam_total_start }}</td>
-			<td>{{ total_table.sam_total_in }}</td>
+			<td>{{ total_table.sam_new_cases }}</td>
+			<td>{{ total_table.sam_returned }}</td>
+			<td>{{ total_table.sam_transferred }}</td>
 			<td>{{ total_table.sam_grand_total_in }}</td>
-			<td>{{ total_table.sam_total_out }}</td>
+			<td>{{ total_table.sam_healed }}</td>
+			<td>{{ total_table.sam_deceased }}</td>
+			<td>{{ total_table.sam_abandon }}</td>
+			<td>{{ total_table.sam_not_responding }}</td>
+			<td>{{ total_table.sam_referred }}</td>
 			<td>{{ total_table.sam_grand_total_out }}</td>
 			<td>{{ total_table.sam_total_end }}</td>
-			<td>{{ total_table.sam_healed_rate|percent }}</td>
-			<td>{{ total_table.sam_deceased_rate|percent }}</td>
-			<td>{{ total_table.sam_abandon_rate|percent }}</td>
 		</tr>
 {% else %}
 
-		<tr><th colspan="11">URENAM</th></tr>
+		<tr><th colspan="14">URENAM</th></tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.urenam_report %}
 		<tr>
 			<td rowspan="6" class="left">{{ sreport.entity.name }}</td>
 			<td>6-23m</td>
 			<td>{{ sreport.urenam_report.u23o6_total_start }}</td>
-			<td>{{ sreport.urenam_report.u23o6_total_in }}</td>
+			<td>{{ sreport.urenam_report.u23o6_new_cases }}</td>
+			<td>{{ sreport.urenam_report.u23o6_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.u23o6_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.u23o6_total_out }}</td>
+			<td>{{ sreport.urenam_report.u23o6_healed }}</td>
+			<td>{{ sreport.urenam_report.u23o6_deceased }}</td>
+			<td>{{ sreport.urenam_report.u23o6_abandon }}</td>
+			<td>{{ sreport.urenam_report.u23o6_not_responding }}</td>
+			<td>{{ sreport.urenam_report.u23o6_referred }}</td>
 			<td>{{ sreport.urenam_report.u23o6_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.u23o6_total_end }}</td>
-			<td>{{ sreport.urenam_report.u23o6_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u23o6_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u23o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>24-59m</td>
 			<td>{{ sreport.urenam_report.u59o23_total_start }}</td>
-			<td>{{ sreport.urenam_report.u59o23_total_in }}</td>
+			<td>{{ sreport.urenam_report.u59o23_new_cases }}</td>
+			<td>{{ sreport.urenam_report.u59o23_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.u59o23_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.u59o23_total_out }}</td>
+			<td>{{ sreport.urenam_report.u59o23_healed }}</td>
+			<td>{{ sreport.urenam_report.u59o23_deceased }}</td>
+			<td>{{ sreport.urenam_report.u59o23_abandon }}</td>
+			<td>{{ sreport.urenam_report.u59o23_not_responding }}</td>
+			<td>{{ sreport.urenam_report.u59o23_referred }}</td>
 			<td>{{ sreport.urenam_report.u59o23_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.u59o23_total_end }}</td>
-			<td>{{ sreport.urenam_report.u59o23_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u59o23_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.u59o23_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>59m+</td>
 			<td>{{ sreport.urenam_report.o59_total_start }}</td>
-			<td>{{ sreport.urenam_report.o59_total_in }}</td>
+			<td>{{ sreport.urenam_report.o59_new_cases }}</td>
+			<td>{{ sreport.urenam_report.o59_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.o59_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.o59_total_out }}</td>
+			<td>{{ sreport.urenam_report.o59_healed }}</td>
+			<td>{{ sreport.urenam_report.o59_deceased }}</td>
+			<td>{{ sreport.urenam_report.o59_abandon }}</td>
+			<td>{{ sreport.urenam_report.o59_not_responding }}</td>
+			<td>{{ sreport.urenam_report.o59_referred }}</td>
 			<td>{{ sreport.urenam_report.o59_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.o59_total_end }}</td>
-			<td>{{ sreport.urenam_report.o59_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.o59_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>FE/FA</td>
 			<td>{{ sreport.urenam_report.pw_total_start }}</td>
-			<td>{{ sreport.urenam_report.pw_total_in }}</td>
+			<td>{{ sreport.urenam_report.pw_new_cases }}</td>
+			<td>{{ sreport.urenam_report.pw_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.pw_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.pw_total_out }}</td>
+			<td>{{ sreport.urenam_report.pw_healed }}</td>
+			<td>{{ sreport.urenam_report.pw_deceased }}</td>
+			<td>{{ sreport.urenam_report.pw_abandon }}</td>
+			<td>{{ sreport.urenam_report.pw_not_responding }}</td>
+			<td>{{ sreport.urenam_report.pw_referred }}</td>
 			<td>{{ sreport.urenam_report.pw_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.pw_total_end }}</td>
-			<td>{{ sreport.urenam_report.pw_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.pw_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.pw_abandon_rate|percent }}</td>
 		</tr>
 		<tr>
 			<td>Ex MAS</td>
 			<td>{{ sreport.urenam_report.exsam_total_start }}</td>
-			<td>{{ sreport.urenam_report.exsam_total_in }}</td>
+			<td>{{ sreport.urenam_report.exsam_new_cases }}</td>
+			<td>{{ sreport.urenam_report.exsam_returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.exsam_grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.exsam_total_out }}</td>
+			<td>{{ sreport.urenam_report.exsam_healed }}</td>
+			<td>{{ sreport.urenam_report.exsam_deceased }}</td>
+			<td>{{ sreport.urenam_report.exsam_abandon }}</td>
+			<td>{{ sreport.urenam_report.exsam_not_responding }}</td>
+			<td>{{ sreport.urenam_report.exsam_referred }}</td>
 			<td>{{ sreport.urenam_report.exsam_grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.exsam_total_end }}</td>
-			<td>{{ sreport.urenam_report.exsam_healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.exsam_deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.exsam_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="total-row">
 			<td>TOTAL</td>
 			<td>{{ sreport.urenam_report.total_start }}</td>
-			<td>{{ sreport.urenam_report.total_in }}</td>
+			<td>{{ sreport.urenam_report.new_cases }}</td>
+			<td>{{ sreport.urenam_report.returned }}</td>
+			<td class="nodata"></td>
 			<td>{{ sreport.urenam_report.grand_total_in }}</td>
-			<td>{{ sreport.urenam_report.total_out }}</td>
+			<td>{{ sreport.urenam_report.healed }}</td>
+			<td>{{ sreport.urenam_report.deceased }}</td>
+			<td>{{ sreport.urenam_report.abandon }}</td>
+			<td>{{ sreport.urenam_report.not_responding }}</td>
+			<td>{{ sreport.urenam_report.referred }}</td>
 			<td>{{ sreport.urenam_report.grand_total_out }}</td>
 			<td>{{ sreport.urenam_report.total_end }}</td>
-			<td>{{ sreport.urenam_report.healed_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.deceased_rate|percent }}</td>
-			<td>{{ sreport.urenam_report.abandon_rate|percent }}</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
@@ -774,74 +942,92 @@
 			<td rowspan="6" class="left">TOTAL URENAM</td>
 			<td>6-23m</td>
 			<td>{{ total_table.urenam_report.u23o6_total_start }}</td>
-			<td>{{ total_table.urenam_report.u23o6_total_in }}</td>
+			<td>{{ total_table.urenam_report.u23o6_new_cases }}</td>
+			<td>{{ total_table.urenam_report.u23o6_returned }}</td>
+			<td>{{ total_table.urenam_report.u23o6_transferred }}</td>
 			<td>{{ total_table.urenam_report.u23o6_grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.u23o6_total_out }}</td>
+			<td>{{ total_table.urenam_report.u23o6_healed }}</td>
+			<td>{{ total_table.urenam_report.u23o6_deceased }}</td>
+			<td>{{ total_table.urenam_report.u23o6_abandon }}</td>
+			<td>{{ total_table.urenam_report.u23o6_not_responding }}</td>
+			<td>{{ total_table.urenam_report.u23o6_referred }}</td>
 			<td>{{ total_table.urenam_report.u23o6_grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.u23o6_total_end }}</td>
-			<td>{{ total_table.urenam_report.u23o6_healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.u23o6_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.u23o6_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>24-59m</td>
 			<td>{{ total_table.urenam_report.u59o23_total_start }}</td>
-			<td>{{ total_table.urenam_report.u59o23_total_in }}</td>
+			<td>{{ total_table.urenam_report.u59o23_new_cases }}</td>
+			<td>{{ total_table.urenam_report.u59o23_returned }}</td>
+			<td>{{ total_table.urenam_report.u59o23_transferred }}</td>
 			<td>{{ total_table.urenam_report.u59o23_grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.u59o23_total_out }}</td>
+			<td>{{ total_table.urenam_report.u59o23_healed }}</td>
+			<td>{{ total_table.urenam_report.u59o23_deceased }}</td>
+			<td>{{ total_table.urenam_report.u59o23_abandon }}</td>
+			<td>{{ total_table.urenam_report.u59o23_not_responding }}</td>
+			<td>{{ total_table.urenam_report.u59o23_referred }}</td>
 			<td>{{ total_table.urenam_report.u59o23_grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.u59o23_total_end }}</td>
-			<td>{{ total_table.urenam_report.u59o23_healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.u59o23_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.u59o23_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>59m+</td>
 			<td>{{ total_table.urenam_report.o59_total_start }}</td>
-			<td>{{ total_table.urenam_report.o59_total_in }}</td>
+			<td>{{ total_table.urenam_report.o59_new_cases }}</td>
+			<td>{{ total_table.urenam_report.o59_returned }}</td>
+			<td>{{ total_table.urenam_report.o59_transferred }}</td>
 			<td>{{ total_table.urenam_report.o59_grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.o59_total_out }}</td>
+			<td>{{ total_table.urenam_report.o59_healed }}</td>
+			<td>{{ total_table.urenam_report.o59_deceased }}</td>
+			<td>{{ total_table.urenam_report.o59_abandon }}</td>
+			<td>{{ total_table.urenam_report.o59_not_responding }}</td>
+			<td>{{ total_table.urenam_report.o59_referred }}</td>
 			<td>{{ total_table.urenam_report.o59_grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.o59_total_end }}</td>
-			<td>{{ total_table.urenam_report.o59_healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.o59_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.o59_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>FE/FA</td>
 			<td>{{ total_table.urenam_report.pw_total_start }}</td>
-			<td>{{ total_table.urenam_report.pw_total_in }}</td>
+			<td>{{ total_table.urenam_report.pw_new_cases }}</td>
+			<td>{{ total_table.urenam_report.pw_returned }}</td>
+			<td>{{ total_table.urenam_report.pw_transferred }}</td>
 			<td>{{ total_table.urenam_report.pw_grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.pw_total_out }}</td>
+			<td>{{ total_table.urenam_report.pw_healed }}</td>
+			<td>{{ total_table.urenam_report.pw_deceased }}</td>
+			<td>{{ total_table.urenam_report.pw_abandon }}</td>
+			<td>{{ total_table.urenam_report.pw_not_responding }}</td>
+			<td>{{ total_table.urenam_report.pw_referred }}</td>
 			<td>{{ total_table.urenam_report.pw_grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.pw_total_end }}</td>
-			<td>{{ total_table.urenam_report.pw_healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.pw_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.pw_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>Ex MAS</td>
 			<td>{{ total_table.urenam_report.exsam_total_start }}</td>
-			<td>{{ total_table.urenam_report.exsam_total_in }}</td>
+			<td>{{ total_table.urenam_report.exsam_new_cases }}</td>
+			<td>{{ total_table.urenam_report.exsam_returned }}</td>
+			<td>{{ total_table.urenam_report.exsam_transferred }}</td>
 			<td>{{ total_table.urenam_report.exsam_grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.exsam_total_out }}</td>
+			<td>{{ total_table.urenam_report.exsam_healed }}</td>
+			<td>{{ total_table.urenam_report.exsam_deceased }}</td>
+			<td>{{ total_table.urenam_report.exsam_abandon }}</td>
+			<td>{{ total_table.urenam_report.exsam_not_responding }}</td>
+			<td>{{ total_table.urenam_report.exsam_referred }}</td>
 			<td>{{ total_table.urenam_report.exsam_grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.exsam_total_end }}</td>
-			<td>{{ total_table.urenam_report.exsam_healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.exsam_deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.exsam_abandon_rate|percent }}</td>
 		</tr>
 		<tr class="highlight-row">
 			<td>TOTAL</td>
 			<td>{{ total_table.urenam_report.total_start }}</td>
-			<td>{{ total_table.urenam_report.total_in }}</td>
+			<td>{{ total_table.urenam_report.new_cases }}</td>
+			<td>{{ total_table.urenam_report.returned }}</td>
+			<td>{{ total_table.urenam_report.transferred }}</td>
 			<td>{{ total_table.urenam_report.grand_total_in }}</td>
-			<td>{{ total_table.urenam_report.total_out }}</td>
+			<td>{{ total_table.urenam_report.healed }}</td>
+			<td>{{ total_table.urenam_report.deceased }}</td>
+			<td>{{ total_table.urenam_report.abandon }}</td>
+			<td>{{ total_table.urenam_report.not_responding }}</td>
+			<td>{{ total_table.urenam_report.referred }}</td>
 			<td>{{ total_table.urenam_report.grand_total_out }}</td>
 			<td>{{ total_table.urenam_report.total_end }}</td>
-			<td>{{ total_table.urenam_report.healed_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.deceased_rate|percent }}</td>
-			<td>{{ total_table.urenam_report.abandon_rate|percent }}</td>
 		</tr>
 
 {% endif %}

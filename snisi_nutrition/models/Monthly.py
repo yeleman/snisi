@@ -807,6 +807,10 @@ class AbstractNutritionR(SNISIReport):
         return self.sam_total_for_age('o59', 'not_responding')
 
     @property
+    def sam_o59_referred(self):
+        return self.sam_total_for_age('o59', 'returned')
+
+    @property
     def sam_o59_total_out(self):
         return self.sam_total_for_age('o59', 'total_out')
 
