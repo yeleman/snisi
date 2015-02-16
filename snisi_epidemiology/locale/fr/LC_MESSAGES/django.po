@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
 "PO-Revision-Date: 2015-01-14 09:45-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,29 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:87
+#: integrity.py:88
 #, python-brace-format
 msgid "{field_name}: ({case}) number case lower than ({death}) number death"
 msgstr ""
 "{field_name}: Nombre de cas ({case}) inférieur au nombre de décès ({death})."
 
-#: integrity.py:98 integrity.py:237 integrity.py:352
+#: integrity.py:99 integrity.py:239 integrity.py:355
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"
 
-#: integrity.py:169
+#: integrity.py:171
 #, python-brace-format
-#| msgid "{field_name}: ({case}) number case lower than ({death}) number death"
 msgid ""
 "{field_name} ({hc}): ({case}) number case lower than ({death}) number death"
 msgstr ""
 "{field_name} ({hc}): Nombre de cas ({case}) inférieur au nombre de décès "
 "({death})."
 
-#: integrity.py:247
+#: integrity.py:249
 #, python-brace-format
-#| msgid "Missing data for {f}"
 msgid "Missing data for {f}/{row}"
 msgstr "Données manquantes pour {f}/{row}"
 
@@ -247,12 +245,10 @@ msgid "Primary. Sources"
 msgstr "Sources primaires"
 
 #: models.py:407
-#| msgid "Epidemiology Report"
 msgid "Epidemiology Alert"
 msgstr "Alerte épidémiologie"
 
 #: models.py:408
-#| msgid "Epidemiology Reports"
 msgid "Epidemiology Alerts"
 msgstr "Alerte épidémiologie"
 
@@ -261,7 +257,6 @@ msgid "Disease"
 msgstr "Maladie"
 
 #: models.py:412
-#| msgid "Suspected AFP cases"
 msgid "Suspected cases"
 msgstr "Cas suspects"
 

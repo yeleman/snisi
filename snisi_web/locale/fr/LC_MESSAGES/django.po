@@ -7,29 +7,154 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-14 14:27+0000\n"
-"PO-Revision-Date: 2014-04-14 14:29-0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
+"PO-Revision-Date: 2015-02-16 13:56-0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: views/addressbook.py:44
+#: templatetags/snisi.py:302
+msgid "Yes"
+msgstr "Oui"
+
+#: templatetags/snisi.py:302
+msgid "No"
+msgstr "Non"
+
+#: views/addressbook.py:47
 msgid "Cluster"
 msgstr "Cluster"
 
-#: views/addressbook.py:46
+#: views/addressbook.py:49
 msgid "Role"
 msgstr "Role"
 
-#: views/addressbook.py:55
+#: views/addressbook.py:65
 msgid "Recherche"
 msgstr "Recherche"
+
+#: views/admin.py:45 views/admin.py:88
+msgid "Entity"
+msgstr "Localité"
+
+#: views/admin.py:50 views/admin.py:94
+msgid "Entity Name"
+msgstr "Nom de l'entité"
+
+#: views/admin.py:76
+msgid "Make sur to match role with proper location"
+msgstr "Assurez vous de faire correspondre le bon rôle à la bonne localité"
+
+#: views/admin.py:90
+msgid "SNISI Code for that entity"
+msgstr "Code SNISI de la l'entité"
+
+#: views/admin.py:95
+msgid "Verify your Entity Code"
+msgstr "Vérifiez le code SNISI de la localité"
+
+#: views/admin.py:101
+msgid "Flotte Number"
+msgstr "Numéro Flotte"
+
+#: views/admin.py:102
+msgid "Only for Flotte Santé numbers"
+msgstr "Seulement pour les numéro de la Flotte Santé"
+
+#: views/admin.py:108
+msgid "Orange Number"
+msgstr "Numéro de téléphone Orange"
+
+#: views/admin.py:109
+msgid "Personnal Orange phone number"
+msgstr "Numéro de téléphone personnel Orange"
+
+#: views/admin.py:115
+msgid "Malitel Number"
+msgstr "Numéro Malitel"
+
+#: views/admin.py:116
+msgid "Personnal Malitel phone number"
+msgstr "Numéro de téléphone personnel Malitel"
+
+#: views/admin.py:128
+msgid "At least one phone number is required."
+msgstr "Au moins un numéro est requis."
+
+#: views/admin.py:136 views/providers.py:36
+#, python-format
+msgid "Invalid Phone Number: %(value)s"
+msgstr "Numéro de téléphone incorrect : %(value)s"
+
+#: views/admin.py:142 views/providers.py:42
+#, python-format
+msgid "Phone Number already in use by %(value)s"
+msgstr "Ce numéro est déjà utilisé par %(value)s"
+
+#: views/admin.py:202 views/admin.py:226
+msgid "Unable to create this account. See error details bellow"
+msgstr "Impossible de créer ce compte. Voir l'erreur ci-dessous"
+
+#: views/admin.py:215
+#, python-brace-format
+#| msgid ""
+#| "Le compte de {provider} a été créé avec l'identifiant «{username} et le "
+#| "mot de passe «{passwd}».{email_suffix}"
+msgid ""
+"User account {provider} has been created with username “{username}” and "
+"password “{passwd}”.{email_suffix}"
+msgstr ""
+"Le compte de {provider} a été créé avec l'identifiant «{username} et le mot "
+"de passe «{passwd}».{email_suffix}"
+
+#: views/admin.py:242 views/admin.py:264 views/admin.py:283
+msgid "Unable to find this user account: `{}`"
+msgstr "Impossible de trouver le compte utilisateur «{}»"
+
+#: views/admin.py:246
+msgid "You can't reset password for {}"
+msgstr "Vous ne pouvez pas réinitialiser le mot de passe de {}"
+
+#: views/admin.py:253
+#, python-brace-format
+msgid "Password for {provider} has been changed to “{passwd}”."
+msgstr "Le mot de passe de {provider} a été changé à «{passwd}»."
+
+#: views/admin.py:268
+msgid "You can't disable “{}”"
+msgstr "Vous ne pouvez pas désactiver «{}»"
+
+#: views/admin.py:273
+#, python-brace-format
+msgid "{provider} has been disabled."
+msgstr "{provider} a été désactiver."
+
+#: views/admin.py:288
+#, python-brace-format
+msgid "{provider} has been enabled."
+msgstr "{provider} a été désactivé."
+
+#: views/admin.py:295
+msgid "Phone Number"
+msgstr "Numéro…"
+
+#: views/admin.py:330
+msgid "Unable to find this phone number: “{}”"
+msgstr "Impossible de trouver le numéro de téléphone : «{}»"
+
+#: views/admin.py:335
+#, python-brace-format
+msgid ""
+"Phone number “{identity}” has been removed and can be reused by someone else."
+msgstr ""
+"Le numéro de téléphone «{identity}» a été supprimé et peut être réutiliser "
+"par quelqu'un d'autre."
 
 #: views/misc.py:32
 msgid "Your Name"
@@ -64,15 +189,15 @@ msgstr "Votre demande"
 msgid "Your message here..."
 msgstr "Votre message ici…"
 
-#: views/misc.py:85
+#: views/misc.py:84
 msgid "Support request sent."
 msgstr "Demande de support envoyé."
 
-#: views/misc.py:88
+#: views/misc.py:87
 msgid "Unable to send request. Please try again later."
 msgstr "Impossible d'envoyer la demande. Merci de réessayer plus tard."
 
-#: views/providers.py:26
+#: views/providers.py:27
 msgid "If not a Mali number, use +indicator syntax."
 msgstr "En cas de numéro hors Mali, utilisez le symbole +."
 
@@ -80,53 +205,43 @@ msgstr "En cas de numéro hors Mali, utilisez le symbole +."
 msgid "Phone number..."
 msgstr "Numéro…"
 
-#: views/providers.py:36
-#, python-format
-msgid "Invalid Phone Number: %(value)s"
-msgstr "Numéro de téléphone incorrect : %(value)s"
-
-#: views/providers.py:42
-#, python-format
-msgid "Phone Number already in use by %(value)s"
-msgstr "Ce numéro est déjà utilisé par %(value)s"
-
-#: views/providers.py:57
+#: views/providers.py:58
 msgid "New Password"
 msgstr "Nouveau mot de passe"
 
-#: views/providers.py:60
+#: views/providers.py:61
 msgid "Confirm New Password"
 msgstr "Confirmation mot de passe"
 
-#: views/providers.py:68
+#: views/providers.py:69
 msgid "You must confirm your password"
 msgstr "Vous devez confirmer votre mot de passe"
 
-#: views/providers.py:70
+#: views/providers.py:71
 msgid "Your passwords do not match"
 msgstr "Vos mots de passe ne correspondent pas"
 
-#: views/providers.py:102
+#: views/providers.py:103
 msgid "Profile details updated."
 msgstr "Profil mis à jour."
 
-#: views/providers.py:106
+#: views/providers.py:107
 msgid "Your request failed. See bellow."
 msgstr "Votre requête a échouée. Voir ci-dessous."
 
-#: views/providers.py:114
+#: views/providers.py:116
 msgid "Password updated."
 msgstr "Mot de passe changé."
 
-#: views/providers.py:118
-msgid "Your password change request failed. See bellow."
+#: views/providers.py:120
+msgid "Your password change request failed.  See bellow."
 msgstr "Impossible de changer votre mot de passe. Voir ci-dessous."
 
-#: views/providers.py:143
+#: views/providers.py:147
 msgid "Added new phone number: {}"
 msgstr "Le numéro {} a été ajouté"
 
-#: views/providers.py:147
+#: views/providers.py:151
 msgid ""
 "Error in creating phone number {}.\n"
 "{}"
@@ -134,11 +249,25 @@ msgstr ""
 "Erreur lors de la création du numéro {}.\n"
 "{}"
 
-#: views/providers.py:152
+#: views/providers.py:156
 msgid "Your new phone request failed. See bellow."
 msgstr "Impossible d'ajouter le numéro de téléphone. Voir ci-dessous."
 
-#: views/providers.py:182
+#: views/providers.py:186
+msgid "New role and location are identical to previous ones. No change made."
+msgstr ""
+"Les nouveaux rôle et localité sont identiques aux précédents. Aucun "
+"changement effectué."
+
+#: views/providers.py:193
+#, python-brace-format
+msgid ""
+"{provider} has been moved from “{prole} at {plocation}” to “{role} at "
+"{location}”."
+msgstr ""
+"{provider} a été déplacé de «{prole} à {plocation}» à «{role} à {location}»."
+
+#: views/providers.py:219
 msgid ""
 "Unable to remove phone number {} from your account.Either it doesn't exist "
 "or it's not yours."
@@ -146,6 +275,6 @@ msgstr ""
 "Impossible de retirer le numéro {} de voter compte. Soit il n'existe plus "
 "soit il ne vous appartient pas."
 
-#: views/providers.py:189
+#: views/providers.py:226
 msgid "Removed phone number: {}"
 msgstr "Le numéro {} a été retiré"

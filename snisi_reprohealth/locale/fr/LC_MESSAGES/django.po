@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
 "PO-Revision-Date: 2015-01-14 09:48-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -617,17 +617,14 @@ msgid "Implants Removals"
 msgstr "Retraits implants"
 
 #: models/PFActivities.py:174
-#| msgid "Emergency controls"
 msgid "Emergency Controls: Quantity"
 msgstr "Contraception d'urgence : Quantité"
 
 #: models/PFActivities.py:176
-#| msgid "Emergency controls"
 msgid "Emergency Controls: Price"
 msgstr "Contraception d'urgence : Prix"
 
 #: models/PFActivities.py:178
-#| msgid "Emergency controls"
 msgid "Emergency Controls"
 msgstr "Contraception d'urgence"
 
@@ -760,22 +757,18 @@ msgid "Pregnancy Tests: Quantity Received"
 msgstr "Tests grossessses : Quantité reçuee"
 
 #: models/PFActivities.py:253
-#| msgid "Female Condoms: Initial Quantity"
 msgid "Emergency Controls: Initial Quantity"
 msgstr "Contraception d'urgence : Quantité initiale"
 
 #: models/PFActivities.py:255
-#| msgid "Female Condoms: Quantity Used"
 msgid "Emergency Controls: Quantity Used"
 msgstr "Contraception d'urgence : Quantité utilisée"
 
 #: models/PFActivities.py:257
-#| msgid "Female Condoms: Quantity Lost"
 msgid "Emergency Controls: Quantity Lost"
 msgstr "Contraception d'urgence : Quantité perdue"
 
 #: models/PFActivities.py:259
-#| msgid "Female Condoms: Quantity Received"
 msgid "Emergency Controls: Quantity Received"
 msgstr "Contraception d'urgence: Quantité reçue"
 

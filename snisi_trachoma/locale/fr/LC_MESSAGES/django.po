@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
 "PO-Revision-Date: 2014-04-14 14:29-0000\n"
 "Last-Translator: \n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:46 integrity.py:217 integrity.py:473
+#: integrity.py:48 integrity.py:221 integrity.py:479
 msgid "Données manquantes pour {}"
 msgstr "Données manquantes pour {}"
 

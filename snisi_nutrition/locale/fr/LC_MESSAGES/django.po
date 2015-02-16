@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
 "PO-Revision-Date: 2015-01-14 11:45-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,8 +19,8 @@ msgstr ""
 "X-Generator: Poedit 1.6.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:150 integrity.py:263 integrity.py:285 integrity.py:307
-#: integrity.py:333
+#: integrity.py:151 integrity.py:266 integrity.py:288 integrity.py:310
+#: integrity.py:337
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"

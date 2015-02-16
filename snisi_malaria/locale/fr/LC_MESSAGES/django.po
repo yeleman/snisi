@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:36+0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
 "PO-Revision-Date: 2014-04-14 14:29-0000\n"
 "Last-Translator: \n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -35,11 +35,11 @@ msgstr "Femmes enceintes"
 msgid "Stock Outs"
 msgstr "Rupture de stock"
 
-#: integrity.py:139 integrity.py:282 integrity.py:477 integrity.py:493
+#: integrity.py:141 integrity.py:284 integrity.py:481 integrity.py:497
 msgid "Données manquantes pour {}"
 msgstr "Données manquantes pour {}"
 
-#: integrity.py:206 integrity.py:232 integrity.py:705 integrity.py:739
+#: integrity.py:208 integrity.py:234 integrity.py:709 integrity.py:743
 #, python-brace-format
 msgid "{simple} + {severe}"
 msgstr "{simple} + {severe}"

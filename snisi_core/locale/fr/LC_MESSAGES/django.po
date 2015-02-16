@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-14 09:28+0000\n"
-"PO-Revision-Date: 2014-09-04 17:44-0000\n"
+"POT-Creation-Date: 2015-02-16 13:55+0000\n"
+"PO-Revision-Date: 2015-02-16 13:52-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: admin.py:84
+#: admin.py:74
 msgid "Personal info"
 msgstr "Informations personnelles"
 
-#: admin.py:87
+#: admin.py:77
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:89
+#: admin.py:79
 msgid "Important dates"
 msgstr "Dates importantes"
 
-#: integrity.py:90
+#: integrity.py:91
 msgid "Missing Data for {}"
 msgstr "Donnée manquante pour {}"
 
@@ -229,13 +229,13 @@ msgstr "Type d'entité"
 msgid "Entity Types"
 msgstr "Types d'entités"
 
-#: models/Entities.py:40 models/Entities.py:62 models/Reporting.py:754
-#: models/Roles.py:23
+#: models/Entities.py:40 models/Entities.py:62 models/Privileges.py:23
+#: models/Reporting.py:815 models/Roles.py:23
 msgid "Slug"
 msgstr "Code"
 
-#: models/Entities.py:41 models/Entities.py:63 models/Reporting.py:755
-#: models/Roles.py:24
+#: models/Entities.py:41 models/Entities.py:63 models/Privileges.py:24
+#: models/Reporting.py:816 models/Roles.py:24
 msgid "Name"
 msgstr "Nom"
 
@@ -410,7 +410,7 @@ msgstr "Non délivré"
 msgid "Expired"
 msgstr "Expiré"
 
-#: models/Notifications.py:69 models/Providers.py:50
+#: models/Notifications.py:69 models/Providers.py:51
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -650,6 +650,32 @@ msgstr "{sd}-{ed} F Y"
 msgid "{sd} to {ed} F Y"
 msgstr "{sd} au {ed} F Y"
 
+#: models/Privileges.py:20
+msgid "Privilege"
+msgstr "Privilège"
+
+#: models/Privileges.py:21
+msgid "Privileges"
+msgstr "Privilèges"
+
+#: models/Privileges.py:44
+msgid "Accreditation"
+msgstr "Accréditation"
+
+#: models/Privileges.py:45
+msgid "Accreditations"
+msgstr "Accréditations"
+
+#: models/Privileges.py:53
+#, python-brace-format
+msgid "{provider}"
+msgstr "{provider}"
+
+#: models/Privileges.py:54
+#, python-brace-format
+msgid "{provider} at {location}"
+msgstr "{provider} à {location}"
+
 #: models/Projects.py:31
 msgid "Domain"
 msgstr "Domain"
@@ -679,112 +705,112 @@ msgstr "Participations"
 msgid "{cluster}/{entity}"
 msgstr "{cluster}/{entity}"
 
-#: models/Providers.py:48
+#: models/Providers.py:49
 msgid "Man"
 msgstr "Homme"
 
-#: models/Providers.py:49
+#: models/Providers.py:50
 msgid "Woman"
 msgstr "Femme"
 
-#: models/Providers.py:60
+#: models/Providers.py:61
 msgid "Mr."
 msgstr "M."
 
-#: models/Providers.py:61
+#: models/Providers.py:62
 msgid "Mrs."
 msgstr "Mlle"
 
-#: models/Providers.py:62
+#: models/Providers.py:63
 msgid "Miss"
 msgstr "Mme"
 
-#: models/Providers.py:63
+#: models/Providers.py:64
 msgid "Dr."
 msgstr "Dr"
 
-#: models/Providers.py:64
+#: models/Providers.py:65
 msgid "Pr."
 msgstr "Pr"
 
-#: models/Providers.py:72
+#: models/Providers.py:73
 msgid "Provider"
 msgstr "Utilisateur"
 
-#: models/Providers.py:73
+#: models/Providers.py:74
 msgid "Providers"
 msgstr "Utilisateurs"
 
-#: models/Providers.py:76
+#: models/Providers.py:77
 msgid "username"
 msgstr "identifiant"
 
-#: models/Providers.py:77
+#: models/Providers.py:78
 msgid ""
 "Required. 50 characters or fewer. Letters, numbers and @/./+/-/_ characters"
 msgstr "Requis, 50 characters ou moins. Lettres, chiffres et  @/./+/-/_"
 
-#: models/Providers.py:80
+#: models/Providers.py:81
 msgid "Enter a valid username."
 msgstr "Entrez un identifiant valide."
 
-#: models/Providers.py:85
+#: models/Providers.py:86
 msgid "Gender"
 msgstr "Genre\t"
 
-#: models/Providers.py:89
+#: models/Providers.py:90
 msgid "Title"
 msgstr "Titre"
 
-#: models/Providers.py:91
+#: models/Providers.py:92
 msgid "First Name"
 msgstr "Prénom"
 
-#: models/Providers.py:93
+#: models/Providers.py:94
 msgid "Middle Name"
 msgstr "Autres prénoms"
 
-#: models/Providers.py:95
+#: models/Providers.py:96
 msgid "Last Name"
 msgstr "Nom"
 
-#: models/Providers.py:97
+#: models/Providers.py:98
 msgid "Maiden Name"
 msgstr "Nom de jeune fille"
 
-#: models/Providers.py:99
+#: models/Providers.py:100
 msgid "Position"
 msgstr "Emploi"
 
-#: models/Providers.py:101 models/Roles.py:20
+#: models/Providers.py:102 models/Roles.py:20
 msgid "Role"
 msgstr "Role"
 
-#: models/Providers.py:104
+#: models/Providers.py:105
 msgid "Location"
 msgstr "Localité"
 
-#: models/Providers.py:106
+#: models/Providers.py:107
 msgid "Access Since"
 msgstr "Accès depuis"
 
-#: models/Providers.py:108
+#: models/Providers.py:114
 msgid "email address"
 msgstr "adresse email"
 
-#: models/Providers.py:110
+#: models/Providers.py:116
 msgid "staff status"
 msgstr "statute staff"
 
-#: models/Providers.py:111
+#: models/Providers.py:117
 msgid "Designates whether the user can log into this admin site."
 msgstr "Désignes si l'utilisateur peu se connecter au site d'administration."
 
-#: models/Providers.py:114
+#: models/Providers.py:120
 msgid "active"
 msgstr "actif"
 
-#: models/Providers.py:115
+#: models/Providers.py:121
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
@@ -792,50 +818,50 @@ msgstr ""
 "Détermine si cet utilisateur est considéré comme actif. Déselectionner pour "
 "supprimer un compte."
 
-#: models/Providers.py:117
+#: models/Providers.py:123
 msgid "date joined"
 msgstr "Date d'inscription"
 
-#: models/Providers.py:202
+#: models/Providers.py:232
 #, python-brace-format
 msgid "{title_full_name}/{access}"
 msgstr "{title_full_name}/{access}"
 
-#: models/Providers.py:205
+#: models/Providers.py:235
 #, python-brace-format
 msgid "{name} ({position})"
 msgstr "{name} ({position})"
 
-#: models/Providers.py:214
+#: models/Providers.py:244
 #, python-brace-format
 msgid "{maiden}{first}{middle}{last}"
 msgstr "{maiden}{first}{middle}{last}"
 
-#: models/Providers.py:220
+#: models/Providers.py:250
 #, python-brace-format
 msgid "{title}{full_name}"
 msgstr "{title}{full_name}"
 
-#: models/Providers.py:225
+#: models/Providers.py:255
 #, python-brace-format
 msgid "{first_i}{middle_i}{last}"
 msgstr "{first_i}{middle_i}{last}"
 
-#: models/Providers.py:231
+#: models/Providers.py:261
 #, python-brace-format
 msgid "{title}{short_name}"
 msgstr "{title}{short_name}"
 
-#: models/Providers.py:235
+#: models/Providers.py:265
 msgid "Désactivé"
 msgstr "Désactivé"
 
-#: models/Providers.py:237
+#: models/Providers.py:267
 #, python-brace-format
 msgid "{role}"
 msgstr "{role}"
 
-#: models/Providers.py:238
+#: models/Providers.py:268
 #, python-brace-format
 msgid "{role} à {location}"
 msgstr "{role} à {location}"
@@ -856,7 +882,7 @@ msgstr "Occasionnel source"
 msgid "Occasional Aggregated"
 msgstr "Occasionnel agrégé"
 
-#: models/Reporting.py:105 models/Reporting.py:829
+#: models/Reporting.py:105 models/Reporting.py:890
 msgid "Complete"
 msgstr "Complet"
 
@@ -924,67 +950,67 @@ msgstr "Modifié le"
 msgid "Validated By"
 msgstr "Validé par"
 
-#: models/Reporting.py:521
+#: models/Reporting.py:525
 msgid "Aggr. Sources (all)"
 msgstr "Sources agrégés (toutes)"
 
-#: models/Reporting.py:529
+#: models/Reporting.py:533
 msgid "Aggr. Sources (direct)"
 msgstr "Source agrégés (directes)"
 
-#: models/Reporting.py:750
+#: models/Reporting.py:811
 msgid "Report Class"
 msgstr "Classe de rapport"
 
-#: models/Reporting.py:751
+#: models/Reporting.py:812
 msgid "Report Classes"
 msgstr "Classes de rapport"
 
-#: models/Reporting.py:756
+#: models/Reporting.py:817
 msgid "cls"
 msgstr "Classe (code)"
 
-#: models/Reporting.py:757
+#: models/Reporting.py:818
 msgid "Period Type"
 msgstr "Type de période"
 
-#: models/Reporting.py:809
+#: models/Reporting.py:870
 msgid "Expected Report"
 msgstr "Rapport Attendu"
 
-#: models/Reporting.py:810
+#: models/Reporting.py:871
 msgid "Expected Reports"
 msgstr "Rapports Attendus"
 
-#: models/Reporting.py:822
+#: models/Reporting.py:883
 msgid "Single"
 msgstr "Un seul"
 
-#: models/Reporting.py:823
+#: models/Reporting.py:884
 msgid "1+"
 msgstr "1+"
 
-#: models/Reporting.py:824
+#: models/Reporting.py:885
 msgid "0+"
 msgstr "0+"
 
-#: models/Reporting.py:825
+#: models/Reporting.py:886
 msgid "Multiple"
 msgstr "Multiple"
 
-#: models/Reporting.py:830
+#: models/Reporting.py:891
 msgid "Matching"
 msgstr "Correspond"
 
-#: models/Reporting.py:831
+#: models/Reporting.py:892
 msgid "Missing"
 msgstr "Manquant"
 
-#: models/Reporting.py:981
+#: models/Reporting.py:1053
 msgid "Expected Validation"
 msgstr "Validation Attendue"
 
-#: models/Reporting.py:982
+#: models/Reporting.py:1054
 msgid "Expected Validations"
 msgstr "Validations Attendues"
 

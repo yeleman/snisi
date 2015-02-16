@@ -31,7 +31,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        domains = [domain.module_path for domain in Domain.active.all()]
+        domains = [domain.module_path for domain in Domain.active.all()] + \
+            ['snisi_web', 'snisi_core', 'snisi_sms', 'snisi_tools']
 
         root = os.getcwdu()
 
