@@ -91,7 +91,8 @@ def default_permissions(prole, plocation, privileges,
 
     # snisi-tech can view every-thing
     if prole == 'snisi_tech' and action in ('access',
-                                            'download'):
+                                            'download',
+                                            'monitor'):
         return True
 
     # all roles can see data within their area
