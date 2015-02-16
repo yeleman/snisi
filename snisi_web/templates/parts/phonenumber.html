@@ -1,0 +1,2 @@
+{% load snisi %}
+<span {%if number.category.slug == 'flotte' %}title="Numéro Flotte" class="flotte"{% endif %}>{{ number.identity|phone }}</span>

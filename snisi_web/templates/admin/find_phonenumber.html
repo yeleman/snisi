@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load snisi %}
+{% block title %}Numéro de téléphone{% endblock %}
+
+{% block content %}
+
+<p class="alert alert-warning"><i class="icon-attention"></i> Ne <strong>supprimez un numéro de téléphone</strong> que lorsqu'une nouvelle personne s'est vu assigner le même numéro ! En cas de doute, vérifiez dans l'<a href="{% url 'addressbook' %}">annuaire</a>.</p>
+
+{% pure_form form csrf_token=csrf_token legend="Recherche de numéro de téléphone" submit_text="Chercher" pure_class="inline" extra_class="pure-form-full-inline" %}
+
+{% if numbers != None %}
+{% for number in numbers %}
+{% if forloop.first %}<table class="pure-table all-left">
+<tr><th>Numéro</th><th>Propriétaire</th><th>Action</th></tr>{% endif %}
+<tr><td>{% include "parts/phonenumber.html" with number=number %}</td>
+	<td>{% include "parts/user_link.html" with provider=number.provider %}</td>
+	<td><a href="{% url 'admin_delete_phonenumber' identity=number.identity %}" class="pure-button pure-button-warning" data-must-confirm="true" data-confirm-text="Êtes vous sûr de vouloir supprimer le numéro «{{ number.identity|phone }}» ?">Supprimer</a></td></tr>
+{% if forloop.last %}</table>{% endif %}
+{% empty %}
+<p>Aucun résultat</p>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+{% block onJQready %}
+{% include "admin_role_location.js" %}
+$('#id_role').on('change', role_location_change);
+$('#id_location').on('change', role_location_change);
+registerEntitySlugAutoQuery('#id_location', '#id_location_name', function () {
+$('#id_role').change();	
+});
+{% endblock %}

@@ -40,11 +40,12 @@
                 </ul>
                 
                 {% if user|allowed_to:"monitor" %}
-                <a class="pure-menu-heading">Monitoring</a>
+                <a class="pure-menu-heading">Monitoring & Gestion</a>
                 <ul>
                     <li><a href="{% url 'periodic_source_monitoring' %}">Collecte données périodiques</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte données occasionnelles</a></li>
                     <li><a class="pure-button-disabled" href="#">Collecte (par localité)</a></li>
+                    <li><a href="{% url 'admin_find_phonenumber' %}">Numéros de téléphone</a></li>
                     <li><a href="{% url 'admin_add_provider' %}">Création compte</a></li>
                 </ul>
                 {% endif %}

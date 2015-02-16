@@ -65,6 +65,13 @@ urlpatterns = patterns(
     url(r'^admin/enable_provider/(?P<username>[a-zA-Z0-9\_\-]+)?$',
         'snisi_web.views.admin.enable_provider',
         name='admin_enable_provider'),
+    url(r'^admin/phone-numbers/?$',
+        'snisi_web.views.admin.find_phonenumber',
+        {'template_name': 'admin/find_phonenumber.html'},
+        name='admin_find_phonenumber'),
+    url(r'^admin/phone-numbers/(?P<identity>[0-9\+]+)/delete/?$',
+        'snisi_web.views.admin.delete_phonenumber',
+        name='admin_delete_phonenumber'),
 
 
     # SNISI

@@ -212,9 +212,9 @@ def add_provider(request, **kwargs):
 
                 messages.success(
                     request,
-                    _("Le compte de {provider} a été créé "
-                      "avec l'identifiant «{username} et "
-                      "le mot de passe «{passwd}».{email_suffix}")
+                    _("User account {provider} has been created with "
+                      "username “{username}” "
+                      "and password “{passwd}”.{email_suffix}")
                     .format(provider=provider,
                             username=provider.username,
                             passwd=passwd,
@@ -288,3 +288,51 @@ def enable_provider(request, username):
                      _("{provider} has been enabled.")
                      .format(provider=provider))
     return redirect('public_profile', username=username)
+
+
+class FindPhoneNumberForm(forms.Form):
+
+    number = forms.IntegerField(_("Phone Number"))
+
+
+@login_required
+def find_phonenumber(request, **kwargs):
+    context = default_context()
+    numbers = None
+
+    # main infos form being sent
+    if request.method == 'POST':
+        form = FindPhoneNumberForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data.get('number')
+            numbers = PhoneNumber.objects.filter(identity__icontains=query)
+            # return redirect('admin_find_phonenumber')
+        # else:
+            # messages.error(
+            #     request,
+            #     _("Unable to create this account. See error details bellow"))
+    else:
+        form = FindPhoneNumberForm()
+
+    context.update({'form': form,
+                    'numbers': numbers})
+
+    return render(request,
+                  kwargs.get('template_name', "admin/find_phonenumber.html"),
+                  context)
+
+
+@login_required
+@user_role_within(['snisi_admin', 'snisi_tech'])
+def delete_phonenumber(request, identity):
+    number = PhoneNumber.get_or_none(identity)
+    if number is None:
+        messages.error(request, _("Unable to find this phone number: “{}”")
+                       .format(identity))
+        return redirect('admin_find_phonenumber')
+    number.delete()
+    messages.success(request,
+                     _("Phone number “{identity}” "
+                       "has been removed and can be reused by someone else.")
+                     .format(identity=identity))
+    return redirect('admin_find_phonenumber')
