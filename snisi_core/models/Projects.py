@@ -113,6 +113,10 @@ class Cluster(models.Model):
     def members_at(self, adate):
         pass
 
+    def has_member(self, entity):
+        return bool(Participation.objects.filter(
+            cluster=self, entity__slug=entity.slug).count())
+
     @classmethod
     def get_or_none(cls, slug, inactive_too=False):
         qs = cls.objects if inactive_too else cls.active

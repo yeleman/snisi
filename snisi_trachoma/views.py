@@ -8,17 +8,17 @@ import logging
 
 from django.http import Http404
 from django.shortcuts import render
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
+from snisi_core.permissions import provider_allowed_or_denied
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Periods import MonthPeriod, Period
-
 from snisi_core.models.Entities import Entity
-from snisi_tools.auth import can_view_entity
 from snisi_trachoma.models import TTBacklogMissionR
 from snisi_web.utils import (entity_browser_context, get_base_url_for_period,
-                             get_base_url_for_periods)
+                             get_base_url_for_periods,
+                             ensure_entity_in_cluster,
+                             ensure_entity_at_least)
 
 logger = logging.getLogger(__name__)
 
@@ -40,9 +40,14 @@ def trachoma_mission_browser(request,
     if entity is None:
         raise Http404("Aucune entité pour le code {}".format(entity_slug))
 
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
     # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+    provider_allowed_or_denied(request.user, 'access_trachoma', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
 
     def period_from_strid(period_str, reportcls=None):
         period = None
@@ -122,9 +127,14 @@ def trachoma_dashboard(request,
     if entity is None:
         raise Http404("Aucune entité pour le code {}".format(entity_slug))
 
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
     # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+    provider_allowed_or_denied(request.user, 'access_trachoma', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
 
     def period_from_strid(period_str, reportcls=None):
         period = None

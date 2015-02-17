@@ -23,6 +23,19 @@ logger = logging.getLogger(__name__)
 _s = lambda l: sorted(l, key=lambda e: e.name)
 
 
+LEVELS = {
+    'country': 0,
+    'health_region': 1,
+    'health_district': 2,
+    'health_area': 3,
+    'health_center': 4,
+    'region': 1,
+    'cercle': 2,
+    'commune': 3,
+    'vfq': 4
+}
+
+
 class EntityQuerySet(models.QuerySet):
 
     def active(self):
@@ -191,6 +204,10 @@ class Entity(MPTTModel):
     @property
     def health_parent_first(self):
         return getattr(self, 'health_entity', self.parent)
+
+    def get_cancestors(self, include_self=False):
+        return [e.casted()
+                for e in self.get_ancestors(include_self=include_self)]
 
     def get_health_descendants(self):
         l = list(set([HealthEntity.get_or_none(e.slug)

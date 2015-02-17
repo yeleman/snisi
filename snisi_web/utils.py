@@ -10,6 +10,7 @@ from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 
+from snisi_core.models.Entities import LEVELS
 from snisi_core.models.Entities import Entity
 from snisi_tools.caching import json_cache_from_cluster
 from snisi_tools.auth import can_view_entity
@@ -198,3 +199,14 @@ def entity_periods_context(request,
         cluster=cluster))
 
     return context
+
+
+def ensure_entity_in_cluster(cluster, entity):
+    if not cluster.has_member(entity):
+        raise PermissionDenied
+
+
+def ensure_entity_at_least(entity, slug='health_district'):
+    # not in entity.get_health_district().get_cancestors(include_self=True)
+    if entity.level > LEVELS.get(slug):
+        raise PermissionDenied

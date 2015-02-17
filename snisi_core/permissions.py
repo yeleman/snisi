@@ -98,7 +98,7 @@ def default_permissions(prole, plocation, privileges,
     # all roles can see data within their area
     # can view data
     if action in ('access', 'download'):
-        if plocation in location.get_ancestors(include_self=True):
+        if plocation in location.get_cancestors(include_self=True):
             return True
 
 
