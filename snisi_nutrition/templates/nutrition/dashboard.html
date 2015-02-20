@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load snisi %}
 
 {% block title %}Tableau de bord Nutrition{% endblock %}
 
@@ -8,10 +9,23 @@
 
 <h2>Tableau de bord Nutrition {{ user }}</h2>
 
-<p>Trouvez ici l'évolution de vos indicateurs de performance Nutrition ainsi que des conseils sur la gestion de vos stocks.</p>
+<p>Trouvez ici l'évolution de vos indicateurs de performance Nutrition ainsi que des conseils.</p>
 
-{% include "parts/indicator_widget.html" with table=promptness_table id=0 %}
-{% include "parts/indicator_widget.html" with table=promptness_graph id=1 %}
+<table class="pure-table">
+<tr><th>Unité sanitaire</th><th>URENAM</th><th>URENAS</th><th>URENI</th></tr>
+<tr>
+	<td>{{ entity.display_full_name }}</td>
+	<td class="center">{{ entity.has_urenam|yesno }}</td>
+	<td class="center">{{ entity.has_urenas|yesno }}</td>
+	<td class="center">{{ entity.has_ureni|yesno }}</td>
+</tr>
+</table>
+
+<!-- {% include "parts/indicator_widget.html" with table=promptness_table id=0 %}
+{% include "parts/indicator_widget.html" with table=promptness_graph id=1 %} -->
+{% if sam_performance %}{% include "parts/indicator_widget.html" with table=sam_performance id=0 %}{% endif %}
+
+{% if mam_performance %}{% include "parts/indicator_widget.html" with table=mam_performance id=1 %}{% endif %}
 
 {% endblock %}
 

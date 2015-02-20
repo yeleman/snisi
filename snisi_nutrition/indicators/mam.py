@@ -26,11 +26,14 @@ class MAMHealedRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAM"
 
-    def _compute(self):
-        return self.report.mam_comp_healed_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= 75 else self.BAD
+
+    def get_numerator(self):
+        return self.report.mam_comp_healed
+
+    def get_denominator(self):
+        return self.report.total_performance_for('mam_comp_')
 
 
 class MAMDeceasedRate(NutritionIndicator):
@@ -40,11 +43,14 @@ class MAMDeceasedRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAM"
 
-    def _compute(self):
-        return self.report.mam_comp_deceased_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data < 10 else self.BAD
+
+    def get_numerator(self):
+        return self.report.mam_comp_deceased
+
+    def get_denominator(self):
+        return self.report.total_performance_for('mam_comp_')
 
 
 class MAMAbandonRate(NutritionIndicator):
@@ -54,11 +60,14 @@ class MAMAbandonRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAM"
 
-    def _compute(self):
-        return self.report.mam_comp_abandon_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data < 15 else self.BAD
+
+    def get_numerator(self):
+        return self.report.mam_comp_abandon
+
+    def get_denominator(self):
+        return self.report.total_performance_for('mam_comp_')
 
 
 class MAMNewCases(ReportDataMixin, NutritionIndicator):
@@ -112,7 +121,7 @@ class MAMCaseloadTreatedRate(NutritionIndicator):
         except:
             return 0
 
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= .50 else self.WARNING
 
 
@@ -171,7 +180,7 @@ class MAMNewCasesTable(IndicatorTableWithEntities):
 
 class MAMPerformanceTable(IndicatorTable):
     name = "MAM"
-    caption = ("INDICATEURS PERFORMANCE 6-59 MOIS DS")
+    caption = ("INDICATEURS PERFORMANCE 6-59 MOIS")
     rendering_type = 'table'
     add_total = True
     is_percentage = True

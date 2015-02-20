@@ -25,11 +25,14 @@ class SAMHealedRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAS"
 
-    def _compute(self):
-        return self.report.sam_comp_healed_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= 75 else self.BAD
+
+    def get_numerator(self):
+        return self.report.sam_comp_healed
+
+    def get_denominator(self):
+        return self.report.total_performance_for('sam_comp_')
 
 
 class SAMDeceasedRate(NutritionIndicator):
@@ -39,11 +42,14 @@ class SAMDeceasedRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAS"
 
-    def _compute(self):
-        return self.report.sam_comp_deceased_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data < 10 else self.BAD
+
+    def get_numerator(self):
+        return self.report.sam_comp_deceased
+
+    def get_denominator(self):
+        return self.report.total_performance_for('sam_comp_')
 
 
 class SAMAbandonRate(NutritionIndicator):
@@ -53,11 +59,14 @@ class SAMAbandonRate(NutritionIndicator):
     is_geo_friendly = True
     geo_section = "Performances MAS"
 
-    def _compute(self):
-        return self.report.sam_comp_abandon_rate
-
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data < 15 else self.BAD
+
+    def get_numerator(self):
+        return self.report.sam_comp_abandon
+
+    def get_denominator(self):
+        return self.report.total_performance_for('sam_comp_')
 
 
 # SYNTHESE NUT DS
@@ -129,7 +138,7 @@ class SAMCaseloadTreatedRate(NutritionIndicator):
         except:
             return 0
 
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= .50 else self.WARNING
 
 
@@ -142,7 +151,7 @@ class URENASNewCasesRate(URENASNewCases):
         return self.report.urenas_report.comp_new_cases \
             / self.report.sam_comp_new_cases
 
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= 80 and self.data <= 90 \
             else self.BAD
 
@@ -156,7 +165,7 @@ class URENINewCasesRate(URENINewCases):
         return self.report.ureni_report.comp_new_cases \
             / self.report.sam_comp_new_cases
 
-    def get_class(self):
+    def _get_class(self):
         return self.GOOD if self.data >= 10 and self.data <= 20 \
             else self.BAD
 

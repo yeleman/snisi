@@ -35,6 +35,7 @@ from snisi_nutrition.indicators.sam import (
     SAMNewCasesGraph, SAMCaseloadTreatedGraph,
     SAMNewCasesByDS, SAMRepartitionByDS, SAMPerformanceByDS,
     SAMCaseloadTreatedByDS)
+from snisi_nutrition.indicators.mixed import KeyIndicatorsTable
 from snisi_nutrition.utils import (
     generate_sum_data_table_for, generate_entities_periods_matrix)
 
@@ -48,8 +49,8 @@ def dashboard(request, **kwargs):
     now = timezone.now()
     last_period = MonthPeriod.current().previous() if now.day < 26 else None
     periods = MonthPeriod.all_from(
-        MonthPeriod.from_url_str("10-2014"), last_period)
-    entity = request.user.location
+        MonthPeriod.from_url_str("11-2014"), last_period)
+    entity = request.user.location.casted()
 
     context = {
         'periods': periods,
@@ -60,10 +61,23 @@ def dashboard(request, **kwargs):
                                                 periods=periods)
     promptness_graph = PromptnessReportingFigure(entity=entity,
                                                  periods=periods)
+    key_indic_table = KeyIndicatorsTable(entity=entity,
+                                         periods=periods)
+    if entity.has_ureni or entity.has_urenas:
+        context.update({
+            'sam_performance': SAMPerformanceTable(entity=entity,
+                                                   periods=periods)
+        })
+    if entity.has_urenam:
+        context.update({
+            'mam_performance': MAMPerformanceTable(entity=entity,
+                                                   periods=periods)
+        })
 
     context.update({
         'promptness_table': promptness_table,
         'promptness_graph': promptness_graph,
+        'key_indic_table': key_indic_table,
     })
 
     return render(request, kwargs.get('template_name',

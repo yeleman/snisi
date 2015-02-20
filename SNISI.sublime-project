@@ -13,7 +13,6 @@
 				"protected",
 				"sqls",
 				"node_modules",
-				"static/js",
 				"static"
 			],
 			"follow_symlinks": true,

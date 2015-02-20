@@ -115,7 +115,18 @@ class Indicator(object):
         return ind
 
     def get_class(self):
+        if self.is_missing or not self.is_expected:
+            return ""
+        return self._get_class()
+
+    def _get_class(self):
         return ""
+
+    def get_numerator(self):
+        return None
+
+    def get_denominator(self):
+        return None
 
     @classmethod
     def clone_from(cls, indicator_instance):
@@ -175,7 +186,11 @@ class Indicator(object):
 
     def _compute(self):
         # overwrite. this returns the final value
-        pass
+        if self.is_ratio:
+            try:
+                return self.get_numerator() / self.get_denominator()
+            except ZeroDivisionError:
+                return 0
 
     @classmethod
     def to_percentage(cls, value):
@@ -365,12 +380,39 @@ class IndicatorTable:
         return self.INDICATORS[line_index]
 
     def get_total_for(self, line_index):
+        if self.INDICATORS[line_index].is_ratio:
+            return self.get_total_for_ratio(line_index)
+
         d = sum([self.data_for(line_index, col).data
                  for col in range(0, self.nb_cols() - 1)
                  if not self.data_for(line_index, col).is_missing
                  and self.data_for(line_index, col).is_expected])
         return self.data_for(line_index, col).get_fake({
             'human': humanize_value(d),
+            'data': d
+        })
+
+    def get_total_for_ratio(self, line_index):
+        entity = self.entities[0]
+        numerators = []
+        denominators = []
+
+        for period in self.periods:
+            indic = self.INDICATORS[line_index](entity=entity, period=period)
+            try:
+                numerators.append(indic.get_numerator())
+                denominators.append(indic.get_denominator())
+            except (DataNotExpected, DataIsMissing):
+                pass
+        try:
+            d = sum(numerators) / sum(denominators)
+        except ZeroDivisionError:
+            d = 0
+        except Exception as e:
+            logger.exception(e)
+            d = None
+        return FakeIndicator({
+            'human': humanize_value(d * 100, is_ratio=True),
             'data': d
         })
 
