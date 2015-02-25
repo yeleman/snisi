@@ -11,10 +11,11 @@ import reversion
 from django.utils import timezone
 from django.forms.models import modelform_factory
 
+from snisi_core.models.Reporting import PERIODICAL_AGGREGATED
 from snisi_web.views.validation import (
     handle_report_edition as original_handle_report_edition,
     handle_do_validation)
-from snisi_nutrition.forms import NutritionRForm
+from snisi_nutrition.forms import NutritionRForm, AggNutritionRForm
 from snisi_core.models.Entities import Entity
 from snisi_nutrition.integrity import (
     NutritionRIntegrityChecker,
@@ -32,14 +33,16 @@ logger = logging.getLogger(__name__)
 
 
 def get_form_class_for(rcls):
-    if rcls in (NutritionR, AggNutritionR):
+    if rcls == NutritionR:
         return NutritionRForm
+    elif rcls == AggNutritionR:
+        return AggNutritionRForm
     return modelform_factory(model=rcls, fields=rcls.data_fields())
 
 
 def handle_report_edition(report, form, provider):
 
-    if not isinstance(report.casted(), NutritionR):
+    if not isinstance(report.casted(), (NutritionR, AggNutritionR)):
         return original_handle_report_edition(report, form, provider)
 
     # now we have well formed and authenticated data.
@@ -73,7 +76,9 @@ def handle_report_edition(report, form, provider):
 
     for sr, sr_data in integrity_map.items():
         sr_rcls, sr_cls = sr_data
-        if sr == 'stocks' or getattr(entity, 'has_{}'.format(sr), False):
+        if sr == 'stocks' or (getattr(entity, 'has_{}'.format(sr), False)
+                              or report.casted().REPORTING_TYPE ==
+                              PERIODICAL_AGGREGATED):
             logger.debug("checking {}".format(sr))
 
             sri = sr_cls()
@@ -142,7 +147,7 @@ def handle_report_edition(report, form, provider):
 def do_validation(report, provider):
 
     # only for month report
-    if not isinstance(report.casted(), NutritionR):
+    if not isinstance(report.casted(), (AggNutritionR, NutritionR)):
         return handle_do_validation(report, provider)
 
     def acknowledge(report, validated_on, provider):

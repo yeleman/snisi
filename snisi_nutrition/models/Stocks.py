@@ -433,8 +433,9 @@ class AbstractNutritionStocksR(SNISIReport):
         e = Entity.get_or_none(self.entity.slug)
         lines = []
         for inp in self.inputs():
-            if not getattr(e, 'has_ureni', False) \
-                    and inp in self.inputs(ureni_only=True):
+            if ((not getattr(e, 'has_ureni', False)
+                    and isinstance(self, NutritionStocksR)) and
+                    inp in self.inputs(ureni_only=True)):
                 continue
 
             d = {'label': self.input_str(inp),

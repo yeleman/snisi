@@ -9,32 +9,25 @@ import logging
 from django import forms
 
 from snisi_core.models.Entities import Entity
-from snisi_nutrition.models.URENAM import URENAMNutritionR
-from snisi_nutrition.models.URENAS import URENASNutritionR
-from snisi_nutrition.models.URENI import URENINutritionR
-from snisi_nutrition.models.Stocks import NutritionStocksR
-from snisi_nutrition.models.Monthly import NutritionR
+from snisi_nutrition.models.URENAM import URENAMNutritionR, AggURENAMNutritionR
+from snisi_nutrition.models.URENAS import URENASNutritionR, AggURENASNutritionR
+from snisi_nutrition.models.URENI import URENINutritionR, AggURENINutritionR
+from snisi_nutrition.models.Stocks import NutritionStocksR, AggNutritionStocksR
+from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 
 logger = logging.getLogger(__name__)
 
 
-class NutritionRForm(forms.ModelForm):
+class NutritionRFormIFace(object):
 
-    class Meta:
-        model = NutritionR
-        fields = []
-
-    def __init__(self, *args, **kwargs):
-        super(NutritionRForm, self).__init__(*args, **kwargs)
-
-        instance = kwargs.get('instance')
+    def initialize(self, is_agg, instance):
         entity = Entity.get_or_none(instance.entity.slug)
 
         uren_map = {
-            'urenam': URENAMNutritionR,
-            'urenas': URENASNutritionR,
-            'ureni': URENINutritionR,
-            'stocks': NutritionStocksR
+            'urenam': AggURENAMNutritionR if is_agg else URENAMNutritionR,
+            'urenas': AggURENASNutritionR if is_agg else URENASNutritionR,
+            'ureni': AggURENINutritionR if is_agg else URENINutritionR,
+            'stocks': AggNutritionStocksR if is_agg else NutritionStocksR
         }
 
         float_fields = ['supercereal_initial',
@@ -44,7 +37,8 @@ class NutritionRForm(forms.ModelForm):
 
         for uren, rcls in uren_map.items():
 
-            if uren != 'stocks' and not getattr(entity, 'has_{}'.format(uren)):
+            if uren != 'stocks' and \
+                    not getattr(entity, 'has_{}'.format(uren)) and not is_agg:
                 continue
 
             report = getattr(instance, '{}_report'.format(uren))
@@ -59,3 +53,27 @@ class NutritionRForm(forms.ModelForm):
                     localize=False,
                     initial=getattr(report, field))
                 self.fields['{}_{}'.format(uren, field)] = ff
+
+
+class NutritionRForm(forms.ModelForm, NutritionRFormIFace):
+
+    class Meta:
+        model = NutritionR
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(NutritionRForm, self).__init__(*args, **kwargs)
+        self.initialize(False, instance)
+
+
+class AggNutritionRForm(forms.ModelForm, NutritionRFormIFace):
+
+    class Meta:
+        model = AggNutritionR
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(AggNutritionRForm, self).__init__(*args, **kwargs)
+        self.initialize(True, instance)

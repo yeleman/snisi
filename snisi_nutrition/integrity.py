@@ -176,9 +176,10 @@ class NutritionRIntegrityChecker(RoutineIntegrityInterface,
     def _check(self, **options):
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
-        self.chk_expected_arrival(**options)
-        options.update({'allowed_roles': ['charge_nut']})
-        self.chk_provider_permission(**options)
+        if not options.get('is_edition', False):
+            self.chk_expected_arrival(**options)
+            options.update({'allowed_roles': ['charge_nut']})
+            self.chk_provider_permission(**options)
 
 
 class NutritionURENCommonChecks(RoutineIntegrityInterface,
@@ -271,9 +272,10 @@ class URENAMNutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.check_common_uren(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
-        self.chk_expected_arrival(**options)
-        options.update({'allowed_roles': ['charge_nut']})
-        self.chk_provider_permission(**options)
+        if not options.get('is_edition', False):
+            self.chk_expected_arrival(**options)
+            options.update({'allowed_roles': ['charge_nut']})
+            self.chk_provider_permission(**options)
 
 
 class URENASNutritionRIntegrityChecker(NutritionURENCommonChecks):
@@ -293,9 +295,10 @@ class URENASNutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.check_common_uren(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
-        self.chk_expected_arrival(**options)
-        options.update({'allowed_roles': ['charge_nut']})
-        self.chk_provider_permission(**options)
+        if not options.get('is_edition', False):
+            self.chk_expected_arrival(**options)
+            options.update({'allowed_roles': ['charge_nut']})
+            self.chk_provider_permission(**options)
 
 
 class URENINutritionRIntegrityChecker(NutritionURENCommonChecks):
@@ -315,9 +318,10 @@ class URENINutritionRIntegrityChecker(NutritionURENCommonChecks):
         self.check_common_uren(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
-        self.chk_expected_arrival(**options)
-        options.update({'allowed_roles': ['charge_nut']})
-        self.chk_provider_permission(**options)
+        if not options.get('is_edition', False):
+            self.chk_expected_arrival(**options)
+            options.update({'allowed_roles': ['charge_nut']})
+            self.chk_provider_permission(**options)
 
 
 class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
@@ -359,6 +363,7 @@ class StocksNutritionRIntegrityChecker(RoutineIntegrityInterface,
         self.check_stocks_consistensy(**options)
         self.chk_period_is_not_future(**options)
         self.chk_entity_exists(**options)
-        self.chk_expected_arrival(**options)
-        options.update({'allowed_roles': ['charge_nut']})
-        self.chk_provider_permission(**options)
+        if not options.get('is_edition', False):
+            self.chk_expected_arrival(**options)
+            options.update({'allowed_roles': ['charge_nut']})
+            self.chk_provider_permission(**options)
