@@ -22,7 +22,7 @@ from snisi_nutrition.integrity import (
     URENASNutritionRIntegrityChecker,
     URENINutritionRIntegrityChecker,
     StocksNutritionRIntegrityChecker)
-from snisi_nutrition.models.Monthly import NutritionR
+from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 from snisi_nutrition.models.URENAM import AbstractURENAMNutritionR
 from snisi_nutrition.models.URENAS import AbstractURENASNutritionR
 from snisi_nutrition.models.URENI import AbstractURENINutritionR
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_form_class_for(rcls):
-    if rcls == NutritionR:
+    if rcls in (NutritionR, AggNutritionR):
         return NutritionRForm
     return modelform_factory(model=rcls, fields=rcls.data_fields())
 

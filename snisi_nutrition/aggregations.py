@@ -297,7 +297,7 @@ def generate_district_reports(period,
     logger.info("Switching to {}".format(period))
 
     region_validation_period = DefaultRegionValidationPeriod \
-        .find_create_by_date(period.middle())
+        .find_create_by_date(period.following().middle())
 
     if ensure_correct_date:
         now = timezone.now()
