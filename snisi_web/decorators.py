@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import collections
 
 from django.core.exceptions import PermissionDenied
+from snisi_core.permissions import provider_allowed_or_denied_at_home
 
 
 def user_role_within(role_list):
@@ -64,5 +65,15 @@ def user_location_level_above(min_level):
             if request.user.location.level >= min_level:
                 return target(request, *args, **kwargs)
             raise PermissionDenied
+        return wrapper
+    return decorator
+
+
+def user_permission(perm_slug):
+    """ decorator asserting user's role is with the provided list """
+    def decorator(target):
+        def wrapper(request, *args, **kwargs):
+            provider_allowed_or_denied_at_home(request.user, perm_slug)
+            return target(request, *args, **kwargs)
         return wrapper
     return decorator

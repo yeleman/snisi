@@ -11,11 +11,11 @@ from django.shortcuts import render
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import ExpectedReporting, PERIODICAL_SOURCE
-from snisi_web.decorators import user_role_within
+from snisi_web.decorators import user_permission
 
 
 @login_required
-@user_role_within(['snisi_tech', 'snisi_admin'])
+@user_permission('monitor')
 def periodic_source_dashboard(request, **kwargs):
     context = {}
 

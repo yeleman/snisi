@@ -17,7 +17,7 @@ from snisi_web import default_context
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Numbers import PhoneNumber
 from snisi_tools.numbers import normalized_phonenumber
-from snisi_web.decorators import user_role_within
+from snisi_web.decorators import user_role_within, user_permission
 from snisi_tools.auth import (
     create_provider, send_new_account_email,
     random_password, get_new_roles_for)
@@ -296,6 +296,7 @@ class FindPhoneNumberForm(forms.Form):
 
 
 @login_required
+@user_permission('monitor')
 def find_phonenumber(request, **kwargs):
     context = default_context()
     numbers = None
@@ -306,11 +307,6 @@ def find_phonenumber(request, **kwargs):
         if form.is_valid():
             query = form.cleaned_data.get('number')
             numbers = PhoneNumber.objects.filter(identity__icontains=query)
-            # return redirect('admin_find_phonenumber')
-        # else:
-            # messages.error(
-            #     request,
-            #     _("Unable to create this account. See error details bellow"))
     else:
         form = FindPhoneNumberForm()
 

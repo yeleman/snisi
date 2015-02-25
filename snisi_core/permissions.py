@@ -95,6 +95,9 @@ def default_permissions(prole, plocation, privileges,
                                             'monitor'):
         return True
 
+    if action == 'monitor' and 'dc_monitor' in privileges.keys():
+        return True
+
     # all roles can see data within their area
     # can view data
     if action in ('access', 'download'):
