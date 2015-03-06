@@ -143,9 +143,15 @@ class Provider(AbstractBaseUser, PermissionsMixin):
     def privileges_dict(self):
         from snisi_core.models.Privileges import Accreditation
         return {
-            acc.privilege.slug: acc.location
+            acc.privilege.slug: acc.location.casted()
             for acc in Accreditation.objects.filter(provider=self)
         }
+
+    @property
+    def best_level_access(self):
+        return min(
+            [e.level for e in self.privileges_dict.values()] +
+            [self.location.level])
 
     @property
     def accreditations(self):

@@ -16,6 +16,25 @@ from snisi_tools.misc import split_or
 logger = logging.getLogger(__name__)
 
 
+def get_permission_request_data(provider, slug, location=None):
+    # not a provider or AnonymousUser
+    if not isinstance(provider, Provider) or not provider.is_authenticated():
+        raise ValueError("Not an authenticated Provider")
+
+    # not properly configured provider
+    if not getattr(provider, 'role', None) or \
+            not getattr(provider, 'location', None):
+        raise ValueError("Not a configured Provider")
+
+    prole = provider.role.slug
+    plocation = provider.location.casted()
+    privileges = provider.privileges_dict
+    action, domain, extension = split_or(slug, 3, max_split=2,
+                                         char="_", default='')
+
+    return prole, plocation, privileges, action, domain, extension
+
+
 def provider_is_allowed(provider, slug, location=None):
     """ single entry point for provider permission check
 
@@ -33,20 +52,12 @@ def provider_is_allowed(provider, slug, location=None):
             * monitor (for snisi-tech only)
             * manage (for snisi-admin only) """
 
-    # not a provider or AnonymousUser
-    if not isinstance(provider, Provider) or not provider.is_authenticated():
+    try:
+        prole, plocation, privileges, action, domain, extension = \
+            get_permission_request_data(provider, slug, location)
+    except ValueError:
+        # request malformed resulting in no access
         return False
-
-    # not properly configured provider
-    if not getattr(provider, 'role', None) or \
-            not getattr(provider, 'location', None):
-        return False
-
-    prole = provider.role.slug
-    plocation = provider.location.casted()
-    privileges = provider.privileges_dict
-    action, domain, extension = split_or(slug, 3, max_split=2,
-                                         char="_", default='')
 
     # admin is god.
     if prole == 'snisi_admin':
@@ -104,6 +115,14 @@ def default_permissions(prole, plocation, privileges,
         if plocation in location.get_cancestors(include_self=True):
             return True
 
+    # supervisor prvivilege grants access plus download
+    supervisor_locations = [prloc for prslug, prloc in
+                            privileges.items() if prslug == 'supervisor']
+    if len(supervisor_locations) and action in ('access', 'download'):
+        for slocation in supervisor_locations:
+            if slocation in location.get_cancestors(include_self=True):
+                return True
+
 
 def provider_is_allowed_at_home(provider, slug):
     return provider_is_allowed(provider=provider, slug=slug,
@@ -122,3 +141,24 @@ def provider_allowed_or_denied_at_home(provider, slug):
     if not provider_is_allowed_at_home(provider, slug):
         raise PermissionDenied
     return True
+
+
+def user_root_for(provider, slug):
+    try:
+        prole, plocation, privileges, action, domain, extension = \
+            get_permission_request_data(provider, slug, None)
+    except ValueError:
+        # request malformed resulting in no access
+        return None
+
+    root = provider.location.casted()
+    for priv_slug, priv_location in \
+            sorted(privileges.items(), key=lambda x: x[1].level):
+        if priv_location.level < root.level:
+            if provider_is_allowed(provider, slug, priv_location):
+                return priv_location.casted()
+            # else:
+            #     print("no permission for", slug, "at", priv_location)
+        # else:
+        #     print("root level higher", priv_location.level, root.level)
+    return root

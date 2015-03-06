@@ -10,10 +10,10 @@ from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 
+from snisi_core.permissions import user_root_for, provider_allowed_or_denied
 from snisi_core.models.Entities import LEVELS
 from snisi_core.models.Entities import Entity
 from snisi_tools.caching import json_cache_from_cluster
-from snisi_tools.auth import can_view_entity
 from snisi_core.models.Periods import MonthPeriod, Period
 
 
@@ -99,36 +99,8 @@ def get_base_url_for_period(view_name, entity, period_str=None):
     return reverse(view_name, kwargs=kwargs)
 
 
-def entity_periods_context(request,
-                           root,
-                           cluster,
-                           view_name,
-                           entity_slug,
-                           report_cls=None,
-                           perioda_str=None,
-                           periodb_str=None,
-                           period_cls=MonthPeriod,
-                           assume_previous=True,
-                           must_be_in_cluster=False,
-                           full_lineage=['country', 'health_region',
-                                         'health_district', 'health_center'],
-                           single_period=False):
-    context = {}
-
-    entity = Entity.get_or_none(entity_slug)
-
-    if entity is None:
-        entity = root.casted()
-
-    if entity is None:
-        raise Http404("Aucune entité pour le code {}".format(entity_slug))
-
-    if must_be_in_cluster and (entity not in cluster.members()):
-        entity = cluster.members()[-1].casted()
-
-    # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+def periods_from_url(perioda_str, periodb_str,
+                     period_cls, assume_previous, report_cls):
 
     def period_from_strid(period_str, report_cls=None):
         period = None
@@ -172,6 +144,42 @@ def entity_periods_context(request,
             pass
     all_periods = period_cls.all_from(first_period, current_period)
     periods = period_cls.all_from(perioda, periodb)
+
+    return periods, all_periods, perioda, periodb
+
+
+def entity_periods_context(request,
+                           root,
+                           cluster,
+                           view_name,
+                           entity_slug,
+                           report_cls=None,
+                           perioda_str=None,
+                           periodb_str=None,
+                           period_cls=MonthPeriod,
+                           assume_previous=True,
+                           must_be_in_cluster=False,
+                           full_lineage=['country', 'health_region',
+                                         'health_district', 'health_center'],
+                           single_period=False):
+    context = {}
+
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
+    entity = Entity.get_or_none(entity_slug) or root
+
+    if entity is None:
+        raise Http404("Aucune entité pour le code {}".format(entity_slug))
+
+    if must_be_in_cluster:
+        ensure_entity_in_cluster(cluster, entity)
+
+    # check permissions on this entity and raise 403
+    provider_allowed_or_denied(request.user, perm_slug, entity)
+
+    periods, all_periods, perioda, periodb = periods_from_url(
+        perioda_str, periodb_str, period_cls=period_cls,
+        assume_previous=assume_previous, report_cls=report_cls)
 
     if single_period:
         base_url = get_base_url_for_period(

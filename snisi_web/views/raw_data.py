@@ -12,11 +12,12 @@ from django.core.exceptions import PermissionDenied
 # from django.utils.translation import ugettext as _
 
 from snisi_core.models.Periods import Period
+from snisi_core.permissions import user_root_for
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import ExpectedReporting, SNISIReport
 from snisi_core.models.Projects import Cluster
-from snisi_tools.auth import can_view_entity
-from snisi_web.utils import entity_browser_context
+from snisi_web.utils import entity_browser_context, ensure_entity_in_cluster
+from snisi_core.permissions import provider_allowed_or_denied
 
 
 @login_required
@@ -24,12 +25,11 @@ def browser(request,
             cluster_slug, entity_slug=None, period_str=None, **kwargs):
 
     context = {}
-
-    root = request.user.location
     period = None
     entity = None
-
     cluster = Cluster.get_or_none(cluster_slug)
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
     report_classes = cluster.domain \
         .import_from('expected.report_classes_for')(cluster)
 
@@ -51,15 +51,12 @@ def browser(request,
     period = period_from_strid(period_str, report_classes[0].period_class)
 
     # find entity or default to provider target
-    if entity_slug:
-        entity = Entity.get_or_none(entity_slug)
+    entity = Entity.get_or_none(entity_slug) or root
 
-    if not entity:
-        entity = request.user.location.casted()
+    ensure_entity_in_cluster(cluster, entity)
 
     # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+    provider_allowed_or_denied(request.user, perm_slug, entity)
 
     entity_period = {'entity': entity, 'period': period}
     expecteds = []

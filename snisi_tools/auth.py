@@ -115,24 +115,6 @@ def username_from_name(first_name, last_name):
     return iterate(jdoe(first_name, last_name))
 
 
-def can_view_entity(provider, entity):
-    ''' wheter a provider can access data from an entity '''
-
-    # Providers on Mali can see everything
-    if provider.location.level == 0:
-        return True
-    # if provider's level is bellow request, deny whatever
-    if provider.location.level > entity.level:
-        return False
-
-    if provider.location.level <= entity.level:
-        return entity.get_type(provider.location.type.slug) == \
-            provider.location.casted()
-
-    # slow but safer check
-    return entity in provider.location.get_types(entity.type.slug)
-
-
 def reset_password_for(username):
     p = Provider.get_or_none(username)
     if p is None:

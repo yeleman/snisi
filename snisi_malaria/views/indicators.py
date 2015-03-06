@@ -9,16 +9,16 @@ import os
 
 from django.shortcuts import render, redirect
 from django.http import Http404
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
+from snisi_core.permissions import user_root_for, provider_allowed_or_denied
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod, Period
 from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.models.Projects import Cluster
-from snisi_tools.auth import can_view_entity
-from snisi_web.utils import entity_browser_context, get_base_url_for_periods
+from snisi_web.utils import (
+    entity_browser_context, get_base_url_for_periods, ensure_entity_in_cluster)
 from snisi_tools.misc import import_path
 from snisi_tools.path import mkdir_p
 from snisi_malaria.rtf_export import generate_section_rtf
@@ -35,23 +35,17 @@ def browser(request,
             section_index='1', sub_section=None, **kwargs):
 
     context = {}
-
-    root = request.user.location
-
     cluster = Cluster.get_or_none('malaria_monthly_routine')
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
+    entity = Entity.get_or_none(entity_slug) or root
     report_classes = cluster.domain.import_from(
         'expected.report_classes_for')(cluster)
 
-    entity = Entity.get_or_none(entity_slug)
-    if entity is None:
-        entity = root
-
-    if entity is None:
-        raise Http404("Aucune entité pour le code {}".format(entity_slug))
+    ensure_entity_in_cluster(cluster, entity)
 
     # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+    provider_allowed_or_denied(request.user, perm_slug, entity)
 
     def period_from_strid(period_str, reportcls=None):
         period = None
@@ -138,14 +132,12 @@ def export(request,
            periodb_str=None,
            section_index='1', sub_section=None, **kwargs):
 
-    entity = Entity.get_or_none(entity_slug)
-
-    if entity is None:
-        raise Http404("Aucune entité pour le code {}".format(entity_slug))
-
-    # check permissions on this entity and raise 403
-    if not can_view_entity(request.user, entity):
-        raise PermissionDenied
+    cluster = Cluster.get_or_none('malaria_monthly_routine')
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
+    entity = Entity.get_or_none(entity_slug) or root
+    ensure_entity_in_cluster(cluster, entity)
+    provider_allowed_or_denied(request.user, perm_slug, entity)
 
     def period_from_strid(period_str, reportcls=None):
         period = None

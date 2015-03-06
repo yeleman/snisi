@@ -67,7 +67,7 @@
                 <ul>
                     <li><a href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
                     <li><a href="{% url 'nutrition_raw_data' %}">Rapports Sources</a></li>
-                    {% if user.location.level <= 2 %}
+                    {% if user.best_level_access <= 2 %}
                     <li><a href="{% url 'nutrition_overview_sam' %}">Rapports MAS</a></li>
                     <li><a href="{% url 'nutrition_overview_mam' %}">Rapports MAM</a></li>
                     <li><a href="{% url 'nutrition_synthesis_sam' %}">Synthèse NUT MAS</a></li>
