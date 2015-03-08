@@ -6,15 +6,15 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import traceback
-import json
 
 import reversion
 from django.utils.translation import ugettext as _
 
-from snisi_core.integrity import ReportIntegrityChecker
+from snisi_core.integrity import (ReportIntegrityChecker,
+                                  RoutineIntegrityInterface)
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Entities import Entity
-from snisi_core.models.Periods import MonthPeriod, DayPeriod
+from snisi_core.models.Periods import DayPeriod
 from snisi_core.models.Notifications import Notification
 from snisi_core.models.Roles import Role
 from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
@@ -31,18 +31,6 @@ from snisi_malaria import get_domain, PROJECT_BRAND
 
 logger = logging.getLogger(__name__)
 validating_role = Role.objects.get(slug='charge_sis')
-
-
-def can_submit_malaria_report(provider, entity):
-    if provider.location.slug == entity.slug \
-            and provider.role == Role.objects.get(slug='dtc'):
-        return True
-
-    if provider.location.slug == entity.parent.slug \
-            and provider.role == Role.objects.get(slug='charge_sis'):
-        return True
-
-    return False
 
 
 def create_report(provider, expected_reporting, completed_on,
@@ -131,9 +119,11 @@ def create_report(provider, expected_reporting, completed_on,
                             receipt=report.receipt))
 
 
-class MalariaRIntegrityChecker(ReportIntegrityChecker):
+class MalariaRIntegrityChecker(ReportIntegrityChecker,
+                               RoutineIntegrityInterface):
 
     DOMAIN = get_domain()
+    report_class = ReportClass.get_or_none("malaria_monthly_routine")
 
     def _check_completeness(self, **options):
         for field in MalariaR.data_fields():
@@ -142,8 +132,11 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker):
                                  blocking=True, field=field)
 
     def _check(self, **options):
-        # common data-only checks
         self.check_malaria_data()
+        self.chk_period_is_not_future(**options)
+        self.chk_entity_exists(**options)
+        self.chk_expected_arrival(**options)
+        self.chk_provider_permission(**options)
 
     def check_malaria_data(self):
 
@@ -283,102 +276,6 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
             if not self.has(field):
                 self.add_missing(_("Données manquantes pour {}").format(field),
                                  blocking=True, field=field)
-
-    def _check(self, **options):
-        # common data-only checks
-        self.check_malaria_data()
-
-        # Get period and Entity
-        period = MonthPeriod.find_create_from(year=self.get('year'),
-                                              month=self.get('month'))
-        if period.is_ahead():
-            self.add_error("La période indiquée ({period}) est dans "
-                           "le futur".format(period=period),
-                           blocking=True, field='month')
-
-        #####
-        # TODO: remove once district knows new codes
-        #####
-        try:
-            matrix_file = open(
-                'snisi_core/fixtures/health_entities_matrix.json', 'r')
-            matrix = json.load(matrix_file)['old_new']
-            if self.get('hc', '').lower() in matrix.keys():
-                self.set('hc', matrix.get(self.get('hc', '').lower()))
-        except Exception as exp:
-            logger.error("Failed trying to fetch new code for {}: {}"
-                         .format(self.get('hc'), exp))
-            logger.debug("".join(traceback.format_exc()))
-
-        entity = Entity.get_or_none(self.get('hc', '').upper(),
-                                    type_slug='health_center')
-
-        if entity is None:
-            self.add_error("Aucun CSCOM ne correspond au code {}"
-                           .format(self.get('hc')),
-                           field='hc', blocking=True)
-
-        # expected reporting defines if report is expeted or not
-        expected_reporting = ExpectedReporting.get_or_none(
-            report_class=ReportClass.objects.get(
-                slug='malaria_monthly_routine'),
-            period=period,
-            within_period=False,
-            entity=entity,
-            within_entity=False,
-            amount_expected=ExpectedReporting.EXPECTED_SINGLE)
-
-        self.set('expected_reporting', expected_reporting)
-
-        if expected_reporting is None:
-            self.add_error("Aucun rapport de routine attendu à "
-                           "{entity} pour {period}"
-                           .format(entity=entity, period=period),
-                           blocking=True)
-
-        if expected_reporting.satisfied:
-            self.add_error("Le rapport de routine attendu à "
-                           "{entity} pour {period} est déjà arrivé"
-                           .format(entity=entity, period=period),
-                           blocking=True)
-
-        # check if the report arrived in time or not.
-        if expected_reporting.reporting_period.contains(
-                self.get('submit_time')):
-            arrival_status = MalariaR.ON_TIME
-        elif expected_reporting.extended_reporting_period.contains(
-                self.get('submit_time')):
-            arrival_status = MalariaR.LATE
-        else:
-            # arrived while not in a reporting period
-            if self.get('submit_time') \
-                    < expected_reporting.reporting_period.start_on:
-                text = ("La période de collecte pour {period} "
-                        "n'a pas encore commencée. Rapport refusé.")
-            else:
-                # arrived too late. We can't accept the report.
-                text = ("La période de collecte pour {period} "
-                        "est terminée. Rapport refusé.")
-            self.add_error(text.format(period=expected_reporting.period),
-                           blocking=True, field='period')
-        self.set('arrival_status', arrival_status)
-
-        # check permission to submit report.
-        provider = self.get('submitter')
-
-        # provider must be DTC or Charge_SIS
-        # if DTC, he must be from very same Entity
-        # if Charge_SIS, he must be from a district
-        # and the district have the Entity as child HC
-        if provider.role.slug not in ('dtc', 'charge_sis') \
-            or (provider.role.slug == 'dtc' and not provider.location.slug == entity.slug) \
-            or (provider.role.slug == 'charge_sis' and
-                (not provider.location.type.slug == 'health_district'
-                 or entity not in provider.location.get_health_centers())):
-                self.add_error("Vous ne pouvez pas envoyer de rapport "
-                               "de routine pour {entity}."
-                               .format(entity=entity),
-                               blocking=True, field='created_by')
 
 
 def create_epidemio_report(provider, expected_reporting, completed_on,
@@ -542,6 +439,8 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
             self.add_error("Aucun CSCOM ne correspond au code {}"
                            .format(self.get('hc')),
                            field='hc', blocking=True)
+        else:
+            self.set('entity', entity)
 
         week_slug_matrix = {
             FixedMonthFirstWeek:
@@ -601,15 +500,7 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
         self.set('arrival_status', arrival_status)
 
         # check permission to submit report.
-        provider = self.get('submitter')
-
-        # provider must be DTC from that entity
-        if not provider.role.slug == 'dtc' \
-                or not provider.location.slug == entity.slug:
-            self.add_error("Vous ne pouvez pas envoyer de rapport "
-                           "de routine pour {entity}."
-                           .format(entity=entity),
-                           blocking=True, field='created_by')
+        self.chk_provider_permission(**options)
 
     def check_data(self):
 

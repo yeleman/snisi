@@ -11,6 +11,7 @@ from py3compat import text_type
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from snisi_core.models.Periods import MonthPeriod
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
 from snisi_tools.misc import class_str
@@ -26,6 +27,7 @@ logger = logging.getLogger(__name__)
 class MalariaExcelForm(MalariaRSourceReportChecker, ExcelForm):
 
     domain = get_domain()
+    period_class = MonthPeriod
 
     """ Mapping between MalariaReport & Excel Monthly Malaria Routine File """
 
