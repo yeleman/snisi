@@ -99,4 +99,4 @@ def get_periods_str(periods):
                                      end.middle().month,
                                      start.middle().year)
 
-    return "{} – {}".format(start.strid(), end.strid())
+    return "{} - {}".format(start.strid(), end.strid())
