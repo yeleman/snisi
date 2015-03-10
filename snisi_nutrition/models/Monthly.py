@@ -66,6 +66,10 @@ class AbstractNutritionR(SNISIReport):
         return getattr(self.urenam_report,
                        'comp_total_for', lambda x: 0)(field)
 
+    def gender_sum(self, field):
+        return sum([getattr(self, "{}_{}".format(field, sex))
+                    for sex in ('m', 'f')])
+
     @classmethod
     def all_uren_fields(cls):
         prefixes = ['', 'mam_', 'sam_', 'mam_comp_', 'sam_comp_',
@@ -101,6 +105,10 @@ class AbstractNutritionR(SNISIReport):
     @property
     def total_in_f(self):
         return self.total_for('total_in_f')
+
+    @property
+    def total_in(self):
+        return self.total_for('total_in')
 
     @property
     def transferred(self):
@@ -815,12 +823,28 @@ class AbstractNutritionR(SNISIReport):
         return self.sam_total_for_age('o59', 'total_out')
 
     @property
+    def sam_o59_total_out_m(self):
+        return self.sam_total_for_age('o59', 'total_out_m')
+
+    @property
+    def sam_o59_total_out_f(self):
+        return self.sam_total_for_age('o59', 'total_out_f')
+
+    @property
     def sam_o59_grand_total_out(self):
         return self.sam_total_for_age('o59', 'grand_total_out')
 
     @property
     def sam_o59_total_end(self):
         return self.sam_total_for_age('o59', 'total_end')
+
+    @property
+    def sam_o59_total_end_m(self):
+        return self.sam_total_for_age('o59', 'total_end_m')
+
+    @property
+    def sam_o59_total_end_f(self):
+        return self.sam_total_for_age('o59', 'total_end_f')
 
     @property
     def sam_o59_healed_rate(self):

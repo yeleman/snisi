@@ -79,3 +79,24 @@ def to_timestamp(dt):
 def to_jstimestamp(adate):
     if adate is not None:
         return int(to_timestamp(adate)) * 1000
+
+
+def get_periods_str(periods):
+    if not len(periods):
+        return
+
+    start = periods[0]
+    end = periods[-1]
+
+    if start == end:
+        return start.strid()
+
+    if start.middle().year == end.middle().year:
+        if start.middle().month == 1 and end.middle().month == 12:
+            return "{}".format(start.middle().year)
+        else:
+            return "{}-{} {}".format(start.middle().month,
+                                     end.middle().month,
+                                     start.middle().year)
+
+    return "{} – {}".format(start.strid(), end.strid())

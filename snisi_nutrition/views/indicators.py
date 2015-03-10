@@ -10,19 +10,22 @@ from collections import OrderedDict
 from django.utils import timezone
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Reporting import ExpectedReporting
-from snisi_web.utils import entity_periods_context
+from snisi_core.permissions import provider_allowed_or_denied, user_root_for
+from snisi_web.utils import (
+    entity_periods_context, periods_from_url,
+    ensure_entity_in_cluster, ensure_entity_at_least)
 from snisi_web.decorators import user_role_within, user_location_level_below
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
-from snisi_nutrition.indicators.common import (
-    PromptnessReportingTable, PromptnessReportingFigure, RSCompletionTable)
+from snisi_nutrition.indicators.common import RSCompletionTable
 from snisi_nutrition.indicators.mam import (
     URENAMNewCasesTable, MAMNewCasesTable,
-    MAMCaseloadTreated, MAMPerformanceTable, MAMPerformanceGraph,
+    MAMPerformanceTable, MAMPerformanceGraph,
     RSMAMCaseloadTable, RSMAMPerformance, MAMNewCasesGraph,
     MAMCaseloadTreatedGraph, MAMNewCasesByDS, MAMPerformanceByDS,
     MAMCaseloadTreatedByDS)
@@ -37,6 +40,7 @@ from snisi_nutrition.indicators.sam import (
     SAMCaseloadTreatedByDS)
 from snisi_nutrition.utils import (
     generate_sum_data_table_for, generate_entities_periods_matrix)
+from snisi_nutrition.xls_export import nutrition_overview_xls
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +60,6 @@ def dashboard(request, **kwargs):
         'entity': entity,
     }
 
-    # promptness_table = PromptnessReportingTable(entity=entity,
-    #                                             periods=periods)
-    # promptness_graph = PromptnessReportingFigure(entity=entity,
-    #                                              periods=periods)
     if entity.has_ureni or entity.has_urenas:
         context.update({
             'sam_performance': SAMPerformanceTable(entity=entity,
@@ -71,17 +71,11 @@ def dashboard(request, **kwargs):
                                                    periods=periods)
         })
 
-    # context.update({
-    #     'promptness_table': promptness_table,
-    #     'promptness_graph': promptness_graph,
-    # })
-
     return render(request, kwargs.get('template_name',
                   'nutrition/dashboard.html'), context)
 
 
 @login_required
-@user_location_level_below(2)
 def overview_generic(request, entity_slug=None,
                      perioda_str=None, periodb_str=None,
                      is_sam=False, is_mam=False, **kwargs):
@@ -90,14 +84,23 @@ def overview_generic(request, entity_slug=None,
         'is_mam': is_mam
     }
 
-    root = request.user.location
     cluster = Cluster.get_or_none('nutrition_routine')
-    report_classes = cluster.domain \
-        .import_from('expected.report_classes_for')(cluster)
-
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
     entity = Entity.get_or_none(entity_slug) or root
 
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
+    # check permissions on this entity and raise 403
+    provider_allowed_or_denied(request.user, 'access_nutrition', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
+
     # report_cls depends on entity
+    report_classes = cluster.domain \
+        .import_from('expected.report_classes_for')(cluster)
     try:
         report_cls = NutritionR \
             if entity.type.slug == 'health_center' else AggNutritionR
@@ -164,6 +167,80 @@ def overview_sam(request, entity_slug=None,
 
 
 @login_required
+def overview_generic_xls(request, entity_slug=None,
+                         perioda_str=None, periodb_str=None,
+                         is_sam=False, is_mam=False, **kwargs):
+
+    cluster = Cluster.get_or_none('nutrition_routine')
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
+    entity = Entity.get_or_none(entity_slug) or root
+
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
+    # check permissions on this entity and raise 403
+    provider_allowed_or_denied(request.user, 'access_nutrition', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
+
+    try:
+        report_cls = NutritionR \
+            if entity.type.slug == 'health_center' else AggNutritionR
+    except:
+        report_cls = None
+    periods, all_periods, perioda, periodb = periods_from_url(
+        perioda_str, periodb_str,
+        report_cls=report_cls,
+        period_cls=MonthPeriod,
+        assume_previous=True)
+
+    # periods_expecteds = [
+    #     (period, ExpectedReporting.objects.filter(
+    #         period=period, entity=entity,
+    #         report_class__in=report_classes).last())
+    #     for period in periods
+    # ]
+
+    file_name, file_content = nutrition_overview_xls(
+        entity, periods, is_sam=is_sam, is_mam=is_mam)
+    file_content = file_content.getvalue()
+
+    response = HttpResponse(file_content,
+                            content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="{}"' \
+        .format(file_name)
+    response['Content-Length'] = len(file_content)
+
+    return response
+
+
+@login_required
+def overview_mam_xls(request, entity_slug=None,
+                     perioda_str=None, periodb_str=None, **kwargs):
+    return overview_generic_xls(request,
+                                entity_slug=entity_slug,
+                                perioda_str=perioda_str,
+                                periodb_str=periodb_str,
+                                is_sam=False,
+                                is_mam=True,
+                                **kwargs)
+
+
+@login_required
+def overview_sam_xls(request, entity_slug=None,
+                     perioda_str=None, periodb_str=None, **kwargs):
+    return overview_generic_xls(request,
+                                entity_slug=entity_slug,
+                                perioda_str=perioda_str,
+                                periodb_str=periodb_str,
+                                is_sam=True,
+                                is_mam=False,
+                                **kwargs)
+
+
+@login_required
 def indicators_browser(request,
                        entity_slug=None,
                        perioda_str=None,
@@ -173,10 +250,19 @@ def indicators_browser(request,
                        view_name='indicators_browser',
                        **kwargs):
 
-    root = request.user.location
     cluster = Cluster.get_or_none('nutrition_routine')
-
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
     entity = Entity.get_or_none(entity_slug) or root
+
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
+    # check permissions on this entity and raise 403
+    provider_allowed_or_denied(request.user, 'access_nutrition', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
 
     # report_cls depends on entity
     try:
@@ -245,7 +331,20 @@ def synthesis_browser(request,
     if 'template_name' not in kwargs.keys():
         kwargs.update({'template_name': 'nutrition/synthesis.html'})
 
-    entity = Entity.get_or_none(entity_slug)
+    cluster = Cluster.get_or_none('nutrition_routine')
+    perm_slug = "access_{}".format(cluster.domain.slug)
+    root = user_root_for(request.user, perm_slug)
+    entity = Entity.get_or_none(entity_slug) or root
+
+    # make sure requested entity is in cluster
+    ensure_entity_in_cluster(cluster, entity)
+
+    # check permissions on this entity and raise 403
+    provider_allowed_or_denied(request.user, 'access_nutrition', entity)
+
+    # mission browser is reserved to district-level and above
+    ensure_entity_at_least(entity, 'health_district')
+
     indic_list = []
     if entity is not None:
         if entity.type.slug == 'health_district':

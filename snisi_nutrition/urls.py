@@ -59,6 +59,11 @@ urlpatterns = patterns(
         name='nutrition_synthesis_mam'),
 
     # MAM Overview
+    url(r'/overview/mam/{entity}/{periods}.xls'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.indicators.overview_mam_xls',
+        name='nutrition_overview_mam_xls'),
+
     url(r'/overview/mam/{entity}/{periods}/?'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
         'snisi_nutrition.views.indicators.overview_mam',
@@ -72,6 +77,11 @@ urlpatterns = patterns(
         name='nutrition_overview_mam'),
 
     # SAM Overview
+    url(r'/overview/sam/{entity}/{periods}.xls'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.indicators.overview_sam_xls',
+        name='nutrition_overview_sam_xls'),
+
     url(r'/overview/sam/{entity}/{periods}/?'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
         'snisi_nutrition.views.indicators.overview_sam',
