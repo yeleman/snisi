@@ -143,7 +143,10 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
         no_more_than_text = lambda d: ("{field2} ({f2value}) ne peut pas "
                                        "être supérieur à "
                                        "{field1} ({f1value})").format(**d)
-        field_name = lambda f: MalariaR.field_name(f)
+        no_different_than_text = lambda d: ("{field2} ({f2value}) ne peut pas "
+                                            "être différent de "
+                                            "{field1} ({f1value})").format(**d)
+        field_name = lambda f: MalariaR.field_name(f).decode('utf-8')
 
         # no_more_than_text =
         allcats = ('u5', 'o5', 'pw')
@@ -219,7 +222,7 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
             except:
                 pass
 
-        # confirmed > simple + severe
+        # confirmed != simple + severe
         for cat in nopwcat:
             try:
                 dic = {
@@ -238,8 +241,8 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
                                          .format(cat)),
                     'f1value': self.get('{}_total_confirmed_malaria_cases'
                                         .format(cat))}
-                if dic['f1value'] < dic['f2value']:
-                    self.add_error(no_more_than_text(dic),
+                if dic['f1value'] != dic['f2value']:
+                    self.add_error(no_different_than_text(dic),
                                    field='{}_total_confirmed_malaria_cases'
                                          .format(cat))
             except:
