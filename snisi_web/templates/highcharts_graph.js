@@ -111,9 +111,8 @@
             dataLabels: {
                 color: 'black',
                 enabled: true,
-                {% if table.as_percentage %}
-                formatter: function () { return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%'; }
-                {% endif %}
+                {% if table.as_percentage %}formatter: function () { return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%'; },{% endif %}
+                {% if table.rotate_labels %}rotation: -90,{% endif %}
             }
         }
     },

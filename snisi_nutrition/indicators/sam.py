@@ -111,7 +111,7 @@ class SAMCaseloadExpected(NutritionIndicator):
 
 
 class SAMCaseloadTreated(NutritionIndicator):
-    name = "Caseload MAS traité"
+    name = "Caseload MAS atteint"
 
     def _compute(self):
         return get_caseload_completion_for(period=self.period,
@@ -120,23 +120,21 @@ class SAMCaseloadTreated(NutritionIndicator):
 
 
 class SAMCaseloadTreatedRate(NutritionIndicator):
-    name = "% Caseload MAS traité"
+    name = "% Caseload MAS atteint"
     raise_class = True
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Performances MAS"
 
-    def _compute(self):
-        expected = SAMCaseloadExpected(
+    def get_denominator(self):
+        return SAMCaseloadExpected(
             entity=self.entity,
             period=self.period).data
-        treated = SAMCaseloadTreated(
+
+    def get_numerator(self):
+        return SAMCaseloadTreated(
             entity=self.entity,
             period=self.period).data
-        try:
-            return treated / expected
-        except:
-            return 0
 
     def _get_class(self):
         return self.GOOD if self.data >= .50 else self.WARNING
@@ -147,9 +145,11 @@ class URENASNewCasesRate(URENASNewCases):
     is_ratio = True
     raise_class = True
 
-    def _compute(self):
-        return self.report.urenas_report.comp_new_cases \
-            / self.report.sam_comp_new_cases
+    def get_numerator(self):
+        return self.report.urenas_report.comp_new_cases
+
+    def get_denominator(self):
+        return self.report.sam_comp_new_cases
 
     def _get_class(self):
         return self.GOOD if self.data >= 80 and self.data <= 90 \
@@ -161,9 +161,11 @@ class URENINewCasesRate(URENINewCases):
     is_ratio = True
     raise_class = True
 
-    def _compute(self):
-        return self.report.ureni_report.comp_new_cases \
-            / self.report.sam_comp_new_cases
+    def get_numerator(self):
+        return self.report.ureni_report.comp_new_cases
+
+    def get_denominator(self):
+        return self.report.sam_comp_new_cases
 
     def _get_class(self):
         return self.GOOD if self.data >= 10 and self.data <= 20 \
@@ -195,7 +197,7 @@ class URENIURENASNewCasesTable(IndicatorTableWithEntities):
 
         # List of all URENAS
         for descendant in descendants:
-            if shoudl_show(descendant, 'urens'):
+            if shoudl_show(descendant, 'urenas'):
                 ind = gen_fixed_entity_indicator(entity=descendant,
                                                  sub_report='urenas_report',
                                                  field='comp_new_cases')
@@ -241,12 +243,14 @@ class SAMCaseloadTable(IndicatorTable):
     name = "MAS"
     caption = ("CASELOAD MAS 6-59 MOIS ATTENDU")
     rendering_type = 'table'
-    add_total = True
+    add_total = False
     use_advanced_rendering = True
 
     INDICATORS = [
         SAMNewCases,
-        SAMCaseloadTreated
+        # SAMCaseloadExpected,
+        # SAMCaseloadTreated,
+        SAMCaseloadTreatedRate
     ]
 
 
@@ -260,7 +264,7 @@ class URENIURENASRepartitionTable(IndicatorTable):
 
     INDICATORS = [
         URENINewCasesRate,
-        URENASNewCasesRate,
+        # URENASNewCasesRate,
     ]
 
 
@@ -342,7 +346,7 @@ class URENIURENASNewCasesTableWithEntities(IndicatorTableWithEntities):
 class RSSAMCaseloadTable(IndicatorTable):
 
     name = "MAS"
-    caption = ("Casload MAS 6-59")
+    caption = ("Caseload MAS 6-59")
     rendering_type = 'table'
 
 
@@ -426,9 +430,18 @@ class SAMPerformanceByDS(SummaryForEntitiesTable):
     ]
 
 
+class SAMPerformanceByHC(SAMPerformanceByDS):
+    caption = ("Indicateurs de performance MAS par HC")
+    is_percentage = True
+
+    def get_descendants(self):
+        return sorted(self.entity.casted().get_health_centers(),
+                      key=lambda x: x.name)
+
+
 class SAMCaseloadTreatedByDS(SummaryForEntitiesTable):
     name = "MAS"
-    caption = ("% caseload MAS traité par DS")
+    caption = ("% caseload MAS atteint par DS")
     rendering_type = 'graph'
     graph_type = 'column'
     is_percentage = True

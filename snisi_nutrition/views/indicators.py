@@ -20,7 +20,7 @@ from snisi_core.permissions import provider_allowed_or_denied, user_root_for
 from snisi_web.utils import (
     entity_periods_context, periods_from_url,
     ensure_entity_in_cluster, ensure_entity_at_least)
-from snisi_web.decorators import user_role_within, user_location_level_below
+from snisi_web.decorators import user_role_within
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 from snisi_nutrition.indicators.common import RSCompletionTable
 from snisi_nutrition.indicators.mam import (
@@ -28,7 +28,7 @@ from snisi_nutrition.indicators.mam import (
     MAMPerformanceTable, MAMPerformanceGraph,
     RSMAMCaseloadTable, RSMAMPerformance, MAMNewCasesGraph,
     MAMCaseloadTreatedGraph, MAMNewCasesByDS, MAMPerformanceByDS,
-    MAMCaseloadTreatedByDS)
+    MAMCaseloadTreatedByDS, MAMPerformanceByHC)
 from snisi_nutrition.indicators.sam import (
     URENIURENASNewCasesTable, SAMNewCasesTable, SAMCaseloadTable,
     URENIURENASRepartitionTable, SAMPerformanceTable,
@@ -37,7 +37,7 @@ from snisi_nutrition.indicators.sam import (
     RSSAMCaseloadTable, RSSAMRepartition, RSSAMPerformance,
     SAMNewCasesGraph, SAMCaseloadTreatedGraph,
     SAMNewCasesByDS, SAMRepartitionByDS, SAMPerformanceByDS,
-    SAMCaseloadTreatedByDS)
+    SAMCaseloadTreatedByDS, SAMPerformanceByHC)
 from snisi_nutrition.utils import (
     generate_sum_data_table_for, generate_entities_periods_matrix)
 from snisi_nutrition.xls_export import nutrition_overview_xls
@@ -355,19 +355,21 @@ def synthesis_browser(request,
                     ('sam_repartition_graph', URENIURENASRepartitionGraph),
                     ('sam_new_cases_hc_graph', URENASNewCasesByHC),
                     ('sam_performance_graph', SAMPerformanceGraph),
+                    ('sam_performance_hc_graph', SAMPerformanceByHC),
                 ]
             if kwargs.get('is_mam', False):
                 indic_list += [
                     ('mam_new_cases', URENAMNewCasesTable),
                     ('mam_performance', MAMPerformanceTable),
                     ('mam_performance_graph', MAMPerformanceGraph),
+                    ('sam_performance_hc_graph', MAMPerformanceByHC),
                 ]
 
         elif entity.type.slug == 'health_region':
             if kwargs.get('is_sam', False):
                 indic_list += [
-                    ('sam_new_cases', URENIURENASNewCasesTable),
                     ('sam_all_new_cases', SAMNewCasesTable),
+                    ('sam_new_cases', URENIURENASNewCasesTable),
                     ('rs_completion', RSCompletionTable),
                     ('rs_sam_caseload', RSSAMCaseloadTable),
                     ('rs_sam_reparition', RSSAMRepartition),

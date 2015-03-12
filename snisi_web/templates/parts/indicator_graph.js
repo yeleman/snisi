@@ -30,6 +30,9 @@ hc_graphs.push({
             week: '%e. %b',
             month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
             year: '%Y'
+        },
+        labels: {
+            {% if table.rotate_labels %}rotation: -90,{% endif %}
         }
     },
     yAxis: {
@@ -69,9 +72,7 @@ hc_graphs.push({
             dataLabels: {
                 color: 'black',
                 enabled: true,
-                {% if table.show_as_percentage %}
-                formatter: function () { if (this.y != null) {return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%';} }
-                {% endif %}
+                {% if table.show_as_percentage %}formatter: function () { if (this.y != null) {return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%';} },{% endif %}
             },
         },
     },

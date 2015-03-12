@@ -277,7 +277,58 @@ class FakeIndicator(dict):
         return self['human']
 
 
-class IndicatorTable:
+class IndicatorTableMixin(object):
+
+    def get_total_for_ratio(self, line_index):
+        entity = self.entities[0]
+        numerators = []
+        denominators = []
+
+        for period in self.periods:
+            indic = self.INDICATORS[line_index](entity=entity, period=period)
+            try:
+                n = indic.get_numerator()
+                if n is not None:
+                    numerators.append(n)
+
+                d = indic.get_denominator()
+                if d is not None:
+                    denominators.append(d)
+            except (DataNotExpected, DataIsMissing):
+                pass
+        try:
+            d = sum(numerators) / sum(denominators)
+        except ZeroDivisionError:
+            d = 0
+        except Exception as e:
+            logger.exception(e)
+            d = None
+        return FakeIndicator({
+            'human': humanize_value(None if d is None else d * 100,
+                                    is_ratio=True),
+            'data': d
+        })
+
+    def get_total_for(self, line_index):
+        if self.INDICATORS[line_index].is_ratio:
+            return self.get_total_for_ratio(line_index)
+
+        d = sum([self.data_for(line_index, col).data
+                 for col in range(0, self.nb_cols() - 1)
+                 if not self.data_for(line_index, col).is_missing
+                 and self.data_for(line_index, col).is_expected])
+        return self.data_for(line_index, col).get_fake({
+            'human': humanize_value(d),
+            'data': d
+        })
+
+    def rotate_labels(self):
+        if self.rotate_many_labels:
+            return self.nb_lines() > self.max_nonrotated_labels
+        return False
+
+
+class IndicatorTable(IndicatorTableMixin):
 
     INDICATORS = []
     add_percentage = False  # add % columns for each period
@@ -292,6 +343,9 @@ class IndicatorTable:
     graph_stacking = False
     is_entity_indicator = False
     use_advanced_rendering = False
+
+    rotate_many_labels = True
+    max_nonrotated_labels = 4
 
     def __init__(self, entity, periods, **kwargs):
         self.entity = entity
@@ -379,42 +433,48 @@ class IndicatorTable:
         line_index = self.fixed_line_index(line_index)
         return self.INDICATORS[line_index]
 
-    def get_total_for(self, line_index):
-        if self.INDICATORS[line_index].is_ratio:
-            return self.get_total_for_ratio(line_index)
+    # def get_total_for(self, line_index):
+    #     if self.INDICATORS[line_index].is_ratio:
+    #         return self.get_total_for_ratio(line_index)
 
-        d = sum([self.data_for(line_index, col).data
-                 for col in range(0, self.nb_cols() - 1)
-                 if not self.data_for(line_index, col).is_missing
-                 and self.data_for(line_index, col).is_expected])
-        return self.data_for(line_index, col).get_fake({
-            'human': humanize_value(d),
-            'data': d
-        })
+    #     d = sum([self.data_for(line_index, col).data
+    #              for col in range(0, self.nb_cols() - 1)
+    #              if not self.data_for(line_index, col).is_missing
+    #              and self.data_for(line_index, col).is_expected])
+    #     return self.data_for(line_index, col).get_fake({
+    #         'human': humanize_value(d),
+    #         'data': d
+    #     })
 
-    def get_total_for_ratio(self, line_index):
-        entity = self.entities[0]
-        numerators = []
-        denominators = []
+    # def get_total_for_ratio(self, line_index):
+    #     entity = self.entities[0]
+    #     numerators = []
+    #     denominators = []
 
-        for period in self.periods:
-            indic = self.INDICATORS[line_index](entity=entity, period=period)
-            try:
-                numerators.append(indic.get_numerator())
-                denominators.append(indic.get_denominator())
-            except (DataNotExpected, DataIsMissing):
-                pass
-        try:
-            d = sum(numerators) / sum(denominators)
-        except ZeroDivisionError:
-            d = 0
-        except Exception as e:
-            logger.exception(e)
-            d = None
-        return FakeIndicator({
-            'human': humanize_value(d * 100, is_ratio=True),
-            'data': d
-        })
+    #     for period in self.periods:
+    #         indic = self.INDICATORS[line_index](entity=entity, period=period)
+    #         try:
+    #             n = indic.get_numerator()
+    #             if n is not None:
+    #                 numerators.append(n)
+
+    #             d = indic.get_denominator()
+    #             if d is not None:
+    #                 denominators.append(d)
+    #         except (DataNotExpected, DataIsMissing):
+    #             pass
+    #     try:
+    #         d = sum(numerators) / sum(denominators)
+    #     except ZeroDivisionError:
+    #         d = 0
+    #     except Exception as e:
+    #         logger.exception(e)
+    #         d = None
+    #     return FakeIndicator({
+    #         'human': humanize_value(None if d is None else d * 100,
+    #                                 is_ratio=True),
+    #         'data': d
+    #     })
 
     def data_for(self, line_index, column_index):
         if self.add_total and column_index == self.total_col_index():
@@ -653,7 +713,7 @@ def gen_report_indicator(field,
     return cls
 
 
-class SummaryForEntitiesTable(object):
+class SummaryForEntitiesTable(IndicatorTableMixin):
     """ Special IndicatorTable adapatation for Graph over children's
 
         Not a complete drop-in replacement.
@@ -707,10 +767,56 @@ class SummaryForEntitiesTable(object):
             'data': cls.compute_sum_data_for(entity, periods, indicator_cls)})
 
     def compute_sum_data_for(cls, entity, periods, indicator_cls):
+        if indicator_cls.is_ratio:
+            return cls.compute_sum_data_for_ratio(
+                entity, periods, indicator_cls).data * 100
         return sum([d for d in [
             indicator_cls(entity=entity, period=period).data
             for period in periods
         ] if d is not None])
+
+    def compute_sum_data_for_ratio(cls, entity, periods, indicator_cls):
+        entity = entity
+        numerators = []
+        denominators = []
+
+        for period in periods:
+            indic = indicator_cls(entity=entity, period=period)
+            try:
+                n = indic.get_numerator()
+                if n is not None:
+                    numerators.append(n)
+
+                d = indic.get_denominator()
+                if d is not None:
+                    denominators.append(d)
+            except (DataNotExpected, DataIsMissing):
+                pass
+        try:
+            d = sum(numerators) / sum(denominators)
+        except ZeroDivisionError:
+            d = 0
+        except Exception as e:
+            logger.exception(e)
+            d = None
+        return FakeIndicator({
+            'human': humanize_value(None if d is None else d * 100,
+                                    is_ratio=True),
+            'data': d
+        })
+
+    # def get_total_for(self, line_index):
+    #     if self.INDICATORS[line_index].is_ratio:
+    #         return self.get_total_for_ratio(line_index)
+
+    #     d = sum([self.data_for(line_index, col).data
+    #              for col in range(0, self.nb_cols() - 1)
+    #              if not self.data_for(line_index, col).is_missing
+    #              and self.data_for(line_index, col).is_expected])
+    #     return self.data_for(line_index, col).get_fake({
+    #         'human': humanize_value(d),
+    #         'data': d
+    #     })
 
     @property
     def computed(self):
@@ -767,4 +873,7 @@ class SummaryForEntitiesTable(object):
             return self.periods[-1]
         except IndexError:
             return None
+
+    def rotate_labels(self):
+        return True
 

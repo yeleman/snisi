@@ -94,7 +94,7 @@ class MAMCaseloadExpected(NutritionIndicator):
 
 
 class MAMCaseloadTreated(NutritionIndicator):
-    name = "Caseload MAM traité"
+    name = "Caseload MAM atteint"
 
     def _compute(self):
         return get_caseload_completion_for(period=self.period,
@@ -103,23 +103,21 @@ class MAMCaseloadTreated(NutritionIndicator):
 
 
 class MAMCaseloadTreatedRate(NutritionIndicator):
-    name = "% Caseload MAM traité"
+    name = "% Caseload MAM atteint"
     raise_class = True
     is_ratio = True
     is_geo_friendly = True
     geo_section = "Performances MAM"
 
-    def _compute(self):
-        expected = MAMCaseloadExpected(
+    def get_numerator(self):
+        return MAMCaseloadTreated(
             entity=self.entity,
             period=self.period).data
-        treated = MAMCaseloadTreated(
+
+    def get_denominator(self):
+        return MAMCaseloadExpected(
             entity=self.entity,
             period=self.period).data
-        try:
-            return treated / expected
-        except:
-            return 0
 
     def _get_class(self):
         return self.GOOD if self.data >= .50 else self.WARNING
@@ -209,7 +207,7 @@ class MAMPerformanceGraph(MAMPerformanceTable):
 class RSMAMCaseloadTable(IndicatorTable):
 
     name = "MAM"
-    caption = ("Casload MAM 6-59")
+    caption = ("Caseload MAM 6-59")
     rendering_type = 'table'
 
 
@@ -272,9 +270,18 @@ class MAMPerformanceByDS(SummaryForEntitiesTable):
     ]
 
 
+class MAMPerformanceByHC(MAMPerformanceByDS):
+    caption = ("Indicateurs de performance MAM par HC")
+    is_percentage = True
+
+    def get_descendants(self):
+        return sorted(self.entity.casted().get_health_centers(),
+                      key=lambda x: x.name)
+
+
 class MAMCaseloadTreatedByDS(SummaryForEntitiesTable):
     name = "MAM"
-    caption = ("% caseload MAM traité par DS")
+    caption = ("% caseload MAM atteint par DS")
     rendering_type = 'graph'
     graph_type = 'column'
     is_percentage = True

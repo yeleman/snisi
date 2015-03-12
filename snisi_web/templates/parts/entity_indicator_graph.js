@@ -23,7 +23,10 @@ hc_graphs.push({
     		{% for entity in table.entities %}
     		"{{ entity.name }}",
     		{% endfor %}
-        ]
+        ],
+        labels: {
+            {% if table.rotate_labels %}rotation: -90,{% endif %}
+        }
     },
     yAxis: {
         title: {text: null},
