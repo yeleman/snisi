@@ -635,13 +635,15 @@ def write_line(sheet, child, children, age_group, age_groups,
 
 
 def get_children(entity, is_sam, is_ureni=None):
+
     def hc_filter(hc, is_sam, is_ureni):
         if is_sam:
             return hc.has_ureni if is_ureni else hc.has_urenas
         else:
             return hc.has_urenam
     if entity.type.slug == 'health_district':
-        return [e for e in entity.get_health_centers() if hc_filter(e)]
+        return [e for e in entity.get_health_centers()
+                if hc_filter(e, is_sam, is_ureni)]
     elif entity.type.slug == 'health_region':
         return entity.get_health_districts()
     elif entity.type.slug == 'country':
