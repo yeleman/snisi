@@ -46,10 +46,7 @@ KEYWORDS = {
 
 def malaria_help(message, nousername=False):
 
-    try:
-        hotline = settings.HOTLINE_NUMBER
-    except:
-        hotline = '65731076'
+    hotline = settings.HOTLINE_NUMBER
 
     if nousername:
         kw1, kw2 = message.content.strip().lower().split()
