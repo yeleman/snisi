@@ -12,7 +12,7 @@
 
     <button type="submit" class="pure-button pure-button-primary">Afficher</button>
 
-    <a href="{% url overview_xls_slug entity_slug=entity_slug perioda_str=perioda_str periodb_str=periodb_str %}" class="pure-button pure-button-primary"><i class="icon-table"></i> Télécharger MAS+MAM</a>
+    <a href="{% url overview_xls_slug entity_slug=entity.slug perioda_str=perioda.strid periodb_str=periodb.strid %}" class="pure-button pure-button-primary"><i class="icon-table"></i> Télécharger MAS+MAM</a>
 </div>
 
 <h1>{{ entity.display_typed_name }} – Rapports statistiques {% if is_sam %}URENI/URENAS{% else %}URENAM{% endif %} – {{ perioda }} à {{ periodb }}</h1>

@@ -138,10 +138,7 @@ def overview_generic(request, entity_slug=None,
     uren = 'mam' if is_mam else 'sam'
     context.update({
         'total_table': total_table,
-        'perioda_str': perioda_str,
-        'periodb_str': periodb_str,
-        'overview_xls_slug': 'nutrition_overview_{u}_xls'.format(u=uren),
-        'entity_slug': entity_slug})
+        'overview_xls_slug': 'nutrition_overview_{u}_xls'.format(u=uren)})
 
     return render(request,
                   kwargs.get('template_name', 'nutrition/overview.html'),
@@ -201,13 +198,6 @@ def overview_generic_xls(request, entity_slug=None,
         report_cls=report_cls,
         period_cls=MonthPeriod,
         assume_previous=True)
-
-    # periods_expecteds = [
-    #     (period, ExpectedReporting.objects.filter(
-    #         period=period, entity=entity,
-    #         report_class__in=report_classes).last())
-    #     for period in periods
-    # ]
 
     file_name, file_content = nutrition_overview_xls(
         entity, periods, is_sam=is_sam, is_mam=is_mam)
