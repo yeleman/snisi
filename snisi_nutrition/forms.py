@@ -52,6 +52,12 @@ class NutritionRFormIFace(object):
                     min_value=0,
                     localize=False,
                     initial=getattr(report, field))
+
+                if uren == 'stocks' and \
+                        field.rsplit('_', 1)[0] \
+                        in rcls.inputs(ureni_only=True):
+                    ff.widget = ff.hidden_widget()
+
                 self.fields['{}_{}'.format(uren, field)] = ff
 
 

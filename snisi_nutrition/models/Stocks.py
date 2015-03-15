@@ -429,14 +429,15 @@ class AbstractNutritionStocksR(SNISIReport):
                 'vita_200_injectable',
                 'iron_folic_acid']
 
-    def line_data(self):
+    def line_data(self, all_fields=False):
         e = Entity.get_or_none(self.entity.slug)
         lines = []
         for inp in self.inputs():
             if ((not getattr(e, 'has_ureni', False)
                     and isinstance(self, NutritionStocksR)) and
                     inp in self.inputs(ureni_only=True)):
-                continue
+                if not all_fields:
+                    continue
 
             d = {'label': self.input_str(inp),
                  'unit': self.unit_str(inp)}
@@ -457,6 +458,9 @@ class AbstractNutritionStocksR(SNISIReport):
 
             lines.append(d)
         return lines
+
+    def line_data_all(self):
+        return self.line_data(all_fields=True)
 
 
 class NutritionStocksR(AbstractNutritionStocksR):
