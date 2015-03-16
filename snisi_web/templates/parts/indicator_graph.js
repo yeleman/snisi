@@ -35,26 +35,46 @@ hc_graphs.push({
             {% if table.rotate_labels %}rotation: -90,{% endif %}
         }
     },
+    {% if table.multiple_axis %}
+    yAxis: [
+    	{% for axe in table.multiple_axis %}
+    	{
+	    	title: {text: null},
+	        min:0,
+	        {% if axe.show_as_percentage %}max:100, show_as_percentage: true,{% endif %}
+	        {% if axe.opposite %}opposite: true,{% endif %}
+	        labels: {
+	        	{% if axe.show_as_percentage %}
+	        	formatter: function () { return this.value + '%'; }
+	        	{% endif %}
+        	}
+	    },
+	    {% endfor %}
+    ],
+    {% else %}
     yAxis: {
         title: {text: null},
         min:0,
         {% if table.show_as_percentage %}
         max:100,
+        show_as_percentage: true,
         {% endif %}
+        labels: {
+        	{% if table.show_as_percentage %}
+        	formatter: function () { return this.value + '%'; }
+        	{% endif %}
+    	}
     },
+    {% endif %}
     series: [
         {% for line in table.render_for_graph %}
         {
             name: "{{ line.label|safe }}",
+            yAxis: {{ line.yAxis }},
             data: {% localize off %}[{% for p, data in line.data %}[{{ p.start_on|to_jstimestamp }}, {{ data|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
         {% endfor %}
     ],
-    tooltip: {
-        {% if table.show_as_percentage %}
-        formatter: function () { return this.series.name + ' : ' + (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%'; }
-        {% endif %}
-    },
     plotOptions: {
         line: {
             animation: false,
@@ -69,12 +89,23 @@ hc_graphs.push({
             {% if table.graph_stacking %}
             stacking: 'percent',
             {% endif %}
-            dataLabels: {
+        },
+        series: {
+        	dataLabels: {
                 color: 'black',
                 enabled: true,
-                {% if table.show_as_percentage %}formatter: function () { if (this.y != null) {return (Math.round(this.y * 10) / 10).toString().replace('.', ',') + '%';} },{% endif %}
+                formatter: function () {
+                	if (this.y != null) {
+                		console.log(this);
+                		var nf = (Math.round(this.y * 10) / 10).toString().replace('.', ',');
+                		if (this.series.yAxis.userOptions.show_as_percentage) {
+                			return nf + '%';
+                		}
+                		return  nf;
+                	}
+        		},
             },
-        },
+        }
     },
     exporting: {
         enabled: true,

@@ -18,7 +18,11 @@ logger = logging.getLogger(__name__)
 
 
 def humanize_value(data, is_expected=True, is_missing=False,
-                   is_ratio=False, is_yesno=False, should_yesno=False):
+                   is_ratio=False, is_yesno=False, should_yesno=False,
+                   float_precision=2):
+    float_fmt = "{0:." + text_type(float_precision) + "f}"
+    zero_end = '.' + ''.zfill(float_precision)
+
     if not is_expected:
         return "n/a"
     if is_missing:
@@ -28,8 +32,8 @@ def humanize_value(data, is_expected=True, is_missing=False,
     if t is int or t is long:
         v = data
     if t is float:
-        v = "{0:.2f}".format(data)
-        if v.endswith('.00'):
+        v = float_fmt.format(data)
+        if v.endswith(zero_end):
             v = int(float(v))
     if is_yesno and should_yesno:
         v = "OUI" if bool(v) else "NON"
@@ -54,6 +58,7 @@ class Indicator(object):
     GOOD = 'indicator-good'
     WARNING = 'indicator-warning'
     BAD = 'indicator-bad'
+    BLANK = 'indicator-blank'
 
     SNISI_INDICATOR = True
     INDIVIDUAL_CLS = SNISIReport
@@ -77,6 +82,9 @@ class Indicator(object):
 
     # whether indicator has a meta value for CSS
     raise_class = False
+
+    # precision of float for values
+    float_precision = 2
 
     CLONABLE_PROPS = [
         'is_ratio', 'is_yesno', 'raise_class', 'get_class',
@@ -187,8 +195,12 @@ class Indicator(object):
     def _compute(self):
         # overwrite. this returns the final value
         if self.is_ratio:
+            num = self.get_numerator()
+            denom = self.get_denominator()
+            if num is None or denom is None:
+                raise DataIsMissing
             try:
-                return self.get_numerator() / self.get_denominator()
+                return num / denom
             except ZeroDivisionError:
                 return 0
 
@@ -212,6 +224,7 @@ class Indicator(object):
         except ZeroDivisionError:
             self._data = 0
         except Exception as e:
+            print(self.period, self.entity, self)
             logger.error(e)
             logger.exception(e)
             raise e
@@ -236,7 +249,8 @@ class Indicator(object):
                               is_missing=self.is_missing,
                               is_ratio=self.is_ratio,
                               is_yesno=self.is_yesno,
-                              should_yesno=self.should_yesno())
+                              should_yesno=self.should_yesno(),
+                              float_precision=self.float_precision)
 
     def divide(self, numerator, denominator):
         try:
@@ -638,7 +652,9 @@ class IndicatorTable(IndicatorTableMixin):
     def render_for_graph(self):
         return [
             {'label': self.get_line_label_for(idx),
-             'data': self.render_line(idx, as_period_tuple=True)}
+             'data': self.render_line(idx, as_period_tuple=True),
+             'yAxis': getattr(
+                self.INDICATORS[self.fixed_line_index(idx)], '_yaxis', 0)}
             for idx in range(0, self.nb_lines())
             if not getattr(
                 self.INDICATORS[self.fixed_line_index(idx)],
@@ -654,6 +670,23 @@ def ref_is(index=0):
                      func.__bases__, dict(func.__dict__))
         nfunc._is_reference = False
         nfunc._reference_index = index
+
+        @wraps(nfunc)
+        def wrapper(self, *args, **kwargs):
+            return nfunc(*args, **kwargs)
+        return nfunc
+    return outer_wrapper
+
+
+def yAxis(index=0):
+    """ decorator setting the Highcharts yAxis of an indicator.
+
+        index is the index of the line in the table's multiple_index array  """
+    def outer_wrapper(func, *args, **kwargs):
+        nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                     func.__bases__, dict(func.__dict__))
+        # nfunc._is_specified_yaxis = False
+        nfunc._yaxis = index
 
         @wraps(nfunc)
         def wrapper(self, *args, **kwargs):
@@ -860,7 +893,8 @@ class SummaryForEntitiesTable(IndicatorTableMixin):
     def render_for_graph(self):
         return [
             {'label': self.get_line_label_for(idx),
-             'data': self.render_line(idx)}
+             'data': self.render_line(idx),
+             'yAxis': getattr(self.INDICATORS[idx], '_yaxis', None)}
             for idx in range(0, self.nb_lines())
         ]
 

@@ -30,7 +30,7 @@
 		<td colspan="2" class="nodata"></td>
 		{% else %}
 			<td>{{ pdata.ureni_nb_arrived }} / {{ pdata.ureni_nb_expected }}</td>
-			<td>{{ pdata.ureni_completion_rate|percent }}</td>
+			<td>{{ pdata.ureni_completion_rate|percent:0 }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -41,7 +41,7 @@
 		<td colspan="2" class="nodata"></td>
 		{% else %}
 			<td>{{ pdata.urenas_nb_arrived }} / {{ pdata.urenas_nb_expected }}</td>
-			<td>{{ pdata.urenas_completion_rate|percent }}</td>
+			<td>{{ pdata.urenas_completion_rate|percent:0 }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -52,7 +52,7 @@
 		<td colspan="2" class="nodata"></td>
 		{% else %}
 			<td>{{ pdata.urenam_nb_arrived }} / {{ pdata.urenam_nb_expected }}</td>
-			<td>{{ pdata.urenam_completion_rate|percent }}</td>
+			<td>{{ pdata.urenam_completion_rate|percent:0 }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>

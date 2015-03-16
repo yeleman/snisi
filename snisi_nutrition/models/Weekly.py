@@ -261,6 +261,18 @@ class AbstractWeeklyNutritionR(SNISIReport):
         return sum([getattr(self, field, 0)
                     for field in self.deaths_fields()])
 
+    @property
+    def sam_screening(self):
+        return sum([self.urenas_screening, self.ureni_screening])
+
+    @property
+    def sam_cases(self):
+        return sum([self.urenas_cases, self.ureni_cases])
+
+    @property
+    def sam_deaths(self):
+        return sum([self.urenas_deaths, self.ureni_deaths])
+
 
 class WeeklyNutritionR(AbstractWeeklyNutritionR):
 

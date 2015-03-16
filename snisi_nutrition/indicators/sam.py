@@ -8,7 +8,7 @@ import logging
 
 from snisi_core.indicators import (
     IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin,
-    DataIsMissing)
+    DataIsMissing, yAxis)
 from snisi_nutrition.indicators.common import (
     IndicatorTableWithEntities,
     NutritionIndicator, shoudl_show, gen_fixed_entity_indicator)
@@ -140,7 +140,7 @@ class SAMCaseloadTreatedRate(NutritionIndicator):
         return self.GOOD if self.data >= .50 else self.WARNING
 
 
-class URENASNewCasesRate(URENASNewCases):
+class URENASNewCasesRate(NutritionIndicator):
     name = "% ADMISSIONS URENAS"
     is_ratio = True
     raise_class = True
@@ -156,7 +156,7 @@ class URENASNewCasesRate(URENASNewCases):
             else self.BAD
 
 
-class URENINewCasesRate(URENINewCases):
+class URENINewCasesRate(NutritionIndicator):
     name = "% ADMISSIONS URENI"
     is_ratio = True
     raise_class = True
@@ -184,6 +184,12 @@ class URENIURENASNewCasesTable(IndicatorTableWithEntities):
 
         indicatorsl = []
 
+        # Total URENI + URENAS
+        # indicatorsl.append(em(URENASNewCasesURENI))
+
+        # Total URENI
+        indicatorsl.append(em(URENINewCases))
+
         # List of all URENI
         for descendant in descendants:
             if shoudl_show(descendant, 'ureni'):
@@ -192,8 +198,8 @@ class URENIURENASNewCasesTable(IndicatorTableWithEntities):
                                                  field='comp_new_cases')
                 indicatorsl.append(ind)
 
-        # Total URENI
-        indicatorsl.append(em(URENINewCases))
+        # Total URENAS
+        indicatorsl.append(em(URENASNewCases))
 
         # List of all URENAS
         for descendant in descendants:
@@ -202,12 +208,6 @@ class URENIURENASNewCasesTable(IndicatorTableWithEntities):
                                                  sub_report='urenas_report',
                                                  field='comp_new_cases')
                 indicatorsl.append(ind)
-
-        # Total URENAS
-        indicatorsl.append(em(URENASNewCases))
-
-        # Total URENI + URENAS
-        indicatorsl.append(em(URENASNewCasesURENI))
 
         return indicatorsl
 
@@ -224,6 +224,9 @@ class SAMNewCasesTable(IndicatorTableWithEntities):
 
         indicatorsl = []
 
+        # Total URENI + URENAS
+        indicatorsl.append(em(SAMNewCases))
+
         # List of all URENI
         for descendant in descendants:
             if shoudl_show(descendant, 'ureni'):
@@ -231,9 +234,6 @@ class SAMNewCasesTable(IndicatorTableWithEntities):
                                                  sub_report=None,
                                                  field='sam_comp_new_cases')
                 indicatorsl.append(ind)
-
-        # Total URENI + URENAS
-        indicatorsl.append(em(SAMNewCases))
 
         return indicatorsl
 
@@ -264,7 +264,13 @@ class URENIURENASRepartitionTable(IndicatorTable):
 
     INDICATORS = [
         URENINewCasesRate,
-        # URENASNewCasesRate,
+        URENASNewCasesRate,
+    ]
+
+
+class URENIURENASRepartitionTableURENIOnly(URENIURENASRepartitionTable):
+    INDICATORS = [
+        URENINewCasesRate,
     ]
 
 
@@ -364,6 +370,20 @@ class RSSAMPerformance(IndicatorTable):
     rendering_type = 'table'
 
 
+class RSURENIPerformance(IndicatorTable):
+
+    name = "MAS"
+    caption = ("INDICATEURS DE PERFORMANCE URENI 6-59")
+    rendering_type = 'table'
+
+
+class RSURENASPerformance(IndicatorTable):
+
+    name = "MAS"
+    caption = ("INDICATEURS DE PERFORMANCE URENAS 6-59")
+    rendering_type = 'table'
+
+
 class SAMNewCasesGraph(IndicatorTable):
 
     name = "MAS"
@@ -383,9 +403,14 @@ class SAMCaseloadTreatedGraph(IndicatorTable):
     rendering_type = 'graph'
     graph_type = 'column'
     is_percentage = True
+    multiple_axis = [
+        {'show_as_percentage': True},
+        {'show_as_percentage': False, 'opposite': True},
+    ]
 
     INDICATORS = [
-        SAMCaseloadTreatedRate
+        yAxis(0)(SAMCaseloadTreatedRate),
+        yAxis(1)(SAMCaseloadTreated)
     ]
 
 

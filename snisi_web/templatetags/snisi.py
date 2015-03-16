@@ -15,7 +15,7 @@ from django.utils.translation import ugettext as _
 
 from snisi_tools.numbers import phonenumber_repr
 from snisi_tools.datetime import to_jstimestamp
-from snisi_tools.misc import split_or_none
+from snisi_tools.misc import split_or_none, format_number
 from snisi_core.models.Reporting import SNISIReport
 from snisi_core.permissions import (provider_is_allowed_at_home,
                                     provider_is_allowed)
@@ -308,8 +308,10 @@ def sort_sources(slist):
 
 
 @register.filter(name='percent')
-def percent_format(number):
-    return "{}%".format(number_format(number * 100))
+def percent_format(number, precision=2):
+    return format_number(number, float_precision=precision,
+                         is_ratio=True, add_percent=True)
+    return "{}%".format(number_format(number * 100.0))
 
 
 @register.filter(name='allowed_to')

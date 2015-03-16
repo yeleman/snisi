@@ -101,7 +101,7 @@ def display_weekly(request,
                 report = report_cls.objects.get(
                     entity=entity, period=week_period)
             except report_cls.DoesNotExist:
-                continue
+                report = None
             d.update({'report': report})
             weekly_data.append(d)
 

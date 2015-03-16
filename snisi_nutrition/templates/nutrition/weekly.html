@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load snisi %}
+{% load l10n %}
 
 {% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
 
@@ -19,6 +21,90 @@ registerEntityPeriodsFilter({
     periodBID: 'filter_periodB',
     url_tmpl: "{% url 'nutrition_weekly' %}/<entity>/<period_str>"
 });
+
+var tmpl = {
+    chart: {renderTo: null,},
+    legend: {},
+    title: {text: null},
+    xAxis: {categories: [{% for week_data in weekly_data %} "{{ week_data.report.period }}", {% endfor %}],},
+    yAxis: {title: {text: "Nombre de cas"}, min:0,},
+    series: [],
+    plotOptions: {column: {animation: false, dataLabels: { color: 'black', enabled: true,}}},
+    exporting: {enabled: true,},
+    credits: {
+        enabled: true,
+        text: "© DNS/DN – {{ periodb }}",
+        href: null
+    },
+};
+var mam = $.extend(true, {}, tmpl);
+mam.chart.renderTo = 'graph-mam-cases';
+mam.series = [
+    {
+        type: 'column',
+        name: "Nombre de cas MAM",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        		{% if week_data.report == None %}null{% else %}{{ week_data.report.urenam_cases|default_if_none:"null" }}{% endif %},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+hc_graphs.push(mam);
+
+var sam = $.extend(true, {}, tmpl);
+sam.chart.renderTo = 'graph-sam-cases';
+sam.series = [
+    {
+        type: 'column',
+        name: "Nombre de cas MAS (MAS et MAS+)",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        		{% if week_data.report == None %}null{% else %}{{ week_data.report.sam_cases|default_if_none:"null" }}{% endif %},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+hc_graphs.push(sam);
+
+var all = $.extend(true, {}, tmpl);
+all.chart.renderTo = 'graph-all-cases';
+all.series = [
+    {
+        type: 'column',
+        name: "Nombre de cas MAM, MAS, MAS+",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        		{% if week_data.report == None %}null{% else %}{{ week_data.report.total_cases|default_if_none:"null" }}{% endif %},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+hc_graphs.push(all);
+
+var deaths = $.extend(true, {}, tmpl);
+deaths.chart.renderTo = 'graph-deaths';
+deaths.yAxis.title.text = "Nombre de décès";
+deaths.series = [
+    {
+        type: 'column',
+        name: "Nombre de décès",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        		{% if week_data.report == None %}null{% else %}{{ week_data.report.total_deaths|default_if_none:"null" }}{% endif %},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+];
+hc_graphs.push(deaths);
 
 
 $.each(hc_graphs, function (idx) {
@@ -51,191 +137,20 @@ $.each(hc_graphs, function (idx) {
 Elles sont transmises au plus tard le {{ day_ext_end }} soir puis compilé le {{ day_agg_ds }} matin au niveau district et enfin compilés au niveau région/national le {{ day_agg_rs }} matin.</p>
 </div>
 
-<h3 class="caption"><strong>Suivi hebdomadaire de la malnutrition à </strong> {{ entity.display_full_typed_name }}</h3>
-<div id="graph-cases"></div>
+<h3 class="caption"><strong>Suivi hebdomadaire MAM à </strong> {{ entity.display_full_typed_name }}</h3>
+<div id="graph-mam-cases"></div>
+
+<h3 class="caption"><strong>Suivi hebdomadaire MAS à </strong> {{ entity.display_full_typed_name }}</h3>
+<div id="graph-sam-cases"></div>
+
+<h3 class="caption"><strong>Suivi hebdomadaire Nutrition (MAM, MAS, MAS+) à </strong> {{ entity.display_full_typed_name }}</h3>
+<div id="graph-all-cases"></div>
 
 <h3 class="caption"><strong>Suivi décès malnutrition à </strong> {{ entity.display_full_typed_name }}</h3>
 <div id="graph-deaths"></div>
 
 
 <script type="text/javascript">
-{% load snisi %}
-{% load l10n %}
-var PERCENT = "";
-hc_graphs.push({
-    chart: {
-        renderTo: 'graph-cases',
-        zoomType: 'x',
-        spacingRight: 20
-    },
-    legend: {},
-    title: {text: null},
-    xAxis: {
-        type: 'datetime',
-        maxZoom: 1 * 24 * 3600000,
-        dateTimeLabelFormats: {
-            millisecond: '%H:%M:%S.%L',
-            second: '%H:%M:%S',
-            minute: '%H:%M',
-            hour: '%H:%M',
-            day: '%e. %b',
-            week: '%e. %b',
-            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
-            year: '%Y'
-        }
-    },
-    yAxis: {
-        title: {text: "Nombre de cas"},
-        min:0,
-    },
-    series: [
-		// URENI
-        {
-            type: 'column',
-            name: "MAS+",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // URENAS
-        {
-            type: 'column',
-            name: "MAS",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-		// URENAM
-        {
-            type: 'column',
-            name: "MAM",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_cases|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-    ],
-    tooltip:  {
-        formatter: function() {
-            var s = '';
-            var total = 0;
-            var threshold = 0;
-            $.each(this.points, function(i, point) {
-                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
-                if (point.series.type == 'column') {
-                    total += point.y;
-                } else {
-                    threshold = point.y;
-                }
-            });
-            var diff = total - threshold;
-            s += '<b>Total: ' + total + '</b> ('+ diff +')';
-
-            return s;
-        },
-        shared: true
-    },
-    plotOptions: {
-        column: {
-            stacking: true,
-            animation: false,
-            enableMouseTracking: true,
-            dataLabels: {
-                color: 'black',
-                enabled: false,
-            }
-        }
-    },
-    exporting: {
-        enabled: true,
-    },
-    credits: {
-        enabled: true,
-        text: "© DNS/DN – {{ periodb }}",
-        href: null
-    },
-});
-
-// DECEASED NUMBERS
-hc_graphs.push({
-    chart: {
-        renderTo: 'graph-deaths',
-        zoomType: 'x',
-        spacingRight: 20
-    },
-    legend: {},
-    title: {text: null},
-    xAxis: {
-        type: 'datetime',
-        maxZoom: 1 * 24 * 3600000,
-        dateTimeLabelFormats: {
-            millisecond: '%H:%M:%S.%L',
-            second: '%H:%M:%S',
-            minute: '%H:%M',
-            hour: '%H:%M',
-            day: '%e. %b',
-            week: '%e. %b',
-            month: '{% if table.periods|length < 6 %}%B %Y{% else %}%b %y{% endif %}',
-            year: '%Y'
-        }
-    },
-    yAxis: {
-        title: {text: "Nombre de décès"},
-        min:0,
-    },
-    series: [
-		// URENI
-        {
-            type: 'column',
-            name: "MAS+",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.ureni_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-        // URENAS
-        {
-            type: 'column',
-            name: "MAS",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenas_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-		// URENAM
-        {
-            type: 'column',
-            name: "MAM",
-            data: {% localize off %}[{% for week_data in weekly_data %}[{{ week_data.report.period.start_on|to_jstimestamp }}, {{ week_data.report.urenam_deaths|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
-        },
-    ],
-    tooltip:  {
-        formatter: function() {
-            var s = '';
-            var total = 0;
-            var threshold = 0;
-            $.each(this.points, function(i, point) {
-                s += '<b>'+ point.series.name +'</b>: '+ point.y + '<br/>';
-                if (point.series.type == 'column') {
-                    total += point.y;
-                } else {
-                    threshold = point.y;
-                }
-            });
-            var diff = total - threshold;
-            s += '<b>Total: ' + total + '</b> ('+ diff +')';
-
-            return s;
-        },
-        shared: true
-    },
-    plotOptions: {
-        column: {
-            stacking: true,
-            animation: false,
-            enableMouseTracking: true,
-            dataLabels: {
-                color: 'black',
-                enabled: false,
-            }
-        }
-    },
-    exporting: {
-        enabled: true,
-    },
-    credits: {
-        enabled: true,
-        text: "© DNS/DN – {{ periodb }}",
-        href: null
-    },
-});
 </script>
 
 {% endif %}

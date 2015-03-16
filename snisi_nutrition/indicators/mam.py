@@ -136,6 +136,9 @@ class URENAMNewCasesTable(IndicatorTableWithEntities):
 
         indicatorsl = []
 
+        # Total URENAM
+        indicatorsl.append(em(URENAMNewCases))
+
         # List of all URENAM
         for descendant in descendants:
             if shoudl_show(descendant, 'urenam'):
@@ -143,9 +146,6 @@ class URENAMNewCasesTable(IndicatorTableWithEntities):
                                                  sub_report='urenam_report',
                                                  field='comp_new_cases')
                 indicatorsl.append(ind)
-
-        # Total URENAM
-        indicatorsl.append(em(URENAMNewCases))
 
         return indicatorsl
 

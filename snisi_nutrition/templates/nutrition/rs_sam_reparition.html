@@ -15,7 +15,7 @@
 <tbody>
 {% for entity_slug, edata in entities_periods.items %}
 <tr {% if forloop.last %}class="highlight-row"{% endif %}>
-	<th rowspan="2">{{ edata.entity.name }}</th>
+	<th>{{ edata.entity.name }}</th>
 	<td class="left">% Admissions URENI</td>
 	{% for pdata in edata.periods.values %}
 		{% if pdata.expected == None %}
@@ -25,7 +25,7 @@
 		{% endif %}
 	{% endfor %}
 </tr>
-<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+<!-- <tr {% if forloop.last %}class="highlight-row"{% endif %}>
 	<td class="left">% admissions URENAS</td>
 	{% for pdata in edata.periods.values %}
 		{% if pdata.expected == None %}
@@ -34,7 +34,7 @@
 			<td class="{{ pdata.sam_urenas_comp_new_cases_rate_class }}">{{ pdata.sam_urenas_comp_new_cases_rate|percent }}</td>
 		{% endif %}
 	{% endfor %}
-</tr>
+</tr> -->
 {% endfor %}
 
 </tbody>

@@ -146,7 +146,7 @@ def generate_sum_data_table_for(entity, periods):
     return data
 
 
-def generate_entity_period_matrix(entity, period):
+def generate_entity_period_matrix(entity, period, months_data=None):
     # TOTAL sum of all periods
     is_total = isinstance(period, list)
 
@@ -191,12 +191,17 @@ def generate_entity_period_matrix(entity, period):
         except ZeroDivisionError:
             return 0
 
+    def rpc(data, field):
+        return pc(data["{}__num".format(field)],
+                  data["{}__denum".format(field)])
+
     def gc(value, slug):
+        blank = Indicator.BLANK
         good = Indicator.GOOD
         warning = Indicator.WARNING
         bad = Indicator.BAD
         if slug == 'caseload':
-            return good if value >= 0.5 else warning
+            return blank if value >= 0.5 else bad
         elif slug == 'healed':
             return good if value >= 0.75 else bad
         elif slug == 'deceased':
@@ -212,6 +217,57 @@ def generate_entity_period_matrix(entity, period):
     if not expecteds.count() or (not is_total and expected is None):
         return {'expected': None}
 
+    def perf_indic_denum(report, prefix, field):
+        if is_total:
+            return sum([data['{}{}_rate__denum'.format(prefix, field)]
+                        for data in months_data.values()])
+
+        if 'sam_ureni_' in prefix:
+            report = report.ureni_report
+            prefix = prefix.replace('sam_ureni_comp_', '') \
+                .replace('sam_ureni_', '')
+
+        if 'sam_urenas_' in prefix:
+            report = report.ureni_report
+            prefix = prefix.replace('sam_urenas_comp_', '') \
+                .replace('sam_urenas_', '')
+
+        tof = '{}total_out'.format(prefix) \
+            if prefix is not None else 'total_out'
+        nof = '{}not_responding'.format(prefix) \
+            if prefix is not None else 'not_responding'
+
+        if isinstance(report, dict):
+            dtof = report.get(tof, 0)
+            dnof = report.get(nof, 0)
+        else:
+            dtof = getattr(report, tof, 0)
+            dnof = getattr(report, nof, 0)
+        return dtof - dnof
+
+    def perf_indic_num(report, prefix, field):
+        if is_total:
+            return sum([data['{}{}_rate__num'.format(prefix, field)]
+                        for data in months_data.values()])
+
+        if 'sam_ureni_' in prefix:
+            report = report.ureni_report
+            prefix = prefix.replace('sam_ureni_comp_', '') \
+                .replace('sam_ureni_', '')
+
+        if 'sam_urenas_' in prefix:
+            report = report.ureni_report
+            prefix = prefix.replace('sam_urenas_comp_', '') \
+                .replace('sam_urenas_', '')
+
+        f = '{}{}'.format(prefix, field) \
+            if prefix != 'all' else '{}'.format(field)
+        if isinstance(report, dict):
+            d = data.get(f)
+        else:
+            d = getattr(report, f)
+        return d
+
     data = {
         'expected': expected,
         'report': report,
@@ -222,40 +278,131 @@ def generate_entity_period_matrix(entity, period):
                                     'nb_source_reports_expected')
     data['ureni_nb_arrived'] = get(report, 'ureni',
                                    'nb_source_reports_arrived')
-    data['ureni_completion_rate'] = pc(
-        data['ureni_nb_arrived'], data['ureni_nb_expected'])
+
+    data['ureni_completion_rate__num'] = data['ureni_nb_arrived']
+    data['ureni_completion_rate__denum'] = data['ureni_nb_expected']
+
+    data['ureni_completion_rate'] = rpc(data, 'ureni_completion_rate')
+    # data['ureni_nb_arrived'], data['ureni_nb_expected'])
 
     data['urenas_nb_expected'] = get(report, 'urenas',
                                      'nb_source_reports_expected')
     data['urenas_nb_arrived'] = get(report, 'urenas',
                                     'nb_source_reports_arrived')
-    data['urenas_completion_rate'] = pc(
-        data['urenas_nb_arrived'], data['urenas_nb_expected'])
+
+    data['urenas_completion_rate__num'] = data['urenas_nb_arrived']
+    data['urenas_completion_rate__denum'] = data['urenas_nb_expected']
+    data['urenas_completion_rate'] = rpc(data, 'urenas_completion_rate')
 
     data['urenam_nb_expected'] = get(report, 'urenam',
                                      'nb_source_reports_expected')
     data['urenam_nb_arrived'] = get(report, 'urenam',
                                     'nb_source_reports_arrived')
-    data['urenam_completion_rate'] = pc(
-        data['urenam_nb_arrived'], data['urenam_nb_expected'])
+
+    data['urenam_completion_rate__num'] = data['urenam_nb_arrived']
+    data['urenam_completion_rate__denum'] = data['urenam_nb_expected']
+    data['urenam_completion_rate'] = rpc(data, 'urenam_completion_rate')
 
     data['sam_comp_new_cases'] = get(report, None, 'sam_comp_new_cases')
     data['sam_comp_caseload_expected'] = get_caseload_expected_for(
         period=period, entity=entity, uren='sam')
-    data['sam_comp_caseload_treated'] = pc(
-        data['sam_comp_new_cases'], data['sam_comp_caseload_expected'])
-    data['sam_comp_caseload_treated_class'] = gc(
-        data['sam_comp_caseload_treated'], 'caseload')
+
+    data['sam_comp_caseload_treated_rate__num'] = data['sam_comp_new_cases']
+    data['sam_comp_caseload_treated_rate__denum'] = \
+        data['sam_comp_caseload_expected']
+    data['sam_comp_caseload_treated_rate'] = rpc(
+        data, 'sam_comp_caseload_treated_rate')
+    data['sam_comp_caseload_treated_rate_class'] = gc(
+        data['sam_comp_caseload_treated_rate'], 'caseload')
+
+    # ureni only
+    data['sam_ureni_comp_healed'] = get(report, 'ureni', 'comp_healed')
+    data['sam_ureni_comp_abandon'] = get(report, 'ureni', 'comp_abandon')
+    data['sam_ureni_comp_deceased'] = get(report, 'ureni', 'comp_deceased')
+    data['sam_ureni_comp_out_base'] = get(report, 'ureni', 'sam_comp_out_base')
+
+    data['sam_ureni_comp_healed_rate__num'] = \
+        perf_indic_num(report, 'sam_ureni_comp_', 'healed')
+    data['sam_ureni_comp_healed_rate__denum'] = \
+        perf_indic_denum(report, 'sam_ureni_comp_', 'healed')
+    data['sam_ureni_comp_healed_rate'] = rpc(
+        data, 'sam_ureni_comp_healed_rate')
+    data['sam_ureni_comp_healed_rate_class'] = gc(
+        data['sam_ureni_comp_healed_rate'], 'healed')
+
+    data['sam_ureni_comp_abandon_rate__num'] = \
+        perf_indic_num(report, 'sam_ureni_comp_', 'abandon')
+    data['sam_ureni_comp_abandon_rate__denum'] = \
+        perf_indic_denum(report, 'sam_ureni_comp_', 'abandon')
+    data['sam_ureni_comp_abandon_rate'] = rpc(
+        data, 'sam_ureni_comp_abandon_rate')
+    data['sam_ureni_comp_abandon_rate_class'] = gc(
+        data['sam_ureni_comp_abandon_rate'], 'abandon')
+
+    data['sam_ureni_comp_deceased_rate__num'] = \
+        perf_indic_num(report, 'sam_ureni_comp_', 'deceased')
+    data['sam_ureni_comp_deceased_rate__denum'] = \
+        perf_indic_denum(report, 'sam_ureni_comp_', 'deceased')
+    data['sam_ureni_comp_deceased_rate'] = rpc(
+        data, 'sam_ureni_comp_deceased_rate')
+    data['sam_ureni_comp_deceased_rate_class'] = gc(
+        data['sam_ureni_comp_deceased_rate'], 'deceased')
+    ####
+
+    # ureni only
+    data['sam_urenas_comp_healed'] = get(report, 'urenas', 'comp_healed')
+    data['sam_urenas_comp_abandon'] = get(report, 'urenas', 'comp_abandon')
+    data['sam_urenas_comp_deceased'] = get(report, 'urenas', 'comp_deceased')
+    data['sam_urenas_comp_out_base'] = get(report, 'urenas',
+                                           'sam_comp_out_base')
+
+    data['sam_urenas_comp_healed_rate__num'] = \
+        perf_indic_num(report, 'sam_urenas_comp_', 'healed')
+    data['sam_urenas_comp_healed_rate__denum'] = \
+        perf_indic_denum(report, 'sam_urenas_comp_', 'healed')
+    data['sam_urenas_comp_healed_rate'] = rpc(
+        data, 'sam_urenas_comp_healed_rate')
+    data['sam_urenas_comp_healed_rate_class'] = gc(
+        data['sam_urenas_comp_healed_rate'], 'healed')
+
+    data['sam_urenas_comp_abandon_rate__num'] = \
+        perf_indic_num(report, 'sam_urenas_comp_', 'abandon')
+    data['sam_urenas_comp_abandon_rate__denum'] = \
+        perf_indic_denum(report, 'sam_urenas_comp_', 'abandon')
+    data['sam_urenas_comp_abandon_rate'] = rpc(
+        data, 'sam_urenas_comp_abandon_rate')
+    data['sam_urenas_comp_abandon_rate_class'] = gc(
+        data['sam_urenas_comp_abandon_rate'], 'abandon')
+
+    data['sam_urenas_comp_deceased_rate__num'] = \
+        perf_indic_num(report, 'sam_urenas_comp_', 'deceased')
+    data['sam_urenas_comp_deceased_rate__denum'] = \
+        perf_indic_denum(report, 'sam_urenas_comp_', 'deceased')
+    data['sam_urenas_comp_deceased_rate'] = rpc(
+        data, 'sam_urenas_comp_deceased_rate')
+    data['sam_urenas_comp_deceased_rate_class'] = gc(
+        data['sam_urenas_comp_deceased_rate'], 'deceased')
+    ####
 
     data['sam_ureni_comp_new_cases'] = get(report, 'ureni', 'comp_new_cases')
     data['sam_urenas_comp_new_cases'] = get(report, 'urenas', 'comp_new_cases')
     data['sam_comp_new_cases'] = get(report, None, 'sam_comp_new_cases')
-    data['sam_ureni_comp_new_cases_rate'] = pc(
-        data['sam_ureni_comp_new_cases'], data['sam_comp_new_cases'])
+
+    data['sam_ureni_comp_new_cases_rate__num'] = \
+        data['sam_ureni_comp_new_cases']
+    data['sam_ureni_comp_new_cases_rate__denum'] = \
+        data['sam_comp_new_cases']
+    data['sam_ureni_comp_new_cases_rate'] = rpc(
+        data, 'sam_ureni_comp_new_cases_rate')
     data['sam_ureni_comp_new_cases_rate_class'] = gc(
         data['sam_ureni_comp_new_cases_rate'], 'ureni')
-    data['sam_urenas_comp_new_cases_rate'] = pc(
-        data['sam_urenas_comp_new_cases'], data['sam_comp_new_cases'])
+
+    data['sam_urenas_comp_new_cases_rate__num'] = \
+        data['sam_urenas_comp_new_cases']
+    data['sam_urenas_comp_new_cases_rate__denum'] = \
+        data['sam_comp_new_cases']
+    data['sam_urenas_comp_new_cases_rate'] = rpc(
+        data, 'sam_urenas_comp_new_cases_rate')
     data['sam_urenas_comp_new_cases_rate_class'] = gc(
         data['sam_urenas_comp_new_cases_rate'], 'urenas')
 
@@ -263,14 +410,28 @@ def generate_entity_period_matrix(entity, period):
     data['sam_comp_abandon'] = get(report, None, 'sam_comp_abandon')
     data['sam_comp_deceased'] = get(report, None, 'sam_comp_deceased')
     data['sam_comp_out_base'] = get(report, None, 'sam_comp_out_base')
-    data['sam_comp_healed_rate'] = get(report, None, 'sam_comp_healed_rate')
+
+    data['sam_comp_healed_rate__num'] = \
+        perf_indic_num(report, 'sam_comp_', 'healed')
+    data['sam_comp_healed_rate__denum'] = \
+        perf_indic_denum(report, 'sam_comp_', 'healed')
+    data['sam_comp_healed_rate'] = rpc(data, 'sam_comp_healed_rate')
     data['sam_comp_healed_rate_class'] = gc(
         data['sam_comp_healed_rate'], 'healed')
-    data['sam_comp_abandon_rate'] = get(report, None, 'sam_comp_abandon_rate')
+
+    data['sam_comp_abandon_rate__num'] = \
+        perf_indic_num(report, 'sam_comp_', 'abandon')
+    data['sam_comp_abandon_rate__denum'] = \
+        perf_indic_denum(report, 'sam_comp_', 'abandon')
+    data['sam_comp_abandon_rate'] = rpc(data, 'sam_comp_abandon_rate')
     data['sam_comp_abandon_rate_class'] = gc(
         data['sam_comp_abandon_rate'], 'abandon')
-    data['sam_comp_deceased_rate'] = get(report, None,
-                                         'sam_comp_deceased_rate')
+
+    data['sam_comp_deceased_rate__num'] = \
+        perf_indic_num(report, 'sam_comp_', 'deceased')
+    data['sam_comp_deceased_rate__denum'] = \
+        perf_indic_denum(report, 'sam_comp_', 'deceased')
+    data['sam_comp_deceased_rate'] = rpc(data, 'sam_comp_deceased_rate')
     data['sam_comp_deceased_rate_class'] = gc(
         data['sam_comp_deceased_rate'], 'deceased')
 
@@ -287,14 +448,28 @@ def generate_entity_period_matrix(entity, period):
     data['mam_comp_abandon'] = get(report, None, 'mam_comp_abandon')
     data['mam_comp_deceased'] = get(report, None, 'mam_comp_deceased')
     data['mam_comp_out_base'] = get(report, None, 'mam_comp_out_base')
-    data['mam_comp_healed_rate'] = get(report, None, 'mam_comp_healed_rate')
+
+    data['mam_comp_healed_rate__num'] = \
+        perf_indic_num(report, 'mam_comp_', 'healed')
+    data['mam_comp_healed_rate__denum'] = \
+        perf_indic_denum(report, 'mam_comp_', 'healed')
+    data['mam_comp_healed_rate'] = rpc(data, 'mam_comp_healed_rate')
     data['mam_comp_healed_rate_class'] = gc(
         data['mam_comp_healed_rate'], 'healed')
-    data['mam_comp_abandon_rate'] = get(report, None, 'mam_comp_abandon_rate')
+
+    data['mam_comp_abandon_rate__num'] = \
+        perf_indic_num(report, 'mam_comp_', 'abandon')
+    data['mam_comp_abandon_rate__denum'] = \
+        perf_indic_denum(report, 'mam_comp_', 'abandon')
+    data['mam_comp_abandon_rate'] = rpc(data, 'mam_comp_abandon_rate')
     data['mam_comp_abandon_rate_class'] = gc(
         data['mam_comp_abandon_rate'], 'abandon')
-    data['mam_comp_deceased_rate'] = get(report, None,
-                                         'mam_comp_deceased_rate')
+
+    data['mam_comp_deceased_rate__num'] = \
+        perf_indic_num(report, 'mam_comp_', 'deceased')
+    data['mam_comp_deceased_rate__denum'] = \
+        perf_indic_denum(report, 'mam_comp_', 'deceased')
+    data['mam_comp_deceased_rate'] = rpc(data, 'mam_comp_deceased_rate')
     data['mam_comp_deceased_rate_class'] = gc(
         data['mam_comp_deceased_rate'], 'deceased')
 
@@ -302,15 +477,16 @@ def generate_entity_period_matrix(entity, period):
 
 
 def generate_entity_periods_matrix(entity, periods):
-    return {
+    data = {
         'entity': {'slug': entity.slug, 'name': entity.name},
         'periods': OrderedDict([
             (period, generate_entity_period_matrix(entity, period))
             for period in sorted(periods, key=lambda x: x.start_on)
-        ] + [
-            ("TOTAL", generate_entity_period_matrix(entity, periods))
         ])
     }
+    data['periods']["TOTAL"] = \
+        generate_entity_period_matrix(entity, periods, data['periods'])
+    return data
 
 
 def generate_entities_periods_matrix(entity, periods):

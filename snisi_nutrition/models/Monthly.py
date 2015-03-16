@@ -894,11 +894,18 @@ class AbstractNutritionR(SNISIReport):
         return getattr(self, tof, 0) - getattr(self, nof, 0)
 
     # rate of indicator (healed, deceased, abandon)
-    def performance_indicator_for(self, prefix, field):
+    def performance_indicator_numerator_for(self, prefix, field):
         f = '{}{}'.format(prefix, field) \
             if prefix != 'all' else '{}'.format(field)
+        return getattr(self, f)
+
+    def performance_indicator_denominator_for(self, prefix, field):
+        return self.total_performance_for(prefix)
+
+    def performance_indicator_for(self, prefix, field):
         try:
-            return getattr(self, f) / self.total_performance_for(prefix)
+            return self.performance_indicator_numerator_for(prefix, field) \
+                / self.performance_indicator_denominator_for(prefix, field)
         except ZeroDivisionError:
             return 0
 

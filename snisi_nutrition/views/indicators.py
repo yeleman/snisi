@@ -31,10 +31,12 @@ from snisi_nutrition.indicators.mam import (
     MAMCaseloadTreatedByDS, MAMPerformanceByHC)
 from snisi_nutrition.indicators.sam import (
     URENIURENASNewCasesTable, SAMNewCasesTable, SAMCaseloadTable,
+    URENIURENASRepartitionTableURENIOnly,
     URENIURENASRepartitionTable, SAMPerformanceTable,
     URENIURENASRepartitionGraph, SAMPerformanceGraph,
     URENIURENASNewCasesTableWithEntities, URENASNewCasesByHC,
-    RSSAMCaseloadTable, RSSAMRepartition, RSSAMPerformance,
+    RSSAMCaseloadTable, RSSAMRepartition,
+    RSURENIPerformance, RSURENASPerformance,
     SAMNewCasesGraph, SAMCaseloadTreatedGraph,
     SAMNewCasesByDS, SAMRepartitionByDS, SAMPerformanceByDS,
     SAMCaseloadTreatedByDS, SAMPerformanceByHC)
@@ -280,6 +282,7 @@ def indicators_browser(request,
         periodb_str=periodb_str,
         period_cls=MonthPeriod,
         must_be_in_cluster=True,
+        full_lineage=['country', 'health_region', 'health_district'],
     ))
 
     for indic_slug, indic_cls in indicators.items():
@@ -350,7 +353,7 @@ def synthesis_browser(request,
                 indic_list += [
                     ('sam_new_cases', URENIURENASNewCasesTable),
                     ('sam_caseload', SAMCaseloadTable),
-                    ('sam_repartition', URENIURENASRepartitionTable),
+                    ('sam_repartition', URENIURENASRepartitionTableURENIOnly),
                     ('sam_performance', SAMPerformanceTable),
                     ('sam_repartition_graph', URENIURENASRepartitionGraph),
                     ('sam_new_cases_hc_graph', URENASNewCasesByHC),
@@ -373,7 +376,10 @@ def synthesis_browser(request,
                     ('rs_completion', RSCompletionTable),
                     ('rs_sam_caseload', RSSAMCaseloadTable),
                     ('rs_sam_reparition', RSSAMRepartition),
-                    ('rs_sam_performance', RSSAMPerformance),
+
+                    ('rs_ureni_performance', RSURENIPerformance),
+                    ('rs_urenas_performance', RSURENASPerformance),
+
                     ('sam_new_cases_graph', SAMNewCasesGraph),
                     ('sam_repartition_graph', URENIURENASRepartitionGraph),
                     ('sam_performance_graph', SAMPerformanceGraph),

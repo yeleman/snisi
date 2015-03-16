@@ -26,8 +26,10 @@
 		{% include "nutrition/rs_sam_caseload.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
 	{% elif indicator_slug = 'rs_sam_reparition' %}
 		{% include "nutrition/rs_sam_reparition.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
-	{% elif indicator_slug = 'rs_sam_performance' %}
-		{% include "nutrition/rs_sam_performance.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
+	{% elif indicator_slug = 'rs_ureni_performance' %}
+		{% include "nutrition/rs_ureni_performance.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
+	{% elif indicator_slug = 'rs_urenas_performance' %}
+		{% include "nutrition/rs_urenas_performance.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
 	{% elif indicator_slug = 'rs_mam_caseload' %}
 		{% include "nutrition/rs_mam_caseload.html" with table=indicator id=forloop.counter0 entity=entity periods=periods reports=reports %}
 	{% elif indicator_slug = 'rs_mam_performance' %}

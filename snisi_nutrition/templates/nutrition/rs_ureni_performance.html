@@ -21,7 +21,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_comp_healed }}</td>
+			<td>{{ pdata.sam_ureni_comp_healed }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -31,7 +31,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_comp_abandon }}</td>
+			<td>{{ pdata.sam_ureni_comp_abandon }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -41,7 +41,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_comp_deceased }}</td>
+			<td>{{ pdata.sam_ureni_comp_deceased }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -51,7 +51,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_comp_out_base }}</td>
+			<td>{{ pdata.sam_ureni_comp_out_base }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -61,7 +61,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td class="{{ pdata.sam_comp_healed_rate_class }}">{{ pdata.sam_comp_healed_rate|percent }}</td>
+			<td class="{{ pdata.sam_ureni_comp_healed_rate_class }}">{{ pdata.sam_ureni_comp_healed_rate|percent }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -71,7 +71,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td class="{{ pdata.sam_comp_abandon_rate_class }}">{{ pdata.sam_comp_abandon_rate|percent }}</td>
+			<td class="{{ pdata.sam_ureni_comp_abandon_rate_class }}">{{ pdata.sam_ureni_comp_abandon_rate|percent }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -81,7 +81,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td class="{{ pdata.sam_comp_deceased_rate_class }}">{{ pdata.sam_comp_deceased_rate|percent }}</td>
+			<td class="{{ pdata.sam_ureni_comp_deceased_rate_class }}">{{ pdata.sam_ureni_comp_deceased_rate|percent }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>

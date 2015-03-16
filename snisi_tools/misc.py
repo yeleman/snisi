@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import uuid
 import os
+import locale
 
 from py3compat import text_type
 from django.apps import apps
@@ -14,6 +15,7 @@ from django.conf import settings
 from django.contrib.sites.models import get_current_site
 
 logger = logging.getLogger(__name__)
+locale.setlocale(locale.LC_ALL, '')
 
 
 def import_path(name, failsafe=False):
@@ -192,3 +194,39 @@ def split_or_none(value, output_len, max_split=-1, char=None, reverse=False):
 def rsplit_or_none(value, output_len, max_split=-1, char=None):
     return split_or_none(value, output_len,
                          max_split=max_split, char=char, reverse=True)
+
+
+def format_number(data, is_ratio=False, is_yesno=False, should_yesno=False,
+                  float_precision=2, add_percent=False):
+
+    if is_yesno and should_yesno:
+        return "OUI" if bool(data) else "NON"
+
+    int_fmt = "%d"
+    float_fmt = "%." + text_type(float_precision) + "f"
+    as_int = lambda v: (int(v), int_fmt)
+    v = data
+    if is_ratio:
+        v = v * 100
+
+    if float(v).is_integer():
+        v, f = as_int(v)
+    else:
+        try:
+            v, f = float(v), float_fmt
+        except:
+            f = "{}"
+            raise
+        else:
+            if v.is_integer():
+                v, f = as_int(v)
+
+    try:
+        v = locale.format(f, v, grouping=True)
+    except Exception:
+        pass
+
+    if add_percent:
+        return "{}%".format(v)
+
+    return text_type(v)
