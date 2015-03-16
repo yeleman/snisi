@@ -57,7 +57,7 @@ def get_performance_text(report):
 
     # no indicator to talk about
     if indicators['mam'] is None and indicators['sam'] is None:
-        return 4
+        return None
 
     nb_bad_indic = sum(
         [1 for idict in indicators.values()
@@ -66,7 +66,9 @@ def get_performance_text(report):
          if indic.get_class() != indic.GOOD])
 
     if nb_bad_indic == 0:
-        return 3
+        return ("Les indicateurs de performance concernant votre "
+                "rapport mensuel semblent satisfaisant. "
+                "Merci de rester vigilant.")
 
     umap = {
         'mam': "MAM",
