@@ -11,7 +11,7 @@ from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 from django.http import HttpResponse
 
-from snisi_web.url_regexp import (RGXP_CLUSTER, RGXP_ENTITY,
+from snisi_web.url_regexp import (RGXP_ENTITY,
                                   RGXP_RECEIPT,
                                   RGXP_PERIOD)
 from snisi_malaria import urls as malaria_urls
@@ -131,18 +131,6 @@ urlpatterns = patterns(
     url(r'^api/indicators/(?P<key>[a-zA-Z0-9\_]*)/?$',
         'snisi_web.views.indicators_api.list_all_indicators',
         name='api_indicators'),
-
-    # Generic raw-data browser
-    url(r'data/{cluster}/{entity}/{period}/?'
-        .format(cluster=RGXP_CLUSTER,
-                entity=RGXP_ENTITY, period=RGXP_PERIOD),
-        'snisi_web.views.raw_data.browser', name='report_browser'),
-
-    # Generic report browser without a period
-    url(r'data/{cluster}/{entity}/?'
-        .format(cluster=RGXP_CLUSTER, entity=RGXP_ENTITY),
-        'snisi_web.views.raw_data.browser', {'period_str': None},
-        name='report_browser_noperiod'),
 
     url(r'download-report/{receipt}.xls'.format(receipt=RGXP_RECEIPT),
         'snisi_web.views.raw_data.download_as_excel',

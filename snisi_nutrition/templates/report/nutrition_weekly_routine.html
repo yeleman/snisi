@@ -1,0 +1,41 @@
+{% load snisi %}
+
+<h2>Surveillance hebdomadaire</h2>
+
+<p>Période {{ period }} du {{ period.start_on }} au {{ period.end_on }}</p>
+
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+	<th></th>
+    <th>Dépistage</th>
+    <th>Cas</th>
+    <th>Décès</th>
+</tr>
+<tbody>
+<tr>
+	<th>URENI</th>
+    <td>{{ report.ureni_screening }}</td>
+    <td>{{ report.ureni_cases }}</td>
+    <td>{{ report.ureni_deaths }}</td>
+</tr>
+<tr>
+	<th>URENAS</th>
+    <td>{{ report.urenas_screening }}</td>
+    <td>{{ report.urenas_cases }}</td>
+    <td>{{ report.urenas_deaths }}</td>
+</tr>
+<tr>
+	<th>URENAM</th>
+    <td>{{ report.urenam_screening }}</td>
+    <td>{{ report.urenam_cases }}</td>
+    <td>{{ report.urenam_deaths }}</td>
+</tr>
+<tr class="total-row">
+	<th>TOTAL</th>
+    <td>{{ report.total_screening }}</td>
+    <td>{{ report.total_cases }}</td>
+    <td>{{ report.total_deaths }}</td>
+</tr>
+</tbody>
+</table>

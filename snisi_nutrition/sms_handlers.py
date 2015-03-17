@@ -532,7 +532,6 @@ def monthly_report(message):
         try:
             args_values = sms_part.strip().lower().split("-")
             arguments = dict(zip(args_names, args_values))
-            print(len(args_values), len(args_names))
             assert len(args_values) == len(args_names)
         except (ValueError, AssertionError):
             # failure to split means we proabably lack a data or more

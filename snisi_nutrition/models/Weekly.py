@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import datetime
+import re
 
 import reversion
 from django.db import models
@@ -19,6 +20,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
 from snisi_core.models.Periods import (WeekPeriod, ONE_WEEK_DELTA,
+                                       Period,
                                        ONE_MICROSECOND_DELTA,
                                        SpecificTypeManager,
                                        normalize_date)
@@ -47,6 +49,9 @@ class NutWeekPeriod(WeekPeriod):
     def pid(self):
         return'nW{}'.format(self.middle().strftime('%W-%Y'))
 
+    def name(self):
+        return "SN{}".format(self.middle().strftime('%W-%Y'))
+
     @classmethod
     def boundaries(cls, date_obj):
         date_obj = normalize_date(date_obj, as_aware=True)
@@ -67,6 +72,20 @@ class NutWeekPeriod(WeekPeriod):
 
     def strid(self):
         return self.middle().strftime('nW%W-%Y')
+
+    @classmethod
+    def from_url_str(cls, period_str):
+        rgxp = r'nW([0-9]{1,2})\-([0-9]{4})'
+        if re.match(rgxp, period_str):
+            week_num, year = [
+                int(x) for x in re.match(rgxp, period_str).groups()]
+            p = cls.find_create_from(year, 1, 1, dont_create=True)
+            if not p.contains(datetime.datetime(year, 1, 1)):
+                p = p.previous()
+            for idx in range(1, week_num + 1):
+                p = p.following()
+            return p
+        return Period.from_url_str(period_str)
 
 
 class NutWeekReportingManager(models.Manager):

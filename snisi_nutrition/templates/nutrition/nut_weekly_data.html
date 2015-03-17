@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block content %}
+
+<div id="report_entity_filter" class="pure-form" method="POST">
+    <legend>Naviguer dans les rapports <em>{{ reportcls.name }}</em></legend>
+    <input type="hidden" id="filter_reportcls" value="{{ cluster.slug }}" />
+
+   {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    <label for="filter_period">Période</label>
+    <select id="filter_period">
+        <option disabled="disabled">Période {{ period.strid }}</option>
+        {% for itemid, item in periods %}
+        <option value="{{ itemid }}" {% if period.strid = itemid %} selected="selected"{% endif %}>{{ item }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="pure-button pure-button-primary">Filtrer</button>
+</div>
+
+<h2>Surveillance hebdomadaire</h2>
+
+<p>Période {{ period }} du {{ period.start_on }} au {{ period.end_on }}</p>
+
+{% if expected = None %}
+<p>Aucun rapport {{ reportcls.name }} attendu pour cette période dans cette localité. Merci de vérifier votre demande.</p>
+{% else %}
+
+{% with report=expected.arrived_report %}
+
+{% if report %}
+	<table class="pure-table center report-table shrink-input">
+	<thead>
+	<tr>
+		<th rowspan="2">{{ entity }}</th>
+		<th colspan="2">URENI</th>
+		<th colspan="2">URENAS</th>
+		<th colspan="2">URENAM</th>
+	</tr>
+	    <th>Cas</th>
+	    <th>Décès</th>
+	    <th>Cas</th>
+	    <th>Décès</th>
+	    <th>Cas</th>
+	    <th>Décès</th>
+	</tr>
+	<tbody>
+	{% for sreport in report.direct_sources %}
+	<tr>
+		<th>{{ sreport.entity }}</th>
+	    <td>{{ sreport.ureni_cases }}</td>
+	    <td>{{ sreport.ureni_deaths }}</td>
+	    <td>{{ sreport.urenas_cases }}</td>
+	    <td>{{ sreport.urenas_deaths }}</td>
+	    <td>{{ sreport.urenam_cases }}</td>
+	    <td>{{ sreport.urenam_deaths }}</td>
+	</tr>
+	{% endfor %}
+	<tr class="total-row">
+		<th>TOTAL</th>
+	    <td>{{ report.ureni_cases }}</td>
+	    <td>{{ report.ureni_deaths }}</td>
+	    <td>{{ report.urenas_cases }}</td>
+	    <td>{{ report.urenas_deaths }}</td>
+	    <td>{{ report.urenam_cases }}</td>
+	    <td>{{ report.urenam_deaths }}</td>
+	</tr>
+	</tbody>
+	</table>
+<p><a class="pure-button" href="{% url 'nutrition_weekly_raw_data' entity_slug=entity.slug period_str=period.strid %}">Consulter {{ report.receipt }}</a></p>
+{% else %}
+<p>Le rapport n'est pas encore disponible.</p>
+{% endif %}
+{% endwith %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'report_entity_filter',
+    baseURL: '/api/entities/getclusterchildren/nutrition_routine',
+    root: "{{ root.slug }}",
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerReportBrowserFilter(entities_browser, "{% url 'nutrition_weekly_data' %}/<entity>/<period_str>");
+{% endblock %}

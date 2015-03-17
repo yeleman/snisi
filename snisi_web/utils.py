@@ -100,13 +100,15 @@ def get_base_url_for_period(view_name, entity, period_str=None):
 
 
 def periods_from_url(perioda_str, periodb_str,
-                     period_cls, assume_previous, report_cls):
+                     period_cls, assume_previous, report_cls,
+                     backlog_periods=12):
 
     def period_from_strid(period_str, report_cls=None):
         period = None
+        base_cls = period_cls or Period
         if period_str:
             try:
-                period = Period.from_url_str(period_str).casted()
+                period = base_cls.from_url_str(period_str).casted()
             except:
                 pass
         return period
@@ -114,11 +116,12 @@ def periods_from_url(perioda_str, periodb_str,
     periodb = period_from_strid(periodb_str)
 
     if periodb is None:
-        periodb = period_cls.current().previous()
+        periodb = period_cls.current()
 
     if perioda is None:
-        perioda = period_cls.find_create_from(year=periodb.middle().year - 1,
-                                              month=periodb.middle().month)
+        perioda = periodb
+        for __ in range(backlog_periods):
+            perioda = perioda.previous()
 
     if perioda is None or periodb is None:
         raise Http404("Période incorrecte.")
@@ -142,6 +145,7 @@ def periods_from_url(perioda_str, periodb_str,
                                         .period.middle())
         except IndexError:
             pass
+
     all_periods = period_cls.all_from(first_period, current_period)
     periods = period_cls.all_from(perioda, periodb)
 
@@ -161,7 +165,8 @@ def entity_periods_context(request,
                            must_be_in_cluster=False,
                            full_lineage=['country', 'health_region',
                                          'health_district', 'health_center'],
-                           single_period=False):
+                           single_period=False,
+                           backlog_periods=12):
     context = {}
 
     perm_slug = "access_{}".format(cluster.domain.slug)
@@ -179,7 +184,8 @@ def entity_periods_context(request,
 
     periods, all_periods, perioda, periodb = periods_from_url(
         perioda_str, periodb_str, period_cls=period_cls,
-        assume_previous=assume_previous, report_cls=report_cls)
+        assume_previous=assume_previous, report_cls=report_cls,
+        backlog_periods=backlog_periods)
 
     if single_period:
         base_url = get_base_url_for_period(

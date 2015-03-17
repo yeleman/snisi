@@ -233,7 +233,7 @@ class MAMNewCasesGraph(IndicatorTable):
 class MAMCaseloadTreatedGraph(IndicatorTable):
 
     name = "MAM"
-    caption = ("% CASELOAD MAM TRAITÉ")
+    caption = ("% CASELOAD MAM ATTEINT")
     rendering_type = 'graph'
     graph_type = 'column'
     is_percentage = True

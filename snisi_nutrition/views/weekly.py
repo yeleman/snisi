@@ -84,6 +84,7 @@ def display_weekly(request,
         period_cls=MonthPeriod,
         assume_previous=False,
         must_be_in_cluster=True,
+        backlog_periods=2,
     ))
 
     extended_end, district_agg, region_agg = important_weekly_day_names()
@@ -106,6 +107,8 @@ def display_weekly(request,
             weekly_data.append(d)
 
         context.update({'weekly_data': weekly_data})
+
+    from pprint import pprint as pp ; pp(context['periods'])
 
     return render(request,
                   kwargs.get('template_name', 'nutrition/weekly.html'),

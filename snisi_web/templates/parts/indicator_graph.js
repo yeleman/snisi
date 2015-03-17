@@ -96,7 +96,6 @@ hc_graphs.push({
                 enabled: true,
                 formatter: function () {
                 	if (this.y != null) {
-                		console.log(this);
                 		var nf = (Math.round(this.y * 10) / 10).toString().replace('.', ',');
                 		if (this.series.yAxis.userOptions.show_as_percentage) {
                 			return nf + '%';

@@ -439,10 +439,13 @@ def generate_entity_period_matrix(entity, period, months_data=None):
 
     data['mam_comp_caseload_expected'] = get_caseload_expected_for(
         period=period, entity=entity, uren='mam')
-    data['mam_comp_caseload_treated'] = pc(
-        data['mam_comp_new_cases'], data['mam_comp_caseload_expected'])
-    data['mam_comp_caseload_treated_class'] = gc(
-        data['mam_comp_caseload_treated'], 'caseload')
+    data['mam_comp_caseload_treated_rate__num'] = data['mam_comp_new_cases']
+    data['mam_comp_caseload_treated_rate__denum'] = \
+        data['mam_comp_caseload_expected']
+    data['mam_comp_caseload_treated_rate'] = rpc(
+        data, 'mam_comp_caseload_treated_rate')
+    data['mam_comp_caseload_treated_rate_class'] = gc(
+        data['mam_comp_caseload_treated_rate'], 'caseload')
 
     data['mam_comp_healed'] = get(report, None, 'mam_comp_healed')
     data['mam_comp_abandon'] = get(report, None, 'mam_comp_abandon')

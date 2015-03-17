@@ -20,6 +20,32 @@ urlpatterns = patterns(
         {'template_name': 'nutrition/map.html'},
         name='nutrition_map'),
 
+    # weekly data as children
+    url(r'^/weekly-data/{entity}/{period}/?$'
+        .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),
+        'snisi_nutrition.views.raw_data.weekly_browser_children',
+        name='nutrition_weekly_data'),
+    url(r'^/weekly-data/{entity}/?$'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.raw_data.weekly_browser_children',
+        name='nutrition_weekly_data'),
+    url(r'^/weekly-data/?$',
+        'snisi_nutrition.views.raw_data.weekly_browser_children',
+        name='nutrition_weekly_data'),
+
+    # weekly nutrition
+    url(r'^/weekly-reports/{entity}/{period}/?$'
+        .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),
+        'snisi_nutrition.views.raw_data.weekly_browser',
+        name='nutrition_weekly_raw_data'),
+    url(r'^/weekly-reports/{entity}/?$'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.raw_data.weekly_browser',
+        name='nutrition_weekly_raw_data'),
+    url(r'^/weekly-reports/?$',
+        'snisi_nutrition.views.raw_data.weekly_browser',
+        name='nutrition_weekly_raw_data'),
+
     # weekly nutrition
     url(r'^/weekly/{entity}/{periods}/?$'
         .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),

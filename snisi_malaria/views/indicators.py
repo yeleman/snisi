@@ -32,7 +32,9 @@ def browser(request,
             entity_slug=None,
             perioda_str=None,
             periodb_str=None,
-            section_index='1', sub_section=None, **kwargs):
+            section_index='1',
+            sub_section=None,
+            **kwargs):
 
     context = {}
     cluster = Cluster.get_or_none('malaria_monthly_routine')

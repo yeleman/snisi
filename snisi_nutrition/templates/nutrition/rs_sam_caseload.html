@@ -28,7 +28,7 @@
 	<td>-</td>
 </tr>
 <tr {% if forloop.last %}class="highlight-row"{% endif %}>
-	<td class="left">% caseload traité</td>
+	<td class="left">% caseload atteint</td>
 	{% for pdata in edata.periods.values %}
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>

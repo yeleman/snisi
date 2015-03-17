@@ -157,8 +157,4 @@ def user_root_for(provider, slug):
         if priv_location.level < root.level:
             if provider_is_allowed(provider, slug, priv_location):
                 return priv_location.casted()
-            # else:
-            #     print("no permission for", slug, "at", priv_location)
-        # else:
-        #     print("root level higher", priv_location.level, root.level)
     return root

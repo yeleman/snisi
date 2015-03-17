@@ -26,16 +26,12 @@ var tmpl = {
     chart: {renderTo: null,},
     legend: {},
     title: {text: null},
-    xAxis: {categories: [{% for week_data in weekly_data %} "{{ week_data.report.period }}", {% endfor %}],},
+    xAxis: {categories: [{% for week_data in weekly_data %} "{{ week_data.report.period }}", {% endfor %}], labels: { rotation: -90}, },
     yAxis: {title: {text: "Nombre de cas"}, min:0,},
     series: [],
     plotOptions: {column: {animation: false, dataLabels: { color: 'black', enabled: true,}}},
     exporting: {enabled: true,},
-    credits: {
-        enabled: true,
-        text: "© DNS/DN – {{ periodb }}",
-        href: null
-    },
+    credits: { enabled: true, text: "© DNS/DN – {{ periodb }}", href: null },
 };
 var mam = $.extend(true, {}, tmpl);
 mam.chart.renderTo = 'graph-mam-cases';
@@ -46,7 +42,15 @@ mam.series = [
         data: {% localize off %}
         [
         	{% for week_data in weekly_data %}
-        		{% if week_data.report == None %}null{% else %}{{ week_data.report.urenam_cases|default_if_none:"null" }}{% endif %},
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.urenam_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
     		{% endfor %}
 		]
 		{% endlocalize %}

@@ -224,7 +224,6 @@ class Indicator(object):
         except ZeroDivisionError:
             self._data = 0
         except Exception as e:
-            print(self.period, self.entity, self)
             logger.error(e)
             logger.exception(e)
             raise e

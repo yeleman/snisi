@@ -53,7 +53,7 @@
                 {% if user|allowed_to_home:"access_malaria" %}
                 <a class="pure-menu-heading">PALUDISME</a>
                 <ul>
-                    <li><a href="{% if user.is_authenticated %}{% url 'report_browser_noperiod' cluster_slug='malaria_monthly_routine' entity_slug=user.location.slug %}{% endif %}">Données brutes</a></li>
+                    <li><a href="{% if user.is_authenticated %}{% url 'malaria_raw_data' %}{% endif %}">Données brutes</a></li>
                     <li><a href="{% url 'malaria_view' %}">Données analysées</a></li>
                     <li><a href="{% url 'malaria_epidemio' %}">Surveillance épi.</a></li>
                     <li><a href="{% url 'malaria_map' %}">Cartographie</a></li>

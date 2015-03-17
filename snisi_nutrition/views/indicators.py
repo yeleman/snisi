@@ -205,8 +205,6 @@ def overview_generic_xls(request, entity_slug=None,
         entity, periods, is_sam=is_sam, is_mam=is_mam)
     file_content = file_content.getvalue()
 
-    print(file_name.encode('utf-8'))
-
     response = HttpResponse(file_content,
                             content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="{}"' \
@@ -365,7 +363,7 @@ def synthesis_browser(request,
                     ('mam_new_cases', URENAMNewCasesTable),
                     ('mam_performance', MAMPerformanceTable),
                     ('mam_performance_graph', MAMPerformanceGraph),
-                    ('sam_performance_hc_graph', MAMPerformanceByHC),
+                    ('mam_performance_hc_graph', MAMPerformanceByHC),
                 ]
 
         elif entity.type.slug == 'health_region':

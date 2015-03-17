@@ -23,9 +23,7 @@
 {% if expected = None %}
 <p>Aucun rapport {{ reportcls.name }} attendu pour cette période dans cette localité. Merci de vérifier votre demande.</p>
 {% else %}
-
 {% include "parts/report_header.html" with expected=expected %}
-
 {% endif %}
 
 {% endblock %}
@@ -33,7 +31,7 @@
 {% block onJQready %}
 entities_browser = getEntitiesBrowser({
     parentID: 'report_entity_filter',
-    baseURL: '/api/entities/getclusterchildren/{{ cluster.slug }}',
+    baseURL: '/api/entities/getclusterchildren/nutrition_routine',
     root: "{{ root.slug }}",
     lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
     lineage_data: [{% for d in lineage_data %}"{{ d}}",{% endfor %}],
@@ -41,5 +39,5 @@ entities_browser = getEntitiesBrowser({
     add_default_option: true,
     default_option: {value: '-1', label: "AUCUN"}
 });
-registerReportBrowserFilter(entities_browser, "{% url view_name %}/<entity>/<period_str>");
+registerReportBrowserFilter(entities_browser, "{% url 'nutrition_weekly_raw_data' %}/<entity>/<period_str>");
 {% endblock %}

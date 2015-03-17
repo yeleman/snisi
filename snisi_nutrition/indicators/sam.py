@@ -399,7 +399,7 @@ class SAMNewCasesGraph(IndicatorTable):
 class SAMCaseloadTreatedGraph(IndicatorTable):
 
     name = "MAS"
-    caption = ("% CASELOAD MAS TRAITÉ")
+    caption = ("% CASELOAD MAS ATTEINT")
     rendering_type = 'graph'
     graph_type = 'column'
     is_percentage = True

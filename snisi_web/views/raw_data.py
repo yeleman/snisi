@@ -11,54 +11,59 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 # from django.utils.translation import ugettext as _
 
-from snisi_core.models.Periods import Period
 from snisi_core.permissions import user_root_for
-from snisi_core.models.Entities import Entity
 from snisi_core.models.Reporting import ExpectedReporting, SNISIReport
 from snisi_core.models.Projects import Cluster
-from snisi_web.utils import entity_browser_context, ensure_entity_in_cluster
+from snisi_web.utils import ensure_entity_in_cluster
 from snisi_core.permissions import provider_allowed_or_denied
+
+from snisi_web.utils import entity_periods_context
 
 
 @login_required
 def browser(request,
-            cluster_slug, entity_slug=None, period_str=None, **kwargs):
+            cluster_slug, entity_slug=None, period_str=None,
+            period_cls=None, report_cls=None, view_name=None, **kwargs):
 
     context = {}
-    period = None
-    entity = None
     cluster = Cluster.get_or_none(cluster_slug)
     perm_slug = "access_{}".format(cluster.domain.slug)
     root = user_root_for(request.user, perm_slug)
     report_classes = cluster.domain \
         .import_from('expected.report_classes_for')(cluster)
 
+    if report_cls is not None:
+        report_classes = [rc for rc in report_classes
+                          if rc.report_class in report_cls]
+
     if not report_classes:
         raise Http404("Pas de ReportClass correspondant.")
 
-    def period_from_strid(period_str, reportcls=None):
-        period = None
-        # find period from string or default to current reporting
-        if period_str:
-            try:
-                period = Period.from_url_str(period_str).casted()
-            except:
-                pass
-        if not period and reportcls:
-            period = reportcls.current()
+    context.update(entity_periods_context(
+        request=request,
+        root=root,
+        cluster=cluster,
+        view_name=view_name or "report_browser",
+        entity_slug=entity_slug,
+        report_cls=report_classes[0].report_class,
+        perioda_str=period_str,
+        periodb_str=None,
+        period_cls=period_cls or report_classes[0].period_class,
+        assume_previous=False,
+        must_be_in_cluster=True,
+        backlog_periods=2,
+        single_period=True,
+    ))
 
-        return period
-    period = period_from_strid(period_str, report_classes[0].period_class)
-
-    # find entity or default to provider target
-    entity = Entity.get_or_none(entity_slug) or root
+    period = context['perioda']
+    entity = context['entity']
 
     ensure_entity_in_cluster(cluster, entity)
 
     # check permissions on this entity and raise 403
     provider_allowed_or_denied(request.user, perm_slug, entity)
 
-    entity_period = {'entity': entity, 'period': period}
+    entity_period = {'entity': context['entity'], 'period': period}
     expecteds = []
     for report_class in report_classes:
         expecteds += list(ExpectedReporting.objects.filter(
@@ -66,33 +71,13 @@ def browser(request,
 
     expecteds = list(set(expecteds))
 
-    # periods list a a list of all periods with a matching ReportClass
-    all_periods = sorted(list(set(
-        [e.period.casted()
-         for e in ExpectedReporting.objects.filter(
-            entity=entity,
-            report_class__in=report_classes)
-         ])), key=lambda x: x.start_on)
-
-    # if request period is outside of all_periods, just take last of those
-    if len(all_periods) and (period is None or period not in all_periods):
-        period = all_periods[-1]
-
     context.update({
         'cluster': cluster,
-        'periods': [(p.strid(), p) for p in reversed(all_periods)],
+        'periods': context['all_periods'],
         'period': period,
-        # 'entity': entity,
         'expecteds': expecteds,
         'expected': expecteds[0] if len(expecteds) > 0 else None
     })
-
-    # JS entities browser
-    context.update(entity_browser_context(
-        root=root, selected_entity=entity,
-        full_lineage=['country', 'health_region',
-                      'health_district', 'health_center'],
-        cluster=cluster))
 
     return render(request,
                   kwargs.get('template_name', 'raw_data.html'),

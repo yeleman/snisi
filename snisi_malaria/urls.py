@@ -7,7 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 
 from django.conf.urls import patterns, url
 
-from snisi_web.url_regexp import (RGXP_ENTITY, RGXP_PERIODS,
+from snisi_web.url_regexp import (RGXP_ENTITY, RGXP_PERIODS, RGXP_PERIOD,
                                   RGXP_SECTION, RGXP_SUBSECTION)
 
 urlpatterns = patterns(
@@ -69,4 +69,18 @@ urlpatterns = patterns(
     url(r'^/quarter-reports/?$',
         'snisi_malaria.views.quarter_reports.display_report',
         name='malaria_quarter_report'),
+
+    url(r'/{entity}/{period}/?'
+        .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),
+        'snisi_malaria.views.raw_data.browser',
+        name='malaria_raw_data'),
+    url(r'/{entity}/?'
+        .format(entity=RGXP_ENTITY),
+        'snisi_malaria.views.raw_data.browser',
+        {'period_str': None},
+        name='malaria_raw_data'),
+    url(r'/?',
+        'snisi_malaria.views.raw_data.browser',
+        {'period_str': None, 'entity_slug': None},
+        name='malaria_raw_data'),
 )

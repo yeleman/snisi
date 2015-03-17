@@ -7,14 +7,15 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_web.views.raw_data import browser as web_browser
+# from snisi_malaria.models import MalariaR, AggMalariaR
 
 logger = logging.getLogger(__name__)
 
 
 def browser(request, entity_slug=None, period_str=None):
     return web_browser(request,
-                       cluster_slug='msi_reprohealth_routine',
+                       cluster_slug='malaria_monthly_routine',
                        entity_slug=entity_slug,
                        period_str=period_str,
-                       template_name='reprohealth/msi_report.html',
-                       view_name='msipf_raw_data')
+                       view_name='malaria_raw_data',
+                       template_name='raw_data.html')

@@ -202,4 +202,5 @@ def create_expected_for(period):
 
 
 def report_classes_for(cluster):
-    return [reportcls_nut, reportcls_nut_agg]
+    return [reportcls_nut, reportcls_nut_agg,
+            reportcls_weekly, reportcls_weekly_agg]
