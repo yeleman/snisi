@@ -33,19 +33,18 @@ urlpatterns = patterns(
         name='epidemio_dashboard'),
 
     # raw data
-    url(r'data/{entity}/{period}/?'
+    url(r'^/data/{entity}/{period}/?'
         .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),
-        'snisi_web.views.raw_data.browser',
-        {'cluster_slug': CLUSTER},
+        'snisi_epidemiology.views.browser',
         name='epidemio_raw_data'),
     # Generic report browser without a period
-    url(r'data/{entity}/?'
+    url(r'^/data/{entity}/?'
         .format(entity=RGXP_ENTITY),
-        'snisi_web.views.raw_data.browser',
-        {'cluster_slug': CLUSTER, 'period_str': None},
+        'snisi_epidemiology.views.browser',
+        {'period_str': None},
         name='epidemio_raw_data'),
-    url(r'data/?',
-        'snisi_web.views.raw_data.browser',
-        {'cluster_slug': CLUSTER, 'period_str': None, 'entity_slug': None},
+    url(r'^/data/?',
+        'snisi_epidemiology.views.browser',
+        {'period_str': None, 'entity_slug': None},
         name='epidemio_raw_data'),
 )

@@ -20,6 +20,7 @@ from snisi_web.utils import entity_periods_context
 from snisi_core.indicators import IndicatorTable, is_ref, ref_is
 from snisi_core.indicators import Indicator, gen_report_indicator
 from snisi_epidemiology.models import EpiWeekPeriod
+from snisi_web.views.raw_data import browser as web_browser
 
 logger = logging.getLogger(__name__)
 
@@ -183,3 +184,15 @@ def dashboard(request, **kwargs):
                   kwargs.get('template_name',
                              'epidemiology/dashboard_alerts.html'),
                   context)
+
+
+logger = logging.getLogger(__name__)
+
+
+def browser(request, entity_slug=None, period_str=None):
+    return web_browser(request,
+                       cluster_slug='epidemiology_routine',
+                       entity_slug=entity_slug,
+                       period_str=period_str,
+                       view_name='epidemio_raw_data',
+                       template_name='raw_data.html')
