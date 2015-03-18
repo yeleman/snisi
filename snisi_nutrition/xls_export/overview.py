@@ -282,7 +282,7 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
     row += 1
 
     # if not expected, just move to next period
-    if not expected.arrived_report:
+    if expected is None or not expected.arrived_report:
         return row
 
     report = expected.arrived_report()
@@ -501,7 +501,7 @@ def write_line(sheet, child, children, age_group, age_groups,
         try:
             sreport = [r for r in report.direct_sources()
                        if r.entity.slug == child.slug][0]
-        except IndexError:
+        except (IndexError, AttributeError):
             sreport = None
 
     # if no report, leave all fields blank and move to next

@@ -218,8 +218,10 @@ def generate_entity_period_matrix(entity, period, months_data=None):
         return {'expected': None}
 
     def perf_indic_denum(report, prefix, field):
+        if report is None:
+            return 0
         if is_total:
-            return sum([data['{}{}_rate__denum'.format(prefix, field)]
+            return sum([data.get('{}{}_rate__denum'.format(prefix, field), 0)
                         for data in months_data.values()])
 
         if 'sam_ureni_' in prefix:
@@ -246,8 +248,11 @@ def generate_entity_period_matrix(entity, period, months_data=None):
         return dtof - dnof
 
     def perf_indic_num(report, prefix, field):
+        if report is None:
+            return 0
+
         if is_total:
-            return sum([data['{}{}_rate__num'.format(prefix, field)]
+            return sum([data.get('{}{}_rate__num'.format(prefix, field), 0)
                         for data in months_data.values()])
 
         if 'sam_ureni_' in prefix:
