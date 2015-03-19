@@ -760,7 +760,7 @@ def nutrition_overview_xls(entity, periods, is_sam=False, is_mam=False):
             row = write_month(sam_sheet, period, entity, expected, row, True)
 
         # write all-periods summary
-        row = write_month(sam_sheet, periods, entity, expected, row, True)
+        row = write_month(sam_sheet, periods, entity, None, row, True)
 
     # create MAM sheet
     if entity.level <= 2 or entity.has_urenam:
@@ -781,7 +781,7 @@ def nutrition_overview_xls(entity, periods, is_sam=False, is_mam=False):
             row = write_month(mam_sheet, period, entity, expected, row, False)
 
         # write all-periods summary
-        row = write_month(mam_sheet, periods, entity, expected, row, False)
+        row = write_month(mam_sheet, periods, entity, None, row, False)
 
     stream = StringIO.StringIO()
     book.save(stream)
