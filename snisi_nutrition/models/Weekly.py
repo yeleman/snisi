@@ -24,6 +24,7 @@ from snisi_core.models.Periods import (WeekPeriod, ONE_WEEK_DELTA,
                                        ONE_MICROSECOND_DELTA,
                                        SpecificTypeManager,
                                        normalize_date)
+from snisi_nutrition.xls_export import nutrition_weekly_as_xls
 
 logger = logging.getLogger(__name__)
 
@@ -291,6 +292,12 @@ class AbstractWeeklyNutritionR(SNISIReport):
     @property
     def sam_deaths(self):
         return sum([self.urenas_deaths, self.ureni_deaths])
+
+    def as_xls(self):
+        file_name = "NUThebdo_{entity}.{period}.xls" \
+                    .format(entity=self.entity.slug,
+                            period=self.period.strid())
+        return file_name, nutrition_weekly_as_xls(self)
 
 
 class WeeklyNutritionR(AbstractWeeklyNutritionR):

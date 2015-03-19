@@ -8,5 +8,6 @@ import logging
 
 from snisi_nutrition.xls_export.overview import nutrition_overview_xls
 from snisi_nutrition.xls_export.monthly import nutrition_monthly_as_xls
+from snisi_nutrition.xls_export.weekly import nutrition_weekly_as_xls
 
 logger = logging.getLogger(__name__)
