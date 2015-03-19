@@ -30,3 +30,10 @@ ROUTINE_REGION_AGG_DAY = 26
 
 def get_domain():
     return Domain.get_or_none(DOMAIN_SLUG)
+
+
+def period_is_complete(period, entity):
+    domain = get_domain()
+    from snisi_tools.reporting import routine_month_period_complete
+    return routine_month_period_complete(
+        period=period, domain=domain, entity=entity)

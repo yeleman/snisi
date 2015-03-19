@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 import StringIO
 import copy
+from collections import OrderedDict
 
 from py3compat import text_type
 import xlwt
@@ -17,6 +18,7 @@ from snisi_core.models.Reporting import ExpectedReporting
 from snisi_core.xls_export import (ColorMatcher, ALPHABET,
                                    xl_set_col_width, xl_set_row_height)
 from snisi_tools.datetime import get_periods_str
+from snisi_nutrition import period_is_complete
 from snisi_nutrition.models.URENAM import URENAMNutritionR
 from snisi_nutrition.models.URENI import URENINutritionR
 from snisi_nutrition.models.URENAS import URENASNutritionR
@@ -343,6 +345,7 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
 
         children = get_children(entity, is_sam, is_ureni=True)
         nb_lines = nb_lines_for(URENINutritionR, len(children))
+        nb_ureni_children = len(children)
 
         # write URENI (vertical merge)
         sheet.write_merge(row, row + nb_lines - 1, 0, 0,
@@ -391,6 +394,7 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
 
         children = get_children(entity, is_sam, is_ureni=False)
         nb_lines = nb_lines_for(URENASNutritionR, len(children))
+        nb_urenas_children = len(children)
 
         # write URENAS (vertical merge)
         sheet.write_merge(row, row + nb_lines - 1, 0, 0,
@@ -421,7 +425,7 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
         sheet.write_merge(row, row + nb_age_groups, 1, 1,
                           "TOTAL", style_label)
 
-        for age_group in URENASNutritionR.age_groups():
+        for age_group in age_groups:
 
             # write line for this age group
             write_line(sheet, "TOTAL", children, age_group, age_groups,
@@ -437,8 +441,9 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
         # URENI + URENAS
         ###
 
-        age_groups = list(set(URENINutritionR.age_groups() +
-                              URENASNutritionR.age_groups()))
+        age_groups = list(OrderedDict.fromkeys(
+            URENINutritionR.age_groups()
+            + URENASNutritionR.age_groups()))
         nb_age_groups = len(age_groups) + 1
 
         # write URENI + URENAS (vertical merge)
@@ -450,22 +455,35 @@ def write_month(sheet, period, entity, expected, start_row, is_sam):
             # write line for this age group
             write_line(sheet, "TOTAL URENI + URENAS", children,
                        "sam_{}".format(age_group), age_groups,
-                       report, expected, row, True, None)
+                       report, expected, row, True, None,
+                       nb_ureni_children=nb_ureni_children,
+                       nb_ureni_age_groups=len(URENINutritionR.age_groups()),
+                       nb_urenas_children=nb_urenas_children,
+                       nb_urenas_age_groups=len(URENASNutritionR.age_groups()))
             row += 1
 
         # write line for the total of all age group at this entity
         write_line(sheet, "TOTAL", children, None, age_groups,
-                   report, expected, row, True, None)
+                   report, expected, row, True, None,
+                   nb_ureni_children=nb_ureni_children,
+                   nb_ureni_age_groups=len(URENINutritionR.age_groups()),
+                   nb_urenas_children=nb_urenas_children,
+                   nb_urenas_age_groups=len(URENASNutritionR.age_groups()))
         row += 1
 
     return row
 
 
 def write_line(sheet, child, children, age_group, age_groups,
-               report, expected, row, is_sam, is_ureni):
+               report, expected, row, is_sam, is_ureni,
+               nb_ureni_children=None, nb_ureni_age_groups=None,
+               nb_urenas_children=None, nb_urenas_age_groups=None,
+               ):
 
     # whether line is part of a children-wide total
     is_total = not isinstance(child, Entity)
+
+    is_ureni_plus_urenas = is_sam and is_ureni is None
 
     # styles definitions changes for total rows and URENI + URENAS
     if is_sam and is_ureni is None:
@@ -560,13 +578,45 @@ def write_line(sheet, child, children, age_group, age_groups,
             or retrieve data from report """
 
         if is_total:
-            nb_age_groups2 = len(age_groups) + 1
-            first_row = xlrow - nb_children * nb_age_groups2
-            age_rows = [first_row + i * nb_age_groups2
-                        for i in range(nb_children)]
-            data = xlwt.Formula("SUM({})".format(
-                ",".join(["{c}{r}".format(c=col, r=r)
-                          for r in age_rows])))
+
+            if is_ureni_plus_urenas:
+
+                age_rows = []
+
+                # total for URENI + URENAS
+                if age_group is None:
+                    age_rows = range(xlrow - len(age_groups), xlrow)
+                else:
+                    cage_group = age_group.replace('sam_', '')
+                    ureni_age_groups = URENINutritionR.age_groups()
+                    urenas_age_groups = URENASNutritionR.age_groups()
+
+                    offset = age_groups.index(cage_group)
+                    start = xlrow - offset
+
+                    if cage_group in ureni_age_groups:
+                        ureni_offset = list(reversed(ureni_age_groups)) \
+                            .index(cage_group) + 2
+                        ureni_sum = (
+                            start - ((nb_urenas_children + 1)
+                                     * (len(urenas_age_groups) + 1))
+                            - ureni_offset)
+                        age_rows.append(ureni_sum)
+
+                    if cage_group in urenas_age_groups:
+                        urenas_offset = list(reversed(urenas_age_groups)) \
+                            .index(cage_group) + 2
+                        urenas_sum = start - urenas_offset
+                        age_rows.append(urenas_sum)
+            else:
+                nb_age_groups2 = len(age_groups) + 1
+                first_row = xlrow - nb_children * nb_age_groups2
+                age_rows = [first_row + i * nb_age_groups2
+                            for i in range(nb_children)]
+
+            fmt = "SUM({})".format(",".join(["{c}{r}".format(c=col, r=r)
+                                             for r in age_rows]))
+            data = xlwt.Formula(fmt)
         else:
             data = colsum(col) if istr \
                 else gd(sreport, sk, age_group, field, ism)
@@ -677,7 +727,7 @@ def nutrition_overview_xls(entity, periods, is_sam=False, is_mam=False):
         (period, ExpectedReporting.objects.filter(
             period=period, entity=entity,
             report_class__in=report_classes).last())
-        for period in periods
+        for period in periods if period_is_complete(period, entity)
     ]
 
     # build sheet's prefix

@@ -21,6 +21,7 @@ from snisi_web.utils import (
     entity_periods_context, periods_from_url,
     ensure_entity_in_cluster, ensure_entity_at_least)
 from snisi_web.decorators import user_role_within
+from snisi_nutrition import period_is_complete
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 from snisi_nutrition.indicators.common import RSCompletionTable
 from snisi_nutrition.indicators.mam import (
@@ -132,6 +133,7 @@ def overview_generic(request, entity_slug=None,
             period=period, entity=context['entity'],
             report_class__in=report_classes).last())
         for period in context['periods']
+        if period_is_complete(period, entity)
     ]
     context.update({'periods_expecteds': periods_expecteds})
 
