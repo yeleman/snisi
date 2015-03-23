@@ -52,6 +52,8 @@ class EntityType(models.Model):
 
     slug = models.SlugField(_("Slug"), max_length=15, primary_key=True)
     name = models.CharField(_("Name"), max_length=30)
+    short_name = models.CharField(
+        _("Name"), max_length=10, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -157,11 +159,34 @@ class Entity(MPTTModel):
                 type=self.type.name, name=self.name)
         return self.display_name()
 
+    def display_typed_short_name(self):
+        if self.type.slug != 'country':
+            return ugettext("{type} {name}").format(
+                type=self.type.short_name, name=self.name)
+        return self.display_name()
+
     def display_full_typed_name(self):
         if self.type.slug != 'country':
             return ugettext("{type} de {name}").format(
                 type=self.type.name, name=self.display_full_name())
         return self.display_name()
+
+    def display_full_typed_short_name(self):
+        if self.type.slug != 'country':
+            return ugettext("{type} {name}").format(
+                type=self.type.short_name, name=self.display_full_name())
+        return self.display_name()
+
+    def display_short_health_hierarchy(self):
+        health_no_area = [
+            'health_region', 'health_district', 'health_center']
+        return " / ".join(
+            [a.name
+             if a.type.slug == 'health_center'
+             else
+             a.display_typed_short_name()
+             for a in self.get_ancestors(ascending=True, include_self=True)
+             if a.type.slug in health_no_area])
 
     def parent_level(self):
         if self.parent:
