@@ -186,7 +186,8 @@ class Entity(MPTTModel):
              else
              a.display_typed_short_name()
              for a in self.get_ancestors(ascending=True, include_self=True)
-             if a.type.slug in health_no_area])
+             if a.type.slug in health_no_area
+             or a.type.slug == self.type.slug])
 
     def parent_level(self):
         if self.parent:
