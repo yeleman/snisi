@@ -41,7 +41,7 @@ def nutperiods_for(month_periods):
         month_periods = [month_periods]
     periods = []
     for month_period in month_periods:
-        for day in (0, 7, 14, 21, 28, 30, 21):
+        for day in (1, 7, 14, 21, 28, 30, 21):
             dd = month_period.start_on + datetime.timedelta(days=day)
             try:
                 p = NutWeekPeriod.find_create_by_date(dd)
@@ -107,8 +107,6 @@ def display_weekly(request,
             weekly_data.append(d)
 
         context.update({'weekly_data': weekly_data})
-
-    from pprint import pprint as pp ; pp(context['periods'])
 
     return render(request,
                   kwargs.get('template_name', 'nutrition/weekly.html'),

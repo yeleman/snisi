@@ -101,7 +101,7 @@ def get_base_url_for_period(view_name, entity, period_str=None):
 
 def periods_from_url(perioda_str, periodb_str,
                      period_cls, assume_previous, report_cls,
-                     backlog_periods=12):
+                     backlog_periods=12, allow_coming_year=False):
 
     def period_from_strid(period_str, report_cls=None):
         period = None
@@ -146,7 +146,13 @@ def periods_from_url(perioda_str, periodb_str,
         except IndexError:
             pass
 
-    all_periods = period_cls.all_from(first_period, current_period)
+    if allow_coming_year:
+        last_period = MonthPeriod.find_create_from(
+            current_period.middle().year, 12)
+    else:
+        last_period = current_period
+
+    all_periods = period_cls.all_from(first_period, last_period)
     periods = period_cls.all_from(perioda, periodb)
 
     return periods, all_periods, perioda, periodb
@@ -166,7 +172,8 @@ def entity_periods_context(request,
                            full_lineage=['country', 'health_region',
                                          'health_district', 'health_center'],
                            single_period=False,
-                           backlog_periods=12):
+                           backlog_periods=12,
+                           allow_coming_year=False):
     context = {}
 
     perm_slug = "access_{}".format(cluster.domain.slug)
@@ -185,7 +192,7 @@ def entity_periods_context(request,
     periods, all_periods, perioda, periodb = periods_from_url(
         perioda_str, periodb_str, period_cls=period_cls,
         assume_previous=assume_previous, report_cls=report_cls,
-        backlog_periods=backlog_periods)
+        backlog_periods=backlog_periods, allow_coming_year=allow_coming_year)
 
     if single_period:
         base_url = get_base_url_for_period(

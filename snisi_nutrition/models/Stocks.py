@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 
+from py3compat import text_type
 import reversion
 from django.db import models
 from django.db.models.signals import pre_save, post_save
@@ -72,11 +73,11 @@ class AbstractNutritionStocksR(SNISIReport):
 
     @classmethod
     def input_str(cls, input_slug):
-        return cls.INPUTS_LABELS.get(input_slug)
+        return text_type(cls.INPUTS_LABELS.get(input_slug))
 
     @classmethod
     def unit_str(cls, input_slug):
-        return cls.INPUTS_UNITS.get(input_slug)
+        return text_type(cls.INPUTS_UNITS.get(input_slug))
 
     # Plumpy Nut
     plumpy_nut_initial = models.IntegerField(_("Plumpy Nut Initial"))

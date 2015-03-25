@@ -324,7 +324,7 @@ def generate_entity_period_matrix(entity, period, months_data=None):
     data['sam_ureni_comp_healed'] = get(report, 'ureni', 'comp_healed')
     data['sam_ureni_comp_abandon'] = get(report, 'ureni', 'comp_abandon')
     data['sam_ureni_comp_deceased'] = get(report, 'ureni', 'comp_deceased')
-    data['sam_ureni_comp_out_base'] = get(report, 'ureni', 'sam_comp_out_base')
+    data['sam_ureni_comp_out_base'] = get(report, 'ureni', 'comp_out_base')
 
     data['sam_ureni_comp_healed_rate__num'] = \
         perf_indic_num(report, 'sam_ureni_comp_', 'healed')
@@ -358,8 +358,7 @@ def generate_entity_period_matrix(entity, period, months_data=None):
     data['sam_urenas_comp_healed'] = get(report, 'urenas', 'comp_healed')
     data['sam_urenas_comp_abandon'] = get(report, 'urenas', 'comp_abandon')
     data['sam_urenas_comp_deceased'] = get(report, 'urenas', 'comp_deceased')
-    data['sam_urenas_comp_out_base'] = get(report, 'urenas',
-                                           'sam_comp_out_base')
+    data['sam_urenas_comp_out_base'] = get(report, 'urenas', 'comp_out_base')
 
     data['sam_urenas_comp_healed_rate__num'] = \
         perf_indic_num(report, 'sam_urenas_comp_', 'healed')

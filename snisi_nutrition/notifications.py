@@ -166,3 +166,61 @@ def performance_indicators_notifications(period):
                 expirate_on=period.following().end_on,
                 category=PROJECT_BRAND,
                 text=text)
+
+
+def inputs_stockouts_notifications(period):
+
+    from snisi_nutrition.models.Stocks import NutritionStocksR
+
+    def create_notif(recipient, text):
+        Notification.create(
+            provider=recipient,
+            deliver=Notification.SOON,
+            expirate_on=period.following().end_on,
+            category=PROJECT_BRAND,
+            text=text)
+
+    # send warning message to DTC with poor performance
+    for report in NutritionR.objects.filter(period=period):
+
+        missing_inputs = []
+        ureni_inputs = report.stocks_report.inputs(ureni_only=True)
+        for inp in report.stocks_report.inputs():
+
+            # exclude URENI inputs if not URENI
+            if not report.entity.casted().has_ureni and inp in ureni_inputs:
+                continue
+
+            if not report.stocks_report.balance_for(inp):
+                missing_inputs.append(inp)
+
+        if not len(missing_inputs):
+            continue
+
+        missing_inputs_names = " * ".join([NutritionStocksR.input_str(inp)
+                                           for inp in missing_inputs])
+
+        text = ("Attention, {nb} stock(s) d'intrant à zéro. Approvisionnez "
+                "vous urgemment au CSRéf: {l}"
+                .format(nb=len(missing_inputs),
+                        l=missing_inputs_names))
+        text2 = ("Attention, {loc} est en rupture de {nb} intrant(s): {l}"
+                 .format(loc=report.entity.casted(),
+                         nb=len(missing_inputs),
+                         l=missing_inputs_names))
+
+        for recipient in Provider.active.filter(location=report.entity):
+            logger.debug("Sending notif to {}".format(recipient))
+
+            # send notification to DTC
+            create_notif(recipient, text)
+
+            ds_slugs = ['medecin_chef', 'pf_nut']
+            ds_recipients = Provider.find_at(location=report.entity.casted(),
+                                             slugs=ds_slugs)
+            ds_recipients += Provider.find_at(
+                location=report.entity.casted().get_health_district()
+                .main_entity, slugs=ds_slugs)
+
+            for ds_recipient in ds_recipients:
+                create_notif(ds_recipient, text2)

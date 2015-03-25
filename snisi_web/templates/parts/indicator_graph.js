@@ -5,17 +5,7 @@ hc_graphs.push({
     chart: {
         renderTo: 'widget_{{ id }}', defaultSeriesType: '{{ table.graph_type }}', backgroundColor: '#ebebeb'
     },
-    colors: [
-       '#4572A7',
-       '#AA4643',
-       '#89A54E',
-       '#80699B',
-       '#3D96AE',
-       '#DB843D',
-       '#92A8CD',
-       '#A47D7C',
-       '#B5CA92'
-    ],
+    colors: [{% for color in table.colors%}'{{ color }}',{% endfor %}],
     legend: {},
     title: {text: null},
     xAxis: {
@@ -71,6 +61,7 @@ hc_graphs.push({
         {
             name: "{{ line.label|safe }}",
             yAxis: {{ line.yAxis }},
+            type: "{{ line.graph_type }}",
             data: {% localize off %}[{% for p, data in line.data %}[{{ p.start_on|to_jstimestamp }}, {{ data|default_if_none:"null" }}],{% endfor %}]{% endlocalize %}
         },
         {% endfor %}

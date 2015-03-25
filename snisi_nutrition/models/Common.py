@@ -379,6 +379,10 @@ class AbstractURENutritionR(SNISIReport):
         return self.comp_total_for('not_responding')
 
     @property
+    def comp_out_base(self):
+        return self.total_performance_for('comp')
+
+    @property
     def comp_total_out(self):
         return self.comp_total_for('total_out')
 

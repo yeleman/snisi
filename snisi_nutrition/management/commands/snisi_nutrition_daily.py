@@ -23,7 +23,8 @@ from snisi_nutrition.models.Weekly import NutWeekPeriod
 from snisi_nutrition.notifications import (
     end_of_reporting_period_notifications,
     end_of_extended_reporting_period_notifications,
-    performance_indicators_notifications)
+    performance_indicators_notifications,
+    inputs_stockouts_notifications)
 from snisi_nutrition.aggregations import (
     generate_district_reports, generate_region_country_reports,
     generate_weekly_district_reports, generate_weekly_region_country_reports)
@@ -49,6 +50,8 @@ class Command(BaseCommand):
                 end_of_extended_reporting_period_notifications,
             'performance_indicators':
                 performance_indicators_notifications,
+            'inputs_stockouts':
+                inputs_stockouts_notifications,
             'end_of_district_period': generate_district_reports,
             'end_of_region_period': generate_region_country_reports,
 
@@ -98,6 +101,7 @@ class Command(BaseCommand):
             # send notification to regions
             handle_category("end_of_district_period")
             handle_category("performance_indicators")
+            handle_category("inputs_stockouts")
 
         # On 26th
         if day >= ROUTINE_REGION_AGG_DAY:

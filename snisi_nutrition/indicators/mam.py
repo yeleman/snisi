@@ -199,6 +199,7 @@ class MAMPerformanceGraph(MAMPerformanceTable):
     rendering_type = 'graph'
     graph_type = 'column'
     graph_stacking = True
+    colors = ['#DF5353', '#55BF3B', '#7798BF']
 
 
 # Montly NUT Snthesis
@@ -262,6 +263,7 @@ class MAMPerformanceByDS(SummaryForEntitiesTable):
     rendering_type = 'graph'
     graph_type = 'column'
     graph_stacking = True
+    colors = ['#DF5353', '#55BF3B', '#7798BF']
 
     INDICATORS = [
         MAMDeceasedRate,

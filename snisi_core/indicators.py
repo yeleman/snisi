@@ -292,6 +292,9 @@ class FakeIndicator(dict):
 
 class IndicatorTableMixin(object):
 
+    colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9',
+              '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1']
+
     def get_total_for_ratio(self, line_index):
         entity = self.entities[0]
         numerators = []
@@ -653,7 +656,10 @@ class IndicatorTable(IndicatorTableMixin):
             {'label': self.get_line_label_for(idx),
              'data': self.render_line(idx, as_period_tuple=True),
              'yAxis': getattr(
-                self.INDICATORS[self.fixed_line_index(idx)], '_yaxis', 0)}
+                self.INDICATORS[self.fixed_line_index(idx)], '_yaxis', 0),
+             'graph_type': getattr(
+                self.INDICATORS[self.fixed_line_index(idx)],
+                '_graph_type', self.graph_type)}
             for idx in range(0, self.nb_lines())
             if not getattr(
                 self.INDICATORS[self.fixed_line_index(idx)],
@@ -686,6 +692,23 @@ def yAxis(index=0):
                      func.__bases__, dict(func.__dict__))
         # nfunc._is_specified_yaxis = False
         nfunc._yaxis = index
+
+        @wraps(nfunc)
+        def wrapper(self, *args, **kwargs):
+            return nfunc(*args, **kwargs)
+        return nfunc
+    return outer_wrapper
+
+
+def serie_type(stype='column'):
+    """ decorator setting the Highcharts yAxis of an indicator.
+
+        index is the index of the line in the table's multiple_index array  """
+    def outer_wrapper(func, *args, **kwargs):
+        nfunc = type(str('{}_{}'.format(func.__name__, uuid.uuid4().hex)),
+                     func.__bases__, dict(func.__dict__))
+        # nfunc._is_specified_yaxis = False
+        nfunc._graph_type = stype
 
         @wraps(nfunc)
         def wrapper(self, *args, **kwargs):

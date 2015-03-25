@@ -367,6 +367,42 @@ class Provider(AbstractBaseUser, PermissionsMixin):
         self.is_active = True
         self.save()
 
+    @classmethod
+    def find_by_location(cls, location):
+        return cls.active.filter(location__slug=location.slug)
+
+    @classmethod
+    def find_by_role(cls, role_slug):
+        return cls.active.filter(role__slug=role_slug)
+
+    @classmethod
+    def find_by_role_location(cls, role_slug=None, location=None):
+        qs = cls.active.all()
+        if role_slug is not None:
+            qs = qs.filter(role__slug=role_slug)
+        if location is not None:
+            qs = qs.filter(location__slug=location.slug)
+
+        return qs
+
+    @classmethod
+    def find_by_privilege(cls, priv_slug, location=None):
+        from snisi_core.models.Privileges import Accreditation
+        acc_qs = Accreditation.objects.filter(privilege__slug=priv_slug)
+        if location is not None:
+            acc_qs = acc_qs.filter(location__slug=location.slug)
+        return list(set([acc.provider for acc in acc_qs]))
+
+    @classmethod
+    def find_at(cls, location=None, slugs=None):
+        providers = []
+        for rps in slugs:
+            providers += list(cls.find_by_role_location(role_slug=rps,
+                                                        location=location))
+            providers += list(cls.find_by_privilege(priv_slug=rps,
+                                                    location=location))
+        return list(set(providers))
+
 
 reversion.register(Provider)
 

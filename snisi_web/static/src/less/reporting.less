@@ -30,15 +30,19 @@ table.pure-table {
 
 
 .pure-table tr {
-    border-bottom: solid 6px @border-table-nodata;
+    border-bottom: solid 1px @border-table-nodata;
 }
 
-.pure-table tr:nth-child(even) td:not(.error) td:not(.changed) {
+.pure-skin-snisi .pure-table tr:nth-child(even) {
     background-color: @background-table-even;
 }
 
-.pure-table tr:nth-child(odd) td:not(.error) td:not(.changed) {
+.pure-skin-snisi .pure-table tr:nth-child(odd) {
     background-color: @background-table-odd;
+}
+
+.pure-skin-snisi .pure-table td {
+	background-color: transparent;
 }
 
 .pure-table td a, .pure-table td a:visited, .pure-table td a:hover, .pure-table td a:link {
@@ -86,8 +90,9 @@ tr.total-row {
 	font-weight: bold;
 }
 
-tr.indicator-em {
+.pure-table tr.indicator-em {
 	border-bottom: .3em solid black !important;
+	border-top: .3em solid black !important;
 }
 
 tr.indicator-em * {
@@ -109,19 +114,20 @@ tr.indicator-em * {
 	text-align: left;	
 }
 
-.pure-table td.indicator-good, .pure-table td.indicator-warning, 
-.pure-table td.indicator-bad {
+.pure-skin-snisi .pure-table td.indicator-good,
+.pure-skin-snisi .pure-table td.indicator-warning, 
+.pure-skin-snisi .pure-table td.indicator-bad {
 	color: black;
 }
 
-.pure-table td.indicator-good {
+.pure-skin-snisi  .pure-table td.indicator-good {
 	background-color: green;
 }
 
-.pure-table td.indicator-warning {
+.pure-skin-snisi  .pure-table td.indicator-warning {
 	background-color: orange;
 }
 
-.pure-table td.indicator-bad {
+.pure-skin-snisi  .pure-table td.indicator-bad {
 	background-color: red;
 }
