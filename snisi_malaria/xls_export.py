@@ -137,8 +137,8 @@ def malaria_monthly_routine_as_xls(report):
         sheet.write_merge(0, 0, 0, 12, "Formulaire de Collecte - Données"
                           "sur l'Information de Routime du PNLP - "
                           "Niveau Primaire", styletitleform)
-    sheet.write(2, 0, "Code SNISI", styledescription)
-    sheet.write(3, 0, "Localité", styledescription)
+    sheet.write(2, 0, "Localité", styledescription)
+    sheet.write(3, 0, "Code SNISI", styledescription)
 
     sheet.write_merge(4, 5, 0, 1, "Classification", styletitle)
     sheet.write_merge(
@@ -177,11 +177,10 @@ def malaria_monthly_routine_as_xls(report):
     sheet.write_merge(27, 27, 0, 8, "")
     sheet.write_merge(28, 28, 0, 12, "", styleborformbutton)
 
-    sheet.write(2, 1, report.entity.slug, styleentity)
-
-    locality = report.entity.display_short_health_hierarchy()
-
-    sheet.write_merge(3, 3, 1, 6, locality, styleentity)
+    sheet.write_merge(2, 2, 1, 1,
+                      report.entity.display_short_health_hierarchy(),
+                      styleentity)
+    sheet.write(3, 1, report.entity.slug, styletitle)
 
     sheet.write_merge(1, 1, 0, 12, "", styledescription)
     sheet.write(2, 2, "Mois", styledescription)
