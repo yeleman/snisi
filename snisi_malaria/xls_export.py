@@ -137,9 +137,8 @@ def malaria_monthly_routine_as_xls(report):
         sheet.write_merge(0, 0, 0, 12, "Formulaire de Collecte - Données"
                           "sur l'Information de Routime du PNLP - "
                           "Niveau Primaire", styletitleform)
-    sheet.write(1, 0, "Région Médical", styledescription)
-    sheet.write(2, 0, "District Sanitaire", styledescription)
-    sheet.write(3, 0, "Etablissement sanitaire", styledescription)
+    sheet.write(2, 0, "Localité", styledescription)
+    sheet.write(3, 0, "Code SNISI", styledescription)
 
     sheet.write_merge(4, 5, 0, 1, "Classification", styletitle)
     sheet.write_merge(
@@ -178,35 +177,12 @@ def malaria_monthly_routine_as_xls(report):
     sheet.write_merge(27, 27, 0, 8, "")
     sheet.write_merge(28, 28, 0, 12, "", styleborformbutton)
 
-    if report.entity.type.slug == 'health_region':
-        region = report.entity.display_name()
-    else:
-        region = "Aucune"
-        entity = report.entity
-        while entity.parent:
-            if entity.parent.type.slug == 'health_region':
-                region = entity.parent.display_name()
-            entity = entity.parent
-    sheet.write(1, 1, region, styleentity)
+    sheet.write_merge(2, 2, 1, 1,
+                      report.entity.display_short_health_hierarchy(),
+                      styleentity)
+    sheet.write(3, 1, report.entity.slug, styletitle)
 
-    if report.entity.type.slug == 'health_district':
-        district = report.entity.display_name()
-    else:
-        district = "Aucun"
-        entity = report.entity
-        while entity.parent:
-            if entity.parent.type.slug == 'health_district':
-                district = entity.parent.display_name()
-            entity = entity.parent
-    sheet.write(2, 1, district, styleentity)
-
-    if report.entity.type.slug == 'health_center':
-        cscom = report.entity.display_name()
-    else:
-        cscom = "Aucun"
-    sheet.write_merge(3, 3, 1, 2, cscom, styleentity)
-
-    sheet.write_merge(1, 1, 2, 12, "", styledescription)
+    sheet.write_merge(1, 1, 0, 12, "", styledescription)
     sheet.write(2, 2, "Mois", styledescription)
     sheet.write(2, 3, report.period.middle().month, styledate)
     sheet.write(2, 4, "", styledescription)

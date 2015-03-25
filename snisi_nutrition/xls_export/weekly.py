@@ -57,16 +57,8 @@ def nutrition_weekly_as_xls(report):
     sheet = wb.get_sheet(0)
     del(template)
 
-    entity = report.entity.casted()
-
-    if entity.type.slug in ('health_region',
-                            'health_district',
-                            'health_center'):
-        xls_update_value_only(sheet, 1, 2,
-                              entity.get_health_region().name)
-    if entity.type.slug in ('health_district', 'health_center'):
-        xls_update_value_only(sheet, 1, 3,
-                              entity.get_health_district().name)
+    xls_update_value_only(sheet, 1, 2,
+                          report.entity.display_short_health_hierarchy())
     xls_update_value_only(sheet, 1, 4, report.entity.slug)
 
     xls_update_value_only(sheet, 5, 2, report.period.casted().strid())

@@ -34,7 +34,7 @@ def pfa_activities_as_xls(report):
     sh_stocks.portrait = False
     del(template)
 
-    xls_update_value_only(sh_services, 4, 1,  report.entity.name)
+    xls_update_value_only(sh_services, 4, 1,  report.entity.display_short_health_hierarchy())
     xls_update_value_only(sh_services, 2, 1,  report.entity.slug)
     xls_update_value_only(sh_services, 2, 2,  report.period.middle().month)
     xls_update_value_only(sh_services, 4, 2,  report.period.middle().year)

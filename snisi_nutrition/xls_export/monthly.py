@@ -42,17 +42,11 @@ def nutrition_monthly_as_xls(report):
     ]
 
     for sheet, colA, colB in meta_map:
-        if entity.type.slug in ('health_region',
-                                'health_district',
-                                'health_center'):
-            xls_update_value_only(sheet, colA, 2,
-                                  entity.get_health_region().name)
-        if entity.type.slug in ('health_district', 'health_center'):
-            xls_update_value_only(sheet, colA, 3,
-                                  entity.get_health_district().name)
-        xls_update_value_only(sheet, colA, 4, report.entity.slug)
         xls_update_value_only(sheet, colB, 2, report.period.middle().month)
         xls_update_value_only(sheet, colB, 3, report.period.middle().year)
+        xls_update_value_only(sheet, colA, 3,
+                              report.entity.display_short_health_hierarchy())
+        xls_update_value_only(sheet, colA, 4, report.entity.slug)
         xls_update_value_only(sheet, colB, 4,
                               report.created_by.get_title_full_name())
 
