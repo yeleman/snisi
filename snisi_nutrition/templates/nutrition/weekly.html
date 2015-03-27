@@ -77,14 +77,53 @@ hc_graphs.push(sam);
 
 var all = $.extend(true, {}, tmpl);
 all.chart.renderTo = 'graph-all-cases';
+all.plotOptions.column.stacking = 'normal';
 all.series = [
-    {
+	{
         type: 'column',
-        name: "Nombre de cas MAM, MAS, MAS+",
+        name: "Nombre de cas MAM",
         data: {% localize off %}
         [
         	{% for week_data in weekly_data %}
-        		{% if week_data.report == None %}null{% else %}{{ week_data.report.total_cases|default_if_none:"null" }}{% endif %},
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.urenam_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+    {
+        type: 'column',
+        name: "Nombre de cas MAS",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        	{
+        		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.urenas_cases|default_if_none:"null" }}{% endif %},
+        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		events: {
+        			click: function (e) {
+        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        			},
+        		},
+        	},
+    		{% endfor %}
+		]
+		{% endlocalize %}
+    },
+    {
+        type: 'column',
+        name: "Nombre de cas MAS+",
+        data: {% localize off %}
+        [
+        	{% for week_data in weekly_data %}
+        		{% if week_data.report == None %}null{% else %}{{ week_data.report.ureni_cases|default_if_none:"null" }}{% endif %},
     		{% endfor %}
 		]
 		{% endlocalize %}

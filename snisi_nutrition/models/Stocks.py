@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 
+from py3compat import text_type
 import reversion
 from django.db import models
 from django.db.models.signals import pre_save, post_save
@@ -72,11 +73,11 @@ class AbstractNutritionStocksR(SNISIReport):
 
     @classmethod
     def input_str(cls, input_slug):
-        return cls.INPUTS_LABELS.get(input_slug)
+        return text_type(cls.INPUTS_LABELS.get(input_slug))
 
     @classmethod
     def unit_str(cls, input_slug):
-        return cls.INPUTS_UNITS.get(input_slug)
+        return text_type(cls.INPUTS_UNITS.get(input_slug))
 
     # Plumpy Nut
     plumpy_nut_initial = models.IntegerField(_("Plumpy Nut Initial"))
@@ -413,21 +414,45 @@ class AbstractNutritionStocksR(SNISIReport):
     def inputs(cls, ureni_only=False):
         if ureni_only:
             return ['milk_f75', 'milk_f100', 'resomal']
+        return cls.therapeutical_inputs() + cls.drug_inputs()
 
+    @classmethod
+    def therapeutical_inputs(cls):
         return ['plumpy_nut',
                 'milk_f75',
                 'milk_f100',
-                'resomal',
                 'plumpy_sup',
                 'supercereal',
                 'supercereal_plus',
-                'oil',
-                'amoxycilline_125_vials',
+                'oil']
+
+    @classmethod
+    def drug_inputs(cls):
+        return ['amoxycilline_125_vials',
                 'amoxycilline_250_caps',
                 'albendazole_400',
                 'vita_100_injectable',
                 'vita_200_injectable',
                 'iron_folic_acid']
+
+    def has_stockout_from(self, inputs):
+        ureni_inputs = self.inputs(ureni_only=True)
+        has_ureni = getattr(self.entity.casted(), 'has_ureni', False)
+        for inp in inputs:
+            if not has_ureni and inp in ureni_inputs:
+                continue
+            if self.balance_for(inp) == 0:
+                return True
+        return False
+
+    def has_stockout(self):
+        return self.has_stockout_from(self.inputs())
+
+    def has_therapeutic_stockout(self):
+        return self.has_stockout_from(self.therapeutical_inputs())
+
+    def has_drug_stockout(self):
+        return self.has_stockout_from(self.drug_inputs())
 
     def line_data(self, all_fields=False):
         e = Entity.get_or_none(self.entity.slug)

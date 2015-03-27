@@ -18,25 +18,6 @@
 <h1>{{ entity.display_typed_name }} – Rapports statistiques {% if is_sam %}URENI/URENAS{% else %}URENAM{% endif %} – {{ perioda }} à {{ periodb }}</h1>
 
 <table class="pure-table center report-table shrink-input">
-<thead>
-<tr>
-	<th>STRUCTURE</th>
-	<th>ÂGE</th>
-	<th>DÉBUT MOIS</th>
-	<th>NOUV. ADM.</th>
-	<th>RÉ-ADM.</th>
-	<th>TR. URENI</th>
-	<th>ADM. GLE</th>
-	<th>GUÉRIS</th>
-	<th>DÉCÈS</th>
-	<th>ABAND.</th>
-	<th>NON-RÉP</th>
-	<th>RÉF/TRF</th>
-	<th>SORTIES GLE</th>
-	<th>FIN MOIS</th>
-</tr>
-</thead>
-<tbody>
 {% for period, expected in periods_expecteds %}
 
 	{% if not expected.arrived_report %}
@@ -45,7 +26,10 @@
 	{% else %}
 		{% with report=expected.arrived_report %}
 		{% if is_sam %}
+
 		<tr><th colspan="14">URENI – {{ period }}</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>REF. vers URENI</th><th>ADM. GLE</th><th>TRAITÉ SUCCÈS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>TRANS. vers URENI</th><th>SORTIES GLE</th><th>FIN MOIS</th>
+		</tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.ureni_report %}
 		<tr>
@@ -174,6 +158,7 @@
 		</tr>
 
 		<tr><th colspan="14">URENAS – {{ period }}</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>TR URENI vers URENAS</th><th>ADM. GLE</th><th>GUÉRIS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>REF. vers URENI TRANS. vers URENAS</th><th>SORTIES GLE</th><th>FIN MOIS</th></tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.urenas_report %}
 		<tr>
@@ -337,6 +322,7 @@
 		{% else %}
 		
 		<tr><th colspan="14">URENAM – {{ period }}</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>TR URENI vers URENAS</th><th>ADM. GLE</th><th>GUÉRIS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>REF. vers URENI TRANS. vers URENAS</th><th>SORTIES GLE</th><th>FIN MOIS</th></tr>
 		{% for sreport in report.direct_sources|sort_sources %}
 		{% if sreport.urenam_report %}
 		<tr>
@@ -528,34 +514,17 @@
 		{% endwith %}
 	{% endif %}
 {% endfor %}
-</tbody>
 </table>
 
 
 <h1>{{ entity.display_typed_name }} – GRAND TOTAL {% if is_sam %}URENI/URENAS{% else %}URENAM{% endif %} – {{ perioda }} à {{ periodb }}</h1>
 
 <table class="pure-table center report-table shrink-input">
-<thead>
-<tr>
-	<th>STRUCTURE</th>
-	<th>ÂGE</th>
-	<th>DÉBUT MOIS</th>
-	<th>NOUV. ADM.</th>
-	<th>RÉ-ADM.</th>
-	<th>TR. URENI</th>
-	<th>ADM. GLE</th>
-	<th>GUÉRIS</th>
-	<th>DÉCÈS</th>
-	<th>ABAND.</th>
-	<th>NON-RÉP</th>
-	<th>RÉF/TRF</th>
-	<th>SORTIES GLE</th>
-	<th>FIN MOIS</th>
-</tr>
-</thead>
-<tbody>
 		{% if is_sam %}
+
 		<tr><th colspan="14">URENI</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>REF. vers URENI</th><th>ADM. GLE</th><th>TRAITÉ SUCCÈS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>TRANS. vers URENI</th><th>SORTIES GLE</th><th>FIN MOIS</th>
+		</tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.ureni_report %}
 		<tr>
@@ -684,6 +653,7 @@
 		</tr>
 
 		<tr><th colspan="14">URENAS</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>TR URENI vers URENAS</th><th>ADM. GLE</th><th>GUÉRIS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>REF. vers URENI TRANS. vers URENAS</th><th>SORTIES GLE</th><th>FIN MOIS</th></tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.urenas_report %}
 		<tr>
@@ -845,6 +815,7 @@
 {% else %}
 
 		<tr><th colspan="14">URENAM</th></tr>
+		<tr><th>STRUCTURE</th><th>ÂGE</th><th>DÉBUT MOIS</th><th>NOUV. ADM.</th><th>RÉ-ADM.</th><th>TR URENI vers URENAS</th><th>ADM. GLE</th><th>GUÉRIS</th><th>DÉCÈS</th><th>ABAND.</th><th>NON-RÉP</th><th>REF. vers URENI TRANS. vers URENAS</th><th>SORTIES GLE</th><th>FIN MOIS</th></tr>
 		{% for sreport in total_table.values %}
 		{% if sreport.urenam_report %}
 		<tr>

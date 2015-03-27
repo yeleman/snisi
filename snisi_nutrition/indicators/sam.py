@@ -8,12 +8,13 @@ import logging
 
 from snisi_core.indicators import (
     IndicatorTable, em, SummaryForEntitiesTable, ReportDataMixin,
-    DataIsMissing, yAxis)
+    DataIsMissing, yAxis, serie_type)
 from snisi_nutrition.indicators.common import (
     IndicatorTableWithEntities,
     NutritionIndicator, shoudl_show, gen_fixed_entity_indicator)
 from snisi_nutrition.models.Caseload import ExpectedCaseload
-from snisi_nutrition.utils import get_caseload_completion_for
+from snisi_nutrition.utils import (get_caseload_completion_for,
+                                   get_caseload_expected_for)
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +138,28 @@ class SAMCaseloadTreatedRate(NutritionIndicator):
             period=self.period).data
 
     def _get_class(self):
-        return self.GOOD if self.data >= .50 else self.WARNING
+        return self.GOOD if self.data >= .50 else self.BAD
+
+
+class SAMNonCumulativeCaseloadTreatedRate(NutritionIndicator):
+    name = "% Caseload MAS atteint"
+    raise_class = True
+    is_ratio = True
+    is_geo_friendly = True
+    geo_section = "Performances MAS"
+
+    def get_denominator(self):
+        return get_caseload_expected_for(period=self.period,
+                                         entity=self.entity,
+                                         uren='sam')
+
+    def get_numerator(self):
+        return SAMNewCases(
+            entity=self.entity,
+            period=self.period).data
+
+    def _get_class(self):
+        return self.GOOD if self.data >= 50 else self.BAD
 
 
 class URENASNewCasesRate(NutritionIndicator):
@@ -243,14 +265,12 @@ class SAMCaseloadTable(IndicatorTable):
     name = "MAS"
     caption = ("CASELOAD MAS 6-59 MOIS ATTENDU")
     rendering_type = 'table'
-    add_total = False
+    add_total = True
     use_advanced_rendering = True
 
     INDICATORS = [
         SAMNewCases,
-        # SAMCaseloadExpected,
-        # SAMCaseloadTreated,
-        SAMCaseloadTreatedRate
+        SAMNonCumulativeCaseloadTreatedRate
     ]
 
 
@@ -322,6 +342,7 @@ class SAMPerformanceGraph(SAMPerformanceTable):
     rendering_type = 'graph'
     graph_type = 'column'
     graph_stacking = True
+    colors = ['#DF5353', '#55BF3B', '#7798BF']
 
 
 class URENIURENASNewCasesTableWithEntities(IndicatorTableWithEntities):
@@ -410,7 +431,7 @@ class SAMCaseloadTreatedGraph(IndicatorTable):
 
     INDICATORS = [
         yAxis(0)(SAMCaseloadTreatedRate),
-        yAxis(1)(SAMCaseloadTreated)
+        serie_type('spline')(yAxis(1)(SAMCaseloadTreated))
     ]
 
 
@@ -447,6 +468,7 @@ class SAMPerformanceByDS(SummaryForEntitiesTable):
     rendering_type = 'graph'
     graph_type = 'column'
     graph_stacking = True
+    colors = ['#DF5353', '#55BF3B', '#7798BF']
 
     INDICATORS = [
         SAMDeceasedRate,

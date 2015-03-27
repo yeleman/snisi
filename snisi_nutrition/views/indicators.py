@@ -282,6 +282,7 @@ def indicators_browser(request,
         periodb_str=periodb_str,
         period_cls=MonthPeriod,
         must_be_in_cluster=True,
+        allow_coming_year=True,
         full_lineage=['country', 'health_region', 'health_district'],
     ))
 
@@ -358,6 +359,7 @@ def synthesis_browser(request,
                     ('sam_repartition_graph', URENIURENASRepartitionGraph),
                     ('sam_new_cases_hc_graph', URENASNewCasesByHC),
                     ('sam_performance_graph', SAMPerformanceGraph),
+                    ('sam_caseload_treated_graph', SAMCaseloadTreatedGraph),
                     ('sam_performance_hc_graph', SAMPerformanceByHC),
                 ]
             if kwargs.get('is_mam', False):
