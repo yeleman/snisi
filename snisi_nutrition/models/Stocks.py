@@ -414,21 +414,45 @@ class AbstractNutritionStocksR(SNISIReport):
     def inputs(cls, ureni_only=False):
         if ureni_only:
             return ['milk_f75', 'milk_f100', 'resomal']
+        return cls.therapeutical_inputs() + cls.drug_inputs()
 
+    @classmethod
+    def therapeutical_inputs(cls):
         return ['plumpy_nut',
                 'milk_f75',
                 'milk_f100',
-                'resomal',
                 'plumpy_sup',
                 'supercereal',
                 'supercereal_plus',
-                'oil',
-                'amoxycilline_125_vials',
+                'oil']
+
+    @classmethod
+    def drug_inputs(cls):
+        return ['amoxycilline_125_vials',
                 'amoxycilline_250_caps',
                 'albendazole_400',
                 'vita_100_injectable',
                 'vita_200_injectable',
                 'iron_folic_acid']
+
+    def has_stockout_from(self, inputs):
+        ureni_inputs = self.inputs(ureni_only=True)
+        has_ureni = getattr(self.entity.casted(), 'has_ureni', False)
+        for inp in inputs:
+            if not has_ureni and inp in ureni_inputs:
+                continue
+            if self.balance_for(inp) == 0:
+                return True
+        return False
+
+    def has_stockout(self):
+        return self.has_stockout_from(self.inputs())
+
+    def has_therapeutic_stockout(self):
+        return self.has_stockout_from(self.therapeutical_inputs())
+
+    def has_drug_stockout(self):
+        return self.has_stockout_from(self.drug_inputs())
 
     def line_data(self, all_fields=False):
         e = Entity.get_or_none(self.entity.slug)

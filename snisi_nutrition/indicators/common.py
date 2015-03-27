@@ -9,10 +9,11 @@ import copy
 from snisi_core.indicators import (IndicatorTable, Indicator,
                                    ReportDataMixin,
                                    gen_report_indicator,
-                                   is_ref, ref_is, hide)
+                                   is_ref, ref_is, hide, DataIsMissing,
+                                   DataNotExpected)
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Projects import Cluster
-from snisi_tools.caching import json_cache_from_cluster
+from snisi_tools.caching import json_cache_from_cluster, descendants_slugs
 from snisi_nutrition.models.Monthly import NutritionR, AggNutritionR
 
 cluster = Cluster.get_or_none("nutrition_routine")
@@ -45,6 +46,10 @@ class NutritionIndicator(Indicator):
         for report in self.reports:
             value += getattr(report.casted(), field, 0)
         return value
+
+    def all_hc_func_values(self, subreport, func, *params):
+        return [getattr(getattr(r, subreport), func)(*params)
+                for r in self.report.indiv_sources.all()]
 
 
 gen_shortcut = lambda field, label=None: gen_report_indicator(
@@ -146,3 +151,25 @@ class RSCompletionTable(IndicatorTable):
     name = "Rapportage"
     caption = ("RAPPORTS MENSUELS TRANSMIS")
     rendering_type = 'table'
+
+
+class NumberOfHealthUnitsReporting(NutritionIndicator):
+    name = "Nombre de structures ayant transmis leurs formulaires."
+    is_yesno = True
+
+    def _compute(self):
+        if self.is_hc():
+            if self.expected and self.expected.satisfied:
+                return 1
+            else:
+                return 0
+        if self.expected and self.expected.satisfied:
+            return NutritionR.objects.filter(
+                period=self.period,
+                entity__slug__in=descendants_slugs(cluster,
+                                                   self.entity.slug)).count()
+            return self.report.nb_source_reports_arrived
+        elif self.expected:
+            raise DataIsMissing
+        else:
+            raise DataNotExpected
