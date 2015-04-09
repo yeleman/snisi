@@ -28,7 +28,7 @@ def epid_activities_as_xls(report):
     del(template)
 
     xls_update_value_only(sh_report,
-                          4, 1, report.entity.name)
+                          4, 1, report.entity.display_short_health_hierarchy())
     xls_update_value_only(sh_report,
                           2, 1, report.entity.slug)
     xls_update_value_only(sh_report,
