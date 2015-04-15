@@ -268,6 +268,7 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
         class SNISIReportForm(forms.ModelForm):
             class Meta:
                 model = self.casted().__class__
+                exclude = []
         if cls_only:
             return SNISIReportForm
         return SNISIReportForm(instance=self)
@@ -900,10 +901,10 @@ class ExpectedReporting(models.Model):
     within_entity = models.BooleanField(default=False)
     reporting_period = models.ForeignKey(
         Period, related_name='expr_for_reporting_period',
-        blank=True)
+        blank=True, null=True)
     extended_reporting_period = models.ForeignKey(
         Period, related_name='expr_for_ext_reporting_period',
-        blank=True)
+        blank=True, null=True)
     amount_expected = models.CharField(max_length=30,
                                        choices=REPORTING_NUMBERS.items())
     completion_status = models.CharField(max_length=30,
