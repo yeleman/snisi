@@ -54,9 +54,9 @@ class Command(BaseCommand):
                 if r.expected_reportings.count():
                     logger.info("\tfound exp")
                     r.expected_reportings.all().delete()
-                if r.expected_validations.count():
+                if r.expected_validation:
                     logger.info("\tfound expval")
-                    r.expected_validations.all().delete()
+                    r.expected_validation.delete()
                 logger.info("\tdeleting report.")
                 r.delete()
 

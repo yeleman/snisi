@@ -1055,7 +1055,7 @@ class ExpectedValidation(models.Model):
         verbose_name_plural = _("Expected Validations")
 
     report = models.OneToOneField(SNISIReport, primary_key=True,
-                                  related_name='expected_validations')
+                                  related_name='expected_validation')
     validation_period = models.ForeignKey(Period)  # from 1st to 5th.
     validating_entity = models.ForeignKey(Entity)  # CSCOM, District, Region
     validating_role = models.ForeignKey(Role)  # charge SIS, DTC,

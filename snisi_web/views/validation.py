@@ -81,7 +81,7 @@ def edit_report(request, report_receipt, **kwargs):
         raise Http404
 
     # mark report as validated
-    expected_val = report.expected_validations.get()
+    expected_val = report.expected_validation
 
     if not expected_val.validation_period.casted().contains(timezone.now()):
         messages.error(request, "Impossible de valider ce rapport en dehors "
@@ -146,7 +146,7 @@ def edit_report(request, report_receipt, **kwargs):
 
 def handle_do_validation(report, provider):
     # mark report as validated
-    expected_val = report.expected_validations.get()
+    expected_val = report.expected_validation
 
     if not expected_val.validation_period.casted().contains(timezone.now()):
         return (False, "Impossible de valider ce rapport en dehors "

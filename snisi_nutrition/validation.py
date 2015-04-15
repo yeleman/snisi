@@ -153,7 +153,7 @@ def do_validation(report, provider):
     def acknowledge(report, validated_on, provider):
         if report is None:
             return
-        expected_val = report.expected_validations.get()
+        expected_val = report.expected_validation
         expected_val.acknowledge_validation(
             validated=True,
             validated_by=provider,
@@ -161,7 +161,7 @@ def do_validation(report, provider):
             auto_validated=False)
 
     # mark report as validated
-    expected_val = report.expected_validations.get()
+    expected_val = report.expected_validation
 
     if not expected_val.validation_period.casted().contains(timezone.now()):
         return (False, "Impossible de valider ce rapport en dehors "
