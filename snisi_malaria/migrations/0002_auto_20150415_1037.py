@@ -26,11 +26,11 @@ class Migration(migrations.Migration):
             name='direct_indiv_sources',
             field=models.ManyToManyField(related_name='direct_source_agg_aggepidemiomalariar_reports', verbose_name='Primary. Sources (direct)', to='snisi_malaria.EpidemioMalariaR', blank=True),
         ),
-        migrations.AlterField(
-            model_name='aggepidemiomalariar',
-            name='indiv_sources',
-            field=models.ManyToManyField(related_name='source_agg_aggepidemiomalariar_reports', verbose_name='Primary. Sources (all)', to='snisi_malaria.EpidemioMalariaR', blank=True),
-        ),
+        # migrations.AlterField(
+        #     model_name='aggepidemiomalariar',
+        #     name='indiv_sources',
+        #     field=models.ManyToManyField(related_name='source_agg_aggepidemiomalariar_reports', verbose_name='Primary. Sources (all)', to='snisi_malaria.EpidemioMalariaR', blank=True),
+        # ),
         migrations.AlterField(
             model_name='aggmalariar',
             name='agg_sources',
