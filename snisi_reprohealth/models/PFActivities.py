@@ -514,14 +514,14 @@ class AggPFActivitiesR(PFActivitiesRIface,
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (all)"),
-        blank=True, null=True,
+        blank=True,
         related_name='source_agg_%(class)s_reports',
         symmetrical=False)
 
     direct_indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (direct)"),
-        blank=True, null=True,
+        blank=True,
         related_name='direct_source_agg_%(class)s_reports',
         symmetrical=False)
 

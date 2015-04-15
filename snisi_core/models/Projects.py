@@ -65,6 +65,9 @@ class Domain(models.Model):
     def __str__(self):
         return ugettext("{name}").format(name=self.name)
 
+    def __unicode__(self):
+        return self.__str__()
+
     @classmethod
     def get_or_none(cls, slug):
         try:

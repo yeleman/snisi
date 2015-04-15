@@ -162,7 +162,7 @@ DATABASES = {
 
 LANGUAGES = (('fr', "French"),)
 LANGUAGE_CODE = 'fr-fr'
-LOCALE_PATHS = os.path.join(ROOT_DIR, 'locale')
+LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'),)
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True

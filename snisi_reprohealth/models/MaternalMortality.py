@@ -66,7 +66,7 @@ class MaternalDeathR(SNISIReport):
         verbose_name=_("Dead children of the deceased"))
     pregnant = models.BooleanField(verbose_name=_("Pregnant?"))
     pregnancy_weeks = models.PositiveIntegerField(
-        null=True, blank=True,
+        null=True,
         verbose_name=_("Duration of the pregnancy (weeks)"))
     pregnancy_related_death = models.BooleanField(
         default=False, verbose_name=_("Pregnancy related death"))
@@ -187,7 +187,7 @@ class AggMaternalDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
-        blank=True, null=True,
+        blank=True,
         related_name='source_agg_%(class)s_reports')
 
     def fill_blank(self):

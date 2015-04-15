@@ -523,7 +523,7 @@ class PeriodicAggregatedReportInterface(models.Model):
     agg_sources = models.ManyToManyField(
         'self',
         verbose_name=_("Aggr. Sources (all)"),
-        blank=True, null=True,
+        blank=True,
         related_name='aggregated_agg_%(class)s_reports',
         symmetrical=False)
 
@@ -531,7 +531,7 @@ class PeriodicAggregatedReportInterface(models.Model):
     direct_agg_sources = models.ManyToManyField(
         'self',
         verbose_name=_("Aggr. Sources (direct)"),
-        blank=True, null=True,
+        blank=True,
         related_name='direct_aggregated_agg_%(class)s_reports',
         symmetrical=False)
 
@@ -900,17 +900,17 @@ class ExpectedReporting(models.Model):
     within_entity = models.BooleanField(default=False)
     reporting_period = models.ForeignKey(
         Period, related_name='expr_for_reporting_period',
-        blank=True, null=True)
+        blank=True)
     extended_reporting_period = models.ForeignKey(
         Period, related_name='expr_for_ext_reporting_period',
-        blank=True, null=True)
+        blank=True)
     amount_expected = models.CharField(max_length=30,
                                        choices=REPORTING_NUMBERS.items())
     completion_status = models.CharField(max_length=30,
                                          choices=REPORTING_COMPLETION.items(),
                                          default=COMPLETION_MISSING)
     arrived_reports = models.ManyToManyField(
-        'SNISIReport', blank=True, null=True,
+        'SNISIReport', blank=True,
         related_name='expected_reportings')
     updated_on = models.DateTimeField(default=timezone.now)
 
@@ -1053,8 +1053,8 @@ class ExpectedValidation(models.Model):
         verbose_name = _("Expected Validation")
         verbose_name_plural = _("Expected Validations")
 
-    report = models.ForeignKey(SNISIReport, primary_key=True,
-                               related_name='expected_validations')
+    report = models.OneToOneField(SNISIReport, primary_key=True,
+                                  related_name='expected_validations')
     validation_period = models.ForeignKey(Period)  # from 1st to 5th.
     validating_entity = models.ForeignKey(Entity)  # CSCOM, District, Region
     validating_role = models.ForeignKey(Role)  # charge SIS, DTC,

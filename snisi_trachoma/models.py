@@ -115,7 +115,7 @@ class TTBacklogMissionR(SNISIReport):
     village_reports = models.ManyToManyField(
         TTBacklogVillageR,
         verbose_name=_("Rapports Villages"),
-        blank=True, null=True)
+        blank=True)
 
     # total values for all villages. real-time updated
     consultation_male = models.PositiveIntegerField(
@@ -251,7 +251,7 @@ class AggTTBacklogMissionR(PeriodicAggregatedReportInterface, SNISIReport):
     village_reports = models.ManyToManyField(
         TTBacklogVillageR,
         verbose_name=_("Rapports Villages"),
-        blank=True, null=True)
+        blank=True)
 
     # raw statistics from village reports. real-time updated
     nb_village_reports = models.PositiveIntegerField()

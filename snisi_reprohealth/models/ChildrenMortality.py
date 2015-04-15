@@ -158,7 +158,7 @@ class AggChildrenDeathR(PeriodicAggregatedReportInterface, SNISIReport):
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
-        blank=True, null=True,
+        blank=True,
         related_name='source_agg_%(class)s_reports')
 
     def fill_blank(self):

@@ -88,7 +88,7 @@ class AggBednetR(PeriodicAggregatedReportInterface, AbstractBednetR):
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
-        blank=True, null=True,
+        blank=True,
         related_name='source_agg_%(class)s_reports')
 
 receiver(pre_save, sender=AggBednetR)(pre_save_report)

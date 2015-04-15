@@ -136,7 +136,8 @@ def get_uuid():
 
 
 def get_snisi_apps():
-    return [app for app in [p.split('/')[-1] for p in apps.get_app_paths()]
+    get_app_paths = [a.path for a in apps.get_app_configs()]
+    return [app for app in [p.split('/')[-1] for p in get_app_paths]
             if app.startswith('snisi_')
             and app not in ('snisi_core', 'snisi_sms',
                             'snisi_web', 'snisi_tools', 'snisi_maint')]

@@ -301,13 +301,13 @@ class AggURENINutritionR(AbstractURENINutritionR,
     indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_(u"Primary. Sources"),
-        blank=True, null=True,
+        blank=True,
         related_name='source_agg_%(class)s_reports')
 
     direct_indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (direct)"),
-        blank=True, null=True,
+        blank=True,
         related_name='direct_source_agg_%(class)s_reports')
 
     @classmethod
