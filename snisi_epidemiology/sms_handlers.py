@@ -28,7 +28,7 @@ def epidemiology_handler(message):
     if message.content.lower().startswith('smir alert'):
         return epidemio_alert(message)
 
-    if message.content.lower().startswith('smir '):
+    if message.content.lower().startswith('smir w'):
         return epidemio(message)
 
     return False
@@ -43,7 +43,7 @@ def epidemio(message):
     reply = SMSReply(message, PROJECT_BRAND)
 
     try:
-        args_names = ['kw', 'username', 'password', 'date',
+        args_names = ['kw', 'kw2', 'username', 'password', 'date',
                       'ebola_case',
                       'ebola_death',
                       'acute_flaccid_paralysis_case',
