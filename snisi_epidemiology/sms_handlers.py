@@ -81,7 +81,7 @@ def epidemio(message):
     try:
         for key, value in arguments.items():
 
-            if key in ('kw',):
+            if key in ('kw', 'kw2'):
                 continue
             elif key in ('username', 'password'):
                 arguments[key] = value.strip()
