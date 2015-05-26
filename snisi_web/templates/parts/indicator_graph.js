@@ -66,11 +66,23 @@ hc_graphs.push({
         },
         {% endfor %}
     ],
+    tooltip: {
+    	enabled: false,
+        formatter: function() {
+        	if (this.y != null) {
+        		var nf = (Math.round(this.y * 10) / 10).toString().replace('.', ',');
+        		if (this.series.yAxis.userOptions.show_as_percentage) {
+        			return nf + '%';
+        		}
+        		return  nf;
+        	}
+        }
+    },
     plotOptions: {
         line: {
             animation: false,
             dataLabels: {
-                enabled: true
+                enabled: true,
             },
             enableMouseTracking: false
         },

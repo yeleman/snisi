@@ -36,7 +36,7 @@ class HealthUnitsWithoutQuinineStockout(MalariaIndicator):
 
 
 class HealthUnitsWithoutSerumStockout(MalariaIndicator):
-    name = "Structures sans rupture de stock d’Artheméter Injectable"
+    name = "Structures sans rupture de stock de Sérum"
 
     def _compute(self):
         if self.is_hc():

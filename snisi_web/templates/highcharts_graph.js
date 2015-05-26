@@ -1,5 +1,6 @@
 {% load snisi %}
 {% load l10n %}
+{% # probably obsolete: see copyright notice to PNLP %}
 {
     chart: {
         renderTo: 'widget_{{ id }}',

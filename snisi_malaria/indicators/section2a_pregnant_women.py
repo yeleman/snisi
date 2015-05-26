@@ -28,7 +28,7 @@ class CasPaludismeFemmesEnceintes(IndicatorTable):
             'pw_total_tested_malaria_cases',
             "Total des cas suspects testés (GE et/ou TDR)")),
         ref_is(2)(gen_shortcut(
-            'pw_total_severe_malaria_cases',
+            'pw_total_confirmed_malaria_cases',
             "Nombre de cas suspects testés qui sont confirmés "
             "par GE ou TDR(cas graves)")),
     ]
