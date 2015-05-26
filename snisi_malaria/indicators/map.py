@@ -61,10 +61,10 @@ class NumberOfHealthUnitsReporting(MalariaIndicator):
             else:
                 return 0
         if self.expected and self.expected.satisfied:
-            return MalariaR.objects.filter(
-                period=self.period,
-                entity__slug__in=descendants_slugs(cluster,
-                                                   self.entity.slug)).count()
+            # return MalariaR.objects.filter(
+            #     period=self.period,
+            #     entity__slug__in=descendants_slugs(cluster,
+            #                                        self.entity.slug)).count()
             return self.report.nb_source_reports_arrived
         elif self.expected:
             raise DataIsMissing
