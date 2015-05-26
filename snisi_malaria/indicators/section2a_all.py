@@ -46,7 +46,7 @@ class ProportionsPaludismeConsultationsTTC(IndicatorTable):
 
     name = "Figure 3"
     title = ""
-    caption = ("Proportion des cas de paludisme par rapport aux "
+    caption = ("Proportion des cas suspects de paludisme par rapport aux "
                "consultations toutes causes confondues")
     rendering_type = 'graph'
     as_percentage = True

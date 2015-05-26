@@ -20,6 +20,8 @@ class NumberOfHealthUnitsWithin(MalariaIndicator):
 
     def _compute(self):
         return ExpectedReporting.objects.filter(
+            report_class__slug__in=['malaria_monthly_routine',
+                                    'malaria_monthly_routine_aggregated'],
             entity__type__slug='health_center',
             period=self.period).filter(
                 entity__slug__in=descendants_slugs(cluster, self.entity.slug)

@@ -19,10 +19,19 @@ class CasPaludismeSimpleTraitesCTA(IndicatorTable):
     add_total = True
 
     INDICATORS = [
-        is_ref(gen_shortcut('u5_total_simple_malaria_cases')),
-        ref_is(0)(gen_shortcut('u5_total_treated_malaria_cases')),
-        is_ref(gen_shortcut('o5_total_simple_malaria_cases')),
-        ref_is(2)(gen_shortcut('o5_total_treated_malaria_cases')),
+        is_ref(gen_shortcut('u5_total_simple_malaria_cases',
+                            "Nbre de cas simple moins de 5ans")),
+        ref_is(0)(gen_shortcut('u5_total_treated_malaria_cases',
+                               "Nbre de cas traités par CTA moins de 5ans")),
+        is_ref(gen_shortcut('o5_total_simple_malaria_cases',
+                            "Nbre de cas simple 5ans et plus")),
+        ref_is(2)(gen_shortcut('o5_total_treated_malaria_cases',
+                               "Nbre de cas traités par CTA 5ans et plus")),
+        gen_shortcut('total_confirmed_malaria_cases', "Nbre de cas confirmés"),
+        is_ref(gen_shortcut('total_simple_malaria_cases',
+                            "Nbre de cas simple")),
+        ref_is(2)(gen_shortcut('total_treated_malaria_cases',
+                               "Nbre de cas traités par CTA")),
     ]
 
 
@@ -39,8 +48,10 @@ class CasPaludismeConfirmesTraitesCTA(IndicatorTable):
     graph_type = 'column'
 
     INDICATORS = [
-        gen_shortcut('total_confirmed_malaria_cases', "Nbre de cas confirmés"),
-        gen_shortcut('total_treated_malaria_cases', "Nbre de cas traités par CTA"),
+        gen_shortcut('total_confirmed_malaria_cases',
+                     "Nbre de cas confirmés"),
+        gen_shortcut('total_treated_malaria_cases',
+                     "Nbre de cas traités par CTA"),
     ]
 
 

@@ -96,7 +96,7 @@ class NbreConfirmesOverFive(IndicatorTable):
     as_percentage = True
 
     INDICATORS = [
-        hide(is_ref(gen_shortcut('o5_total_suspected_malaria_cases',
+        hide(is_ref(gen_shortcut('o5_total_tested_malaria_cases',
                                  "Cas suspects"))),
         ref_is(0)(gen_shortcut('o5_total_confirmed_malaria_cases',
                                "% Cas confirmés")),
