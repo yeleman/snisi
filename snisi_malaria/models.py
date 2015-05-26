@@ -182,6 +182,7 @@ class MalariaRIface(object):
 
     def add_pregnantwomen_data(self, total_consultation_all_causes,
                                total_suspected_malaria_cases,
+                               total_simple_malaria_cases,
                                total_severe_malaria_cases,
                                total_tested_malaria_cases,
                                total_confirmed_malaria_cases,
@@ -196,6 +197,7 @@ class MalariaRIface(object):
                                total_sp2):
         self.pw_total_consultation_all_causes = total_consultation_all_causes
         self.pw_total_suspected_malaria_cases = total_suspected_malaria_cases
+        self.pw_total_simple_malaria_cases = total_simple_malaria_cases
         self.pw_total_severe_malaria_cases = total_severe_malaria_cases
         self.pw_total_tested_malaria_cases = total_tested_malaria_cases
         self.pw_total_confirmed_malaria_cases = total_confirmed_malaria_cases
@@ -350,6 +352,8 @@ class MalariaR(MalariaRIface, SNISIReport):
         _("Total Consultation All Causes"))
     pw_total_suspected_malaria_cases = models.PositiveIntegerField(
         _("Total Suspected Malaria Cases"))
+    pw_total_simple_malaria_cases = models.PositiveIntegerField(
+        _("Total Simple Malaria Cases"), default=0)
     pw_total_severe_malaria_cases = models.PositiveIntegerField(
         _("Total Severe Malaria Cases"))
     pw_total_tested_malaria_cases = models.PositiveIntegerField(
@@ -406,7 +410,8 @@ class MalariaR(MalariaRIface, SNISIReport):
     def fill_blank(self):
         self.add_underfive_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.add_overfive_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        self.add_pregnantwomen_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        self.add_pregnantwomen_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                    0, 0, 0, 0, 0)
         self.add_stockout_data(self.NO, self.NO, self.NO, self.NO, self.NO,
                                self.NO, self.NO, self.NO, self.NO)
 
@@ -518,6 +523,8 @@ class AggMalariaR(MalariaRIface,
         _("Total Consultation All Causes"))
     pw_total_suspected_malaria_cases = models.PositiveIntegerField(
         _("Total Suspected Malaria Cases"))
+    pw_total_simple_malaria_cases = models.PositiveIntegerField(
+        _("Total Simple Malaria Cases"), default=0)
     pw_total_severe_malaria_cases = models.PositiveIntegerField(
         _("Total Severe Malaria Cases"))
     pw_total_tested_malaria_cases = models.PositiveIntegerField(
@@ -582,7 +589,8 @@ class AggMalariaR(MalariaRIface,
     def fill_blank(self, **kwargs):
         self.add_underfive_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.add_overfive_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        self.add_pregnantwomen_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        self.add_pregnantwomen_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                    0, 0, 0, 0)
         self.add_stockout_data(0, 0, 0, 0, 0, 0, 0, 0, 0)
         self.set_reporting_status_fields(**kwargs)
 
@@ -847,13 +855,15 @@ class AggEpidemioMalariaR(EpidemioMalariaRIFace,
         INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (all)"),
         blank=True,
-        related_name='source_agg_%(class)s_reports')
+        related_name='source_agg_%(class)s_reports',
+        symmetrical=False)
 
     direct_indiv_sources = models.ManyToManyField(
         INDIVIDUAL_CLS,
         verbose_name=_("Primary. Sources (direct)"),
         blank=True,
-        related_name='direct_source_agg_%(class)s_reports')
+        related_name='direct_source_agg_%(class)s_reports',
+        symmetrical=False)
 
     @classmethod
     def create_from(cls, period, entity, created_by,
