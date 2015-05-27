@@ -10,15 +10,11 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from snisi_core.models.Periods import MonthPeriod
+from snisi_tools.datetime import DEBUG_change_system_date
 from snisi_core.models.PeriodicTasks import PeriodicTask
 from snisi_nutrition import (DOMAIN_SLUG,
                              ROUTINE_DISTRICT_AGG_DAYS_DELTA,
-                             ROUTINE_REGION_AGG_DAYS_DELTA,
-                             ROUTINE_REPORTING_END_DAY,
-                             ROUTINE_EXTENDED_REPORTING_END_DAY,
-                             ROUTINE_DISTRICT_AGG_DAY,
-                             ROUTINE_REGION_AGG_DAY)
+                             ROUTINE_REGION_AGG_DAYS_DELTA)
 from snisi_nutrition.models.Weekly import NutWeekPeriod
 from snisi_nutrition.notifications import (
     end_of_reporting_period_notifications,
@@ -40,8 +36,6 @@ class Command(BaseCommand):
 
         now = timezone.now()
         today = now.date()
-        day = now.day
-        period = MonthPeriod.current().previous()
 
         category_matrix = {
             'end_of_reporting_period':
@@ -61,8 +55,6 @@ class Command(BaseCommand):
         }
 
         def handle_category(category, custom_period=None):
-            if custom_period is None:
-                custom_period = period
             slug = "{domain}_{period}_{category}".format(
                 domain=DOMAIN_SLUG,
                 period=custom_period.strid(),
@@ -80,42 +72,9 @@ class Command(BaseCommand):
             else:
                 logger.debug("{} already triggered".format(task))
 
-        # Monthly reports
-        # On 6th
-        if day >= ROUTINE_REPORTING_END_DAY:
-            # send warning notice to non-satisfied HC person
-            handle_category("end_of_reporting_period")
-            pass
-
-        # On 11th
-        if day >= ROUTINE_EXTENDED_REPORTING_END_DAY:
-            # send summary notification and validation invitatin to districts
-            handle_category("end_of_extended_reporting_period")
-            pass
-
-        # On 16th
-        if day >= ROUTINE_DISTRICT_AGG_DAY:
-            # validate all HC reports
-            # create aggregated for district
-            # create expected-validation for district
-            # send notification to regions
-            handle_category("end_of_district_period")
-            handle_category("performance_indicators")
-            handle_category("inputs_stockouts")
-
-        # On 26th
-        if day >= ROUTINE_REGION_AGG_DAY:
-            # validate all district reports
-            # create aggregated for region
-            # create aggregated for country
-            # send notification to central/national
-            handle_category("end_of_region_period")
-
-        # WEEKLY REPORTS
-
         # number and position of weeks across month is inconsistent.
         # loop through potential past weeks and process if possible
-        pf = NutWeekPeriod.find_create_by_date(period.start_on)
+        pf = NutWeekPeriod.find_create_by_date(datetime.datetime(2015, 1, 1))
         pl = NutWeekPeriod.current()
         wperiods = [p for p in NutWeekPeriod.all_from(pf, pl)
                     if p.end_on < now]
@@ -127,6 +86,9 @@ class Command(BaseCommand):
             # send notification to regions
             if (wperiod.end_on + datetime.timedelta(
                     days=ROUTINE_DISTRICT_AGG_DAYS_DELTA)).date() <= today:
+                nd = (wperiod.end_on + datetime.timedelta(
+                    days=ROUTINE_DISTRICT_AGG_DAYS_DELTA)).date()
+                DEBUG_change_system_date(nd, True)
                 handle_category("end_of_weekly_district_period", wperiod)
 
             # validate all district reports
@@ -135,4 +97,7 @@ class Command(BaseCommand):
             # send notification to central/national
             if (wperiod.end_on + datetime.timedelta(
                     days=ROUTINE_REGION_AGG_DAYS_DELTA)).date() <= today:
+                nd = (wperiod.end_on + datetime.timedelta(
+                    days=ROUTINE_REGION_AGG_DAYS_DELTA)).date()
+                DEBUG_change_system_date(nd, True)
                 handle_category("end_of_weekly_region_period", wperiod)
