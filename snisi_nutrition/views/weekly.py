@@ -72,6 +72,12 @@ def display_weekly(request,
     except:
         report_cls = None
 
+    # default is show periods since begining of this year.
+    if perioda_str is None and periodb_str is None:
+        nb_mp_ty = MonthPeriod.current().start_on.month - 1
+    else:
+        nb_mp_ty = 2
+
     context.update(entity_periods_context(
         request=request,
         root=root,
@@ -84,7 +90,7 @@ def display_weekly(request,
         period_cls=MonthPeriod,
         assume_previous=False,
         must_be_in_cluster=True,
-        backlog_periods=2,
+        backlog_periods=nb_mp_ty,
     ))
 
     extended_end, district_agg, region_agg = important_weekly_day_names()
