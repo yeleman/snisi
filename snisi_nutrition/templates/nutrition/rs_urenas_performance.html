@@ -31,7 +31,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_urenas_comp_abandon }}</td>
+			<td>{{ pdata.sam_urenas_comp_deceased }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -41,7 +41,7 @@
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
-			<td>{{ pdata.sam_urenas_comp_deceased }}</td>
+			<td>{{ pdata.sam_urenas_comp_abandon }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>
@@ -66,22 +66,22 @@
 	{% endfor %}
 </tr>
 <tr {% if forloop.last %}class="highlight-row"{% endif %}>
-	<td class="left">% abandon</td>
-	{% for pdata in edata.periods.values %}
-		{% if pdata.expected == None %}
-		<td class="nodata"></td>
-		{% else %}
-			<td class="{{ pdata.sam_urenas_comp_abandon_rate_class }}">{{ pdata.sam_urenas_comp_abandon_rate|percent }}</td>
-		{% endif %}
-	{% endfor %}
-</tr>
-<tr {% if forloop.last %}class="highlight-row"{% endif %}>
 	<td class="left">% décès</td>
 	{% for pdata in edata.periods.values %}
 		{% if pdata.expected == None %}
 		<td class="nodata"></td>
 		{% else %}
 			<td class="{{ pdata.sam_urenas_comp_deceased_rate_class }}">{{ pdata.sam_urenas_comp_deceased_rate|percent }}</td>
+		{% endif %}
+	{% endfor %}
+</tr>
+<tr {% if forloop.last %}class="highlight-row"{% endif %}>
+	<td class="left">% abandon</td>
+	{% for pdata in edata.periods.values %}
+		{% if pdata.expected == None %}
+		<td class="nodata"></td>
+		{% else %}
+			<td class="{{ pdata.sam_urenas_comp_abandon_rate_class }}">{{ pdata.sam_urenas_comp_abandon_rate|percent }}</td>
 		{% endif %}
 	{% endfor %}
 </tr>

@@ -226,12 +226,12 @@ def generate_entity_period_matrix(entity, period, months_data=None):
 
         if 'sam_ureni_' in prefix:
             report = report.ureni_report
-            prefix = prefix.replace('sam_ureni_comp_', '') \
+            prefix = prefix.replace('sam_ureni_comp_', 'comp_') \
                 .replace('sam_ureni_', '')
 
         if 'sam_urenas_' in prefix:
-            report = report.ureni_report
-            prefix = prefix.replace('sam_urenas_comp_', '') \
+            report = report.urenas_report
+            prefix = prefix.replace('sam_urenas_comp_', 'comp_') \
                 .replace('sam_urenas_', '')
 
         tof = '{}total_out'.format(prefix) \
@@ -257,16 +257,17 @@ def generate_entity_period_matrix(entity, period, months_data=None):
 
         if 'sam_ureni_' in prefix:
             report = report.ureni_report
-            prefix = prefix.replace('sam_ureni_comp_', '') \
+            prefix = prefix.replace('sam_ureni_comp_', 'comp_') \
                 .replace('sam_ureni_', '')
 
         if 'sam_urenas_' in prefix:
-            report = report.ureni_report
-            prefix = prefix.replace('sam_urenas_comp_', '') \
+            report = report.urenas_report
+            prefix = prefix.replace('sam_urenas_comp_', 'comp_') \
                 .replace('sam_urenas_', '')
 
         f = '{}{}'.format(prefix, field) \
             if prefix != 'all' else '{}'.format(field)
+
         if isinstance(report, dict):
             d = data.get(f)
         else:
