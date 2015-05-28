@@ -174,7 +174,7 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
 
         # total >  malaria simple
         test_value_under('total_consultation_all_causes',
-                         'total_simple_malaria_cases', nopwcat)
+                         'total_simple_malaria_cases', allcats)
 
         # total >  malaria severe
         test_value_under('total_consultation_all_causes',
@@ -182,7 +182,7 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
 
         # suspected > malaria simple
         test_value_under('total_suspected_malaria_cases',
-                         'total_simple_malaria_cases', nopwcat)
+                         'total_simple_malaria_cases', allcats)
 
         # suspected > malaria severe
         test_value_under('total_suspected_malaria_cases',
@@ -223,7 +223,7 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
                 pass
 
         # confirmed != simple + severe
-        for cat in nopwcat:
+        for cat in allcats:
             try:
                 dic = {
                     'field2':

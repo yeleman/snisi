@@ -238,7 +238,8 @@ def malaria_monthly_routine_as_xls(report):
     sheet.write_merge(
         9, 9, 6, 7, report.pw_total_confirmed_malaria_cases, stylevariable)
     sheet.write_merge(
-        10, 10, 6, 7, "", stylevide)
+        10, 10, 6, 7, report.pw_total_simple_malaria_cases or 0,
+        stylevariable)
     sheet.write_merge(
         11, 11, 6, 7, report.pw_total_severe_malaria_cases, stylevariable)
     sheet.write_merge(
@@ -349,7 +350,7 @@ def malaria_monthly_routine_as_xls(report):
     sheet.write(21, 12, report.pw_total_anc1, stylevariable)
     sheet.write_merge(22, 22, 10, 11, "SP 1", stylelabel)
     sheet.write(22, 12, report.pw_total_sp1, stylevariable)
-    sheet.write_merge(23, 23, 10, 11, "SP 2", stylelabel)
+    sheet.write_merge(23, 23, 10, 11, "SP 2 et +", stylelabel)
     sheet.write(23, 12, report.pw_total_sp2, stylevariable)
 
     sheet.write(25, 9, "Nom et Prénom : {}".format(report.created_by.name()))

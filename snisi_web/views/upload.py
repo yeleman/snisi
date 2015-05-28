@@ -25,8 +25,11 @@ def handle_uploaded_file(f):
     return tfile.name
 
 
-def available_form_upload_types():
-    return get_from_snisi_apps('xls_import.EXPORTED_FORMS', fusion_list=True)
+def available_form_upload_types(raw=False):
+    tuples = get_from_snisi_apps('xls_import.EXPORTED_FORMS', fusion_list=True)
+    if raw:
+        return tuples
+    return [(t[0], t[1]) for t in tuples]
 
 
 def handle_report_upload(excel_form, form, provider):
@@ -49,6 +52,13 @@ class ExcelUploadForm(forms.Form):
     def get_form_cls(self):
         return import_path(self.cleaned_data.get('reportcls'))
 
+    def get_form_cls_extra(self):
+        for f in available_form_upload_types(raw=True):
+            if f[0] == self.cleaned_data.get('reportcls'):
+                if len(f) > 2 and isinstance(f[2], dict):
+                    return f[2]
+        return {}
+
 
 @login_required
 @user_role_within(['charge_sis', 'dtc', 'pf_palu'])
@@ -64,6 +74,7 @@ def upload_form(request, template_name='upload_form.html'):
 
             filepath = handle_uploaded_file(request.FILES['report_file'])
             excel_form_cls = form.get_form_cls()
+            excel_form_extra = form.get_form_cls_extra()
             domain = excel_form_cls.get_domain()
             if domain is not None:
                 # Handling of report form might be custom to domain/report
@@ -72,7 +83,7 @@ def upload_form(request, template_name='upload_form.html'):
                         'upload.handle_report_upload', failsafe=False)
                 except:
                     pass
-            excel_form = excel_form_cls(filepath)
+            excel_form = excel_form_cls(filepath, **excel_form_extra)
 
             new_report, text_message = handle_report_func(
                 excel_form, form, request.user)
