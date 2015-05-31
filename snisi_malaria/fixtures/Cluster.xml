@@ -18,4 +18,10 @@
         <field type="BooleanField" name="is_active">True</field>
         <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
     </object>
+    <object pk="malaria_weekly_routine" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">malaria</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
+    </object>
 </django-objects>

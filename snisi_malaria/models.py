@@ -728,7 +728,6 @@ class EpidemioMalariaRIFace(models.Model):
                 values.append(getattr(self, fname))
         return sum(values)
 
-    @property
     def agnostic_total_confirmed_malaria_cases(self, age_group):
         return sum([getattr(self, '{}_total_{}_confirmed_malaria_cases'
                                   .format(age_group, method), 0)
@@ -929,3 +928,145 @@ receiver(pre_save, sender=AggEpidemioMalariaR)(pre_save_report_incomplete)
 receiver(post_save, sender=AggEpidemioMalariaR)(post_save_report)
 
 reversion.register(AggEpidemioMalariaR, follow=['snisireport_ptr'])
+
+############
+# WEEKLY MALARIAR
+############
+
+
+class WeeklyMalariaRIFace(models.Model):
+
+    class Meta:
+        abstract = True
+
+    u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"))
+    o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"))
+    pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
+        _("Total Confirmed Malaria Cases"))
+
+    def __str__(self):
+        return self.receipt
+
+    def fill_blank(self, **kwargs):
+        for field in self.data_fields():
+            setattr(self, field, 0)
+        if hasattr(self, 'set_reporting_status_fields'):
+            self.set_reporting_status_fields(**kwargs)
+
+    def total_for_field(self, field):
+        values = []
+        for cat in ('u5', 'o5', 'pw'):
+            fname = '%s_%s' % (cat, field)
+            if hasattr(self, fname):
+                values.append(getattr(self, fname))
+        return sum(values)
+
+    @property
+    def total_confirmed_malaria_cases(self):
+        return self.total_for_field(inspect.stack()[0][3])
+
+
+class WeeklyMalariaR(WeeklyMalariaRIFace, SNISIReport):
+
+    RECEIPT_FORMAT = ("MRW-{entity__slug}/"
+                      "{period__year_short}{period__month}"
+                      "{period__day}-{rand}")
+    REPORTING_TYPE = PERIODICAL_SOURCE
+    UNIQUE_TOGETHER = [('period', 'entity')]
+
+    class Meta:
+        app_label = 'snisi_malaria'
+        verbose_name = _("Weekly Malaria Report")
+        verbose_name_plural = _("Weekly Malaria Reports")
+
+receiver(pre_save, sender=WeeklyMalariaR)(pre_save_report)
+receiver(post_save, sender=WeeklyMalariaR)(post_save_report)
+
+reversion.register(WeeklyMalariaR, follow=['snisireport_ptr'])
+
+
+class AggWeeklyMalariaR(WeeklyMalariaRIFace,
+                        PeriodicAggregatedReportInterface, SNISIReport):
+
+    RECEIPT_FORMAT = None
+    INDIVIDUAL_CLS = WeeklyMalariaR
+    REPORTING_TYPE = PERIODICAL_AGGREGATED
+    UNIQUE_TOGETHER = [('period', 'entity')]
+
+    class Meta:
+        app_label = 'snisi_malaria'
+        verbose_name = _("Aggregated Weekly Malaria Report")
+        verbose_name_plural = _("Aggregated Weekly Malaria Reports")
+
+    # all source reports (CSCOM)
+    indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (all)"),
+        blank=True,
+        related_name='source_agg_%(class)s_reports',
+        symmetrical=False)
+
+    direct_indiv_sources = models.ManyToManyField(
+        INDIVIDUAL_CLS,
+        verbose_name=_("Primary. Sources (direct)"),
+        blank=True,
+        related_name='direct_source_agg_%(class)s_reports',
+        symmetrical=False)
+
+    @classmethod
+    def create_from(cls, period, entity, created_by,
+                    indiv_sources=None, agg_sources=None):
+
+        # indiv_sources are from Health Centers during DayPeriods
+        # aggregated are created either at HC level for other periods
+        # or at higher levels on any periods.
+
+        # Aggregated are thus sourced by indiv reports
+        # only if at HC (any periods) or at District.
+
+        # from snisi_core.models.Periods import DayPeriod
+
+        if indiv_sources is None:
+            if entity.type.slug in ('health_center', 'health_district'):
+                indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(
+                    period__start_on__gte=period.start_on,
+                    period__end_on__lte=period.end_on) \
+                    .filter(entity__in=entity.get_health_centers())
+            else:
+                indiv_sources = []
+
+        if agg_sources is None and not len(indiv_sources):
+            agg_sources = cls.objects.filter(
+                period__start_on__gte=period.start_on,
+                period__end_on__lte=period.end_on) \
+                .filter(entity__in=entity.get_natural_children(
+                    skip_slugs=['health_area']))
+
+        return super(AggWeeklyMalariaR, cls).create_from(
+            period=period,
+            entity=entity,
+            created_by=created_by,
+            indiv_sources=indiv_sources,
+            agg_sources=agg_sources)
+
+    @classmethod
+    def generate_receipt(cls, instance):
+
+        fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)
+
+        extra_field = {
+            'week_part': "S{}".format(fwp_num) if fwp_num else ""
+        }
+        receipt_format = ("AMRW-{entity__slug}/"
+                          "{period__year_short}{period__month}"
+                          "{week_part}-{rand}")
+        return generate_receipt(
+            instance=instance,
+            receipt_format=receipt_format, **extra_field)
+
+receiver(pre_save, sender=AggWeeklyMalariaR)(pre_save_report_incomplete)
+receiver(post_save, sender=AggWeeklyMalariaR)(post_save_report)
+
+reversion.register(AggWeeklyMalariaR, follow=['snisireport_ptr'])

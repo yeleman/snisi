@@ -17,6 +17,7 @@ from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_malaria.models import MalariaR
 from snisi_malaria.integrity import (MalariaRSourceReportChecker,
+                                     WeeklyMalariaRIntegrityChecker,
                                      create_report, PROJECT_BRAND)
 from snisi_tools.sms import send_sms
 from snisi_sms.reply import SMSReply
@@ -45,8 +46,7 @@ def malaria_routine_handler(message):
         if message.content.lower().startswith('mr m'):
             return malaria_report(message)
         elif message.content.lower().startswith('mr w'):
-            # return malaria_weekly_report(message)
-            pass
+            return weekly_malaria_report(message)
         else:
             return malaria_report(message)
 
@@ -354,3 +354,148 @@ def malaria_report_old04(message):
     arguments['pw_total_simple_malaria_cases'] = '0'
 
     return base_malaria_report(message, arguments)
+
+
+def weekly_malaria_report(message):
+
+    reply = SMSReply(message, PROJECT_BRAND)
+
+    # mr w renaud reno 1 2 3#4 5 6#7 8 9#10 11 12#13 14 15#16 17 18#19 20 21
+
+    # create variables from text messages.
+    try:
+        args_names = ['kw1', 'kw2',
+                      'username',
+                      'password',
+                      'day1_u5_total_confirmed_malaria_cases',
+                      'day1_o5_total_confirmed_malaria_cases',
+                      'day1_pw_total_confirmed_malaria_cases',
+                      'day2_u5_total_confirmed_malaria_cases',
+                      'day2_o5_total_confirmed_malaria_cases',
+                      'day2_pw_total_confirmed_malaria_cases',
+                      'day3_u5_total_confirmed_malaria_cases',
+                      'day3_o5_total_confirmed_malaria_cases',
+                      'day3_pw_total_confirmed_malaria_cases',
+                      'day4_u5_total_confirmed_malaria_cases',
+                      'day4_o5_total_confirmed_malaria_cases',
+                      'day4_pw_total_confirmed_malaria_cases',
+                      'day5_u5_total_confirmed_malaria_cases',
+                      'day5_o5_total_confirmed_malaria_cases',
+                      'day5_pw_total_confirmed_malaria_cases',
+                      'day6_u5_total_confirmed_malaria_cases',
+                      'day6_o5_total_confirmed_malaria_cases',
+                      'day6_pw_total_confirmed_malaria_cases',
+                      'day7_u5_total_confirmed_malaria_cases',
+                      'day7_o5_total_confirmed_malaria_cases',
+                      'day7_pw_total_confirmed_malaria_cases']
+
+        args_values = message.content.strip().lower().split()
+        arguments = dict(zip(args_names, args_values))
+    except ValueError:
+        # failure to split means we proabably lack a data or more
+        # we can't process it.
+        return reply.error("Le format du SMS est incorrect.")
+
+    # convert form-data to int or bool respectively
+    try:
+        for key, value in arguments.items():
+            if key.startswith('day'):
+                arguments[key] = int(value)
+    except:
+        logger.warning("Unable to convert SMS data to int: {}"
+                       .format(message.content))
+        # failure to convert means non-numeric value which we can't process.
+        return reply.error("Les données sont malformées.")
+
+    # check credentials
+    try:
+        provider = Provider.active.get(username=arguments['username'])
+    except Provider.DoesNotExist:
+        return reply.error("Ce nom d'utilisateur "
+                           "({}) n'existe pas.".format(arguments['username']))
+
+    if not provider.check_password(arguments['password']):
+        return reply.error("Votre mot de passe est incorrect.")
+
+    # now we have well formed and authenticated data.
+    # let's check for business-logic errors.
+    checker = WeeklyMalariaRIntegrityChecker()
+
+    # feed data holder with sms provided data
+    for key, value in arguments.items():
+        if key.startswith('day'):
+            checker.set(key, value)
+
+    # harmonized meta-data
+    try:
+        hc = provider.location
+    except:
+        hc = None
+    checker.set('entity', hc)
+    checker.set('hc', getattr(hc, 'slug', None))
+    today = datetime.date.today()
+    checker.set('fillin_day', today.day)
+    checker.set('fillin_month', today.month)
+    checker.set('fillin_year', today.year)
+
+    # find out which week it is sent for
+    if today.day > 7:
+        jump_back = 7
+    else:
+        jump_back = today.day
+        # last_day_of_prev = today - datetime.timedelta(days=today.day)
+        # jump_back =
+    ref_date = today - datetime.timedelta(days=jump_back)
+    week = (ref_date.day // 7)
+    if ref_date.day % 7:
+        week += 1
+
+    # period = MonthPeriod.current().previous()
+    checker.set('week', week)
+    checker.set('month', ref_date.month)
+    checker.set('year', ref_date.year)
+
+    checker.set('submit_time', message.event_on)
+    checker.set('author', provider.name())
+    checker.set('submitter', provider)
+
+    # test the data
+    checker.check()
+    if not checker.is_valid():
+        return reply.error(checker.errors.pop().render(short=True))
+
+    # build requirements for report
+    period = MonthPeriod.find_create_from(year=checker.get('year'),
+                                          month=checker.get('month'))
+
+    entity = HealthEntity.objects.get(slug=checker.get('hc'),
+                                      type__slug='health_center')
+
+    # expected reporting defines if report is expeted or not
+    expected_reporting = ExpectedReporting.get_or_none(
+        report_class=reportcls,
+        period=period,
+        within_period=False,
+        entity=entity,
+        within_entity=False,
+        amount_expected=ExpectedReporting.EXPECTED_SINGLE)
+
+    # should have already been checked in checker.
+    if expected_reporting is None:
+        logger.error("Expected reporting not found: "
+                     "cls:{cls} - period:{period} - entity:{entity}"
+                     .format(cls=reportcls, period=period, entity=entity))
+        return reply.error("Aucun rapport de routine attendu à "
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period))
+
+    report, text_message = create_report(provider=provider,
+                                         expected_reporting=expected_reporting,
+                                         completed_on=timezone.now(),
+                                         integrity_checker=checker,
+                                         data_source=message.content,)
+
+    if report:
+        return reply.success(text_message)
+    else:
+        return reply.error(text_message)

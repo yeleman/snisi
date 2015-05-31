@@ -14,6 +14,7 @@
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
+    
     <object pk="malaria_weekly_epidemio" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_epidemio</field>
         <field type="CharField" name="name">Épidémiologie hebdomadaire Paludisme</field>
@@ -60,6 +61,56 @@
         <field type="SlugField" name="slug">malaria_weekly_epidemio_fifthweek_aggregated</field>
         <field type="CharField" name="name">Épidémiologie hebdomadaire Paludisme 5º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggEpidemioMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFifthWeek</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+
+    <object pk="malaria_weekly_routine" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme</field>
+        <field type="CharField" name="cls">snisi_malaria.models.WeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.DayPeriod</field>
+        <field type="CharField" name="report_type">periosrc</field>
+    </object>
+    <object pk="malaria_weekly_routine_monthly_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_monthly_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+    <object pk="malaria_weekly_routine_firstweek_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_firstweek_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme 1º semaine (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFirstWeek</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+    <object pk="malaria_weekly_routine_secondweek_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_secondweek_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme 2º semaine (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthSecondWeek</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+    <object pk="malaria_weekly_routine_thirdweek_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_thirdweek_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme 3º semaine (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthThirdWeek</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+    <object pk="malaria_weekly_routine_fourthweek_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_fourthweek_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme 4º semaine (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFourthWeek</field>
+        <field type="CharField" name="report_type">perioagg</field>
+    </object>
+    <object pk="malaria_weekly_routine_fifthweek_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_fifthweek_aggregated</field>
+        <field type="CharField" name="name">Routine hebdomadaire Paludisme 5º semaine (Aggrégé)</field>
+        <field type="CharField" name="cls">snisi_malaria.models.AggWeeklyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFifthWeek</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>

@@ -46,7 +46,7 @@ def create_expected_for(period):
 
     created_list = []
 
-    epidemio_cluster = Cluster.get_or_none("malaria_weekly_epidemiology")
+
     routine_cluster = Cluster.get_or_none("malaria_monthly_routine")
 
     dtc = Role.get_or_none("dtc")
@@ -126,6 +126,11 @@ def create_expected_for(period):
         next_period = period.following()
         nb_day_in_month = ((next_period.end_on - next_period.start_on)
                            + datetime.timedelta(seconds=1)).days
+
+        ###
+        # EPIDEMIO
+        ###
+        epidemio_cluster = Cluster.get_or_none("malaria_weekly_epidemiology")
         for day in range(1, nb_day_in_month + 1):
             day_period = DayPeriod.find_create_from(
                 year=next_period.start_on.year,
@@ -218,6 +223,118 @@ def create_expected_for(period):
             logger.debug("ReportClass slug: {}".format(reportcls_slug))
 
             for entity in epidemio_cluster.members(only_active=True):
+
+                edict = copy.copy(expected_dict)
+                edict.update({
+                    'entity': entity,
+                    'period': week_period,
+                    'report_class': ReportClass.get_or_none(reportcls_slug),
+                    'reporting_period': reporting_period,
+                    'extended_reporting_period': extended_reporting_period,
+                })
+                e, created = ExpectedReporting.objects.get_or_create(**edict)
+                if created:
+                    logger.debug("Created {}".format(e))
+                    created_list.append(e)
+                else:
+                    logger.debug("Exists already: {}".format(e))
+
+        ###
+        # WEEKLY ROUTINE
+        ###
+        weekly_cluster = Cluster.get_or_none("malaria_weekly_routine")
+        for day in range(1, nb_day_in_month + 1):
+            day_period = DayPeriod.find_create_from(
+                year=next_period.start_on.year,
+                month=next_period.start_on.month, day=day)
+
+            logger.debug("Generating DayPeriod Expecteds for {}"
+                         .format(day_period))
+
+            for entity in weekly_cluster.members(only_active=True):
+
+                edict = copy.copy(expected_dict)
+                edict.update({
+                    'entity': entity,
+                    'period': day_period,
+                    'report_class': episrc_report_class,
+                    'reporting_period': None,
+                    'extended_reporting_period': None,
+                })
+                e, created = ExpectedReporting.objects.get_or_create(**edict)
+                if created:
+                    logger.debug("Created {}".format(e))
+                    created_list.append(e)
+                else:
+                    logger.debug("Exists already: {}".format(e))
+
+        # create FixedWeekPeriods for Epidemiology for the month
+        week_repperiod_matrix = OrderedDict([
+            (FixedMonthFirstWeek, FixedMonthFirstWeekReportingPeriod),
+            (FixedMonthSecondWeek, FixedMonthSecondWeekReportingPeriod),
+            (FixedMonthThirdWeek, FixedMonthThirdWeekReportingPeriod),
+            (FixedMonthFourthWeek, FixedMonthFourthWeekReportingPeriod),
+            (FixedMonthFifthWeek, FixedMonthFifthWeekReportingPeriod)
+        ])
+        week_extrepperiod_matrix = OrderedDict([
+            (FixedMonthFirstWeek, FixedMonthFirstWeekExtendedReportingPeriod),
+            (FixedMonthSecondWeek,
+             FixedMonthSecondWeekExtendedReportingPeriod),
+            (FixedMonthThirdWeek, FixedMonthThirdWeekExtendedReportingPeriod),
+            (FixedMonthFourthWeek,
+             FixedMonthFourthWeekExtendedReportingPeriod),
+            (FixedMonthFifthWeek, FixedMonthFifthWeekExtendedReportingPeriod)
+        ])
+
+        week_slug_matrix = OrderedDict([
+            (FixedMonthFirstWeek,
+             'malaria_weekly_routine_firstweek_aggregated'),
+            (FixedMonthSecondWeek,
+             'malaria_weekly_routine_secondweek_aggregated'),
+            (FixedMonthThirdWeek,
+             'malaria_weekly_routine_thirdweek_aggregated'),
+            (FixedMonthFourthWeek,
+             'malaria_weekly_routine_fourthweek_aggregated'),
+            (FixedMonthFifthWeek,
+             'malaria_weekly_routine_fifthweek_aggregated')
+        ])
+        for weekcls in week_slug_matrix.keys():
+            logger.debug("\n\n-------")
+            logger.debug(next_period)
+            logger.debug(next_period.start_on)
+            logger.debug(next_period.end_on)
+            try:
+                week_period = weekcls.find_create_from(
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
+            except ValueError:
+                continue
+            if week_period is None:
+                continue
+            logger.debug(week_period)
+            logger.debug(week_period.start_on)
+            logger.debug(week_period.end_on)
+
+            reporting_period = week_repperiod_matrix.get(weekcls) \
+                .find_create_from(
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
+            logger.debug(reporting_period)
+            logger.debug(reporting_period.start_on)
+            logger.debug(reporting_period.end_on)
+
+            extended_reporting_period = week_extrepperiod_matrix \
+                .get(weekcls).find_create_from(
+                    year=next_period.start_on.year,
+                    month=next_period.start_on.month)
+            logger.debug(extended_reporting_period)
+            logger.debug(extended_reporting_period.start_on)
+            logger.debug(extended_reporting_period.end_on)
+
+            reportcls_slug = week_slug_matrix.get(weekcls)
+            logger.debug("ReportClass slug: {}".format(reportcls_slug))
+
+            for entity in weekly_cluster.members(only_active=True):
 
                 edict = copy.copy(expected_dict)
                 edict.update({

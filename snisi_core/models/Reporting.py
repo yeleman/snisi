@@ -147,6 +147,7 @@ class SNISIReport(SuperMixin, InterestingFieldsMixin, models.Model):
 
     class Meta:
         app_label = 'snisi_core'
+        ordering = ('period__start_on',)
 
     # Reports might get deleted/recreated so a custom PK will insure
     # that FK are accurate.

@@ -23,7 +23,8 @@ from snisi_core.models.FixedWeekPeriods import (FixedMonthFirstWeek,
                                                 FixedMonthFourthWeek,
                                                 FixedMonthFifthWeek)
 from snisi_malaria.models import (MalariaR,
-                                  EpidemioMalariaR, AggEpidemioMalariaR)
+                                  EpidemioMalariaR, AggEpidemioMalariaR,
+                                  WeeklyMalariaR, AggWeeklyMalariaR)
 from snisi_core.models.Reporting import (ReportClass, ExpectedReporting,
                                          ExpectedValidation)
 from snisi_core.models.ValidationPeriods import DefaultDistrictValidationPeriod
@@ -670,3 +671,233 @@ class EpidemioMalariaRIntegrityChecker(ReportIntegrityChecker):
                             .format(cat))
                 except:
                     pass
+
+
+def create_weekly_report(provider, expected_reporting, completed_on,
+                         integrity_checker, data_source):
+
+    fday = expected_reporting.period.start_on.day
+    eday = expected_reporting.period.end_on.day
+    day = fday
+    daynum = 1
+    while day <= eday:
+        day_period = DayPeriod.find_create_from(
+            year=expected_reporting.period.start_on.year,
+            month=expected_reporting.period.start_on.month,
+            day=day)
+
+        day_expected = ExpectedReporting.objects.get(
+            report_class__slug="malaria_weekly_routine",
+            period=day_period,
+            entity=expected_reporting.entity)
+
+        day_report = WeeklyMalariaR.start(
+            period=day_expected.period,
+            entity=day_expected.entity,
+            created_by=provider,
+            completion_status=WeeklyMalariaR.COMPLETE,
+            completed_on=completed_on,
+            integrity_status=WeeklyMalariaR.CORRECT,
+            arrival_status=integrity_checker.get('arrival_status'),
+            validation_status=WeeklyMalariaR.NOT_VALIDATED)
+
+        for field in WeeklyMalariaR.data_fields():
+            setattr(day_report, field,
+                    integrity_checker.get('day{}_{}'.format(daynum, field)))
+
+        try:
+            with reversion.create_revision():
+                day_report.save()
+        except Exception as e:
+            logger.error("Unable to save report to DB. Content: {} | Exp: {}"
+                         .format(data_source, e))
+            logger.debug("".join(traceback.format_exc()))
+            return False, ("Une erreur technique s'est "
+                           "produite. Réessayez plus tard et "
+                           "contactez ANTIM si le problème persiste.")
+        else:
+            day_expected.acknowledge_report(day_report)
+
+        daynum += 1
+        day += 1
+
+    # create weekly aggregated report
+    try:
+        report = AggWeeklyMalariaR.create_from(
+            period=expected_reporting.period,
+            entity=expected_reporting.entity,
+            created_by=provider)
+    except Exception as e:
+        logger.error("Unable to save report to DB. Content: {} | Exp: {}"
+                     .format(data_source, e))
+        logger.debug("".join(traceback.format_exc()))
+        return False, ("Une erreur technique s'est "
+                       "produite. Réessayez plus tard et "
+                       "contactez ANTIM si le problème persiste.")
+    else:
+        expected_reporting.acknowledge_report(report)
+
+    return report, ("Le rapport de {cscom} pour {period} "
+                    "a été enregistré. "
+                    "Le No de reçu est #{receipt}."
+                    .format(cscom=report.entity.display_full_name(),
+                            period=report.period,
+                            receipt=report.receipt))
+
+
+class WeeklyMalariaRIntegrityChecker(ReportIntegrityChecker):
+
+    DOMAIN = get_domain()
+
+    def nb_days_for_week(self, year, month, week):
+        nb_day_in_month = self.nb_days_for_month(year, month)
+        if week < 5:
+            return 7
+        return nb_day_in_month - 28
+
+    def nb_days_for_month(self, year, month):
+        nb_day_in_month = 30
+        if month == 2:
+            if year in (2012, 2016, 2020):
+                nb_day_in_month = 29
+            else:
+                nb_day_in_month = 28
+        if month in (1, 3, 5, 7, 8, 10, 12):
+            nb_day_in_month = 31
+        return nb_day_in_month
+
+    def _check_completeness(self, **options):
+
+        for field in ('week', 'month', 'year'):
+            if not self.has(field):
+                self.add_missing(_("Données manquantes "
+                                   "pour {}").format(field),
+                                 blocking=True, field=field)
+
+        week = self.get('week')
+        month = self.get('month')
+        year = self.get('year')
+
+        nb_days_this_week = self.nb_days_for_week(year, month, week)
+        if nb_days_this_week == 0:
+            pass
+
+        for day_num in range(1, 1 + nb_days_this_week):
+            for field in WeeklyMalariaR.data_fields():
+                fname = "day{}_{}".format(day_num, field)
+                if not self.has(fname):
+                    self.add_missing(_("Données manquantes "
+                                       "pour {}").format(fname),
+                                     blocking=True, field=fname)
+
+    def _check(self, **options):
+
+        week = self.get('week')
+        month = self.get('month')
+        year = self.get('year')
+
+        print(week, month, year)
+
+        date_txt = "La valeur pour {} est incorrecte: {}"
+        if week not in range(1, 6):
+            self.add_error(date_txt.format("semaine", week),
+                           blocking=True, field='week')
+
+        if month not in range(1, 13):
+            self.add_error(date_txt.format("mois", month),
+                           blocking=True, field='month')
+
+        if year not in range(2011, 2020):
+            self.add_error(date_txt.format("année", year),
+                           blocking=True, field='year')
+
+        # common data-only checks
+        self.check_data(**options)
+
+        weekcls_dict = {
+            1: FixedMonthFirstWeek,
+            2: FixedMonthSecondWeek,
+            3: FixedMonthThirdWeek,
+            4: FixedMonthFourthWeek,
+            5: FixedMonthFifthWeek
+        }
+
+        weekcls = weekcls_dict.get(week)
+
+        # Get period and Entity
+        period = weekcls.find_create_from(year=year, month=month)
+        if period.is_ahead():
+            self.add_error("La période indiquée ({period}) est dans "
+                           "le futur".format(period=period),
+                           blocking=True, field='week')
+
+        entity = Entity.get_or_none(self.get('hc'), type_slug='health_center')
+        if entity is None:
+            self.add_error("Aucun CSCOM ne correspond au code {}"
+                           .format(self.get('hc')),
+                           field='hc', blocking=True)
+        else:
+            self.set('entity', entity)
+
+        week_slug_matrix = {
+            FixedMonthFirstWeek:
+                'malaria_weekly_routine_firstweek_aggregated',
+            FixedMonthSecondWeek:
+                'malaria_weekly_routine_secondweek_aggregated',
+            FixedMonthThirdWeek:
+                'malaria_weekly_routine_thirdweek_aggregated',
+            FixedMonthFourthWeek:
+                'malaria_weekly_routine_fourthweek_aggregated',
+            FixedMonthFifthWeek: 'malaria_weekly_routine_fifthweek_aggregated'
+        }
+
+        # expected reporting defines if report is expeted or not
+        expected_reporting = ExpectedReporting.get_or_none(
+            report_class=ReportClass.objects.get(
+                slug=week_slug_matrix.get(weekcls)),
+            period=period,
+            within_period=False,
+            entity=entity,
+            within_entity=False,
+            amount_expected=ExpectedReporting.EXPECTED_SINGLE)
+
+        self.set('expected_reporting', expected_reporting)
+
+        if expected_reporting is None:
+            self.add_error("Aucun rapport de routine attendu à "
+                           "{entity} pour {period}"
+                           .format(entity=entity, period=period),
+                           blocking=True)
+
+        if expected_reporting.satisfied:
+            self.add_error("Le rapport de routine attendu à "
+                           "{entity} pour {period} est déjà arrivé"
+                           .format(entity=entity, period=period),
+                           blocking=True)
+
+        # check if the report arrived in time or not.
+        if expected_reporting.reporting_period.contains(
+                self.get('submit_time')):
+            arrival_status = EpidemioMalariaR.ON_TIME
+        elif expected_reporting.extended_reporting_period.contains(
+                self.get('submit_time')):
+            arrival_status = EpidemioMalariaR.LATE
+        else:
+            # arrived while not in a reporting period
+            if self.get('submit_time') \
+                    < expected_reporting.reporting_period.start_on:
+                text = ("La période de collecte pour {period} "
+                        "n'a pas encore commencée. Rapport refusé.")
+            else:
+                # arrived too late. We can't accept the report.
+                text = ("La période de collecte pour {period} "
+                        "est terminée. Rapport refusé.")
+            self.add_error(text.format(period=expected_reporting.period),
+                           blocking=True, field='period')
+        self.set('arrival_status', arrival_status)
+
+        # check permission to submit report.
+        self.chk_provider_permission(**options)
+
+    def check_data(self):
+        pass
