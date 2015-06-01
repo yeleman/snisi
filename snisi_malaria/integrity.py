@@ -157,10 +157,14 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
                 try:
                     fieldtest_slug = '{}_{}'.format(cat, fieldtest)
                     fieldref_slug = '{}_{}'.format(cat, fieldref)
-                    dic = {'field2': field_name(fieldtest_slug),
-                           'f2value': self.get(fieldtest_slug),
-                           'field1': field_name(fieldref_slug),
-                           'f1value': self.get(fieldref_slug)}
+                    dic = {'field2': "[{cat}] {fn}".format(
+                        cat=MalariaR.verbose_cat(cat),
+                        fn=field_name(fieldtest_slug)),
+                        'f2value': self.get(fieldtest_slug),
+                        'field1': "[{cat}] {fn}".format(
+                        cat=MalariaR.verbose_cat(cat),
+                        fn=field_name(fieldref_slug)),
+                        'f1value': self.get(fieldref_slug)}
                     if dic['f1value'] < dic['f2value']:
                         self.add_error(no_more_than_text(dic),
                                        field=dic['field2'])
@@ -201,8 +205,9 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
             try:
                 dic = {
                     'field2':
-                        _("{simple} + {severe}")
+                        _("[{cat}] {simple} + {severe}")
                         .format(
+                            cat=MalariaR.verbose_cat(cat),
                             simple=field_name('{}_total_simple_malaria_cases'
                                               .format(cat)),
                             severe=field_name('{}_total_severe_malaria_cases'
@@ -211,8 +216,10 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
                                             .format(cat)))
                         + int(self.get('{}_total_severe_malaria_cases'
                                        .format(cat))),
-                    'field1': field_name(
-                        '{}_total_suspected_malaria_cases'.format(cat)),
+                    'field1': "[{cat}] {fn}".format(
+                        cat=MalariaR.verbose_cat(cat),
+                        fn=field_name('{}_total_suspected_malaria_cases'
+                                      .format(cat))),
                     'f1value': self.get(
                         '{}_total_suspected_malaria_cases'.format(cat))}
                 if dic['f1value'] < dic['f2value']:
@@ -227,8 +234,9 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
             try:
                 dic = {
                     'field2':
-                        _("{simple} + {severe}")
+                        _("[{cat}] {simple} + {severe}")
                         .format(
+                            cat=MalariaR.verbose_cat(cat),
                             simple=field_name('{}_total_simple_malaria_cases'
                                               .format(cat)),
                             severe=field_name('{}_total_severe_malaria_cases'
@@ -237,8 +245,10 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
                                             .format(cat)))
                     + int(self.get('{}_total_severe_malaria_cases'
                                    .format(cat))),
-                    'field1': field_name('{}_total_confirmed_malaria_cases'
-                                         .format(cat)),
+                    'field1': "[{cat}] {fn}".format(
+                        cat=MalariaR.verbose_cat(cat),
+                        fn=field_name('{}_total_confirmed_malaria_cases'
+                                      .format(cat))),
                     'f1value': self.get('{}_total_confirmed_malaria_cases'
                                         .format(cat))}
                 if dic['f1value'] != dic['f2value']:

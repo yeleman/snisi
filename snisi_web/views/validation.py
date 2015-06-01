@@ -47,6 +47,8 @@ def handle_report_edition(report, form, provider):
                 return data_checker, None
 
             return data_checker, new_report
+        else:
+            return data_checker, None
     return None, None
 
 

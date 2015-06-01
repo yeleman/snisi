@@ -27,6 +27,17 @@ from snisi_malaria.xls_export import malaria_monthly_routine_as_xls
 
 class MalariaRIface(object):
 
+    CATEGORIES = {
+        'u5': _("Under 5"),
+        'o5': _("Over 5"),
+        'pw': _("Pregnant Women"),
+        'stockout': _("Stockout")
+    }
+
+    @classmethod
+    def verbose_cat(cls, cat):
+        return cls.CATEGORIES.get(cat)
+
     @property
     def total_consultation_all_causes(self):
         return self.total_for_field(inspect.stack()[0][3])
