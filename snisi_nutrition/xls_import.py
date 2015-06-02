@@ -12,7 +12,6 @@ from django.utils import timezone
 
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
-from snisi_tools.misc import class_str
 from snisi_nutrition import get_domain
 from snisi_nutrition.integrity import (NutritionRIntegrityChecker,
                                        create_nut_report)
@@ -858,6 +857,9 @@ class NutritionExcelForm(NutritionRIntegrityChecker, ExcelForm):
                                  integrity_checker=self,
                                  data_source=self.filepath)
 
-EXPORTED_FORMS = [
-    (class_str(NutritionExcelForm), "Routine Mensuelle Nutrition")
-]
+EXPORTED_FORMS = {
+    '3nutrition_monthly_routine': {
+        'label': "Routine Mensuelle Nutrition",
+        'class': NutritionExcelForm
+    }
+}

@@ -135,6 +135,17 @@ def get_uuid():
     return uuid.uuid4().get_urn()[9:]
 
 
+def get_flat_dict_from_snisi_apps(path):
+    data = {}
+    for app in get_snisi_apps():
+        try:
+            data.update(import_path('{app}.{path}'
+                                    .format(app=app, path=path)))
+        except (ImportError, AttributeError):
+            pass
+    return data
+
+
 def get_snisi_apps():
     get_app_paths = [a.path for a in apps.get_app_configs()]
     return [app for app in [p.split('/')[-1] for p in get_app_paths]
