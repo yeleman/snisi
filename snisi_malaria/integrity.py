@@ -285,7 +285,7 @@ class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
 
         # if malaria Excel version 0.4, conider PW simple as zero
         pws = 'pw_total_simple_malaria_cases'
-        if self.version == '0.4' and not self.has(pws):
+        if getattr(self, 'version', None) == '0.4' and not self.has(pws):
             self.set(pws, 0)
 
         local_fields = ['year', 'month', 'hc', 'submit_time',
