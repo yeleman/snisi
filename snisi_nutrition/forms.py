@@ -46,6 +46,7 @@ class NutritionRFormIFace(object):
             for field in rcls.data_fields():
                 ffcls = forms.FloatField \
                     if field in float_fields else forms.IntegerField
+
                 ff = ffcls(
                     label=rcls.field_name(field),
                     required=True,
@@ -55,7 +56,8 @@ class NutritionRFormIFace(object):
 
                 if uren == 'stocks' and \
                         field.rsplit('_', 1)[0] \
-                        in rcls.inputs(ureni_only=True):
+                        in rcls.inputs(ureni_only=True) \
+                        and not entity.has_ureni:
                     ff.widget = ff.hidden_widget()
 
                 self.fields['{}_{}'.format(uren, field)] = ff

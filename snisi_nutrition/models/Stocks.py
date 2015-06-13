@@ -421,6 +421,7 @@ class AbstractNutritionStocksR(SNISIReport):
         return ['plumpy_nut',
                 'milk_f75',
                 'milk_f100',
+                'resomal',
                 'plumpy_sup',
                 'supercereal',
                 'supercereal_plus',
