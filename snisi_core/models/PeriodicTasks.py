@@ -38,6 +38,13 @@ class PeriodicTask(models.Model):
         return not self.triggered
 
     @classmethod
+    def get_or_none(cls, slug):
+        try:
+            return cls.objects.get(slug=slug)
+        except cls.DoesNotExist:
+            return None
+
+    @classmethod
     def get_or_create(cls, slug, category=None):
         return cls.objects.get_or_create(slug=slug,
                                          category=category)
