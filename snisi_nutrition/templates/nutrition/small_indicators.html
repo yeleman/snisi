@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load snisi %}
+
+{% block title %}Tableau de bord Nutrition{% endblock %}
+
+{% block assets %}{% include "assets/highcharts.html" %}{% endblock %}
+
+{% block content %}
+
+<table class="pure-table indicator-table data-centered">
+{% for name, value in overall_table.items %}
+<tr><th>{{ name }}</th><td>{{ value|human }}</td></tr>
+{% endfor %}
+</table>
+
+{% for slug, widget in indicators.items %}
+	{% include "parts/indicator_widget.html" with table=widget id=slug %}
+{% endfor %}
+
+{% endblock %}
+
+{% block onJQready %}
+$.each(hc_graphs, function (idx) {
+    new Highcharts.Chart(hc_graphs[idx]);
+});
+{% endblock %}

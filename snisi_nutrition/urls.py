@@ -120,6 +120,19 @@ urlpatterns = patterns(
         'snisi_nutrition.views.indicators.overview_sam',
         name='nutrition_overview_sam'),
 
+    # DEBUG: small indicators
+    url(r'/followup/{entity}/{periods}/?'
+        .format(entity=RGXP_ENTITY, periods=RGXP_PERIODS),
+        'snisi_nutrition.views.small_indicators.dashboard',
+        name='nutrition_small_indicators'),
+    url(r'/followup/{entity}/?'
+        .format(entity=RGXP_ENTITY),
+        'snisi_nutrition.views.small_indicators.dashboard',
+        name='nutrition_small_indicators'),
+    url(r'/followup/?',
+        'snisi_nutrition.views.small_indicators.dashboard',
+        name='nutrition_small_indicators'),
+
     # raw-data browser
     url(r'/{entity}/{period}/?'
         .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),

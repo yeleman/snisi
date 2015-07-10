@@ -65,6 +65,7 @@
                 {% if user|allowed_to_home:"access_nutrition" %}
                 <a class="pure-menu-heading" href="{% url 'nutrition_dashboard' %}">NUTRITION</a>
                 <ul>
+                    {% if user|allowed_to:"admin" %}<li><a href="{% url 'nutrition_small_indicators' %}">Données YLM</a></li>{% endif %}
                     <li><a href="{% url 'nutrition_weekly' %}">Surveillance hebdo.</a></li>
                     <li><a href="{% url 'nutrition_raw_data' %}">Données brutes</a></li>
                     {% if user.best_level_access <= 2 %}
