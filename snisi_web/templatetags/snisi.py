@@ -19,6 +19,7 @@ from snisi_tools.misc import split_or_none, format_number
 from snisi_core.models.Reporting import SNISIReport
 from snisi_core.permissions import (provider_is_allowed_at_home,
                                     provider_is_allowed)
+from snisi_core.indicators import humanize_value
 
 register = template.Library()
 locale.setlocale(locale.LC_ALL, '')
@@ -282,6 +283,11 @@ def provider_additional_numbers(provider):
 @register.filter(name='to_jstimestamp')
 def convert_to_jstimestamp(adate):
     return to_jstimestamp(adate)
+
+
+@register.filter(name='human')
+def humanize(data):
+    return humanize_value(data)
 
 
 @register.filter(name='igetter')

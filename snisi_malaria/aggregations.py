@@ -158,7 +158,13 @@ def generate_region_country_reports(period,
             logger.info("\t\tAt district {}".format(district))
 
             # ack validation (auto)
-            report = AggMalariaR.objects.get(period=period, entity=district)
+            try:
+                report = AggMalariaR.objects.get(period=period,
+                                                 entity=district)
+            except AggMalariaR.DoesNotExist:
+                logger.warning("AggMalariaR report missing for DS {}"
+                               .format(district))
+                continue
             if not report.validated:
                 try:
                     expv = ExpectedValidation.objects.get(report=report)

@@ -7,6 +7,7 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from py3compat import implements_to_string
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.db import models
@@ -14,6 +15,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from snisi_core.models.Providers import Provider
+from snisi_core.models.Numbers import PhoneNumber
 from snisi_core import branding
 from snisi_tools.emails import send_email
 from snisi_tools.sms import send_sms
@@ -413,6 +415,11 @@ class Notification(models.Model):
             destination.type, destination.identity, title, body))
 
         if destination.type == 'sms':
+            # restricted SMS mode
+            if settings.FLOTTE_ONLY_NOTIFICATIONS:
+                pn = PhoneNumber.get_or_none(destination.identity)
+                if pn is None or pn.category != 'flotte':
+                    return
             send_sms(destination.identity,
                      "{title} {body}".format(title=title, body=body))
 

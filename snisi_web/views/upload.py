@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 
 from snisi_web.decorators import user_role_within
-from snisi_tools.misc import get_from_snisi_apps, import_path
+from snisi_tools.misc import get_flat_dict_from_snisi_apps
 
 
 def handle_uploaded_file(f):
@@ -26,10 +26,12 @@ def handle_uploaded_file(f):
 
 
 def available_form_upload_types(raw=False):
-    tuples = get_from_snisi_apps('xls_import.EXPORTED_FORMS', fusion_list=True)
+    data = get_flat_dict_from_snisi_apps('xls_import.EXPORTED_FORMS')
+    tuples = sorted([(k, v.get('label')) for k, v in data.items()],
+                    key=lambda t: t[0])
     if raw:
-        return tuples
-    return [(t[0], t[1]) for t in tuples]
+        return data
+    return tuples
 
 
 def handle_report_upload(excel_form, form, provider):
@@ -50,14 +52,12 @@ class ExcelUploadForm(forms.Form):
     report_file = forms.FileField(label="Fichier du rapport")
 
     def get_form_cls(self):
-        return import_path(self.cleaned_data.get('reportcls'))
+        return available_form_upload_types(raw=True) \
+            .get(self.cleaned_data.get('reportcls')).get('class')
 
     def get_form_cls_extra(self):
-        for f in available_form_upload_types(raw=True):
-            if f[0] == self.cleaned_data.get('reportcls'):
-                if len(f) > 2 and isinstance(f[2], dict):
-                    return f[2]
-        return {}
+        return available_form_upload_types(raw=True) \
+            .get(self.cleaned_data.get('reportcls')).get('extras', {})
 
 
 @login_required
@@ -75,6 +75,7 @@ def upload_form(request, template_name='upload_form.html'):
             filepath = handle_uploaded_file(request.FILES['report_file'])
             excel_form_cls = form.get_form_cls()
             excel_form_extra = form.get_form_cls_extra()
+
             domain = excel_form_cls.get_domain()
             if domain is not None:
                 # Handling of report form might be custom to domain/report

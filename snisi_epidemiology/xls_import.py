@@ -12,7 +12,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
-from snisi_tools.misc import class_str
 from snisi_epidemiology import get_domain
 from snisi_epidemiology.integrity import (
     EpidemiologyRIntegrityChecker,
@@ -3592,8 +3591,13 @@ class EpidemiologyDistrictExcelForm(
                 msgs.append(msg)
         return reports[-1], "\n".join(msgs)
 
-EXPORTED_FORMS = [
-    (class_str(EpidemiologyExcelForm), "Routine Hebdomadaire SMIR"),
-    (class_str(EpidemiologyDistrictExcelForm),
-     "Routine Hebdomadaire SMIR (District)")
-]
+EXPORTED_FORMS = {
+    'epidemiology_weekly_routine': {
+        'label': "Routine Hebdomadaire SMIR",
+        'class': EpidemiologyExcelForm
+    },
+    'epidemiology_weekly_routine_ds': {
+        'label': "Routine Hebdomadaire SMIR (District)",
+        'class': EpidemiologyDistrictExcelForm
+    }
+}

@@ -51,6 +51,8 @@ class Command(BaseCommand):
             if task.can_trigger():
                 category_matrix.get(category)(period)
                 task.trigger()
+            else:
+                logger.info("{} already triggered".format(task))
 
         # On 6th
         if day >= ROUTINE_REPORTING_END_DAY:

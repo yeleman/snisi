@@ -12,7 +12,6 @@ from django.utils import timezone
 
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
-from snisi_tools.misc import class_str
 from snisi_reprohealth import get_domain
 from snisi_reprohealth.integrity import (PFActivitiesRIntegrityChecker,
                                          create_pf_report)
@@ -370,6 +369,9 @@ class PfactivitiesExcelForm(PFActivitiesRIntegrityChecker, ExcelForm):
                                 integrity_checker=self,
                                 data_source=self.filepath)
 
-EXPORTED_FORMS = [
-    (class_str(PfactivitiesExcelForm), "Routine Mensuelle PF/MSI")
-]
+EXPORTED_FORMS = {
+    '4reprohealth_monthly_routine': {
+        'label': "Routine Mensuelle PF/MSI",
+        'class': PfactivitiesExcelForm
+    }
+}

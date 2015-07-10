@@ -283,6 +283,12 @@ class MalariaRIntegrityChecker(ReportIntegrityChecker,
 class MalariaRSourceReportChecker(MalariaRIntegrityChecker):
 
     def _check_completeness(self, **options):
+
+        # if malaria Excel version 0.4, conider PW simple as zero
+        pws = 'pw_total_simple_malaria_cases'
+        if getattr(self, 'version', None) == '0.4' and not self.has(pws):
+            self.set(pws, 0)
+
         local_fields = ['year', 'month', 'hc', 'submit_time',
                         'fillin_year', 'fillin_month', 'fillin_day',
                         'submitter']

@@ -219,6 +219,9 @@ SERVE_PROTECTED_FILES = False
 FILES_REPOSITORY_URL_PATH = '/protected'
 FILES_REPOSITORY = os.path.join(ROOT_DIR, 'protected')
 
+# is the system low on units to answer SMS to non-flotte memebers?
+FLOTTE_ONLY_NOTIFICATIONS = False
+
 try:
     SITE_ID = int(os.environ['SITE_ID'])
 except KeyError:

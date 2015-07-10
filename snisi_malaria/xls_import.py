@@ -1382,10 +1382,19 @@ class EpidemioMalariaRForm(EpidemioMalariaRIntegrityChecker, ExcelForm):
                                       data_source=self.filepath)
 
 
-EXPORTED_FORMS = [
-    (class_str(MalariaExcelForm), "Routine Mensuelle Paludisme",
-     {'version': '0.5'}),
-    (class_str(MalariaExcelForm), "Routine Mensuelle Paludisme (ancien)",
-     {'version': '0.4'}),
-    (class_str(EpidemioMalariaRForm), "Épidémiologie hebdomadaire Paludisme")
-]
+EXPORTED_FORMS = {
+    '0malaria_monthly_routine_0.5': {
+        'label': "Routine Mensuelle Paludisme",
+        'class': MalariaExcelForm,
+        'extras': {'version': '0.5'}
+    },
+    '1malaria_monthly_routine_0.4': {
+        'label': "Routine Mensuelle Paludisme (ancien)",
+        'class': MalariaExcelForm,
+        'extras': {'version': '0.4'}
+    },
+    '2malaria_epidemio_weekly': {
+        'label': "Épidémiologie hebdomadaire Paludisme",
+        'class': EpidemioMalariaRForm
+    }
+}
