@@ -87,7 +87,7 @@ def contact(request, *args, **kwargs):
                 messages.error(request, _("Unable to send request. Please "
                                           "try again later."))
 
-    if request.method == 'GET':
+    elif request.method == 'GET':
         if request.user.is_authenticated():
             initial_data = {
                 'name': request.user,
@@ -97,6 +97,9 @@ def contact(request, *args, **kwargs):
             initial_data = {}
 
         form = ContactForm(initial=initial_data)
+
+    else:
+        form = None
 
     context.update({'form': form})
 
