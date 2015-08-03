@@ -18,7 +18,6 @@ from snisi_tools.misc import import_path
 logger = logging.getLogger(__name__)
 
 
-@implements_to_string
 class Domain(models.Model):
 
     """ Represent a field of activity in which we collect data.
@@ -64,9 +63,6 @@ class Domain(models.Model):
 
     def __str__(self):
         return ugettext("{name}").format(name=self.name)
-
-    def __unicode__(self):
-        return self.__str__()
 
     @classmethod
     def get_or_none(cls, slug):
