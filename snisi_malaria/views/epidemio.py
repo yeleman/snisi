@@ -78,7 +78,7 @@ def display_epidemio(request,
                     report = AggWeeklyMalariaR.objects.get(
                         entity=context['entity'], period=week_period)
                 except AggWeeklyMalariaR.DoesNotExist:
-                    continue
+                    report = None
 
                 agg_weekly_data.append({
                     'week': week_period,

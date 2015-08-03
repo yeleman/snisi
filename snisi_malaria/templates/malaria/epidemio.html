@@ -242,12 +242,7 @@ graph2.series = [
 ];
 graph2.tooltip = {
 	enabled: true,
-    formatter: function() {
-    	if (this.y != null) {
-    		var nf = (Math.round(this.y * 10) / 10).toString().replace('.', ',');
-			return this.series.name + ' : ' + nf + '%';
-    	}
-    }
+	headerFormat: '<span style="font-size: 10px">{point.key}</span><br/>',
 };
 hc_graphs.push(graph2);
 
