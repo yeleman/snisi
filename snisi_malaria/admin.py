@@ -11,7 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 from snisi_core.admin import ReportAdmin
 from snisi_malaria.models import (MalariaR, AggMalariaR,
                                   EpidemioMalariaR, AggEpidemioMalariaR,
-                                  DailyMalariaR, AggDailyMalariaR)
+                                  DailyMalariaR, AggDailyMalariaR,
+                                  AggWeeklyMalariaR)
 
 
 class MalariaRAdmin(admin.ModelAdmin):
@@ -86,3 +87,4 @@ admin.site.register(EpidemioMalariaR, ReportAdmin)
 admin.site.register(AggEpidemioMalariaR, ReportAdmin)
 admin.site.register(DailyMalariaR, ReportAdmin)
 admin.site.register(AggDailyMalariaR, ReportAdmin)
+admin.site.register(AggWeeklyMalariaR, ReportAdmin)

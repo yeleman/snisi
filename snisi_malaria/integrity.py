@@ -9,6 +9,7 @@ import traceback
 
 import reversion
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 
 from snisi_core.integrity import (ReportIntegrityChecker,
                                   RoutineIntegrityInterface)
@@ -32,6 +33,7 @@ from snisi_malaria import get_domain, PROJECT_BRAND
 
 logger = logging.getLogger(__name__)
 validating_role = Role.objects.get(slug='charge_sis')
+autobot = Provider.get_or_none('autobot')
 
 
 def create_report(provider, expected_reporting, completed_on,
@@ -686,7 +688,9 @@ def create_weekly_report(provider, expected_reporting, completed_on,
     eday = expected_reporting.period.end_on.day
     day = fday
     daynum = 1
+
     while day <= eday:
+
         day_period = DayPeriod.find_create_from(
             year=expected_reporting.period.start_on.year,
             month=expected_reporting.period.start_on.month,
@@ -742,6 +746,11 @@ def create_weekly_report(provider, expected_reporting, completed_on,
                        "contactez ANTIM si le problème persiste.")
     else:
         expected_reporting.acknowledge_report(report)
+        report.record_validation(
+            validated=True,
+            validated_by=autobot,
+            validated_on=timezone.now(),
+            auto_validated=True)
 
     return report, ("Le rapport de {cscom} pour {period} "
                     "a été enregistré. "
@@ -802,8 +811,6 @@ class DailyMalariaRIntegrityChecker(ReportIntegrityChecker):
         month = self.get('month')
         year = self.get('year')
 
-        print(week, month, year)
-
         date_txt = "La valeur pour {} est incorrecte: {}"
         if week not in range(1, 6):
             self.add_error(date_txt.format("semaine", week),
@@ -832,6 +839,7 @@ class DailyMalariaRIntegrityChecker(ReportIntegrityChecker):
 
         # Get period and Entity
         period = weekcls.find_create_from(year=year, month=month)
+        self.set('period', period)
         if period.is_ahead():
             self.add_error("La période indiquée ({period}) est dans "
                            "le futur".format(period=period),

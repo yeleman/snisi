@@ -11,14 +11,14 @@ from django.conf import settings
 from django.utils import timezone
 
 from snisi_core.models.Providers import Provider
-# from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import HealthEntity
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Reporting import (ExpectedReporting, ReportClass)
 from snisi_malaria.models import MalariaR
 from snisi_malaria.integrity import (MalariaRSourceReportChecker,
                                      DailyMalariaRIntegrityChecker,
-                                     create_report, PROJECT_BRAND)
+                                     create_report, PROJECT_BRAND,
+                                     create_weekly_report)
 from snisi_tools.sms import send_sms
 from snisi_sms.reply import SMSReply
 from snisi_sms.common import change_passwd, ask_for_help
@@ -465,20 +465,11 @@ def weekly_malaria_report(message):
         return reply.error(checker.errors.pop().render(short=True))
 
     # build requirements for report
-    period = MonthPeriod.find_create_from(year=checker.get('year'),
-                                          month=checker.get('month'))
+    period = checker.get('period')
+    entity = checker.get('entity')
+    expected_reporting = checker.get('expected_reporting')
 
-    entity = HealthEntity.objects.get(slug=checker.get('hc'),
-                                      type__slug='health_center')
-
-    # expected reporting defines if report is expeted or not
-    expected_reporting = ExpectedReporting.get_or_none(
-        report_class=reportcls,
-        period=period,
-        within_period=False,
-        entity=entity,
-        within_entity=False,
-        amount_expected=ExpectedReporting.EXPECTED_SINGLE)
+    print("expected_reporting", expected_reporting)
 
     # should have already been checked in checker.
     if expected_reporting is None:
@@ -489,11 +480,12 @@ def weekly_malaria_report(message):
                            "{entity} pour {period}"
                            .format(entity=entity, period=period))
 
-    report, text_message = create_report(provider=provider,
-                                         expected_reporting=expected_reporting,
-                                         completed_on=timezone.now(),
-                                         integrity_checker=checker,
-                                         data_source=message.content,)
+    report, text_message = create_weekly_report(
+        provider=provider,
+        expected_reporting=expected_reporting,
+        completed_on=timezone.now(),
+        integrity_checker=checker,
+        data_source=message.content,)
 
     if report:
         return reply.success(text_message)

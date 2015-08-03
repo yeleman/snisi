@@ -2,14 +2,14 @@
 <django-objects version="1.0">
     <object pk="malaria_monthly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_monthly_routine</field>
-        <field type="CharField" name="name">Routine Mensuelle Paludisme</field>
+        <field type="CharField" name="name">Routine Paludisme mensuelle</field>
         <field type="CharField" name="cls">snisi_malaria.models.MalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
     <object pk="malaria_monthly_routine_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_monthly_routine_aggregated</field>
-        <field type="CharField" name="name">Routine Mensuelle Paludisme (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme mensuelle (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
@@ -67,49 +67,49 @@
 
     <object pk="malaria_weekly_routine" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire</field>
         <field type="CharField" name="cls">snisi_malaria.models.DailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.Periods.DayPeriod</field>
         <field type="CharField" name="report_type">periosrc</field>
     </object>
-    <object pk="malaria_weekly_routine_monthly_aggregated" model="snisi_core.reportclass">
-        <field type="SlugField" name="slug">malaria_weekly_routine_monthly_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme (Aggrégé)</field>
+    <object pk="malaria_weekly_routine_aggregated" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">malaria_weekly_routine_aggregated</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
-        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.DayPeriod</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="malaria_weekly_routine_firstweek_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine_firstweek_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme 1º semaine (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire 1º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFirstWeek</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="malaria_weekly_routine_secondweek_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine_secondweek_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme 2º semaine (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire 2º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthSecondWeek</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="malaria_weekly_routine_thirdweek_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine_thirdweek_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme 3º semaine (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire 3º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthThirdWeek</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="malaria_weekly_routine_fourthweek_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine_fourthweek_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme 4º semaine (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire 4º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFourthWeek</field>
         <field type="CharField" name="report_type">perioagg</field>
     </object>
     <object pk="malaria_weekly_routine_fifthweek_aggregated" model="snisi_core.reportclass">
         <field type="SlugField" name="slug">malaria_weekly_routine_fifthweek_aggregated</field>
-        <field type="CharField" name="name">Routine hebdomadaire Paludisme 5º semaine (Aggrégé)</field>
+        <field type="CharField" name="name">Routine Paludisme hebdomadaire 5º semaine (Aggrégé)</field>
         <field type="CharField" name="cls">snisi_malaria.models.AggDailyMalariaR</field>
         <field type="CharField" name="period_cls">snisi_core.models.FixedWeekPeriods.FixedMonthFifthWeek</field>
         <field type="CharField" name="report_type">perioagg</field>

@@ -15,17 +15,28 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_malaria.models import AggMalariaR, MalariaR
+from snisi_malaria.models import (AggMalariaR, MalariaR,
+                                  AggDailyMalariaR, AggWeeklyMalariaR)
 from snisi_malaria import (ROUTINE_DISTRICT_AGG_DAY,
                            ROUTINE_REGION_AGG_DAY)
 from snisi_malaria.integrity import PROJECT_BRAND
 from snisi_core.models.Notifications import Notification
+from snisi_core.models.FixedWeekPeriods import FixedMonthWeek
 
 logger = logging.getLogger(__name__)
 
 autobot = Provider.get_or_none('autobot')
 reportcls_slug = "malaria_monthly_routine_aggregated"
+daily_reportcls_slug = "malaria_weekly_routine_aggregated"
 rclass = ReportClass.get_or_none(reportcls_slug)
+daily_rclass = ReportClass.get_or_none(daily_reportcls_slug)
+weekly_rclasses = [
+    ReportClass.get_or_none('malaria_weekly_routine_firstweek_aggregated'),
+    ReportClass.get_or_none('malaria_weekly_routine_secondweek_aggregated'),
+    ReportClass.get_or_none('malaria_weekly_routine_thirdweek_aggregated'),
+    ReportClass.get_or_none('malaria_weekly_routine_fourthweek_aggregated'),
+    ReportClass.get_or_none('malaria_weekly_routine_fifthweek_aggregated'),
+]
 charge_sis = Role.get_or_none("charge_sis")
 
 mali = Entity.get_or_none("mali")
@@ -35,6 +46,225 @@ get_districts = lambda: [e for e in cluster.members()
                          if e.type.slug == 'health_district']
 get_regions = lambda: [e for e in cluster.members()
                        if e.type.slug == 'health_region']
+
+
+def generate_weekly_reports(period,
+                            ensure_correct_date=True):
+
+    now = timezone.now()
+
+    # period = 06-2015
+    # fourth_week
+
+    current_week = FixedMonthWeek.current(at=now)
+    wperiod = FixedMonthWeek.previous_week(current_week)
+
+    # wperiod = FixedMonthWeek.previous_week(
+    #     FixedMonthWeek.current(at=period.middle()))
+    # next_period = FixedMonthWeek.following_week(wperiod)
+
+    logger.info("Switching to {}/{}".format(wperiod, period))
+
+    if ensure_correct_date:
+        if not current_week.includes(now):
+            logger.error("Not allowed to generate weekly agg "
+                         "outside of the following period")
+            return
+
+    # gen all-levels AggDailyMalariaR for each day
+    logger.info("all-levels AggDailyMalariaR for each day")
+    for day_period in wperiod.get_day_periods():
+        logger.debug("Generating for {}".format(day_period))
+        districts = get_districts()
+        for district in districts:
+            logger.info("\tAt district {}".format(district))
+
+            # ack expected
+            exp = ExpectedReporting.objects.filter(
+                report_class=daily_rclass,
+                entity__slug=district.slug,
+                period=day_period)
+            # not expected
+            if exp.count() == 0:
+                continue
+            else:
+                # might explode if 2 exp but that's the point
+                exp = exp.get()
+
+            # create AggMalariaR
+            agg = AggDailyMalariaR.create_from(
+                period=day_period,
+                entity=district,
+                created_by=autobot)
+            exp.acknowledge_report(agg)
+
+            # validate (no expected validation)
+            agg.record_validation(
+                validated=True,
+                validated_by=autobot,
+                validated_on=timezone.now(),
+                auto_validated=True)
+
+        regions = get_regions()
+        for region in regions:
+            logger.info("\tAt region {}".format(region))
+            # ack expected
+            exp = ExpectedReporting.objects.filter(
+                report_class=daily_rclass,
+                entity__slug=region.slug,
+                period=day_period)
+            if exp.count() == 0:
+                continue
+            else:
+                exp = exp.get()
+
+            # create AggDailyMalariaR/region
+            agg = AggDailyMalariaR.create_from(
+                period=day_period,
+                entity=region,
+                created_by=autobot)
+            exp.acknowledge_report(agg)
+
+            # validate (no expected validation)
+            agg.record_validation(
+                validated=True,
+                validated_by=autobot,
+                validated_on=timezone.now(),
+                auto_validated=True)
+
+        logger.info("\tAt {}".format(mali))
+
+        # ack expected
+        exp = ExpectedReporting.objects.get(
+            report_class=daily_rclass,
+            entity__slug=mali.slug,
+            period=day_period)
+
+        # create AggDailyMalariaR/country
+        agg = AggDailyMalariaR.create_from(
+            period=day_period,
+            entity=mali,
+            created_by=autobot)
+        exp.acknowledge_report(agg)
+
+        # validate (no expected validation)
+        agg.record_validation(
+            validated=True,
+            validated_by=autobot,
+            validated_on=timezone.now(),
+            auto_validated=True)
+
+    # gen all-level AggWeeklyMalariaR for period
+    logger.info("all-level AggWeeklyMalariaR for period")
+    districts = get_districts()
+    for district in districts:
+        logger.info("\tAt district {}".format(district))
+
+        for hc in district.get_health_centers():
+            logger.info("\tAt HC {}".format(hc))
+
+            # ack expected
+            exp = ExpectedReporting.objects.filter(
+                report_class__in=weekly_rclasses,
+                entity__slug=district.slug,
+                period=wperiod)
+            # not expected
+            if exp.count() == 0:
+                continue
+            else:
+                # might explode if 2 exp but that's the point
+                exp = exp.get()
+
+            # create AggWeeklyMalariaR
+            agg = AggWeeklyMalariaR.create_from(
+                period=wperiod,
+                entity=hc,
+                created_by=autobot)
+            exp.acknowledge_report(agg)
+
+            # validate (no expected validation)
+            agg.record_validation(
+                validated=True,
+                validated_by=autobot,
+                validated_on=timezone.now(),
+                auto_validated=True)
+
+        # ack expected
+        exp = ExpectedReporting.objects.filter(
+            report_class__in=weekly_rclasses,
+            entity__slug=district.slug,
+            period=wperiod)
+        # not expected
+        if exp.count() == 0:
+            continue
+        else:
+            # might explode if 2 exp but that's the point
+            exp = exp.get()
+
+        # create AggWeeklyMalariaR
+        agg = AggWeeklyMalariaR.create_from(
+            period=wperiod,
+            entity=district,
+            created_by=autobot)
+        exp.acknowledge_report(agg)
+
+        # validate (no expected validation)
+        agg.record_validation(
+            validated=True,
+            validated_by=autobot,
+            validated_on=timezone.now(),
+            auto_validated=True)
+
+    regions = get_regions()
+    for region in regions:
+        logger.info("\tAt region {}".format(region))
+        # ack expected
+        exp = ExpectedReporting.objects.filter(
+            report_class__in=weekly_rclasses,
+            entity__slug=region.slug,
+            period=wperiod)
+        if exp.count() == 0:
+            continue
+        else:
+            exp = exp.get()
+
+        # create AggWeeklyMalariaR/region
+        agg = AggWeeklyMalariaR.create_from(
+            period=wperiod,
+            entity=region,
+            created_by=autobot)
+        exp.acknowledge_report(agg)
+
+        # validate (no expected validation)
+        agg.record_validation(
+            validated=True,
+            validated_by=autobot,
+            validated_on=timezone.now(),
+            auto_validated=True)
+
+    logger.info("\tAt {}".format(mali))
+
+    # ack expected
+    exp = ExpectedReporting.objects.get(
+        report_class__in=weekly_rclasses,
+        entity__slug=mali.slug,
+        period=wperiod)
+    if exp is None:
+        return
+
+    # create AggWeeklyMalariaR/country
+    agg = AggWeeklyMalariaR.create_from(
+        period=wperiod,
+        entity=mali,
+        created_by=autobot)
+    exp.acknowledge_report(agg)
+
+    # validate (no expected validation)
+    agg.record_validation(
+        validated=True,
+        validated_by=autobot,
+        validated_on=timezone.now(),
+        auto_validated=True)
 
 
 def generate_district_reports(period,

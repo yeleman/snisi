@@ -1217,9 +1217,6 @@ class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
     def create_from(cls, period, entity, created_by,
                     indiv_sources=None, agg_sources=None):
 
-        for idx, day in enumerate(period.get_day_periods()):
-            print(day, idx)
-
         if indiv_sources is None:
             if entity.type.slug in ('health_center', 'health_district'):
                 indiv_sources = cls.INDIVIDUAL_CLS.objects.filter(

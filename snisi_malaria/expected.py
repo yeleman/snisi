@@ -37,6 +37,9 @@ indiv_report_class = ReportClass.get_or_none("malaria_monthly_routine")
 agg_report_class = ReportClass.get_or_none(
     "malaria_monthly_routine_aggregated")
 episrc_report_class = ReportClass.get_or_none("malaria_weekly_epidemio")
+routinesrc_report_class = ReportClass.get_or_none("malaria_weekly_routine")
+routineagg_report_class = ReportClass.get_or_none(
+    "malaria_weekly_routine_aggregated")
 
 
 def create_expected_for(period):
@@ -45,7 +48,6 @@ def create_expected_for(period):
                 .format(DOMAIN, period))
 
     created_list = []
-
 
     routine_cluster = Cluster.get_or_none("malaria_monthly_routine")
 
@@ -253,11 +255,14 @@ def create_expected_for(period):
 
             for entity in weekly_cluster.members(only_active=True):
 
+                rcls = routinesrc_report_class \
+                    if entity.type.slug == 'health_center' \
+                    else routineagg_report_class
                 edict = copy.copy(expected_dict)
                 edict.update({
                     'entity': entity,
                     'period': day_period,
-                    'report_class': episrc_report_class,
+                    'report_class': rcls,
                     'reporting_period': None,
                     'extended_reporting_period': None,
                 })

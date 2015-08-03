@@ -8,6 +8,7 @@ from __future__ import (unicode_literals, absolute_import,
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.dateformat import format as date_format
+from django.utils import timezone
 
 from snisi_core.models.Periods import MonthPeriod, ONE_MICROSECOND_DELTA
 from snisi_tools.datetime import normalize_date
@@ -269,3 +270,55 @@ class FixedMonthFifthWeek(MonthPeriod):
 
     def strid(self):
         return self.middle().strftime('[29+]-%m-%Y')
+
+
+class FixedMonthWeek(object):
+
+    week_classes = [
+        FixedMonthFirstWeek,
+        FixedMonthSecondWeek,
+        FixedMonthThirdWeek,
+        FixedMonthFourthWeek,
+        FixedMonthFifthWeek
+    ]
+
+    @classmethod
+    def current(cls, at=None):
+        if at is None:
+            at = timezone.now()
+        day = at.day
+        if day <= 7:
+            ccls = FixedMonthFirstWeek
+        elif day <= 14:
+            ccls = FixedMonthSecondWeek
+        elif day <= 21:
+            ccls = FixedMonthThirdWeek
+        elif day <= 28:
+            ccls = FixedMonthFourthWeek
+        else:
+            ccls = FixedMonthFifthWeek
+        return ccls.find_create_from(year=at.year, month=at.month)
+
+    @classmethod
+    def previous_week(cls, reference):
+        idx = cls.week_classes.index(reference.__class__)
+        if idx == 0:
+            ncls = cls.week_classes[-1]
+            nmonth = MonthPeriod.find_create_by_date(reference.middle())
+            at = nmonth.previous().middle()
+        else:
+            ncls = cls.week_classes[idx - 1]
+            at = reference.middle()
+        return ncls.find_create_by_date(at)
+
+    @classmethod
+    def following_week(cls, reference):
+        idx = cls.week_classes.index(reference.__class__)
+        if idx == len(cls.week_classes) - 1:
+            ncls = cls.week_classes[0]
+            nmonth = MonthPeriod.find_create_by_date(reference.middle())
+            at = nmonth.next().middle()
+        else:
+            ncls = cls.week_classes[idx + 1]
+            at = reference.middle()
+        return ncls.find_create_by_date(at)
