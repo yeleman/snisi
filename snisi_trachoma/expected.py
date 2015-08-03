@@ -10,7 +10,7 @@ import copy
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.models.Projects import Cluster
 from snisi_core.models.Reporting import ExpectedReporting, ReportClass
-from snisi_malaria import get_domain
+from snisi_trachoma import get_domain
 
 logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
@@ -45,7 +45,7 @@ def create_expected_for(period):
         'amount_expected': ExpectedReporting.EXPECTED_ZEROPLUS,
     }
 
-    # snisi_malaria only work with those periods
+    # snisi_trachoma only work with those periods
     if period.__class__ not in (MonthPeriod,):
         logger.debug("Period {} is not relevant to {}".format(period, DOMAIN))
         return created_list
