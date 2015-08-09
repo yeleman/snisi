@@ -360,4 +360,6 @@ def create_expected_for(period):
 
 
 def report_classes_for(cluster):
+    if cluster.slug == 'malaria_weekly_routine':
+        return [routinesrc_report_class, routineagg_report_class]
     return [indiv_report_class, agg_report_class]

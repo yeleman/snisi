@@ -4,6 +4,7 @@
 
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
+import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -58,6 +59,10 @@ class FixedMonthFirstWeek(MonthPeriod):
     objects = FixedMonthFirstWeekManager()
 
     @classmethod
+    def from_url_str(cls, period_str):
+        return FixedMonthWeek.from_url_str(period_str)
+
+    @classmethod
     def type(cls):
         return cls.FWP
 
@@ -101,6 +106,10 @@ class FixedMonthSecondWeek(MonthPeriod):
         verbose_name_plural = _("Monthly Reporting Periods")
 
     objects = FixedMonthSecondWeekManager()
+
+    @classmethod
+    def from_url_str(cls, period_str):
+        return FixedMonthWeek.from_url_str(period_str)
 
     @classmethod
     def type(cls):
@@ -148,6 +157,10 @@ class FixedMonthThirdWeek(MonthPeriod):
     objects = FixedMonthThirdWeekManager()
 
     @classmethod
+    def from_url_str(cls, period_str):
+        return FixedMonthWeek.from_url_str(period_str)
+
+    @classmethod
     def type(cls):
         return cls.FWP
 
@@ -191,6 +204,10 @@ class FixedMonthFourthWeek(MonthPeriod):
         verbose_name_plural = _("Monthly Reporting Periods")
 
     objects = FixedMonthFourthWeekManager()
+
+    @classmethod
+    def from_url_str(cls, period_str):
+        return FixedMonthWeek.from_url_str(period_str)
 
     @classmethod
     def type(cls):
@@ -239,6 +256,10 @@ class FixedMonthFifthWeek(MonthPeriod):
     objects = FixedMonthFifthWeekManager()
 
     @classmethod
+    def from_url_str(cls, period_str):
+        return FixedMonthWeek.from_url_str(period_str)
+
+    @classmethod
     def type(cls):
         return cls.FWP
 
@@ -281,6 +302,16 @@ class FixedMonthWeek(object):
         FixedMonthFourthWeek,
         FixedMonthFifthWeek
     ]
+
+    @classmethod
+    def from_url_str(cls, period_str):
+        if not re.match(r'^FM[1-5]W[0-9]{2}[0-9]{4}$', period_str):
+            raise ValueError("Not a FixedMonthWeek")
+
+        pcls = cls.week_classes[int(period_str[2]) - 1]
+        month = int(period_str[4:6])
+        year = int(period_str[-4:])
+        return pcls.find_create_from(year=year, month=month)
 
     @classmethod
     def current(cls, at=None):

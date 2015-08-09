@@ -61,6 +61,18 @@ urlpatterns = patterns(
         'snisi_malaria.views.epidemio.display_epidemio',
         name='malaria_epidemio'),
 
+    # weekly malaria raw data
+    url(r'^/weekly-reports/{entity}/{period}/?$'
+        .format(entity=RGXP_ENTITY, period=RGXP_PERIOD),
+        'snisi_malaria.views.raw_data.weekly_browser',
+        name='malaria_weekly_raw_data'),
+    url(r'^/weekly-reports/{entity}/?$'
+        .format(entity=RGXP_ENTITY),
+        'snisi_malaria.views.raw_data.weekly_browser',
+        name='malaria_weekly_raw_data'),
+    url(r'^/weekly-reports/?$',
+        'snisi_malaria.views.raw_data.weekly_browser',
+        name='malaria_weekly_raw_data'),
 
     # quarter reports
     url(r'^/quarter-reports/'+RGXP_ENTITY+'/?$',

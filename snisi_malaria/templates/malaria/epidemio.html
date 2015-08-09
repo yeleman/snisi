@@ -188,10 +188,10 @@ graph2.series = [
         	{% for week_data in agg_weekly_data %}
         	{
         		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.u5pc_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
-        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		pstrid: "{{ week_data.report.period.casted.pid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
@@ -211,7 +211,7 @@ graph2.series = [
         		pstrid: "{{ week_data.report.period.casted.strid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
@@ -231,7 +231,7 @@ graph2.series = [
         		pstrid: "{{ week_data.report.period.casted.strid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
@@ -258,10 +258,10 @@ graph3.series = [
         	{% for week_data in agg_weekly_data %}
         	{
         		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.u5_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
-        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		pstrid: "{{ week_data.report.period.casted.pid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
@@ -278,10 +278,10 @@ graph3.series = [
         	{% for week_data in agg_weekly_data %}
         	{
         		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.o5_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
-        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		pstrid: "{{ week_data.report.period.casted.pid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
@@ -298,10 +298,10 @@ graph3.series = [
         	{% for week_data in agg_weekly_data %}
         	{
         		y: {% if week_data.report == None %}null{% else %}{{ week_data.report.pw_total_confirmed_malaria_cases|default_if_none:"null" }}{% endif %},
-        		pstrid: "{{ week_data.report.period.casted.strid }}",
+        		pstrid: "{{ week_data.report.period.casted.pid }}",
         		events: {
         			click: function (e) {
-        				window.location = "{% url 'nutrition_weekly_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
+        				window.location = "{% url 'malaria_weekly_raw_data' entity_slug=entity.slug period_str='nW99-9999' %}".replace('nW99-9999', this.pstrid);
         			},
         		},
         	},
