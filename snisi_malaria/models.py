@@ -1058,8 +1058,6 @@ class AggDailyMalariaR(DailyMalariaRIFace,
         # fwp_num = getattr(instance.period.casted(), 'FIXED_WEEK_NUM', None)
 
         extra_field = {}
-        #     'week_part': "S{}".format(fwp_num) if fwp_num else ""
-        # }
         receipt_format = ("AMRW-{entity__slug}/"
                           "{period__year_short}{period__month}"
                           "{period__day}-{rand}")

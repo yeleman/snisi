@@ -5,7 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-
+import datetime
 from django.utils import timezone
 
 from snisi_core.models.Reporting import (ExpectedReporting,
@@ -59,17 +59,14 @@ def generate_weekly_reports(period,
     current_week = FixedMonthWeek.current(at=now)
     wperiod = FixedMonthWeek.previous_week(current_week)
 
-    # wperiod = FixedMonthWeek.previous_week(
-    #     FixedMonthWeek.current(at=period.middle()))
-    # next_period = FixedMonthWeek.following_week(wperiod)
-
     logger.info("Switching to {}/{}".format(wperiod, period))
 
     if ensure_correct_date:
         if not current_week.includes(now):
-            logger.error("Not allowed to generate weekly agg "
-                         "outside of the following period")
-            return
+            raise ValueError("Not allowed to generate weekly agg "
+                             "outside of the following period")
+        elif now < wperiod.end_on + datetime.timedelta(days=5):
+            raise ValueError("Extended Reporting Period not over yet")
 
     # gen all-levels AggDailyMalariaR for each day
     logger.info("all-levels AggDailyMalariaR for each day")

@@ -63,8 +63,12 @@ class Command(BaseCommand):
 
             if task.can_trigger():
                 logger.debug("triggering {}".format(task))
-                category_matrix.get(category)(nperiod)
-                task.trigger()
+                try:
+                    category_matrix.get(category)(nperiod)
+                except Exception as e:
+                    logger.exception(e)
+                else:
+                    task.trigger()
             else:
                 logger.info("{} already triggered".format(task))
 
@@ -79,18 +83,14 @@ class Command(BaseCommand):
             # send warning notice to non-satisfied HC person
             handle_category("end_of_reporting_period")
 
-        # On 8th
-        if day >= 8:
-            handle_category("end_of_first_week_period_reporting", this_month)
-
         # On 11th
         if day >= ROUTINE_EXTENDED_REPORTING_END_DAY:
             # send summary notification and validation invitatin to districts
             handle_category("end_of_extended_reporting_period")
 
-        # On 15th
-        if day >= 15:
-            handle_category("end_of_second_week_period_reporting", this_month)
+        # On 13th
+        if day >= 13:
+            handle_category("end_of_first_week_period_reporting", this_month)
 
         # On 16th
         if day >= ROUTINE_DISTRICT_AGG_DAY:
@@ -100,9 +100,9 @@ class Command(BaseCommand):
             # send notification to regions
             handle_category("end_of_district_period")
 
-        # On 22th
-        if day >= 22:
-            handle_category("end_of_third_week_period_reporting", this_month)
+        # On 20th
+        if day >= 20:
+            handle_category("end_of_second_week_period_reporting", this_month)
 
         # On 26th
         if day >= ROUTINE_REGION_AGG_DAY:
@@ -112,6 +112,6 @@ class Command(BaseCommand):
             # send notification to central/national
             handle_category("end_of_region_period")
 
-        # On 29th
-        if day >= 29:
-            handle_category("end_of_fourth_week_period_reporting", this_month)
+        # On 27th
+        if day >= 27:
+            handle_category("end_of_third_week_period_reporting", this_month)
