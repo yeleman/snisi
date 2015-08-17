@@ -276,9 +276,8 @@ def generate_district_reports(period,
         now = timezone.now()
         if not period.following().includes(now) \
                 or not now.day == ROUTINE_DISTRICT_AGG_DAY:
-            logger.error("Not allowed to generate district agg "
-                         "outside the 16th of the following period")
-            return
+            raise ValueError("Not allowed to generate district agg "
+                             "outside the 16th of the following period")
 
     districts = get_districts()
 
@@ -356,8 +355,8 @@ def generate_region_country_reports(period,
         now = timezone.now()
         if not period.following().includes(now) \
                 or not now.day == ROUTINE_REGION_AGG_DAY:
-            logger.error("Not allowed to generate district agg "
-                         "outside the 16th of the following period")
+            raise ValueError("Not allowed to generate district agg "
+                             "outside the 16th of the following period")
             return
 
     regions = get_regions()
