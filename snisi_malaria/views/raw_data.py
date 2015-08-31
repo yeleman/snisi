@@ -7,10 +7,11 @@ from __future__ import (unicode_literals, absolute_import,
 import logging
 
 from snisi_web.views.raw_data import browser as web_browser
-from snisi_malaria.models import AggWeeklyMalariaR
+# from snisi_malaria.models import AggWeeklyMalariaR
 from snisi_core.models.FixedWeekPeriods import (
     FixedMonthFirstWeek, FixedMonthSecondWeek, FixedMonthThirdWeek,
-    FixedMonthFourthWeek, FixedMonthFifthWeek)
+    FixedMonthFourthWeek, FixedMonthFifthWeek,
+    FixedMonthWeek)
 
 logger = logging.getLogger(__name__)
 period_classes = [
@@ -32,7 +33,8 @@ def weekly_browser(request, entity_slug=None, period_str=None):
         period_cls = period_classes[int(period_str[2]) - 1]
     except:
         period_cls = period_classes[0]
-    print("calling weekly browser", entity_slug, period_str, period_cls)
+    period_cls = FixedMonthWeek
+
     return web_browser(request,
                        cluster_slug='malaria_weekly_routine',
                        entity_slug=entity_slug,

@@ -49,25 +49,25 @@ def get_cluster_children_live(request, cluster_slug,
                                          filter_func=filter_func)
 
 
-def get_epidemio_children(request,
-                          parent_slug=None, type_slug=None):
-    """ same get-children API but reduces results to members of cluster """
+# def get_epidemio_children(request,
+#                           parent_slug=None, type_slug=None):
+#     """ same get-children API but reduces results to members of cluster """
 
-    cluster = Cluster.get_or_none('malaria_weekly_epidemiology')
+#     cluster = Cluster.get_or_none('malaria_weekly_epidemiology')
 
-    def filter_func(e):
-        if e.casted() in cluster.members(only_active=True):
-            return True
-        for m in cluster.members(only_active=True):
-            if e.slug in [a.slug for a in m.get_ancestors()]:
-                return True
-        return False
+#     def filter_func(e):
+#         if e.casted() in cluster.members(only_active=True):
+#             return True
+#         for m in cluster.members(only_active=True):
+#             if e.slug in [a.slug for a in m.get_ancestors()]:
+#                 return True
+#         return False
 
-    return natural_children_as_json_view(request,
-                                         parent_slug=parent_slug,
-                                         type_slug=type_slug,
-                                         skip_slugs=['health_area', 'vfq'],
-                                         filter_func=filter_func)
+#     return natural_children_as_json_view(request,
+#                                          parent_slug=parent_slug,
+#                                          type_slug=type_slug,
+#                                          skip_slugs=['health_area', 'vfq'],
+#                                          filter_func=filter_func)
 
 
 def get_cluster_children(request,

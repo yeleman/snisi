@@ -17,8 +17,8 @@ def update_cluster_caches_for(cluster):
         'malaria_monthly_routine': update_malaria_monthly_routine_cache,
         'malaria_monthly_routine_sms':
             update_malaria_monthly_routine_sms_cache,
-        'malaria_weekly_epidemiology':
-            update_malaria_weekly_epidemiology_cache,
+        # 'malaria_weekly_epidemiology':
+        #     update_malaria_weekly_epidemiology_cache,
         'malaria_weekly_routine':
             update_malaria_weekly_routine_cache,
     }.get(cluster.slug, lambda c: False)(cluster)

@@ -397,3 +397,22 @@ def malaria_monthly_routine_as_xls(report):
     book.save(stream)
 
     return stream
+
+
+def malaria_weekly_routine_weeklong_as_xls(report):
+    book = xlwt.Workbook(encoding='utf-8')
+    book.add_sheet("Report")
+    stream = StringIO.StringIO()
+    book.save(stream)
+
+    return stream
+
+
+def malaria_weekly_routine_as_xls(report):
+
+    book = xlwt.Workbook(encoding='utf-8')
+    book.add_sheet("Report")
+    stream = StringIO.StringIO()
+    book.save(stream)
+
+    return stream

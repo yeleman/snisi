@@ -22,7 +22,10 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          ExpectedReporting,
                                          PERIODICAL_SOURCE,
                                          PERIODICAL_AGGREGATED)
-from snisi_malaria.xls_export import malaria_monthly_routine_as_xls
+from snisi_malaria.xls_export import (
+    malaria_monthly_routine_as_xls,
+    malaria_weekly_routine_as_xls,
+    malaria_weekly_routine_weeklong_as_xls)
 from snisi_malaria.utils import weekdaynum_for_datetime
 
 
@@ -941,11 +944,11 @@ class DailyMalariaRIFace(models.Model):
         abstract = True
 
     u5_total_confirmed_malaria_cases = models.PositiveIntegerField(
-        _("Total Confirmed Malaria Cases"))
+        _("Total Confirmed Malaria Cases"), default=0)
     o5_total_confirmed_malaria_cases = models.PositiveIntegerField(
-        _("Total Confirmed Malaria Cases"))
+        _("Total Confirmed Malaria Cases"), default=0)
     pw_total_confirmed_malaria_cases = models.PositiveIntegerField(
-        _("Total Confirmed Malaria Cases"))
+        _("Total Confirmed Malaria Cases"), default=0)
 
     def __str__(self):
         return self.receipt
@@ -968,6 +971,10 @@ class DailyMalariaRIFace(models.Model):
     def total_confirmed_malaria_cases(self):
         return self.total_for_field(inspect.stack()[0][3])
 
+    def as_xls(self):
+        file_name = "{receipt}.xls".format(receipt=self.receipt)
+        return file_name, malaria_weekly_routine_as_xls(self)
+
 
 class DailyMalariaR(DailyMalariaRIFace, SNISIReport):
 
@@ -989,7 +996,7 @@ reversion.register(DailyMalariaR, follow=['snisireport_ptr'])
 
 
 class AggDailyMalariaR(DailyMalariaRIFace,
-                       PeriodicAggregatedReportInterface, SNISIReport):
+                       SNISIReport, PeriodicAggregatedReportInterface):
 
     RECEIPT_FORMAT = None
     INDIVIDUAL_CLS = DailyMalariaR
@@ -1071,7 +1078,7 @@ receiver(post_save, sender=AggDailyMalariaR)(post_save_report)
 reversion.register(AggDailyMalariaR, follow=['snisireport_ptr'])
 
 
-class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
+class AggWeeklyMalariaR(SNISIReport, PeriodicAggregatedReportInterface):
 
     RECEIPT_FORMAT = None
     INDIVIDUAL_CLS = DailyMalariaR
@@ -1183,6 +1190,18 @@ class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
     def pwpc_total_confirmed_malaria_cases(self):
         return self.catpc('pw')
 
+    # @property
+    # def u5_total_confirmed_malaria_cases(self):
+    #     return self.catsum('u5')
+
+    # @property
+    # def o5_total_confirmed_malaria_cases(self):
+    #     return self.catsum('o5')
+
+    # @property
+    # def pw_total_confirmed_malaria_cases(self):
+    #     return self.catsum('pw')
+
     @property
     def day1_total_confirmed_malaria_cases(self):
         return self.catsum('day1_')
@@ -1242,23 +1261,32 @@ class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
     def update_instance_with_indiv(cls, report, instance):
 
         prefix = 'day{}'.format(
-            weekdaynum_for_datetime(report.period.start_on))
+            weekdaynum_for_datetime(instance.period.start_on))
 
         # copy values from DayMalariaR to proper day fields
         for field in report.data_fields():
             nfield = '{}_{}'.format(prefix, field)
 
             setattr(report, nfield,
-                    (getattr(report, field, 0) or 0)
-                    + (getattr(instance, nfield, 0) or 0))
+                    (getattr(report, nfield, 0) or 0)
+                    + (getattr(instance, field, 0) or 0))
 
             # update counter on week-long fields
             setattr(report, field,
                     (getattr(report, field, 0) or 0)
                     + (getattr(instance, field, 0) or 0))
 
+    def build_source_exp_reportings(self):
+        return list(set(
+            ExpectedReporting.objects.filter(
+                report_class=self.report_class(for_source=True),
+                period__start_on__gte=self.period.start_on,
+                period__end_on__lte=self.period.end_on).filter(
+                    entity__in=self.entity.get_health_centers())))
+
     @classmethod
     def update_instance_with_agg(cls, report, instance):
+
         for field in cls.data_fields():
             setattr(report, field,
                     (getattr(report, field, 0) or 0)
@@ -1278,6 +1306,10 @@ class AggWeeklyMalariaR(PeriodicAggregatedReportInterface, SNISIReport):
         return generate_receipt(
             instance=instance,
             receipt_format=receipt_format, **extra_field)
+
+    def as_xls(self):
+        file_name = "{receipt}.xls".format(receipt=self.receipt)
+        return file_name, malaria_weekly_routine_weeklong_as_xls(self)
 
 receiver(pre_save, sender=AggWeeklyMalariaR)(pre_save_report_incomplete)
 receiver(post_save, sender=AggWeeklyMalariaR)(post_save_report)

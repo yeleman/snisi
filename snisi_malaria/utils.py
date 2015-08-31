@@ -13,4 +13,4 @@ def weekdaynum_for_datetime(adatetime):
     day = adatetime.day
     if day <= 7:
         return day
-    return day % 7
+    return day % 7 or 7

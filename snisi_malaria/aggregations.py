@@ -37,6 +37,18 @@ weekly_rclasses = [
     ReportClass.get_or_none('malaria_weekly_routine_fourthweek_aggregated'),
     ReportClass.get_or_none('malaria_weekly_routine_fifthweek_aggregated'),
 ]
+weekly_wlong_rclasses = [
+    ReportClass.get_or_none(
+        'malaria_weekly_routine_firstweek_weeklong_aggregated'),
+    ReportClass.get_or_none(
+        'malaria_weekly_routine_secondweek_weeklong_aggregated'),
+    ReportClass.get_or_none(
+        'malaria_weekly_routine_thirdweek_weeklong_aggregated'),
+    ReportClass.get_or_none(
+        'malaria_weekly_routine_fourthweek_weeklong_aggregated'),
+    ReportClass.get_or_none(
+        'malaria_weekly_routine_fifthweek_weeklong_aggregated'),
+]
 charge_sis = Role.get_or_none("charge_sis")
 
 mali = Entity.get_or_none("mali")
@@ -49,9 +61,8 @@ get_regions = lambda: [e for e in cluster.members()
 
 
 def generate_weekly_reports(period,
-                            ensure_correct_date=True):
-
-    now = timezone.now()
+                            ensure_correct_date=True,
+                            now=timezone.now):
 
     # period = 06-2015
     # fourth_week
@@ -162,8 +173,8 @@ def generate_weekly_reports(period,
 
             # ack expected
             exp = ExpectedReporting.objects.filter(
-                report_class__in=weekly_rclasses,
-                entity__slug=district.slug,
+                report_class__in=weekly_wlong_rclasses,
+                entity__slug=hc.slug,
                 period=wperiod)
             # not expected
             if exp.count() == 0:
@@ -173,6 +184,7 @@ def generate_weekly_reports(period,
                 exp = exp.get()
 
             # create AggWeeklyMalariaR
+            print(exp, exp.satisfied, exp.updated_on)
             agg = AggWeeklyMalariaR.create_from(
                 period=wperiod,
                 entity=hc,
@@ -188,7 +200,7 @@ def generate_weekly_reports(period,
 
         # ack expected
         exp = ExpectedReporting.objects.filter(
-            report_class__in=weekly_rclasses,
+            report_class__in=weekly_wlong_rclasses,
             entity__slug=district.slug,
             period=wperiod)
         # not expected
@@ -217,7 +229,7 @@ def generate_weekly_reports(period,
         logger.info("\tAt region {}".format(region))
         # ack expected
         exp = ExpectedReporting.objects.filter(
-            report_class__in=weekly_rclasses,
+            report_class__in=weekly_wlong_rclasses,
             entity__slug=region.slug,
             period=wperiod)
         if exp.count() == 0:
@@ -243,7 +255,7 @@ def generate_weekly_reports(period,
 
     # ack expected
     exp = ExpectedReporting.objects.get(
-        report_class__in=weekly_rclasses,
+        report_class__in=weekly_wlong_rclasses,
         entity__slug=mali.slug,
         period=wperiod)
     if exp is None:

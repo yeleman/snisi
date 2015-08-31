@@ -1,0 +1,74 @@
+{% load snisi %}
+
+<h2>Surveillance hebdomadaire</h2>
+
+<p>Période {{ period }} du {{ period.start_on }} au {{ period.end_on }}</p>
+
+<table class="pure-table center report-table shrink-input">
+<thead>
+<tr>
+	<th></th>
+    <th>Moins de 5ans</th>
+    <th>5ans et plus</th>
+    <th>Femmes Enceintes</th>
+    <th>Total</th>
+</tr>
+<tbody>
+<tr>
+    <th>Jour 1</th>
+    <td>{{ report.day1_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day1_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day1_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day1_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 2</th>
+    <td>{{ report.day2_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day2_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day2_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day2_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 3</th>
+    <td>{{ report.day3_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day3_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day3_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day3_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 4</th>
+    <td>{{ report.day4_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day4_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day4_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day4_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 5</th>
+    <td>{{ report.day5_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day5_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day5_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day5_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 6</th>
+    <td>{{ report.day6_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day6_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day6_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day6_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr>
+    <th>Jour 7</th>
+    <td>{{ report.day7_u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day7_o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day7_pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.day7_total_confirmed_malaria_cases }}</td>
+</tr>
+<tr class="total-row">
+	<th>TOTAL</th>
+    <td>{{ report.u5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.o5_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.pw_total_confirmed_malaria_cases }}</td>
+    <td>{{ report.total_confirmed_malaria_cases }}</td>
+</tr>
+</tbody>
+</table>

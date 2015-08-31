@@ -5,6 +5,7 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import re
+import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -91,6 +92,7 @@ class FixedMonthFirstWeek(MonthPeriod):
         return (start, end)
 
     def strid(self):
+        return self.pid
         return self.middle().strftime('[1-7]-%m-%Y')
 
 
@@ -140,6 +142,7 @@ class FixedMonthSecondWeek(MonthPeriod):
         return (start, end)
 
     def strid(self):
+        return self.pid
         return self.middle().strftime('[8-14]-%m-%Y')
 
 
@@ -189,6 +192,7 @@ class FixedMonthThirdWeek(MonthPeriod):
         return (start, end)
 
     def strid(self):
+        return self.pid
         return self.middle().strftime('[15-21]-%m-%Y')
 
 
@@ -239,6 +243,7 @@ class FixedMonthFourthWeek(MonthPeriod):
         return (start, end)
 
     def strid(self):
+        return self.pid
         return self.middle().strftime('[22-28]-%m-%Y')
 
 
@@ -290,6 +295,7 @@ class FixedMonthFifthWeek(MonthPeriod):
         return (start, end)
 
     def strid(self):
+        return self.pid
         return self.middle().strftime('[29+]-%m-%Y')
 
 
@@ -314,7 +320,7 @@ class FixedMonthWeek(object):
         return pcls.find_create_from(year=year, month=month)
 
     @classmethod
-    def current(cls, at=None):
+    def get_fxp_class(cls, at=None):
         if at is None:
             at = timezone.now()
         day = at.day
@@ -328,7 +334,28 @@ class FixedMonthWeek(object):
             ccls = FixedMonthFourthWeek
         else:
             ccls = FixedMonthFifthWeek
-        return ccls.find_create_from(year=at.year, month=at.month)
+        return ccls
+
+    @classmethod
+    def find_create_by_date(cls, date_obj, dont_create=False):
+        return cls.get_fxp_class(at=date_obj) \
+            .find_create_by_date(date_obj=date_obj, dont_create=dont_create)
+
+    @classmethod
+    def current(cls, at=None):
+        if at is None:
+            at = timezone.now()
+        return cls.get_fxp_class(at=at) \
+            .find_create_from(year=at.year, month=at.month)
+
+    @classmethod
+    def all_from(cls, first_period, last_period=None):
+        l = []
+        p = first_period
+        while p <= last_period:
+            l.append(p)
+            p = cls.find_create_by_date(p.end_on + datetime.timedelta(days=1))
+        return l
 
     @classmethod
     def previous_week(cls, reference):
