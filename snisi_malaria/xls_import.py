@@ -14,12 +14,11 @@ from django.utils import timezone
 from snisi_core.models.Periods import MonthPeriod
 from snisi_core.xls_import import (ExcelForm, ExcelFormField)
 from snisi_tools import type_converters
-from snisi_tools.misc import class_str
+# from snisi_tools.misc import class_str
 from snisi_malaria import get_domain
-from snisi_malaria.models import MalariaR, EpidemioMalariaR
+from snisi_malaria.models import MalariaR
 from snisi_malaria.integrity import (MalariaRSourceReportChecker,
-                                     EpidemioMalariaRIntegrityChecker,
-                                     create_report, create_epidemio_report)
+                                     create_report)
 
 logger = logging.getLogger(__name__)
 
@@ -319,1067 +318,1067 @@ class MalariaExcelForm(MalariaRSourceReportChecker, ExcelForm):
                              data_source=self.filepath)
 
 
-class EpidemioMalariaRForm(EpidemioMalariaRIntegrityChecker, ExcelForm):
+# class EpidemioMalariaRForm(EpidemioMalariaRIntegrityChecker, ExcelForm):
 
-    MONTH_MAP = range(1, 13)
-    WEEK_MAP = range(1, 6)
-    YEAR_MAP = range(2011, 2025)
+#     MONTH_MAP = range(1, 13)
+#     WEEK_MAP = range(1, 6)
+#     YEAR_MAP = range(2011, 2025)
 
-    _mapping = {'0.1': {
-        'region': ExcelFormField('B3', text_type, _("Region")),
-        'district': ExcelFormField('B4', text_type, _('Health District')),
-        'hc': ExcelFormField('B5', text_type, _("Health Center")),
-        'month': ExcelFormField(
-            'F4', type_converters.NormalizedIntChoiceList,
-            _("Month"), cast_args=MONTH_MAP),
-        'year': ExcelFormField(
-            'I4', type_converters.NormalizedIntChoiceList,
-            _("Year"), cast_args=YEAR_MAP),
-        'week': ExcelFormField(
-            'G6', type_converters.NormalizedIntChoiceList,
-            _("Week"), cast_args=WEEK_MAP),
+#     _mapping = {'0.1': {
+#         'region': ExcelFormField('B3', text_type, _("Region")),
+#         'district': ExcelFormField('B4', text_type, _('Health District')),
+#         'hc': ExcelFormField('B5', text_type, _("Health Center")),
+#         'month': ExcelFormField(
+#             'F4', type_converters.NormalizedIntChoiceList,
+#             _("Month"), cast_args=MONTH_MAP),
+#         'year': ExcelFormField(
+#             'I4', type_converters.NormalizedIntChoiceList,
+#             _("Year"), cast_args=YEAR_MAP),
+#         'week': ExcelFormField(
+#             'G6', type_converters.NormalizedIntChoiceList,
+#             _("Week"), cast_args=WEEK_MAP),
 
-        'd1_u5_total_consultation_all_causes': ExcelFormField(
-            'C10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd1_u5_total_suspected_malaria_cases': ExcelFormField(
-            'C13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd1_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'C16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd1_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'C19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd1_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'C22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd1_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'C25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd1_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'C28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd1_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'C31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd1_u5_total_simple_malaria_cases': ExcelFormField(
-            'C34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd1_u5_total_severe_malaria_cases': ExcelFormField(
-            'C37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd1_u5_total_malaria_death': ExcelFormField(
-            'C40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd1_u5_total_death_all_causes': ExcelFormField(
-            'C43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd1_u5_total_consultation_all_causes': ExcelFormField(
+#             'C10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd1_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'C13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd1_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'C16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd1_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'C19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd1_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'C22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd1_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'C25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd1_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'C28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd1_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'C31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd1_u5_total_simple_malaria_cases': ExcelFormField(
+#             'C34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd1_u5_total_severe_malaria_cases': ExcelFormField(
+#             'C37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd1_u5_total_malaria_death': ExcelFormField(
+#             'C40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd1_u5_total_death_all_causes': ExcelFormField(
+#             'C43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd1_o5_total_consultation_all_causes': ExcelFormField(
-            'C11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd1_o5_total_suspected_malaria_cases': ExcelFormField(
-            'C14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd1_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'C17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd1_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'C20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd1_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'C23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd1_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'C26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd1_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'C29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd1_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'C32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd1_o5_total_simple_malaria_cases': ExcelFormField(
-            'C35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd1_o5_total_severe_malaria_cases': ExcelFormField(
-            'C38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd1_o5_total_malaria_death': ExcelFormField(
-            'C41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd1_o5_total_death_all_causes': ExcelFormField(
-            'C34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd1_o5_total_consultation_all_causes': ExcelFormField(
+#             'C11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd1_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'C14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd1_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'C17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd1_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'C20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd1_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'C23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd1_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'C26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd1_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'C29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd1_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'C32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd1_o5_total_simple_malaria_cases': ExcelFormField(
+#             'C35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd1_o5_total_severe_malaria_cases': ExcelFormField(
+#             'C38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd1_o5_total_malaria_death': ExcelFormField(
+#             'C41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd1_o5_total_death_all_causes': ExcelFormField(
+#             'C34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd1_pw_total_consultation_all_causes': ExcelFormField(
-            'C12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd1_pw_total_suspected_malaria_cases': ExcelFormField(
-            'C15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd1_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'C18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd1_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'C21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd1_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'C24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd1_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'C27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd1_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'C30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd1_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'C33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd1_pw_total_simple_malaria_cases': ExcelFormField(
-            'C36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd1_pw_total_severe_malaria_cases': ExcelFormField(
-            'C39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd1_pw_total_malaria_death': ExcelFormField(
-            'C42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd1_pw_total_death_all_causes': ExcelFormField(
-            'C45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd1_pw_total_consultation_all_causes': ExcelFormField(
+#             'C12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd1_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'C15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd1_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'C18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd1_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'C21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd1_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'C24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd1_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'C27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd1_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'C30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd1_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'C33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd1_pw_total_simple_malaria_cases': ExcelFormField(
+#             'C36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd1_pw_total_severe_malaria_cases': ExcelFormField(
+#             'C39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd1_pw_total_malaria_death': ExcelFormField(
+#             'C42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd1_pw_total_death_all_causes': ExcelFormField(
+#             'C45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd2_u5_total_consultation_all_causes': ExcelFormField(
-            'D10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd2_u5_total_suspected_malaria_cases': ExcelFormField(
-            'D13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd2_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'D16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd2_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'D19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd2_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'D22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd2_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'D25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd2_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'D28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd2_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'D31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd2_u5_total_simple_malaria_cases': ExcelFormField(
-            'D34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd2_u5_total_severe_malaria_cases': ExcelFormField(
-            'D37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd2_u5_total_malaria_death': ExcelFormField(
-            'D40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd2_u5_total_death_all_causes': ExcelFormField(
-            'D43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd2_u5_total_consultation_all_causes': ExcelFormField(
+#             'D10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd2_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'D13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd2_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'D16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd2_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'D19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd2_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'D22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd2_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'D25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd2_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'D28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd2_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'D31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd2_u5_total_simple_malaria_cases': ExcelFormField(
+#             'D34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd2_u5_total_severe_malaria_cases': ExcelFormField(
+#             'D37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd2_u5_total_malaria_death': ExcelFormField(
+#             'D40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd2_u5_total_death_all_causes': ExcelFormField(
+#             'D43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd2_o5_total_consultation_all_causes': ExcelFormField(
-            'D11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd2_o5_total_suspected_malaria_cases': ExcelFormField(
-            'D14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd2_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'D17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd2_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'D20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd2_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'D23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd2_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'D26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd2_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'D29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd2_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'D32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd2_o5_total_simple_malaria_cases': ExcelFormField(
-            'D35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd2_o5_total_severe_malaria_cases': ExcelFormField(
-            'D38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd2_o5_total_malaria_death': ExcelFormField(
-            'D41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd2_o5_total_death_all_causes': ExcelFormField(
-            'D34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd2_o5_total_consultation_all_causes': ExcelFormField(
+#             'D11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd2_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'D14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd2_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'D17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd2_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'D20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd2_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'D23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd2_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'D26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd2_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'D29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd2_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'D32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd2_o5_total_simple_malaria_cases': ExcelFormField(
+#             'D35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd2_o5_total_severe_malaria_cases': ExcelFormField(
+#             'D38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd2_o5_total_malaria_death': ExcelFormField(
+#             'D41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd2_o5_total_death_all_causes': ExcelFormField(
+#             'D34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd2_pw_total_consultation_all_causes': ExcelFormField(
-            'D12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd2_pw_total_suspected_malaria_cases': ExcelFormField(
-            'D15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd2_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'D18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd2_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'D21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd2_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'D24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd2_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'D27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd2_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'D30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd2_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'D33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd2_pw_total_simple_malaria_cases': ExcelFormField(
-            'D36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd2_pw_total_severe_malaria_cases': ExcelFormField(
-            'D39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd2_pw_total_malaria_death': ExcelFormField(
-            'D42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd2_pw_total_death_all_causes': ExcelFormField(
-            'D45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd2_pw_total_consultation_all_causes': ExcelFormField(
+#             'D12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd2_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'D15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd2_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'D18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd2_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'D21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd2_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'D24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd2_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'D27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd2_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'D30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd2_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'D33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd2_pw_total_simple_malaria_cases': ExcelFormField(
+#             'D36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd2_pw_total_severe_malaria_cases': ExcelFormField(
+#             'D39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd2_pw_total_malaria_death': ExcelFormField(
+#             'D42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd2_pw_total_death_all_causes': ExcelFormField(
+#             'D45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd3_u5_total_consultation_all_causes': ExcelFormField(
-            'E10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd3_u5_total_suspected_malaria_cases': ExcelFormField(
-            'E13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd3_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'E16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd3_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'E19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd3_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'E22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd3_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'E25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd3_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'E28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd3_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'E31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd3_u5_total_simple_malaria_cases': ExcelFormField(
-            'E34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd3_u5_total_severe_malaria_cases': ExcelFormField(
-            'E37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd3_u5_total_malaria_death': ExcelFormField(
-            'E40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd3_u5_total_death_all_causes': ExcelFormField(
-            'E43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd3_u5_total_consultation_all_causes': ExcelFormField(
+#             'E10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd3_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'E13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd3_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'E16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd3_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'E19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd3_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'E22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd3_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'E25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd3_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'E28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd3_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'E31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd3_u5_total_simple_malaria_cases': ExcelFormField(
+#             'E34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd3_u5_total_severe_malaria_cases': ExcelFormField(
+#             'E37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd3_u5_total_malaria_death': ExcelFormField(
+#             'E40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd3_u5_total_death_all_causes': ExcelFormField(
+#             'E43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd3_o5_total_consultation_all_causes': ExcelFormField(
-            'E11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd3_o5_total_suspected_malaria_cases': ExcelFormField(
-            'E14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd3_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'E17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd3_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'E20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd3_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'E23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd3_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'E26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd3_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'E29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd3_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'E32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd3_o5_total_simple_malaria_cases': ExcelFormField(
-            'E35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd3_o5_total_severe_malaria_cases': ExcelFormField(
-            'E38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd3_o5_total_malaria_death': ExcelFormField(
-            'E41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd3_o5_total_death_all_causes': ExcelFormField(
-            'E34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd3_o5_total_consultation_all_causes': ExcelFormField(
+#             'E11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd3_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'E14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd3_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'E17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd3_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'E20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd3_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'E23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd3_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'E26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd3_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'E29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd3_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'E32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd3_o5_total_simple_malaria_cases': ExcelFormField(
+#             'E35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd3_o5_total_severe_malaria_cases': ExcelFormField(
+#             'E38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd3_o5_total_malaria_death': ExcelFormField(
+#             'E41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd3_o5_total_death_all_causes': ExcelFormField(
+#             'E34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd3_pw_total_consultation_all_causes': ExcelFormField(
-            'E12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd3_pw_total_suspected_malaria_cases': ExcelFormField(
-            'E15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd3_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'E18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd3_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'E21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd3_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'E24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd3_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'E27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd3_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'E30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd3_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'E33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd3_pw_total_simple_malaria_cases': ExcelFormField(
-            'E36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd3_pw_total_severe_malaria_cases': ExcelFormField(
-            'E39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd3_pw_total_malaria_death': ExcelFormField(
-            'E42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd3_pw_total_death_all_causes': ExcelFormField(
-            'E45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd3_pw_total_consultation_all_causes': ExcelFormField(
+#             'E12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd3_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'E15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd3_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'E18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd3_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'E21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd3_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'E24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd3_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'E27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd3_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'E30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd3_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'E33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd3_pw_total_simple_malaria_cases': ExcelFormField(
+#             'E36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd3_pw_total_severe_malaria_cases': ExcelFormField(
+#             'E39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd3_pw_total_malaria_death': ExcelFormField(
+#             'E42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd3_pw_total_death_all_causes': ExcelFormField(
+#             'E45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd4_u5_total_consultation_all_causes': ExcelFormField(
-            'F10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd4_u5_total_suspected_malaria_cases': ExcelFormField(
-            'F13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd4_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'F16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd4_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'F19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd4_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'F22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd4_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'F25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd4_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'F28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd4_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'F31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd4_u5_total_simple_malaria_cases': ExcelFormField(
-            'F34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd4_u5_total_severe_malaria_cases': ExcelFormField(
-            'F37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd4_u5_total_malaria_death': ExcelFormField(
-            'F40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd4_u5_total_death_all_causes': ExcelFormField(
-            'F43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd4_u5_total_consultation_all_causes': ExcelFormField(
+#             'F10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd4_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'F13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd4_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'F16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd4_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'F19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd4_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'F22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd4_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'F25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd4_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'F28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd4_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'F31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd4_u5_total_simple_malaria_cases': ExcelFormField(
+#             'F34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd4_u5_total_severe_malaria_cases': ExcelFormField(
+#             'F37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd4_u5_total_malaria_death': ExcelFormField(
+#             'F40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd4_u5_total_death_all_causes': ExcelFormField(
+#             'F43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd4_o5_total_consultation_all_causes': ExcelFormField(
-            'F11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd4_o5_total_suspected_malaria_cases': ExcelFormField(
-            'F14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd4_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'F17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd4_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'F20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd4_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'F23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd4_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'F26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd4_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'F29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd4_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'F32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd4_o5_total_simple_malaria_cases': ExcelFormField(
-            'F35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd4_o5_total_severe_malaria_cases': ExcelFormField(
-            'F38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd4_o5_total_malaria_death': ExcelFormField(
-            'F41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd4_o5_total_death_all_causes': ExcelFormField(
-            'F34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd4_o5_total_consultation_all_causes': ExcelFormField(
+#             'F11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd4_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'F14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd4_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'F17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd4_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'F20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd4_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'F23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd4_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'F26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd4_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'F29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd4_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'F32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd4_o5_total_simple_malaria_cases': ExcelFormField(
+#             'F35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd4_o5_total_severe_malaria_cases': ExcelFormField(
+#             'F38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd4_o5_total_malaria_death': ExcelFormField(
+#             'F41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd4_o5_total_death_all_causes': ExcelFormField(
+#             'F34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd4_pw_total_consultation_all_causes': ExcelFormField(
-            'F12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd4_pw_total_suspected_malaria_cases': ExcelFormField(
-            'F15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd4_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'F18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd4_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'F21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd4_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'F24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd4_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'F27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd4_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'F30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd4_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'F33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd4_pw_total_simple_malaria_cases': ExcelFormField(
-            'F36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd4_pw_total_severe_malaria_cases': ExcelFormField(
-            'F39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd4_pw_total_malaria_death': ExcelFormField(
-            'F42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd4_pw_total_death_all_causes': ExcelFormField(
-            'F45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd4_pw_total_consultation_all_causes': ExcelFormField(
+#             'F12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd4_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'F15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd4_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'F18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd4_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'F21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd4_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'F24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd4_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'F27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd4_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'F30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd4_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'F33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd4_pw_total_simple_malaria_cases': ExcelFormField(
+#             'F36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd4_pw_total_severe_malaria_cases': ExcelFormField(
+#             'F39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd4_pw_total_malaria_death': ExcelFormField(
+#             'F42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd4_pw_total_death_all_causes': ExcelFormField(
+#             'F45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd5_u5_total_consultation_all_causes': ExcelFormField(
-            'G10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd5_u5_total_suspected_malaria_cases': ExcelFormField(
-            'G13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd5_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'G16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd5_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'G19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd5_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'G22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd5_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'G25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd5_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'G28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd5_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'G31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd5_u5_total_simple_malaria_cases': ExcelFormField(
-            'G34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd5_u5_total_severe_malaria_cases': ExcelFormField(
-            'G37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd5_u5_total_malaria_death': ExcelFormField(
-            'G40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd5_u5_total_death_all_causes': ExcelFormField(
-            'G43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd5_u5_total_consultation_all_causes': ExcelFormField(
+#             'G10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd5_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'G13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd5_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'G16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd5_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'G19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd5_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'G22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd5_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'G25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd5_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'G28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd5_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'G31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd5_u5_total_simple_malaria_cases': ExcelFormField(
+#             'G34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd5_u5_total_severe_malaria_cases': ExcelFormField(
+#             'G37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd5_u5_total_malaria_death': ExcelFormField(
+#             'G40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd5_u5_total_death_all_causes': ExcelFormField(
+#             'G43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd5_o5_total_consultation_all_causes': ExcelFormField(
-            'G11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd5_o5_total_suspected_malaria_cases': ExcelFormField(
-            'G14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd5_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'G17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd5_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'G20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd5_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'G23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd5_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'G26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd5_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'G29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd5_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'G32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd5_o5_total_simple_malaria_cases': ExcelFormField(
-            'G35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd5_o5_total_severe_malaria_cases': ExcelFormField(
-            'G38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd5_o5_total_malaria_death': ExcelFormField(
-            'G41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd5_o5_total_death_all_causes': ExcelFormField(
-            'G34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd5_o5_total_consultation_all_causes': ExcelFormField(
+#             'G11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd5_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'G14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd5_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'G17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd5_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'G20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd5_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'G23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd5_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'G26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd5_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'G29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd5_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'G32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd5_o5_total_simple_malaria_cases': ExcelFormField(
+#             'G35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd5_o5_total_severe_malaria_cases': ExcelFormField(
+#             'G38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd5_o5_total_malaria_death': ExcelFormField(
+#             'G41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd5_o5_total_death_all_causes': ExcelFormField(
+#             'G34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd5_pw_total_consultation_all_causes': ExcelFormField(
-            'G12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd5_pw_total_suspected_malaria_cases': ExcelFormField(
-            'G15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd5_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'G18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd5_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'G21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd5_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'G24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd5_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'G27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd5_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'G30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd5_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'G33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd5_pw_total_simple_malaria_cases': ExcelFormField(
-            'G36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd5_pw_total_severe_malaria_cases': ExcelFormField(
-            'G39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd5_pw_total_malaria_death': ExcelFormField(
-            'G42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd5_pw_total_death_all_causes': ExcelFormField(
-            'G45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd5_pw_total_consultation_all_causes': ExcelFormField(
+#             'G12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd5_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'G15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd5_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'G18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd5_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'G21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd5_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'G24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd5_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'G27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd5_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'G30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd5_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'G33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd5_pw_total_simple_malaria_cases': ExcelFormField(
+#             'G36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd5_pw_total_severe_malaria_cases': ExcelFormField(
+#             'G39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd5_pw_total_malaria_death': ExcelFormField(
+#             'G42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd5_pw_total_death_all_causes': ExcelFormField(
+#             'G45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd6_u5_total_consultation_all_causes': ExcelFormField(
-            'H10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd6_u5_total_suspected_malaria_cases': ExcelFormField(
-            'H13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd6_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'H16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd6_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'H19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd6_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'H22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd6_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'H25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd6_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'H28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd6_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'H31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd6_u5_total_simple_malaria_cases': ExcelFormField(
-            'H34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd6_u5_total_severe_malaria_cases': ExcelFormField(
-            'H37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd6_u5_total_malaria_death': ExcelFormField(
-            'H40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd6_u5_total_death_all_causes': ExcelFormField(
-            'H43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd6_u5_total_consultation_all_causes': ExcelFormField(
+#             'H10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd6_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'H13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd6_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'H16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd6_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'H19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd6_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'H22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd6_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'H25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd6_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'H28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd6_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'H31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd6_u5_total_simple_malaria_cases': ExcelFormField(
+#             'H34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd6_u5_total_severe_malaria_cases': ExcelFormField(
+#             'H37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd6_u5_total_malaria_death': ExcelFormField(
+#             'H40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd6_u5_total_death_all_causes': ExcelFormField(
+#             'H43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd6_o5_total_consultation_all_causes': ExcelFormField(
-            'H11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd6_o5_total_suspected_malaria_cases': ExcelFormField(
-            'H14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd6_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'H17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd6_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'H20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd6_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'H23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd6_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'H26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd6_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'H29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd6_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'H32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd6_o5_total_simple_malaria_cases': ExcelFormField(
-            'H35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd6_o5_total_severe_malaria_cases': ExcelFormField(
-            'H38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd6_o5_total_malaria_death': ExcelFormField(
-            'H41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd6_o5_total_death_all_causes': ExcelFormField(
-            'H34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd6_o5_total_consultation_all_causes': ExcelFormField(
+#             'H11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd6_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'H14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd6_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'H17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd6_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'H20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd6_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'H23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd6_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'H26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd6_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'H29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd6_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'H32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd6_o5_total_simple_malaria_cases': ExcelFormField(
+#             'H35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd6_o5_total_severe_malaria_cases': ExcelFormField(
+#             'H38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd6_o5_total_malaria_death': ExcelFormField(
+#             'H41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd6_o5_total_death_all_causes': ExcelFormField(
+#             'H34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd6_pw_total_consultation_all_causes': ExcelFormField(
-            'H12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd6_pw_total_suspected_malaria_cases': ExcelFormField(
-            'H15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd6_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'H18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd6_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'H21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd6_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'H24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd6_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'H27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd6_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'H30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd6_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'H33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd6_pw_total_simple_malaria_cases': ExcelFormField(
-            'H36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd6_pw_total_severe_malaria_cases': ExcelFormField(
-            'H39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd6_pw_total_malaria_death': ExcelFormField(
-            'H42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd6_pw_total_death_all_causes': ExcelFormField(
-            'H45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
+#         'd6_pw_total_consultation_all_causes': ExcelFormField(
+#             'H12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd6_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'H15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd6_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'H18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd6_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'H21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd6_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'H24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd6_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'H27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd6_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'H30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd6_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'H33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd6_pw_total_simple_malaria_cases': ExcelFormField(
+#             'H36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd6_pw_total_severe_malaria_cases': ExcelFormField(
+#             'H39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd6_pw_total_malaria_death': ExcelFormField(
+#             'H42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd6_pw_total_death_all_causes': ExcelFormField(
+#             'H45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
 
-        'd7_u5_total_consultation_all_causes': ExcelFormField(
-            'I10', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_consultation_all_causes').verbose_name),
-        'd7_u5_total_suspected_malaria_cases': ExcelFormField(
-            'I13', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_suspected_malaria_cases').verbose_name),
-        'd7_u5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'I16', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_tested_malaria_cases').verbose_name),
-        'd7_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'I19', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd7_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'I22', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd7_u5_total_ts_tested_malaria_cases': ExcelFormField(
-            'I25', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_tested_malaria_cases').verbose_name),
-        'd7_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'I28', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd7_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'I31', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd7_u5_total_simple_malaria_cases': ExcelFormField(
-            'I34', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_simple_malaria_cases').verbose_name),
-        'd7_u5_total_severe_malaria_cases': ExcelFormField(
-            'I37', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_severe_malaria_cases').verbose_name),
-        'd7_u5_total_malaria_death': ExcelFormField(
-            'I40', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_malaria_death').verbose_name),
-        'd7_u5_total_death_all_causes': ExcelFormField(
-            'I43', int,
-            EpidemioMalariaR._meta.get_field(
-                'u5_total_death_all_causes').verbose_name),
+#         'd7_u5_total_consultation_all_causes': ExcelFormField(
+#             'I10', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_consultation_all_causes').verbose_name),
+#         'd7_u5_total_suspected_malaria_cases': ExcelFormField(
+#             'I13', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_suspected_malaria_cases').verbose_name),
+#         'd7_u5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'I16', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd7_u5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'I19', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd7_u5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'I22', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd7_u5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'I25', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_tested_malaria_cases').verbose_name),
+#         'd7_u5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'I28', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd7_u5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'I31', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd7_u5_total_simple_malaria_cases': ExcelFormField(
+#             'I34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_simple_malaria_cases').verbose_name),
+#         'd7_u5_total_severe_malaria_cases': ExcelFormField(
+#             'I37', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_severe_malaria_cases').verbose_name),
+#         'd7_u5_total_malaria_death': ExcelFormField(
+#             'I40', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_malaria_death').verbose_name),
+#         'd7_u5_total_death_all_causes': ExcelFormField(
+#             'I43', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'u5_total_death_all_causes').verbose_name),
 
-        'd7_o5_total_consultation_all_causes': ExcelFormField(
-            'I11', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_consultation_all_causes').verbose_name),
-        'd7_o5_total_suspected_malaria_cases': ExcelFormField(
-            'I14', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_suspected_malaria_cases').verbose_name),
-        'd7_o5_total_rdt_tested_malaria_cases': ExcelFormField(
-            'I17', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_tested_malaria_cases').verbose_name),
-        'd7_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'I20', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd7_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'I23', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd7_o5_total_ts_tested_malaria_cases': ExcelFormField(
-            'I26', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_tested_malaria_cases').verbose_name),
-        'd7_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'I29', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_confirmed_malaria_cases').verbose_name),
-        'd7_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'I32', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd7_o5_total_simple_malaria_cases': ExcelFormField(
-            'I35', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_simple_malaria_cases').verbose_name),
-        'd7_o5_total_severe_malaria_cases': ExcelFormField(
-            'I38', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_severe_malaria_cases').verbose_name),
-        'd7_o5_total_malaria_death': ExcelFormField(
-            'I41', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_malaria_death').verbose_name),
-        'd7_o5_total_death_all_causes': ExcelFormField(
-            'I34', int,
-            EpidemioMalariaR._meta.get_field(
-                'o5_total_death_all_causes').verbose_name),
+#         'd7_o5_total_consultation_all_causes': ExcelFormField(
+#             'I11', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_consultation_all_causes').verbose_name),
+#         'd7_o5_total_suspected_malaria_cases': ExcelFormField(
+#             'I14', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_suspected_malaria_cases').verbose_name),
+#         'd7_o5_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'I17', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_tested_malaria_cases').verbose_name),
+#         'd7_o5_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'I20', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd7_o5_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'I23', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd7_o5_total_ts_tested_malaria_cases': ExcelFormField(
+#             'I26', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_tested_malaria_cases').verbose_name),
+#         'd7_o5_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'I29', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd7_o5_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'I32', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd7_o5_total_simple_malaria_cases': ExcelFormField(
+#             'I35', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_simple_malaria_cases').verbose_name),
+#         'd7_o5_total_severe_malaria_cases': ExcelFormField(
+#             'I38', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_severe_malaria_cases').verbose_name),
+#         'd7_o5_total_malaria_death': ExcelFormField(
+#             'I41', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_malaria_death').verbose_name),
+#         'd7_o5_total_death_all_causes': ExcelFormField(
+#             'I34', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'o5_total_death_all_causes').verbose_name),
 
-        'd7_pw_total_consultation_all_causes': ExcelFormField(
-            'I12', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_consultation_all_causes').verbose_name),
-        'd7_pw_total_suspected_malaria_cases': ExcelFormField(
-            'I15', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_suspected_malaria_cases').verbose_name),
-        'd7_pw_total_rdt_tested_malaria_cases': ExcelFormField(
-            'I18', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_tested_malaria_cases').verbose_name),
-        'd7_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
-            'I21', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_confirmed_malaria_cases').verbose_name),
-        'd7_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
-            'I24', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
-        'd7_pw_total_ts_tested_malaria_cases': ExcelFormField(
-            'I27', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_tested_malaria_cases').verbose_name),
-        'd7_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
-            'I30', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_confirmed_malaria_cases').verbose_name),
-        'd7_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
-            'I33', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
-        'd7_pw_total_simple_malaria_cases': ExcelFormField(
-            'I36', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_simple_malaria_cases').verbose_name),
-        'd7_pw_total_severe_malaria_cases': ExcelFormField(
-            'I39', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_severe_malaria_cases').verbose_name),
-        'd7_pw_total_malaria_death': ExcelFormField(
-            'I42', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_malaria_death').verbose_name),
-        'd7_pw_total_death_all_causes': ExcelFormField(
-            'I45', int,
-            EpidemioMalariaR._meta.get_field(
-                'pw_total_death_all_causes').verbose_name),
-        }
-    }
+#         'd7_pw_total_consultation_all_causes': ExcelFormField(
+#             'I12', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_consultation_all_causes').verbose_name),
+#         'd7_pw_total_suspected_malaria_cases': ExcelFormField(
+#             'I15', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_suspected_malaria_cases').verbose_name),
+#         'd7_pw_total_rdt_tested_malaria_cases': ExcelFormField(
+#             'I18', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_tested_malaria_cases').verbose_name),
+#         'd7_pw_total_rdt_confirmed_malaria_cases': ExcelFormField(
+#             'I21', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_confirmed_malaria_cases').verbose_name),
+#         'd7_pw_total_rdt_pfalciparum_malaria_cases': ExcelFormField(
+#             'I24', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_rdt_pfalciparum_malaria_cases').verbose_name),
+#         'd7_pw_total_ts_tested_malaria_cases': ExcelFormField(
+#             'I27', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_tested_malaria_cases').verbose_name),
+#         'd7_pw_total_ts_confirmed_malaria_cases': ExcelFormField(
+#             'I30', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_confirmed_malaria_cases').verbose_name),
+#         'd7_pw_total_ts_pfalciparum_malaria_cases': ExcelFormField(
+#             'I33', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_ts_pfalciparum_malaria_cases').verbose_name),
+#         'd7_pw_total_simple_malaria_cases': ExcelFormField(
+#             'I36', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_simple_malaria_cases').verbose_name),
+#         'd7_pw_total_severe_malaria_cases': ExcelFormField(
+#             'I39', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_severe_malaria_cases').verbose_name),
+#         'd7_pw_total_malaria_death': ExcelFormField(
+#             'I42', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_malaria_death').verbose_name),
+#         'd7_pw_total_death_all_causes': ExcelFormField(
+#             'I45', int,
+#             EpidemioMalariaR._meta.get_field(
+#                 'pw_total_death_all_causes').verbose_name),
+#         }
+#     }
 
-    def create_report(self, provider):
+#     def create_report(self, provider):
 
-        expected_reporting = self.get('expected_reporting')
+#         expected_reporting = self.get('expected_reporting')
 
-        # return report, text_message (success or failure)
-        return create_epidemio_report(provider=provider,
-                                      expected_reporting=expected_reporting,
-                                      completed_on=timezone.now(),
-                                      integrity_checker=self,
-                                      data_source=self.filepath)
+#         # return report, text_message (success or failure)
+#         return create_epidemio_report(provider=provider,
+#                                       expected_reporting=expected_reporting,
+#                                       completed_on=timezone.now(),
+#                                       integrity_checker=self,
+#                                       data_source=self.filepath)
 
 
 EXPORTED_FORMS = {
@@ -1388,13 +1387,13 @@ EXPORTED_FORMS = {
         'class': MalariaExcelForm,
         'extras': {'version': '0.5'}
     },
-    '1malaria_monthly_routine_0.4': {
-        'label': "Routine Mensuelle Paludisme (ancien)",
-        'class': MalariaExcelForm,
-        'extras': {'version': '0.4'}
-    },
-    '2malaria_epidemio_weekly': {
-        'label': "Épidémiologie hebdomadaire Paludisme",
-        'class': EpidemioMalariaRForm
-    }
+    # '1malaria_monthly_routine_0.4': {
+    #     'label': "Routine Mensuelle Paludisme (ancien)",
+    #     'class': MalariaExcelForm,
+    #     'extras': {'version': '0.4'}
+    # },
+    # '2malaria_epidemio_weekly': {
+    #     'label': "Épidémiologie hebdomadaire Paludisme",
+    #     'class': EpidemioMalariaRForm
+    # }
 }
