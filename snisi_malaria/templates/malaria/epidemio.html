@@ -240,7 +240,10 @@ graph2.series = [
 		{% endlocalize %}
     },
 ];
-graph2.tooltip = {enabled: true};
+graph2.tooltip = {
+	enabled: true,
+	pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b><br/>'
+};
 hc_graphs.push(graph2);
 
 var graph3 = $.extend(true, {}, tmpl);
