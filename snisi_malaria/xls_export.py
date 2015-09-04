@@ -423,8 +423,6 @@ def malaria_weekly_routine_weeklong_as_xls(report):
 
     xls_update_value_only(sh_report, 4, 3, report.created_by.name())
     xls_update_value_only(sh_report, 4, 2, report.period.casted().strid())
-    # xls_update_value_only(27, 11, report.created_on.month)
-    # xls_update_value_only(27, 12, report.created_on.year)
 
     col = 2
     row = 6
@@ -486,8 +484,11 @@ def malaria_weekly_routine_weeklong_as_xls(report):
         sh_report, col, row + 3, report.pw_total_confirmed_malaria_cases)
 
     for col, coly in enumerate(["C", "D", "E", "F", "G", "H", "I"]):
-        xls_update_value_only(sh_report, col + 2, row + 4,
-                              xlwt.Formula("SUM({}8:{}10)".format(coly, coly)))
+        xls_update_value_only(
+            sh_report, col + 2, row + 4, xlwt.Formula("SUM({}8:{}10)".format(coly, coly)))
+
+    xls_update_value_only(
+        sh_report, col + 3, row + 4, xlwt.Formula("SUM(J8:J10)"))
 
     stream = StringIO.StringIO()
     copy_week_book.save(stream)
@@ -505,7 +506,6 @@ def malaria_weekly_routine_as_xls(report):
     sh_report = copy_week_book.get_sheet(0)
     del(template)
 
-    print(report.entity.display_short_health_hierarchy())
     xls_update_value_only(
         sh_report, 1, 2, report.entity.display_short_health_hierarchy())
     xls_update_value_only(sh_report, 1, 3, report.entity.slug)
@@ -513,7 +513,7 @@ def malaria_weekly_routine_as_xls(report):
     xls_update_value_only(sh_report, 3, 3, report.created_by.name())
 
     col = 2
-    row = 6
+    row = 5
 
     xls_update_value_only(
         sh_report, col, row + 1, report.u5_total_confirmed_malaria_cases)
@@ -521,8 +521,7 @@ def malaria_weekly_routine_as_xls(report):
         sh_report, col, row + 2, report.o5_total_confirmed_malaria_cases)
     xls_update_value_only(
         sh_report, col, row + 3, report.pw_total_confirmed_malaria_cases)
-    xls_update_value_only(sh_report, col, row + 4,
-                          xlwt.Formula("SUM(C8:C10)"))
+    xls_update_value_only(sh_report, col, row + 4, xlwt.Formula("SUM(C7:C9)"))
 
     stream = StringIO.StringIO()
     copy_week_book.save(stream)
