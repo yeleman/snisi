@@ -5,9 +5,16 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import StringIO
-
+import os
 import xlwt
+
 from py3compat import text_type
+
+from xlrd import open_workbook
+from xlutils.copy import copy
+
+from snisi_core.xls_export import xls_update_value_only
+from snisi_malaria import get_domain
 
 # Définition des bordures
 borders = xlwt.Borders()
@@ -400,19 +407,123 @@ def malaria_monthly_routine_as_xls(report):
 
 
 def malaria_weekly_routine_weeklong_as_xls(report):
-    book = xlwt.Workbook(encoding='utf-8')
-    book.add_sheet("Report")
+
+    template_path = os.path.join(
+        get_domain().module_path,
+        'fixtures', 'template-malaria-weekly-routine-weeklong.xls')
+    template = open_workbook(template_path, formatting_info=True)
+    copy_week_book = copy(template)
+    sh_report = copy_week_book.get_sheet(0)
+    del(template)
+
+    print(report.entity.display_short_health_hierarchy())
+    xls_update_value_only(
+        sh_report, 1, 2, report.entity.display_short_health_hierarchy())
+    xls_update_value_only(sh_report, 1, 3, report.entity.slug)
+
+    xls_update_value_only(sh_report, 4, 3, report.created_by.name())
+    xls_update_value_only(sh_report, 4, 2, report.period.casted().strid())
+
+    col = 2
+    row = 6
+
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day1_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day1_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day1_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day2_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day2_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day2_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day3_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day3_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day3_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day4_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day4_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day4_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day5_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day5_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day5_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day6_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day6_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day6_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.day7_u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.day7_o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.day7_pw_total_confirmed_malaria_cases)
+    col += 1
+    xls_update_value_only(
+        sh_report, col, row + 1, report.u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.pw_total_confirmed_malaria_cases)
+
+    for col, coly in enumerate(["C", "D", "E", "F", "G", "H", "I"]):
+        xls_update_value_only(
+            sh_report, col + 2, row + 4, xlwt.Formula("SUM({}8:{}10)".format(coly, coly)))
+
+    xls_update_value_only(
+        sh_report, col + 3, row + 4, xlwt.Formula("SUM(J8:J10)"))
+
     stream = StringIO.StringIO()
-    book.save(stream)
+    copy_week_book.save(stream)
 
     return stream
 
 
 def malaria_weekly_routine_as_xls(report):
 
-    book = xlwt.Workbook(encoding='utf-8')
-    book.add_sheet("Report")
+    template_path = os.path.join(
+        get_domain().module_path,
+        'fixtures', 'template-malaria-weekly.xls')
+    template = open_workbook(template_path, formatting_info=True)
+    copy_week_book = copy(template)
+    sh_report = copy_week_book.get_sheet(0)
+    del(template)
+
+    xls_update_value_only(
+        sh_report, 1, 2, report.entity.display_short_health_hierarchy())
+    xls_update_value_only(sh_report, 1, 3, report.entity.slug)
+    xls_update_value_only(sh_report, 3, 2, report.period.casted().strid())
+    xls_update_value_only(sh_report, 3, 3, report.created_by.name())
+
+    col = 2
+    row = 5
+
+    xls_update_value_only(
+        sh_report, col, row + 1, report.u5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 2, report.o5_total_confirmed_malaria_cases)
+    xls_update_value_only(
+        sh_report, col, row + 3, report.pw_total_confirmed_malaria_cases)
+    xls_update_value_only(sh_report, col, row + 4, xlwt.Formula("SUM(C7:C9)"))
+
     stream = StringIO.StringIO()
-    book.save(stream)
+    copy_week_book.save(stream)
 
     return stream
