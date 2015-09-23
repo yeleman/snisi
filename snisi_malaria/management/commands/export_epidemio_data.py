@@ -6,6 +6,7 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 import datetime
+import copy
 from optparse import make_option
 
 from django.core.management.base import BaseCommand
@@ -34,8 +35,10 @@ ascotamb = Entity.get_or_none("ACE3")
 sevare2 = Entity.get_or_none("KTE4")
 autobot = get_autobot()
 agg_locations = [dsmopti, dsbandiagara, rsmopti, mali]
-week_agg_locations = [bandiagara, ascotamb, sevare2] + agg_locations
+locations = [bandiagara, ascotamb, sevare2]
+week_agg_locations = locations + agg_locations
 nbal = len(agg_locations)
+nbl = len(locations)
 period_classes = [
     FixedMonthFirstWeek,
     FixedMonthSecondWeek,
@@ -55,10 +58,89 @@ class Command(BaseCommand):
         )
 
     def clear_all_data(self):
+        gsd = datetime.datetime(2015, 8, 1)
         logger.info("Clear all DailyMalariaR and AggDailyMalariaR...")
-        DailyMalariaR.objects.all().delete()
-        AggDailyMalariaR.objects.all().delete()
+        DailyMalariaR.objects.filter(period__start_on__lt=gsd).delete()
+        AggDailyMalariaR.objects.filter(period__start_on__lt=gsd).delete()
         logger.info("\tdone.")
+
+    def gen_all_day(self):
+
+        logger.info("Generate DailyMalariaR for all DayPeriod")
+        ps = DayPeriod.all_from(EpidemioMalariaR.objects.first().period,
+                                EpidemioMalariaR.objects.last().period)
+
+        exp_data = {
+            'report_class': ReportClass.get_or_none('malaria_weekly_routine'),
+            'within_period': False,
+            'within_entity': False,
+            'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
+            'completion_status': ExpectedReporting.COMPLETION_MISSING,
+        }
+
+        for period in ps:
+
+            logger.info(period)
+
+            # skip if period is complete
+            if DailyMalariaR.objects.filter(period=period).count() == nbl:
+                continue
+
+            gen_time = period.end_on + \
+                datetime.timedelta(seconds=28800)  # 8h
+
+            DEBUG_change_system_date(gen_time, True)
+
+            for entity in locations:
+
+                logger.info(entity)
+
+                # skip if report exists
+                if DailyMalariaR.objects.filter(period=period,
+                                                entity=entity).count():
+                    continue
+
+                new_exp_data = copy.copy(exp_data)
+                new_exp_data.update({
+                    'period': period,
+                    'entity': entity,
+                    # 'reporting_period': None,
+                    # 'extended_reporting_period': None,
+                })
+
+                new_exp = ExpectedReporting.objects.create(**new_exp_data)
+
+                try:
+                    epi_report = EpidemioMalariaR.objects.get(period=period,
+                                                              entity=entity)
+                except:
+                    continue
+
+                logger.debug("\tFound report {} -- {} -- {}".format(
+                    epi_report, epi_report.period, epi_report.created_on))
+                data = {}
+                for field in EpidemioMalariaR.meta_fields():
+                    if field in ('receipt', 'report_cls', 'uuid'):
+                        continue
+                    data.update({field: epi_report.get(field)})
+
+                data.update({
+                    'u5_total_confirmed_malaria_cases':
+                        epi_report.u5_total_confirmed_malaria_cases,
+                    'o5_total_confirmed_malaria_cases':
+                        epi_report.o5_total_confirmed_malaria_cases,
+                    'pw_total_confirmed_malaria_cases':
+                        epi_report.pw_total_confirmed_malaria_cases})
+
+                # need to change system date so that receipt use proper
+                # date elements (otherwise duplicates!)
+                logger.debug("\tchange date to {}".format(
+                    epi_report.created_on))
+                DEBUG_change_system_date(epi_report.created_on, True)
+                daily_report = DailyMalariaR.objects.create(**data)
+                logger.info("Created {}".format(daily_report))
+
+                new_exp.acknowledge_report(daily_report)
 
     def create_all_dayreport(self):
         # Export all EpidemioMalariaR into DailyMalariaR
@@ -188,21 +270,22 @@ class Command(BaseCommand):
         if options.get('clear'):
             self.clear_all_data()
 
-        nb_old = ExpectedReporting.objects.filter(
-            report_class__slug__startswith='malaria_weekly_epidemio').count()
-        nb_new = ExpectedReporting.objects.filter(
-            report_class__slug__startswith='malaria_weekly_routine').count()
+        # nb_old = ExpectedReporting.objects.filter(
+        #     report_class__slug__startswith='malaria_weekly_epidemio').count()
+        # nb_new = ExpectedReporting.objects.filter(
+        #     report_class__slug__startswith='malaria_weekly_routine').count()
 
-        # uncomplete first stage ; remove everything
-        if nb_old != nb_new:
-            self.clear_all_data()
+        # # uncomplete first stage ; remove everything
+        # if nb_old != nb_new:
+        #     assert not options.get('clear')
+        #     self.clear_all_data()
 
-        # first stage not processed ; process
-        if nb_new == 0:
-            self.create_all_dayreport()
+        # # first stage not processed ; process
+        # if nb_new == 0:
+        #     self.create_all_dayreport()
 
         # generate AggDailyMalariaR
-        # self.gen_all_weekagg()
+        self.gen_all_day()
 
         # generate AggWeeklyMalariaR
         self.gen_all_weekagg()
