@@ -416,7 +416,6 @@ def malaria_weekly_routine_weeklong_as_xls(report):
     sh_report = copy_week_book.get_sheet(0)
     del(template)
 
-    print(report.entity.display_short_health_hierarchy())
     xls_update_value_only(
         sh_report, 1, 2, report.entity.display_short_health_hierarchy())
     xls_update_value_only(sh_report, 1, 3, report.entity.slug)
@@ -484,8 +483,8 @@ def malaria_weekly_routine_weeklong_as_xls(report):
         sh_report, col, row + 3, report.pw_total_confirmed_malaria_cases)
 
     for col, coly in enumerate(["C", "D", "E", "F", "G", "H", "I"]):
-        xls_update_value_only(
-            sh_report, col + 2, row + 4, xlwt.Formula("SUM({}8:{}10)".format(coly, coly)))
+        xls_update_value_only(sh_report, col + 2, row + 4,
+                              xlwt.Formula("SUM({}8:{}10)".format(coly, coly)))
 
     xls_update_value_only(
         sh_report, col + 3, row + 4, xlwt.Formula("SUM(J8:J10)"))
@@ -525,5 +524,109 @@ def malaria_weekly_routine_as_xls(report):
 
     stream = StringIO.StringIO()
     copy_week_book.save(stream)
+
+    return stream
+
+
+def all_malariar_as_xls(save_to=None):
+
+    from snisi_malaria.models import MalariaR
+
+    reports = MalariaR.objects.all() \
+                      .order_by('created_on',
+                                'entity__parent__parent__parent__name',
+                                'entity__parent__parent__name',
+                                'entity__name')
+
+    wb = xlwt.Workbook()
+    sheet = wb.add_sheet("Rapports Routine Palu ")
+
+    headers = ["CODE", "REGION", "DISTRICT", "CSCOM",
+               "YEAR", "MONTH", "RECEIVED_ON"] + MalariaR.data_fields()
+
+    for col, item in enumerate(headers):
+        sheet.write(0, col, item)
+
+    for row, report in enumerate(reports):
+        col = 0
+        row += 1
+        sheet.write(row, col, report.entity.slug)
+        col += 1
+        sheet.write(row, col, report.entity.get_health_region().display_name())
+        col += 1
+        sheet.write(
+            row, col, report.entity.get_health_district().display_name())
+        col += 1
+        sheet.write(row, col, report.entity.display_name())
+        col += 1
+        sheet.write(row, col, report.period.middle().year)
+        col += 1
+        sheet.write(row, col, report.period.middle().month)
+        col += 1
+        sheet.write(row, col, report.created_on.strftime("%Y-%m-%d"))
+        col += 1
+
+        for field in report.data_fields():
+            sheet.write(row, col, report.get(field))
+            col += 1
+
+    if save_to:
+        wb.save(save_to)
+        return
+
+    stream = StringIO.StringIO()
+    wb.save(stream)
+
+    return stream
+
+
+def all_daily_malariar_as_xls(save_to=None):
+
+    from snisi_malaria.models import DailyMalariaR
+
+    reports = DailyMalariaR.objects.all() \
+        .order_by('created_on',
+                  'entity__parent__parent__parent__name',
+                  'entity__parent__parent__name',
+                  'entity__name')
+
+    wb = xlwt.Workbook()
+    sheet = wb.add_sheet("Rapports Routine Palu ")
+
+    headers = ["CODE", "REGION", "DISTRICT", "CSCOM",
+               "YEAR", "MONTH", "RECEIVED_ON"] + DailyMalariaR.data_fields()
+
+    for col, item in enumerate(headers):
+        sheet.write(0, col, item)
+
+    for row, report in enumerate(reports):
+        col = 0
+        row += 1
+        sheet.write(row, col, report.entity.slug)
+        col += 1
+        sheet.write(row, col, report.entity.get_health_region().display_name())
+        col += 1
+        sheet.write(
+            row, col, report.entity.get_health_district().display_name())
+        col += 1
+        sheet.write(row, col, report.entity.display_name())
+        col += 1
+        sheet.write(row, col, report.period.middle().year)
+        col += 1
+        sheet.write(row, col, report.period.middle().month)
+        col += 1
+        sheet.write(row, col, report.created_on.strftime("%Y-%m-%d"))
+        col += 1
+
+        for field in report.data_fields():
+            sheet.write(row, col, report.get(field))
+            col += 1
+
+    if save_to:
+        wb.save(save_to)
+        return
+
+    stream = StringIO.StringIO()
+    wb.save(stream)
 
     return stream
