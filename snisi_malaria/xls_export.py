@@ -578,3 +578,55 @@ def all_malariar_as_xls(save_to=None):
     wb.save(stream)
 
     return stream
+
+
+def all_daily_malariar_as_xls(save_to=None):
+
+    from snisi_malaria.models import DailyMalariaR
+
+    reports = DailyMalariaR.objects.all() \
+        .order_by('created_on',
+                  'entity__parent__parent__parent__name',
+                  'entity__parent__parent__name',
+                  'entity__name')
+
+    wb = xlwt.Workbook()
+    sheet = wb.add_sheet("Rapports Routine Palu ")
+
+    headers = ["CODE", "REGION", "DISTRICT", "CSCOM",
+               "YEAR", "MONTH", "RECEIVED_ON"] + DailyMalariaR.data_fields()
+
+    for col, item in enumerate(headers):
+        sheet.write(0, col, item)
+
+    for row, report in enumerate(reports):
+        col = 0
+        row += 1
+        sheet.write(row, col, report.entity.slug)
+        col += 1
+        sheet.write(row, col, report.entity.get_health_region().display_name())
+        col += 1
+        sheet.write(
+            row, col, report.entity.get_health_district().display_name())
+        col += 1
+        sheet.write(row, col, report.entity.display_name())
+        col += 1
+        sheet.write(row, col, report.period.middle().year)
+        col += 1
+        sheet.write(row, col, report.period.middle().month)
+        col += 1
+        sheet.write(row, col, report.created_on.strftime("%Y-%m-%d"))
+        col += 1
+
+        for field in report.data_fields():
+            sheet.write(row, col, report.get(field))
+            col += 1
+
+    if save_to:
+        wb.save(save_to)
+        return
+
+    stream = StringIO.StringIO()
+    wb.save(stream)
+
+    return stream
