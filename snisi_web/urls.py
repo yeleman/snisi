@@ -93,6 +93,9 @@ urlpatterns = patterns(
         'snisi_web.views.monitoring.periodic_sources.'
         'periodic_source_dashboard',
         name='periodic_source_monitoring'),
+    url(r'^raw-exports/?$',
+        TemplateView.as_view(template_name='raw-exports.html'),
+        name='raw_exports'),
 
     # Entities API
     url(r'^api/entity/'

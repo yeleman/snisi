@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block page_slug %}raw_exports{% endblock %}
+
+{% block title %}Exports de données brutes{% endblock %}
+
+{% block content %}
+<h2>Exports de données brutes</h2>
+<div class="alert alert-info">
+<p>Les exports de données ci-dessous sont à destination des <strong>analyses statistiques dans des logiciels tiers</strong> (SPSS, STATA, etc.).</p>
+<p>Ces données correspondent aux données reçues et n'ont pas subies de traitement ; c'est pourquoi il n'y a que des données sources.</p></div>
+
+<h3>Routine Paludisme mensuelle</h3>
+<p>La routine mensuelle a commencée en septembre 2011 à Ségou et deux DS de Bamako. Depuis 2015 à Mopti et 2 DS de Koulikoro.</p>
+<p>Les données sont transmises dans les 10jours suivant la fin de la période. Cet export est mis à jour chaque mois dans la matinée du 16 (pour prendre en compte les modifications éventuelles et la validation du DS).</p>
+<p><a href="{% url 'protected' 'malaria/all_malariar.xls' %}" class="pure-button pure-button-default"><i class="icon-file-excel"></i> rapports de routine mensuelle paludisme (tous)</a></p>
+
+<h3>Surveillance paludisme quotidienne</h3>
+<p>Cette surveillance a démarrée dans 3 CSCOMs de la région de Mopti en janvier 2013. Elle s'est étendue à l'ensemble des deux DS concernés en août 2015.</p>
+<p>Les données sont transmises hebdomadairement (les semaines sont basées sur un calendrier fixe de 7 jours – 1-7, 8-14, 15-21, 22-28, 28+). Cet export est mis à jour les 4, 11, 17 et 24 du mois. Ces données ne subissent pas de validation.</p>
+<p><a href="{% url 'protected' 'malaria/all_dailymalariar.xls' %}" class="pure-button pure-button-default"><i class="icon-file-excel"></i> rapports de routine mensuelle paludisme (tous)</a></p>
+
+<div class="alert alert-info"><p>Si vous souhaitez un export brut pour un autre type de données collectée par le SNISI, merci de contacter la {{ hotline }}</p></div>
+{% endblock %}
