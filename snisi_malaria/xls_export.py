@@ -539,7 +539,7 @@ def all_malariar_as_xls(save_to=None):
                                 'entity__name')
 
     wb = xlwt.Workbook()
-    sheet = wb.add_sheet("Rapports Routine Palu ")
+    sheet = wb.add_sheet("malaria-routine-reports")
 
     headers = ["CODE", "REGION", "DISTRICT", "CSCOM",
                "YEAR", "MONTH", "RECEIVED_ON"] + MalariaR.data_fields()
@@ -591,7 +591,7 @@ def all_dailymalariar_xls(save_to=None):
                   'entity__name')
 
     wb = xlwt.Workbook()
-    sheet = wb.add_sheet("Rapports Routine Palu ")
+    sheet = wb.add_sheet("malaria-daily-routine-reports")
 
     headers = ["CODE", "REGION", "DISTRICT", "CSCOM", "YEAR", "MONTH", "DAY",
                "RECEIVED_ON"] + DailyMalariaR.data_fields()

@@ -5,7 +5,6 @@
 from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
-import os
 
 from django.core.management.base import BaseCommand
 from optparse import make_option
