@@ -1109,8 +1109,13 @@ function getMalariaMapManager(options) {
 			bounds = L.latLngBounds(southWest, northEast);
 		}
 		if (this.current_region == "4JN7") {
-			var southWest = L.latLng(15.5212, -5.9096),
-				northEast = L.latLng(11.4356, -9.1726);
+			var southWest = L.latLng(15.5847, -5.8767),
+				northEast = L.latLng(11.4087, -9.2275);
+			bounds = L.latLngBounds(southWest, northEast);
+		}
+		if (this.current_region == "GJM3") {
+			var southWest = L.latLng(15.6826, -8.0245),
+				northEast = L.latLng(11.8526, -12.2817);
 			bounds = L.latLngBounds(southWest, northEast);
 		}
 				
