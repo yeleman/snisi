@@ -60,8 +60,8 @@ def checkdigit_for(id_without_check):
         return int((10 - (sum % 10)) % 10)
 
 
-def base_random_id():
-    return ''.join([random.choice(CHARACTERS_POOL) for i in range(ID_LENGTH)])
+def base_random_id(length=ID_LENGTH, pool=CHARACTERS_POOL):
+    return ''.join([random.choice(pool) for i in range(length)])
 
 
 def full_random_id():

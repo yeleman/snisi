@@ -22,7 +22,13 @@ from snisi_malaria.notifications import (
     end_of_reporting_period_notifications,
     end_of_extended_reporting_period_notifications)
 from snisi_core.models.Periods import MonthPeriod
-from snisi_core.models.FixedWeekPeriods import FixedMonthWeek
+from snisi_core.models.FixedWeekPeriods import (
+    FixedMonthWeek,
+    FixedMonthFirstWeek,
+    FixedMonthSecondWeek,
+    FixedMonthThirdWeek,
+    FixedMonthFourthWeek,
+    FixedMonthFifthWeek)
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +60,7 @@ class Command(BaseCommand):
             'end_of_fifth_week_period_reporting': generate_weekly_reports,
         }
 
-        def handle_category(category, nperiod=None):
+        def handle_category(category, nperiod=None, wperiod=None):
             if nperiod is None:
                 nperiod = period
             slug = "{domain}_{period}_{category}".format(
@@ -64,7 +70,8 @@ class Command(BaseCommand):
             if task.can_trigger():
                 logger.debug("triggering {}".format(task))
                 try:
-                    category_matrix.get(category)(nperiod)
+                    category_matrix.get(category)(period=nperiod,
+                                                  wperiod=wperiod)
                 except Exception as e:
                     logger.exception(e)
                 else:
@@ -75,8 +82,14 @@ class Command(BaseCommand):
         # On 1st
         if day >= 1:
             # in case we had only 28 days last month
-            handle_category("end_of_fourth_week_period_reporting", period)
-            handle_category("end_of_fifth_week_period_reporting", period)
+            wperiod = FixedMonthFourthWeek.find_create_from(
+                period.middle().year, period.middle().month)
+            handle_category("end_of_fourth_week_period_reporting",
+                            period, wperiod)
+            wperiod = FixedMonthFifthWeek.find_create_from(
+                period.middle().year, period.middle().month)
+            handle_category("end_of_fifth_week_period_reporting",
+                            period, wperiod)
 
         # On 6th
         if day >= ROUTINE_REPORTING_END_DAY:
@@ -90,7 +103,11 @@ class Command(BaseCommand):
 
         # On 13th
         if day >= 13:
-            handle_category("end_of_first_week_period_reporting", this_month)
+            wperiod = FixedMonthFirstWeek.find_create_from(
+                period.following().middle().year,
+                period.following().middle().month)
+            handle_category("end_of_first_week_period_reporting",
+                            this_month, wperiod)
 
         # On 16th
         if day >= ROUTINE_DISTRICT_AGG_DAY:
@@ -102,7 +119,11 @@ class Command(BaseCommand):
 
         # On 20th
         if day >= 20:
-            handle_category("end_of_second_week_period_reporting", this_month)
+            wperiod = FixedMonthSecondWeek.find_create_from(
+                period.following().middle().year,
+                period.following().middle().month)
+            handle_category("end_of_second_week_period_reporting",
+                            this_month, wperiod)
 
         # On 26th
         if day >= ROUTINE_REGION_AGG_DAY:
@@ -114,4 +135,8 @@ class Command(BaseCommand):
 
         # On 27th
         if day >= 27:
-            handle_category("end_of_third_week_period_reporting", this_month)
+            wperiod = FixedMonthThirdWeek.find_create_from(
+                period.following().middle().year,
+                period.following().middle().month)
+            handle_category("end_of_third_week_period_reporting",
+                            this_month, wperiod)

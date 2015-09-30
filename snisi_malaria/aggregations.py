@@ -60,16 +60,20 @@ get_regions = lambda: [e for e in cluster.members()
                        if e.type.slug == 'health_region']
 
 
-def generate_weekly_reports(period,
-                            ensure_correct_date=True,
+def generate_weekly_reports(period, wperiod,
+                            ensure_correct_date=False,
                             now=timezone.now):
+
+    if hasattr(now, '__call__'):
+        now = now()
 
     # period = 06-2015
     # fourth_week
 
     current_week = FixedMonthWeek.current(at=now)
-    wperiod = FixedMonthWeek.previous_week(current_week)
+    # wperiod = FixedMonthWeek.previous_week(current_week)
 
+    logger.info("current: {} - wperiod: {}".format(current_week, wperiod))
     logger.info("Switching to {}/{}".format(wperiod, period))
 
     if ensure_correct_date:
