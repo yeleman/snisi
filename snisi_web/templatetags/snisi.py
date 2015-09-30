@@ -20,6 +20,7 @@ from snisi_core.models.Reporting import SNISIReport
 from snisi_core.permissions import (provider_is_allowed_at_home,
                                     provider_is_allowed)
 from snisi_core.indicators import humanize_value
+from snisi_core.models.Entities import HealthEntity, AdministrativeEntity
 
 register = template.Library()
 locale.setlocale(locale.LC_ALL, '')
@@ -329,3 +330,20 @@ def provider_allowed(provider, slug_location):
 @register.filter(name='allowed_to_home')
 def provider_allowed_home(provider, slug):
     return provider_is_allowed_at_home(provider, slug)
+
+
+@register.filter(name='hentities')
+def only_health_entities(entities):
+    return [h for h in entities if HealthEntity.objects.filter(slug=h.slug).count()]
+
+
+@register.filter(name='hnametype')
+def type_formatted_name(entity):
+    if entity.type.slug == 'country':
+        return entity.name
+    return "{type} de {entity}".format(type=entity.type.name, entity=entity.name).upper()
+
+
+@register.filter(name='villages')
+def villages_for_hcenter(entity):
+    return AdministrativeEntity.objects.filter(health_entity=entity)
