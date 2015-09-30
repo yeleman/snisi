@@ -1951,6 +1951,11 @@ function getMalariaMapManager(options) {
 				northEast = L.latLng(16.1724728083975, -0.9118652343749999);
 			bounds = L.latLngBounds(southWest, northEast);
 		}
+		if (this.current_region == "4JN7") {
+			var southWest = L.latLng(15.5212, -5.9096),
+				northEast = L.latLng(11.4356, -9.1726);
+			bounds = L.latLngBounds(southWest, northEast);
+		}
 				
         if (bounds) {
         	this.map.fitBounds(bounds);
