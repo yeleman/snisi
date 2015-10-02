@@ -62,7 +62,7 @@ mapManager = getMalariaMapManager({
 	load: true,
 	indicators: all_indicators,
 	indicator_api_url: "{% url 'domain_indicator' domain_slug='malaria' %}",
-    geojson_api_url: "{% url 'api_geojson_data' cluster_slug='malaria_monthly_routine' %}",
+    geojson_api_url: "{% url 'api_geojson_data' cluster_slug='malaria_monthly_routine' %}?date=20151002",
     });
 mapExporter = getMapExporter({mapManager: mapManager, auto_click:true});
 
