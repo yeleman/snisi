@@ -281,6 +281,7 @@ def generate_weekly_reports(period, wperiod,
 
 
 def generate_district_reports(period,
+                              wperiod=None,
                               ensure_correct_date=True):
 
     logger.info("Switching to {}".format(period))
@@ -363,6 +364,7 @@ def generate_district_reports(period,
 
 
 def generate_region_country_reports(period,
+                                    wperiod=None,
                                     ensure_correct_date=True):
 
     logger.info("Switching to {}".format(period))

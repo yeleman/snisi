@@ -28,7 +28,7 @@ def get_expected_source_reports(period):
         completion_status__in=('', ExpectedReporting.COMPLETION_MISSING))
 
 
-def end_of_reporting_period_notifications(period):
+def end_of_reporting_period_notifications(period, wperiod=None):
     """ Send notifications to DTC at end of reporting period """
 
     now = timezone.now()
@@ -53,7 +53,7 @@ def end_of_reporting_period_notifications(period):
                      .format(period=period, entity=exp.entity))
 
 
-def end_of_extended_reporting_period_notifications(period):
+def end_of_extended_reporting_period_notifications(period, wperiod=None):
     """ Send notifications to DTC at end of extended reporting period
 
         Send notifications to Districts """
