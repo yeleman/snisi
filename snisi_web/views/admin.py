@@ -124,7 +124,7 @@ class AddProviderForm(forms.ModelForm):
         malitel = cleaned_data.get("phonenumber_malitel")
 
         if flotte is None and orange is None and malitel is None \
-                and not self.requester.is_admin():
+                and not self.requester.is_admin:
             raise forms.ValidationError(
                 _("At least one phone number is required."))
 
