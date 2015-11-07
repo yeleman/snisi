@@ -65,12 +65,12 @@ class AddProviderForm(forms.ModelForm):
                   'role', 'location']
 
     def __init__(self, *args, **kwargs):
-        requester = kwargs.pop('requester') or None
+        self.requester = kwargs.pop('requester') or None
         super(AddProviderForm, self).__init__(*args, **kwargs)
 
         # limit available roles
         self.fields['role'].choices = [
-            (r.slug, r.name) for r in get_new_roles_for(requester)
+            (r.slug, r.name) for r in get_new_roles_for(self.requester)
         ]
         self.fields['role'].help_text = _(
             "Make sur to match role with proper location")
@@ -123,7 +123,8 @@ class AddProviderForm(forms.ModelForm):
         orange = cleaned_data.get("phonenumber_orange")
         malitel = cleaned_data.get("phonenumber_malitel")
 
-        if flotte is None and orange is None and malitel is None:
+        if flotte is None and orange is None and malitel is None \
+                and not self.requester.is_admin():
             raise forms.ValidationError(
                 _("At least one phone number is required."))
 
