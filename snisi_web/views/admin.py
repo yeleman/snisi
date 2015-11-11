@@ -53,7 +53,7 @@ class ProviderRoleLocationForm(forms.ModelForm):
 
     def clean_location(self):
         return Entity.get_or_none(
-            self.cleaned_data.get('location'))
+            self.cleaned_data.get('location').strip())
 
 
 class AddProviderForm(forms.ModelForm):
@@ -147,7 +147,7 @@ class AddProviderForm(forms.ModelForm):
 
     def clean_location(self):
         return Entity.get_or_none(
-            self.cleaned_data.get('location'))
+            self.cleaned_data.get('location').strip())
 
     def clean_phonenumber_flotte(self):
         return AddProviderForm.get_clean_number(
