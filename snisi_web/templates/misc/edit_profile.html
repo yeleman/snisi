@@ -1,29 +1,32 @@
 {% extends "base.html" %}
 {% load snisi %}
-{% block title %}Mon profil ({{ user.username }}){% endblock %}
+{% block title %}Mon profil ({{ provider.username }}){% endblock %}
 
 {% block content %}
 
 {% pure_form form csrf_token=csrf_token legend="Mes informations" submit_text="Enregistrer les modifications" %}
+    <div class="pure-form pure-form-aligned">
+        <legend>Mes numéros de téléphone</legend>
 
-<div class="pure-form pure-form-aligned">
-    <legend>Mes numéros de téléphone</legend>
+        <fieldset>
 
-    <fieldset>
+            <p class="alert alert-warning"><i class="icon-attention"></i> Attention, si vous effacez tous vos numéros, nous ne pourrons plus vous contacter et vous ne recevrez pas d'alertes.<br />
+                Supprimez un numéro uniquement si celui-ci ne vous appartient plus.</p>
 
-        <p class="alert alert-warning"><i class="icon-attention"></i> Attention, si vous effacez tous vos numéros, nous ne pourrons plus vous contacter et vous ne recevrez pas d'alertes.<br />
-            Supprimez un numéro uniquement si celui-ci ne vous appartient plus.</p>
+            {% for number in provider.phone_numbers.all %}
+            <div class="pure-control-group">
+                <label for="">{{ number.category.name }}</label>
+                <input type="tel" readonly="readonly" value="{{ number.identity|phone }}" />
+{% if not update %}
+                    <a href="{% url 'profile-remove-number' number.identity %}"><button class="pure-button pure-button-primary">Supprimer</button></a>
+{% endif %}
+            </div>
+            {% endfor %}
 
-        {% for number in user.phone_numbers.all %}
-        <div class="pure-control-group">
-            <label for="">{{ number.category.name }}</label>
-            <input type="tel" readonly="readonly" value="{{ number.identity|phone }}" />
-            <a href="{% url 'profile-remove-number' number.identity %}"><button class="pure-button pure-button-primary">Supprimer</button></a>
-        </div>
-        {% endfor %}
 
-    </fieldset>
-</div>
+        </fieldset>
+    </div>
+
 
 {% pure_form phone_form csrf_token=csrf_token legend="Ajouter un numéro" submit_text="Ajouter" pure_class="inline" %}
 
