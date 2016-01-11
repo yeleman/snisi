@@ -84,7 +84,7 @@ def edit_profile(request, username=None, **kwargs):
             raise PermissionDenied
         provider = Provider.get_or_none(username)
         if not provider:
-            raise Http404("{} not found!".format(username))
+            raise Http404("Provider {} not found!".format(username))
         redirect_view = 'profile_update'
     else:
         provider = request.user
@@ -195,7 +195,7 @@ def public_profile(request, username, **kwargs):
 
     provider = Provider.get_or_none(username, with_inactive=True)
     if not provider:
-        raise Http404("{} not found!".format(username))
+        raise Http404("Provider {} not found!".format(username))
     context.update({'provider': provider})
 
     # admin

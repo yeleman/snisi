@@ -7,8 +7,7 @@
 
 {% pure_form form csrf_token=csrf_token legend="Mes informations" submit_text="Enregistrer les modifications" %}
     <div class="pure-form pure-form-aligned">
-        <legend>Mes numéros de téléphone</legend>
-
+        {% if is_update %}<legend>Numéros de téléphone</legend>{% else %}<legend>Mes numéros de téléphone</legend>{% endif %}
         <fieldset>
             {% if not is_update %}
                 <p class="alert alert-warning"><i class="icon-attention"></i> Attention, si vous effacez tous vos numéros, nous ne pourrons plus vous contacter et vous ne recevrez pas d'alertes.<br />
