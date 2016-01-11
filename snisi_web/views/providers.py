@@ -9,6 +9,7 @@ from django import forms
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.contrib.auth.decorators import login_required
 
@@ -76,17 +77,18 @@ class ProviderPasswordForm(forms.Form):
 @login_required
 def edit_profile(request, username=None, **kwargs):
     context = default_context()
-    update = False
+    is_update = username is not None
 
-    if username:
+    if is_update:
         if not request.user.role.slug in ['snisi_admin', 'snisi_tech']:
             raise PermissionDenied
         provider = Provider.get_or_none(username)
-        string_url = 'profile_update'
-        update = True
+        if not provider:
+            raise Http404("{} not found!".format(username))
+        redirect_view = 'profile_update'
     else:
         provider = request.user
-        string_url = 'profile'
+        redirect_view = 'profile'
 
     is_password = 'password1' in request.POST
     is_newphone = 'identity' in request.POST
@@ -113,10 +115,10 @@ def edit_profile(request, username=None, **kwargs):
                 form.cleaned_data.get('phone_number_extra')
             provider.save()
             messages.success(request, _("Profile details updated."))
-            if update:
-                return redirect(string_url, username=provider.username)
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
             else:
-                return redirect(string_url)
+                return redirect(redirect_view)
         else:
             messages.warning(request,
                              _("Your request failed. See bellow."))
@@ -129,8 +131,8 @@ def edit_profile(request, username=None, **kwargs):
                 passwd_form.cleaned_data.get('password1'))
             provider.save()
             messages.success(request, _("Password updated."))
-            if update:
-                return redirect(string_url, username=provider.username)
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
             else:
                 return redirect('logout')
         else:
@@ -168,17 +170,17 @@ def edit_profile(request, username=None, **kwargs):
                 messages.error(request,
                                _("Error in creating phone number {}.\n{}")
                                .format(phonenumber_repr(identity), e))
-            if update:
-                return redirect(string_url, username=provider.username)
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
             else:
-                return redirect(string_url)
+                return redirect(redirect_view)
         else:
             messages.warning(request,
                              _("Your new phone request failed. See bellow."))
 
     context.update({'form': form,
                     'passwd_form': passwd_form,
-                    'update': update,
+                    'is_update': is_update,
                     'phone_form': phone_form,
                     'provider': provider})
 
@@ -192,6 +194,8 @@ def public_profile(request, username, **kwargs):
     context = {'has_admin': True}
 
     provider = Provider.get_or_none(username, with_inactive=True)
+    if not provider:
+        raise Http404("{} not found!".format(username))
     context.update({'provider': provider})
 
     # admin
