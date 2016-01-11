@@ -6,8 +6,10 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
 from django import forms
+from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.contrib.auth.decorators import login_required
 
@@ -73,14 +75,26 @@ class ProviderPasswordForm(forms.Form):
 
 
 @login_required
-def edit_profile(request, **kwargs):
+def edit_profile(request, username=None, **kwargs):
     context = default_context()
+    is_update = username is not None
+
+    if is_update:
+        if not request.user.role.slug in ['snisi_admin', 'snisi_tech']:
+            raise PermissionDenied
+        provider = Provider.get_or_none(username)
+        if not provider:
+            raise Http404("Provider `{}` not found!".format(username))
+        redirect_view = 'profile_update'
+    else:
+        provider = request.user
+        redirect_view = 'profile'
 
     is_password = 'password1' in request.POST
     is_newphone = 'identity' in request.POST
 
     # creating default forms for no-action-yet
-    form = ProviderForm(instance=request.user)
+    form = ProviderForm(instance=provider)
     passwd_form = ProviderPasswordForm()
     phone_form = PhoneNumberForm()
 
@@ -88,20 +102,23 @@ def edit_profile(request, **kwargs):
     if request.method == 'POST' and not is_password and not is_newphone:
         form = ProviderForm(request.POST)
         if form.is_valid() and not is_password:
-            request.user.gender = form.cleaned_data.get('gender')
-            request.user.title = form.cleaned_data.get('title')
-            request.user.maiden_name = form.cleaned_data.get('maiden_name')
-            request.user.first_name = form.cleaned_data.get('first_name')
-            request.user.middle_name = form.cleaned_data.get('middle_name')
-            request.user.last_name = form.cleaned_data.get('last_name')
-            request.user.position = form.cleaned_data.get('position')
-            request.user.email = form.cleaned_data.get('email')
-            request.user.phone_number = form.cleaned_data.get('phone_number')
-            request.user.phone_number_extra = \
+            provider.gender = form.cleaned_data.get('gender')
+            provider.title = form.cleaned_data.get('title')
+            provider.maiden_name = form.cleaned_data.get('maiden_name')
+            provider.first_name = form.cleaned_data.get('first_name')
+            provider.middle_name = form.cleaned_data.get('middle_name')
+            provider.last_name = form.cleaned_data.get('last_name')
+            provider.position = form.cleaned_data.get('position')
+            provider.email = form.cleaned_data.get('email')
+            provider.phone_number = form.cleaned_data.get('phone_number')
+            provider.phone_number_extra = \
                 form.cleaned_data.get('phone_number_extra')
-            request.user.save()
+            provider.save()
             messages.success(request, _("Profile details updated."))
-            return redirect('profile')
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
+            else:
+                return redirect(redirect_view)
         else:
             messages.warning(request,
                              _("Your request failed. See bellow."))
@@ -110,11 +127,14 @@ def edit_profile(request, **kwargs):
     if request.method == 'POST' and is_password:
         passwd_form = ProviderPasswordForm(request.POST)
         if passwd_form.is_valid() and is_password:
-            request.user.set_password(
+            provider.set_password(
                 passwd_form.cleaned_data.get('password1'))
-            request.user.save()
+            provider.save()
             messages.success(request, _("Password updated."))
-            return redirect('logout')
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
+            else:
+                return redirect('logout')
         else:
             messages.warning(request,
                              _("Your password change request failed. "
@@ -142,7 +162,7 @@ def edit_profile(request, **kwargs):
                     identity=identity,
                     category=category,
                     priority=category.priority,
-                    provider=request.user)
+                    provider=provider)
                 messages.success(request,
                                  _("Added new phone number: {}")
                                  .format(phonenumber_repr(identity)))
@@ -150,15 +170,19 @@ def edit_profile(request, **kwargs):
                 messages.error(request,
                                _("Error in creating phone number {}.\n{}")
                                .format(phonenumber_repr(identity), e))
-            return redirect('profile')
+            if is_update:
+                return redirect(redirect_view, username=provider.username)
+            else:
+                return redirect(redirect_view)
         else:
             messages.warning(request,
                              _("Your new phone request failed. See bellow."))
 
     context.update({'form': form,
                     'passwd_form': passwd_form,
+                    'is_update': is_update,
                     'phone_form': phone_form,
-                    'provider': request.user})
+                    'provider': provider})
 
     return render(request,
                   kwargs.get('template_name', "misc/edit_profile.html"),
@@ -170,6 +194,8 @@ def public_profile(request, username, **kwargs):
     context = {'has_admin': True}
 
     provider = Provider.get_or_none(username, with_inactive=True)
+    if not provider:
+        raise Http404("Provider `{}` not found!".format(username))
     context.update({'provider': provider})
 
     # admin
