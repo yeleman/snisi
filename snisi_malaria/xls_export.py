@@ -547,9 +547,9 @@ def all_malariar_as_xls(save_to=None):
     for col, item in enumerate(headers):
         sheet.write(0, col, item)
 
-    for row, report in enumerate(reports):
+    row = 1
+    for report in reports.iterator():
         col = 0
-        row += 1
         sheet.write(row, col, report.entity.slug)
         col += 1
         sheet.write(row, col, report.entity.get_health_region().display_name())
@@ -569,6 +569,8 @@ def all_malariar_as_xls(save_to=None):
         for field in report.data_fields():
             sheet.write(row, col, report.get(field))
             col += 1
+
+        row += 1
 
     if save_to:
         wb.save(save_to)
@@ -599,9 +601,10 @@ def all_dailymalariar_xls(save_to=None):
     for col, item in enumerate(headers):
         sheet.write(0, col, item)
 
-    for row, report in enumerate(reports):
+    row = 1
+    for report in reports.iterator():
+
         col = 0
-        row += 1
         sheet.write(row, col, report.entity.slug)
         col += 1
         sheet.write(row, col, report.entity.get_health_region().display_name())
@@ -623,6 +626,8 @@ def all_dailymalariar_xls(save_to=None):
         for field in report.data_fields():
             sheet.write(row, col, report.get(field))
             col += 1
+
+        row += 1
 
     if save_to:
         wb.save(save_to)
