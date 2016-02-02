@@ -14,8 +14,8 @@ CHARACTERS_POOL = '23456789ABCDEFGHJKMNPRSTWXYZ'
 ID_LENGTH = 3
 
 
-def base_random_id():
-    return ''.join([random.choice(CHARACTERS_POOL) for i in range(ID_LENGTH)])
+def base_random_id(length=ID_LENGTH, pool=CHARACTERS_POOL):
+    return ''.join([random.choice(pool) for i in range(length)])
 
 
 def full_random_id():
