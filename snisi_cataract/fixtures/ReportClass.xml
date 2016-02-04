@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="cat_mission" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">cat_mission</field>
+        <field type="CharField" name="name">Mission cataracte</field>
+        <field type="CharField" name="cls">snisi_cataract.models.CATMissionR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">occasiosrc</field>
+    </object>
+    <object pk="cat_surgery" model="snisi_core.reportclass">
+        <field type="SlugField" name="slug">cat_surgery</field>
+        <field type="CharField" name="name">Chirurgie cataracte</field>
+        <field type="CharField" name="cls">snisi_cataract.models.CATSurgeryR</field>
+        <field type="CharField" name="period_cls">snisi_core.models.Periods.MonthPeriod</field>
+        <field type="CharField" name="report_type">occasiosrc</field>
+    </object>
+</django-objects>

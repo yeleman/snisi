@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="cataract" model="snisi_core.cluster">
+        <field to="snisi_core.domain" name="domain" rel="ManyToOneRel">cataract</field>
+        <field type="CharField" name="name">Chirurgies Cataracte</field>
+        <field type="BooleanField" name="is_active">True</field>
+        <field to="snisi_core.provider" name="contact" rel="ManyToOneRel">adolo</field>
+    </object>
+</django-objects>
