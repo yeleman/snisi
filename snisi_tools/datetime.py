@@ -22,11 +22,10 @@ def datetime_to_iso(adate):
 
 def parse_date_string(adatestr, as_date=False):
     def _cast(d, as_date):
-        cls = datetime.datetime if not as_date else datetime.date
-        if isinstance(d, cls):
-            return d if as_date else d.replace(tzinfo=timezone.utc)
+        if type(d) == datetime.datetime:
+            return d.date() if as_date else d.replace(tzinfo=timezone.utc)
         if as_date:
-            return d.date()
+            return d
         return datetime.datetime(
             *d.timetuple()[:3]).replace(tzinfo=timezone.utc)
     if isinstance(adatestr, (datetime.date, datetime.datetime)):

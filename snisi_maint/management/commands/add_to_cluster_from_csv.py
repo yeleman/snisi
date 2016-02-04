@@ -59,7 +59,7 @@ class Command(BaseCommand):
                          .format(options.get('filename')))
             return
 
-        headers = ['SNISI', 'Name']
+        headers = ['SNISI', 'Name', 'recursive']
         input_csv_file = open(options.get('filename'), 'r')
         csv_reader = csv.DictReader(input_csv_file, fieldnames=headers)
 
@@ -79,9 +79,16 @@ class Command(BaseCommand):
                                .format(entry.get('SNISI')))
                 continue
 
-            p, created = Participation.objects.get_or_create(
-                cluster=cluster,
-                entity=entity,
-                is_active=not options.get('not_active'),
-                modified_on=modified_on)
-            logger.info(p)
+            # recurse to children?
+            if entry.get('recursive').lower().strip() == 'y':
+                entities = entity.all_children(health_only=True)
+            else:
+                entities = [entity]
+
+            for single_entity in entities:
+                p, created = Participation.objects.get_or_create(
+                    cluster=cluster,
+                    entity=single_entity,
+                    is_active=not options.get('not_active'),
+                    modified_on=modified_on)
+                logger.info(p)

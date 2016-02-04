@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
     <object pk="trachoma" model="snisi_core.domain">
-        <field type="CharField" name="name">Cécité</field>
+        <field type="CharField" name="name">Trachome</field>
         <field type="BooleanField" name="is_active">True</field>
         <field to="snisi_core.provider" name="technical_contact" rel="ManyToOneRel">adolo</field>
         <field to="snisi_core.provider" name="operational_contact" rel="ManyToOneRel">bcamara</field>
