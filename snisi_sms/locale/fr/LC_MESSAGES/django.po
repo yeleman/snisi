@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
 "PO-Revision-Date: 2015-02-16 12:23-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: reply.py:20
+#: snisi_sms/reply.py:20
 msgid "ECHEC"
 msgstr "ECHEC"
 
-#: reply.py:21
+#: snisi_sms/reply.py:21
 msgid "/!\\"
 msgstr "/!\\"
 
-#: reply.py:22
+#: snisi_sms/reply.py:22
 msgid "OK"
 msgstr "OK"
 
-#: reply.py:28
+#: snisi_sms/reply.py:28
 msgid ""
 "Impossible d'enregistrer le rapport. Une erreur technique est survenue. "
 "Reessayez plus tard ou contactez ANTIM"

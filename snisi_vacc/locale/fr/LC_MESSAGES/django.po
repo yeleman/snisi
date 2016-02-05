@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 10:08+0000\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: snisi_vacc/integrity.py:48
+#, python-brace-format
+msgid "Missing data for {f}"
+msgstr "Données manquantes pour {f}"
+
+#: snisi_vacc/models.py:26
+msgid "BCG Coverage"
+msgstr "Couverture BCG"
+
+#: snisi_vacc/models.py:27
+msgid "Penta3 Coverage"
+msgstr "Couverture Penta3"
+
+#: snisi_vacc/models.py:28
+msgid "Measles Coverage"
+msgstr "Couverture Rougeole"
+
+#: snisi_vacc/models.py:30
+msgid "Penta3 Abandonment Rate"
+msgstr "Taux d’abandon Penta3"
+
+#: snisi_vacc/models.py:46
+msgid "Provided Services Report"
+msgstr "Rapport de services fournis"
+
+#: snisi_vacc/models.py:47
+msgid "Provided Services Reports"
+msgstr "Rapports de services fournis"
+
+#: snisi_vacc/models.py:98
+msgid "Aggregated Major Vaccine Coverage Report"
+msgstr "Rapport de couverture vaccination majeure agrégé"
+
+#: snisi_vacc/models.py:99
+msgid "Aggregated Major Vaccine Coverage Reports"
+msgstr "Rapports de couverture vaccination majeure agrégés"
+
+#: snisi_vacc/models.py:104
+msgid "Primary. Sources (all)"
+msgstr "Sources primaires (toutes)"
+
+#: snisi_vacc/models.py:111
+msgid "Primary. Sources (direct)"
+msgstr "Sources primaires (directes)"

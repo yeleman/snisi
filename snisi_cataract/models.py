@@ -45,7 +45,7 @@ MALE = 'male'
 FEMALE = 'female'
 GENDERS = {
     MALE: _("Male"),
-    FEMALE: _("FEMALE")
+    FEMALE: _("Female")
 }
 
 ADVANCED = 'advanced'

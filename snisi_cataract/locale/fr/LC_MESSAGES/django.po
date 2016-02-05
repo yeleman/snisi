@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 10:05+0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: snisi_cataract/integrity.py:47 snisi_cataract/integrity.py:224
+#: snisi_cataract/integrity.py:464 snisi_cataract/integrity.py:582
+msgid "Missing data for {}"
+msgstr "Données manquantes pour {}"
+
+#: snisi_cataract/models.py:32
+msgid "AMO"
+msgstr "AMO"
+
+#: snisi_cataract/models.py:33
+msgid "TSO"
+msgstr "TSO"
+
+#: snisi_cataract/models.py:34
+msgid "OPT"
+msgstr "OPT"
+
+#: snisi_cataract/models.py:40
+msgid "R.E"
+msgstr "OD"
+
+#: snisi_cataract/models.py:41
+msgid "L.E"
+msgstr "OG"
+
+#: snisi_cataract/models.py:47
+msgid "Male"
+msgstr "Homme"
+
+#: snisi_cataract/models.py:48
+msgid "Female"
+msgstr ""
+
+#: snisi_cataract/models.py:56
+msgid "Fixed"
+msgstr "Fixe"
+
+#: snisi_cataract/models.py:57
+msgid "Mobile"
+msgstr "Mobile"
+
+#: snisi_cataract/models.py:58
+msgid "Advanced"
+msgstr "Avancée"
+
+#: snisi_cataract/models.py:69
+msgid "CAT Surgery Report"
+msgstr "Rapport de chirurgie cataracte"
+
+#: snisi_cataract/models.py:70
+msgid "CAT Surgery Reports"
+msgstr "Rapport de chirurgie cataracte"
+
+#: snisi_cataract/models.py:78
+msgid "in years"
+msgstr "en années"
+
+#: snisi_cataract/models.py:135
+#, python-brace-format
+msgid "{gender}/{age}y/{eye}"
+msgstr "{gender}/{age}a/{eye}"
+
+#: snisi_cataract/models.py:156
+msgid "CAT Surgery Mission Report"
+msgstr "Rapport de mission chirurgie cataracte"
+
+#: snisi_cataract/models.py:157
+msgid "CAT Surgery Mission Reports"
+msgstr "Rapports de mission chirurgie cataracte"
+
+#: snisi_cataract/models.py:160
+msgid "Start Date"
+msgstr "Date de début"
+
+#: snisi_cataract/models.py:161
+msgid "End Date"
+msgstr "Date de fin"
+
+#: snisi_cataract/models.py:164
+msgid "Operator"
+msgstr "Opérateur"
+
+#: snisi_cataract/models.py:167
+msgid "Operatr Profile"
+msgstr "Profil opérateur"
+
+#: snisi_cataract/models.py:171
+msgid "Strategy"
+msgstr "Stratégie"
+
+#: snisi_cataract/models.py:175
+msgid "Surgery Reports"
+msgstr "Rapports de chirurgie"
+
+#: snisi_cataract/models.py:198
+msgid "Nb of surgeries"
+msgstr "Nombre de chirurgies"
+
+#~ msgid "FEMALE"
+#~ msgstr "Femme"
+
+#~ msgid "Données manquantes pour {}"
+#~ msgstr "Données manquantes pour {}"

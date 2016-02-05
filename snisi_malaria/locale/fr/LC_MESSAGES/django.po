@@ -7,261 +7,335 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
-"PO-Revision-Date: 2014-04-14 14:29-0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:58+0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: admin.py:29
+#: snisi_malaria/admin.py:31 snisi_malaria/models.py:35
 msgid "Under 5"
 msgstr "Moins de 5ans"
 
-#: admin.py:42
+#: snisi_malaria/admin.py:44 snisi_malaria/models.py:36
 msgid "Over 5"
 msgstr "5ans et plus"
 
-#: admin.py:55
+#: snisi_malaria/admin.py:57 snisi_malaria/models.py:37
 msgid "Pregnant Women"
 msgstr "Femmes enceintes"
 
-#: admin.py:69
+#: snisi_malaria/admin.py:71
 msgid "Stock Outs"
 msgstr "Rupture de stock"
 
-#: integrity.py:141 integrity.py:284 integrity.py:481 integrity.py:497
+#: snisi_malaria/integrity.py:134 snisi_malaria/integrity.py:299
+#: snisi_malaria/integrity.py:793 snisi_malaria/integrity.py:809
 msgid "Données manquantes pour {}"
 msgstr "Données manquantes pour {}"
 
-#: integrity.py:208 integrity.py:234 integrity.py:709 integrity.py:743
+#: snisi_malaria/integrity.py:211 snisi_malaria/integrity.py:240
 #, python-brace-format
-msgid "{simple} + {severe}"
-msgstr "{simple} + {severe}"
+msgid "[{cat}] {simple} + {severe}"
+msgstr "[{cat}] {simple} + {severe}"
 
-#: models.py:292
+#: snisi_malaria/models.py:38
+msgid "Stockout"
+msgstr "Rupture de stock"
+
+#: snisi_malaria/models.py:309
 msgid "Yes"
 msgstr "Oui"
 
-#: models.py:293
+#: snisi_malaria/models.py:310
 msgid "No"
 msgstr "Non"
 
-#: models.py:298
+#: snisi_malaria/models.py:315
 msgid "Malaria Report"
 msgstr "Rapport de routine paludisme"
 
-#: models.py:299
+#: snisi_malaria/models.py:316
 msgid "Malaria Reports"
 msgstr "Rapports de routine paludisme"
 
-#: models.py:302 models.py:327 models.py:350 models.py:470 models.py:495
-#: models.py:518 models.py:621 models.py:646 models.py:671
+#: snisi_malaria/models.py:319 snisi_malaria/models.py:344
+#: snisi_malaria/models.py:367 snisi_malaria/models.py:490
+#: snisi_malaria/models.py:515 snisi_malaria/models.py:538
+#: snisi_malaria/models.py:644 snisi_malaria/models.py:669
+#: snisi_malaria/models.py:694
 msgid "Total Consultation All Causes"
 msgstr "Consultations toutes causes"
 
-#: models.py:304 models.py:329 models.py:352 models.py:472 models.py:497
-#: models.py:520 models.py:623 models.py:648 models.py:673
+#: snisi_malaria/models.py:321 snisi_malaria/models.py:346
+#: snisi_malaria/models.py:369 snisi_malaria/models.py:492
+#: snisi_malaria/models.py:517 snisi_malaria/models.py:540
+#: snisi_malaria/models.py:646 snisi_malaria/models.py:671
+#: snisi_malaria/models.py:696
 msgid "Total Suspected Malaria Cases"
 msgstr "Cas suspects de paludisme"
 
-#: models.py:306 models.py:331 models.py:474 models.py:499 models.py:637
-#: models.py:662 models.py:687
+#: snisi_malaria/models.py:323 snisi_malaria/models.py:348
+#: snisi_malaria/models.py:371 snisi_malaria/models.py:494
+#: snisi_malaria/models.py:519 snisi_malaria/models.py:542
+#: snisi_malaria/models.py:660 snisi_malaria/models.py:685
+#: snisi_malaria/models.py:710
 msgid "Total Simple Malaria Cases"
 msgstr "Cas de paludisme simple"
 
-#: models.py:308 models.py:333 models.py:354 models.py:476 models.py:501
-#: models.py:522 models.py:639 models.py:664 models.py:689
+#: snisi_malaria/models.py:325 snisi_malaria/models.py:350
+#: snisi_malaria/models.py:373 snisi_malaria/models.py:496
+#: snisi_malaria/models.py:521 snisi_malaria/models.py:544
+#: snisi_malaria/models.py:662 snisi_malaria/models.py:687
+#: snisi_malaria/models.py:712
 msgid "Total Severe Malaria Cases"
 msgstr "Cas de paludisme grave"
 
-#: models.py:310 models.py:335 models.py:356 models.py:478 models.py:503
-#: models.py:524
+#: snisi_malaria/models.py:327 snisi_malaria/models.py:352
+#: snisi_malaria/models.py:375 snisi_malaria/models.py:498
+#: snisi_malaria/models.py:523 snisi_malaria/models.py:546
 msgid "Total Tested Malaria Cases"
 msgstr "Cas de paludisme testés"
 
-#: models.py:312 models.py:337 models.py:358 models.py:480 models.py:505
-#: models.py:526
+#: snisi_malaria/models.py:329 snisi_malaria/models.py:354
+#: snisi_malaria/models.py:377 snisi_malaria/models.py:500
+#: snisi_malaria/models.py:525 snisi_malaria/models.py:548
+#: snisi_malaria/models.py:947 snisi_malaria/models.py:949
+#: snisi_malaria/models.py:951 snisi_malaria/models.py:1094
+#: snisi_malaria/models.py:1096 snisi_malaria/models.py:1098
+#: snisi_malaria/models.py:1101 snisi_malaria/models.py:1103
+#: snisi_malaria/models.py:1105 snisi_malaria/models.py:1108
+#: snisi_malaria/models.py:1110 snisi_malaria/models.py:1112
+#: snisi_malaria/models.py:1115 snisi_malaria/models.py:1117
+#: snisi_malaria/models.py:1119 snisi_malaria/models.py:1122
+#: snisi_malaria/models.py:1124 snisi_malaria/models.py:1126
+#: snisi_malaria/models.py:1129 snisi_malaria/models.py:1131
+#: snisi_malaria/models.py:1133 snisi_malaria/models.py:1136
+#: snisi_malaria/models.py:1138 snisi_malaria/models.py:1140
+#: snisi_malaria/models.py:1143 snisi_malaria/models.py:1145
+#: snisi_malaria/models.py:1147
 msgid "Total Confirmed Malaria Cases"
 msgstr "Cas de paludisme confirmés"
 
-#: models.py:314 models.py:339 models.py:360 models.py:482 models.py:507
-#: models.py:528
+#: snisi_malaria/models.py:331 snisi_malaria/models.py:356
+#: snisi_malaria/models.py:379 snisi_malaria/models.py:502
+#: snisi_malaria/models.py:527 snisi_malaria/models.py:550
 msgid "Total Treated Malaria Cases"
 msgstr "Cas de paludisme traités par CTA"
 
-#: models.py:316 models.py:341 models.py:362 models.py:484 models.py:509
-#: models.py:530
+#: snisi_malaria/models.py:333 snisi_malaria/models.py:358
+#: snisi_malaria/models.py:381 snisi_malaria/models.py:504
+#: snisi_malaria/models.py:529 snisi_malaria/models.py:552
 msgid "Total Inpatient All Causes"
 msgstr "Hospitalisations toutes causes"
 
-#: models.py:318 models.py:343 models.py:364 models.py:486 models.py:511
-#: models.py:532
+#: snisi_malaria/models.py:335 snisi_malaria/models.py:360
+#: snisi_malaria/models.py:383 snisi_malaria/models.py:506
+#: snisi_malaria/models.py:531 snisi_malaria/models.py:554
 msgid "Total Malaria Inpatient"
 msgstr "Hospitalisation paludisme"
 
-#: models.py:320 models.py:345 models.py:366 models.py:488 models.py:513
-#: models.py:534 models.py:641 models.py:666 models.py:691
+#: snisi_malaria/models.py:337 snisi_malaria/models.py:362
+#: snisi_malaria/models.py:385 snisi_malaria/models.py:508
+#: snisi_malaria/models.py:533 snisi_malaria/models.py:556
+#: snisi_malaria/models.py:664 snisi_malaria/models.py:689
+#: snisi_malaria/models.py:714
 msgid "Total Death All Causes"
 msgstr "Décès toutes causes"
 
-#: models.py:322 models.py:347 models.py:368 models.py:490 models.py:515
-#: models.py:536 models.py:643 models.py:668 models.py:693
+#: snisi_malaria/models.py:339 snisi_malaria/models.py:364
+#: snisi_malaria/models.py:387 snisi_malaria/models.py:510
+#: snisi_malaria/models.py:535 snisi_malaria/models.py:558
+#: snisi_malaria/models.py:666 snisi_malaria/models.py:691
+#: snisi_malaria/models.py:716
 msgid "Total Malaria Death"
 msgstr "Décès dû au paludisme"
 
-#: models.py:324 models.py:370 models.py:492 models.py:538
+#: snisi_malaria/models.py:341 snisi_malaria/models.py:389
+#: snisi_malaria/models.py:512 snisi_malaria/models.py:560
 msgid "Total Distributed Bednets"
 msgstr "MILDs distribuées"
 
-#: models.py:372 models.py:539
+#: snisi_malaria/models.py:391 snisi_malaria/models.py:561
 msgid "Total ANC1 Visits"
 msgstr "Nb. CPN1"
 
-#: models.py:374 models.py:540
+#: snisi_malaria/models.py:393 snisi_malaria/models.py:562
 msgid "Total SP1 given"
 msgstr "Nb. SP1 distribués"
 
-#: models.py:376 models.py:541
+#: snisi_malaria/models.py:395 snisi_malaria/models.py:563
 msgid "Total SP2 given"
 msgstr "Nb. SP2 distribués"
 
-#: models.py:378 models.py:543
+#: snisi_malaria/models.py:397 snisi_malaria/models.py:565
 msgid "ACT Children"
 msgstr "CTA Nourisson"
 
-#: models.py:381 models.py:544
+#: snisi_malaria/models.py:400 snisi_malaria/models.py:566
 msgid "ACT Youth"
 msgstr "CTA Adolescent"
 
-#: models.py:384 models.py:545
+#: snisi_malaria/models.py:403 snisi_malaria/models.py:567
 msgid "ACT Adult"
 msgstr "CTA Adulte"
 
-#: models.py:387 models.py:546
+#: snisi_malaria/models.py:406 snisi_malaria/models.py:568
 msgid "Artemether"
 msgstr "Artemether"
 
-#: models.py:390 models.py:547
+#: snisi_malaria/models.py:409 snisi_malaria/models.py:569
 msgid "Quinine"
 msgstr "Quinine"
 
-#: models.py:393 models.py:548
+#: snisi_malaria/models.py:412 snisi_malaria/models.py:570
 msgid "Serum"
 msgstr "Sérum"
 
-#: models.py:395 models.py:549
+#: snisi_malaria/models.py:414 snisi_malaria/models.py:571
 msgid "Bednets"
 msgstr "MILDs"
 
-#: models.py:398 models.py:550
+#: snisi_malaria/models.py:417 snisi_malaria/models.py:572
 msgid "RDTs"
 msgstr "TDRs"
 
-#: models.py:400 models.py:551
+#: snisi_malaria/models.py:419 snisi_malaria/models.py:573
 msgid "SPs"
 msgstr "SPs"
 
-#: models.py:466
+#: snisi_malaria/models.py:486
 msgid "Aggregated Malaria Report"
 msgstr "Rapport paludisme agrégé"
 
-#: models.py:467
+#: snisi_malaria/models.py:487
 msgid "Aggregated Malaria Reports"
 msgstr "Rapports paludisme Aggrégés"
 
-#: models.py:556 models.py:848
+#: snisi_malaria/models.py:578 snisi_malaria/models.py:870
+#: snisi_malaria/models.py:1014 snisi_malaria/models.py:1152
 msgid "Primary. Sources (all)"
 msgstr "Sources primaires (toutes)"
 
-#: models.py:563 models.py:854
+#: snisi_malaria/models.py:585 snisi_malaria/models.py:877
+#: snisi_malaria/models.py:1021 snisi_malaria/models.py:1159
 msgid "Primary. Sources (direct)"
 msgstr "Sources primaires (directes)"
 
-#: models.py:625 models.py:650 models.py:675
+#: snisi_malaria/models.py:648 snisi_malaria/models.py:673
+#: snisi_malaria/models.py:698
 msgid "Total RDT Tested Malaria Cases"
 msgstr "Cas de paludisme testés par TDR"
 
-#: models.py:627 models.py:652 models.py:677
+#: snisi_malaria/models.py:650 snisi_malaria/models.py:675
+#: snisi_malaria/models.py:700
 msgid "Total RDT Confirmed Malaria Cases"
 msgstr "Cas de paludisme confirmés par TDR"
 
-#: models.py:629 models.py:654 models.py:679
+#: snisi_malaria/models.py:652 snisi_malaria/models.py:677
+#: snisi_malaria/models.py:702
 msgid "Total RDT Confirmed P.Falciparum Malaria Cases"
 msgstr "Cas de paludisme à P.Falciparum confirmés par TDR"
 
-#: models.py:631 models.py:656 models.py:681
+#: snisi_malaria/models.py:654 snisi_malaria/models.py:679
+#: snisi_malaria/models.py:704
 msgid "Total TS Tested Malaria Cases"
 msgstr "Cas de paludisme testés par G.E"
 
-#: models.py:633 models.py:658 models.py:683
+#: snisi_malaria/models.py:656 snisi_malaria/models.py:681
+#: snisi_malaria/models.py:706
 msgid "Total TS Confirmed Malaria Cases"
 msgstr "Cas de paludisme confirmés par G.E"
 
-#: models.py:635 models.py:660 models.py:685
+#: snisi_malaria/models.py:658 snisi_malaria/models.py:683
+#: snisi_malaria/models.py:708
 msgid "Total TS Confirmed P.Falciparum Malaria Cases"
 msgstr "Cas de paludisme à P.Falciparum confirmés par G.E"
 
-#: models.py:823
+#: snisi_malaria/models.py:845
 msgid "Epidemiology Malaria Report"
 msgstr "Rapport épidémiologie paludisme"
 
-#: models.py:824
+#: snisi_malaria/models.py:846
 msgid "Epidemology Malaria Reports"
 msgstr "Rapports épidémiologie paludisme"
 
-#: models.py:842
+#: snisi_malaria/models.py:864
 msgid "Aggregated Epidemiology Malaria Report"
 msgstr "Rapport épidémiologie paludisme Aggrégé"
 
-#: models.py:843
+#: snisi_malaria/models.py:865
 msgid "Aggregated Epidemology Malaria Reports"
 msgstr "Rapports épidémiologie paludisme Aggrégés"
 
-#: xls_import.py:38 xls_import.py:312
+#: snisi_malaria/models.py:989
+msgid "Daily Malaria Report"
+msgstr "Rapport quotidien paludisme"
+
+#: snisi_malaria/models.py:990
+msgid "Daily Malaria Reports"
+msgstr "Rapports quotidiens paludisme"
+
+#: snisi_malaria/models.py:1008
+msgid "Aggregated Daily Malaria Report"
+msgstr "Rapport quotidien paludisme agrégé"
+
+#: snisi_malaria/models.py:1009
+msgid "Aggregated Daily Malaria Reports"
+msgstr "Rapports quotidiens paludisme Agrégés"
+
+#: snisi_malaria/models.py:1090
+msgid "Aggregated Weekly Malaria Report"
+msgstr "Rapport hebdomadaire paludisme agrégé"
+
+#: snisi_malaria/models.py:1091
+msgid "Aggregated Weekly Malaria Reports"
+msgstr "Rapports hebdomadaires paludisme Agrégés"
+
+#: snisi_malaria/xls_import.py:31
 msgid "Region"
 msgstr "Région"
 
-#: xls_import.py:39 xls_import.py:313
+#: snisi_malaria/xls_import.py:32
 msgid "Health District"
 msgstr "District sanitaire"
 
-#: xls_import.py:40 xls_import.py:314
+#: snisi_malaria/xls_import.py:33
 msgid "Health Center"
 msgstr "Centre de santé"
 
-#: xls_import.py:42 xls_import.py:317
+#: snisi_malaria/xls_import.py:35
 msgid "Month"
 msgstr "Mois"
 
-#: xls_import.py:44 xls_import.py:320
+#: snisi_malaria/xls_import.py:37
 msgid "Year"
 msgstr "Année"
 
-#: xls_import.py:281
+#: snisi_malaria/xls_import.py:274
 msgid "Filling Day"
 msgstr "Jour de remplissage"
 
-#: xls_import.py:284
+#: snisi_malaria/xls_import.py:277
 msgid "Filling Month"
 msgstr "Mois de remplissage"
 
-#: xls_import.py:287
+#: snisi_malaria/xls_import.py:280
 msgid "Filling Year"
 msgstr "Année de remplissage"
 
-#: xls_import.py:289
+#: snisi_malaria/xls_import.py:282
 msgid "Author Name"
 msgstr "Auteur"
 
-#: xls_import.py:323
-msgid "Week"
-msgstr "Semaine"
+#~ msgid "Week"
+#~ msgstr "Semaine"
 
 #~ msgid "%(simple)s + %(severe)s"
 #~ msgstr "%(simple)s + %(severe)s"

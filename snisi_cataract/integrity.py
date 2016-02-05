@@ -44,7 +44,7 @@ class CATMissionStartChecker(ReportIntegrityChecker):
                     fname = CATSurgeryR.field_name(field)
                 except:
                     fname = field
-                self.add_missing(_("Données manquantes pour {}").format(fname),
+                self.add_missing(_("Missing data for {}").format(fname),
                                  blocking=True, field=field)
 
     def _check(self, **options):
@@ -221,7 +221,7 @@ class CATSurgeryChecker(ReportIntegrityChecker):
                     fname = CATSurgeryR.field_name(field)
                 except:
                     fname = field
-                self.add_missing(_("Données manquantes pour {}").format(fname),
+                self.add_missing(_("Missing data for {}").format(fname),
                                  blocking=True, field=field)
 
     def check_data(self, **options):
@@ -461,7 +461,7 @@ class CATSurgeryResultChecker(ReportIntegrityChecker):
                     fname = CATSurgeryR.field_name(field)
                 except:
                     fname = field
-                self.add_missing(_("Données manquantes pour {}").format(fname),
+                self.add_missing(_("Missing data for {}").format(fname),
                                  blocking=True, field=field)
 
     def check_data(self, **options):
@@ -579,7 +579,7 @@ class CATMissionEndChecker(ReportIntegrityChecker):
     def _check_completeness(self, **options):
         for field in ['district', 'ended_on', 'submit_time', 'submitter']:
             if not self.has(field):
-                self.add_missing(_("Données manquantes pour {}").format(field),
+                self.add_missing(_("Missing data for {}").format(field),
                                  blocking=True, field=field)
 
     def _check(self, **options):

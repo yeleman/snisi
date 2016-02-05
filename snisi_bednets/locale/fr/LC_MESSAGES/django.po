@@ -7,55 +7,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-14 14:27+0000\n"
-"PO-Revision-Date: 2014-04-14 14:29-0000\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:53+0000\n"
+"Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: models.py:29
+#: snisi_bednets/models.py:30
 msgid "Initial"
 msgstr "Initiales"
 
-#: models.py:30
+#: snisi_bednets/models.py:31
 msgid "Received"
 msgstr "Reçues"
 
-#: models.py:32
+#: snisi_bednets/models.py:33
 msgid "Distributed"
 msgstr "Distribuées"
 
-#: models.py:33
+#: snisi_bednets/models.py:34
 msgid "Left"
 msgstr "Restantes"
 
-#: models.py:35
+#: snisi_bednets/models.py:36
 msgid "Difference"
 msgstr "Différence"
 
-#: models.py:49
+#: snisi_bednets/models.py:50
 #, python-brace-format
 msgid "{cscom} / {period} / {receipt}"
 msgstr "{cscom} / {period} / {receipt}"
 
-#: models.py:66
+#: snisi_bednets/models.py:67
 msgid "MILD Report"
 msgstr "Rapport MILD"
 
-#: models.py:67
+#: snisi_bednets/models.py:68
 msgid "MILD Reports"
 msgstr "Rapports MILD"
 
-#: models.py:84
+#: snisi_bednets/models.py:85
 msgid "Aggregated MILD Report"
 msgstr "Rapport de MILDs agrégé"
 
-#: models.py:85
+#: snisi_bednets/models.py:86
 msgid "Aggregated MILD Reports"
 msgstr "Rapports de MILDs agrégés"
+
+#: snisi_bednets/models.py:90
+msgid "Primary. Sources"
+msgstr "Sources primaires"
