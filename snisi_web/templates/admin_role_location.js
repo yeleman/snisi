@@ -10,6 +10,7 @@ var role_entity_map = {
 	'tt_opt': ['health_district'],
 	'tt_amo': ['health_district'],
 	'tt_tso': ['health_district'],
+	'tt_surgeon': ['health_district'],
 	'pf_palu': ['health_region', 'health_district'],
 	'pf_mtn': ['health_district'],
 	'snisi_tech': ['country'],
