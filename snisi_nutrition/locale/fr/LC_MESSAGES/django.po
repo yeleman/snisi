@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
-"PO-Revision-Date: 2015-01-14 11:45-0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:58+0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr\n"
@@ -16,906 +16,926 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:151 integrity.py:266 integrity.py:288 integrity.py:310
-#: integrity.py:337
+#: snisi_nutrition/integrity.py:151 snisi_nutrition/integrity.py:267
+#: snisi_nutrition/integrity.py:290 snisi_nutrition/integrity.py:313
+#: snisi_nutrition/integrity.py:341
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"
 
-#: models/Caseload.py:33
+#: snisi_nutrition/models/Caseload.py:33
 msgid "Expected Caseload"
 msgstr "Caseload attendu"
 
-#: models/Caseload.py:34
+#: snisi_nutrition/models/Caseload.py:34
 msgid "Expected Caseloads"
 msgstr "Caseload attendus"
 
-#: models/Monthly.py:893
+#: snisi_nutrition/models/Monthly.py:928
 msgid "Nutrition Report"
 msgstr "Rapport Nutrition"
 
-#: models/Monthly.py:894
+#: snisi_nutrition/models/Monthly.py:929
 msgid "Nutrition Reports"
 msgstr "Rapports Nutrition"
 
-#: models/Monthly.py:922
+#: snisi_nutrition/models/Monthly.py:957
 msgid "Aggregated Nutrition Report"
 msgstr "Rapport Nutrition agrégé"
 
-#: models/Monthly.py:923
+#: snisi_nutrition/models/Monthly.py:958
 msgid "Aggregated Nutrition Reports"
 msgstr "Rapports Nutrition agrégés"
 
-#: models/Monthly.py:940 models/Stocks.py:496 models/URENAM.py:494
-#: models/URENAS.py:227 models/URENI.py:303 models/Weekly.py:299
+#: snisi_nutrition/models/Monthly.py:975 snisi_nutrition/models/Stocks.py:527
+#: snisi_nutrition/models/URENAM.py:494 snisi_nutrition/models/URENAS.py:227
+#: snisi_nutrition/models/URENI.py:303 snisi_nutrition/models/Weekly.py:337
 msgid "Primary. Sources"
 msgstr "Sources primaires"
 
-#: models/Monthly.py:946 models/Stocks.py:502 models/URENAM.py:500
-#: models/URENAS.py:233 models/URENI.py:309 models/Weekly.py:305
+#: snisi_nutrition/models/Monthly.py:981 snisi_nutrition/models/Stocks.py:533
+#: snisi_nutrition/models/URENAM.py:500 snisi_nutrition/models/URENAS.py:233
+#: snisi_nutrition/models/URENI.py:309 snisi_nutrition/models/Weekly.py:343
 msgid "Primary. Sources (direct)"
 msgstr "Sources primaires (directes)"
 
-#: models/Stocks.py:36
+#: snisi_nutrition/models/Stocks.py:37
 msgid "Plumpy Nut"
 msgstr "Plumpy Nut"
 
-#: models/Stocks.py:37
+#: snisi_nutrition/models/Stocks.py:38
 msgid "Milk F75"
 msgstr "Lait F75"
 
-#: models/Stocks.py:38
+#: snisi_nutrition/models/Stocks.py:39
 msgid "Milk F100"
 msgstr "Lait F100"
 
-#: models/Stocks.py:39
+#: snisi_nutrition/models/Stocks.py:40
 msgid "Resomal"
 msgstr "Résomal"
 
-#: models/Stocks.py:40
+#: snisi_nutrition/models/Stocks.py:41
 msgid "Plumpy Sup"
 msgstr "Plumpy Sup"
 
-#: models/Stocks.py:41
+#: snisi_nutrition/models/Stocks.py:42
 msgid "Supercereal"
 msgstr "Supercereal"
 
-#: models/Stocks.py:42
+#: snisi_nutrition/models/Stocks.py:43
 msgid "Supercereal+"
 msgstr "Supercereal+"
 
-#: models/Stocks.py:43
+#: snisi_nutrition/models/Stocks.py:44
 msgid "Oil"
 msgstr "Huile"
 
-#: models/Stocks.py:44
+#: snisi_nutrition/models/Stocks.py:45
 msgid "Amoxycilline 125"
 msgstr "Amoxycilline 125"
 
-#: models/Stocks.py:45
+#: snisi_nutrition/models/Stocks.py:46
 msgid "Amoxycilline 250"
 msgstr "Amoxycilline 250"
 
-#: models/Stocks.py:46
+#: snisi_nutrition/models/Stocks.py:47
 msgid "Albendazole"
 msgstr "Albendazole"
 
-#: models/Stocks.py:47
+#: snisi_nutrition/models/Stocks.py:48
 msgid "Vitamin A 100"
 msgstr "Vitamine A 100"
 
-#: models/Stocks.py:48
+#: snisi_nutrition/models/Stocks.py:49
 msgid "Vitamin A 200"
 msgstr "Vitamine A 200"
 
-#: models/Stocks.py:49
+#: snisi_nutrition/models/Stocks.py:50
 msgid "Iron/Folic Acid"
 msgstr "Fer/Acide folique"
 
-#: models/Stocks.py:53 models/Stocks.py:54 models/Stocks.py:55
-#: models/Stocks.py:56 models/Stocks.py:57
+#: snisi_nutrition/models/Stocks.py:54 snisi_nutrition/models/Stocks.py:55
+#: snisi_nutrition/models/Stocks.py:56 snisi_nutrition/models/Stocks.py:57
+#: snisi_nutrition/models/Stocks.py:58
 msgid "Packet"
 msgstr "Sachet"
 
-#: models/Stocks.py:58
+#: snisi_nutrition/models/Stocks.py:59
 msgid "Kilo"
 msgstr "Kilo"
 
-#: models/Stocks.py:59
+#: snisi_nutrition/models/Stocks.py:60
 msgid "1.5Kg Packet"
 msgstr "Sachet 1,5Kg"
 
-#: models/Stocks.py:60
+#: snisi_nutrition/models/Stocks.py:61
 msgid "Liter"
 msgstr "Litre"
 
-#: models/Stocks.py:61 models/Stocks.py:64 models/Stocks.py:65
+#: snisi_nutrition/models/Stocks.py:62 snisi_nutrition/models/Stocks.py:65
+#: snisi_nutrition/models/Stocks.py:66
 msgid "Vials"
 msgstr "Flacons"
 
-#: models/Stocks.py:62 models/Stocks.py:63 models/Stocks.py:66
+#: snisi_nutrition/models/Stocks.py:63 snisi_nutrition/models/Stocks.py:64
+#: snisi_nutrition/models/Stocks.py:67
 msgid "Caps"
 msgstr "Comprimés"
 
-#: models/Stocks.py:82
+#: snisi_nutrition/models/Stocks.py:83
 msgid "Plumpy Nut Initial"
 msgstr "Plumpy Nut : Qté initiale"
 
-#: models/Stocks.py:83
+#: snisi_nutrition/models/Stocks.py:84
 msgid "Plumpy Nut Received"
 msgstr "Plumpy Nut : Qté reçue"
 
-#: models/Stocks.py:84
+#: snisi_nutrition/models/Stocks.py:85
 msgid "Plumpy Nut Used"
 msgstr "Plumpy Nut : Qté utilisée"
 
-#: models/Stocks.py:85
+#: snisi_nutrition/models/Stocks.py:86
 msgid "Plumpy Nut Lost"
 msgstr "Plumpy Nut : Qté perdue"
 
-#: models/Stocks.py:101
+#: snisi_nutrition/models/Stocks.py:102
 msgid "Milk_F75 Initial"
 msgstr "Lait F75 : Qté initiale"
 
-#: models/Stocks.py:103
+#: snisi_nutrition/models/Stocks.py:104
 msgid "Milk_F75 Received"
 msgstr "Lait F75 : Qté reçue"
 
-#: models/Stocks.py:105
+#: snisi_nutrition/models/Stocks.py:106
 msgid "Milk_F75 Used"
 msgstr "Lait F75 : Qté utilisée"
 
-#: models/Stocks.py:107
+#: snisi_nutrition/models/Stocks.py:108
 msgid "Milk_F75 Lost"
 msgstr "Lait F75 : Qté perdue"
 
-#: models/Stocks.py:123
+#: snisi_nutrition/models/Stocks.py:124
 msgid "Milk_F100 Initial"
 msgstr "Lait F100 : Qté initiale"
 
-#: models/Stocks.py:125
+#: snisi_nutrition/models/Stocks.py:126
 msgid "Milk_F100 Received"
 msgstr "Lait F100 : Qté reçue"
 
-#: models/Stocks.py:127
+#: snisi_nutrition/models/Stocks.py:128
 msgid "Milk_F100 Used"
 msgstr "Lait F100 : Qté utilisée"
 
-#: models/Stocks.py:129
+#: snisi_nutrition/models/Stocks.py:130
 msgid "Milk_F100 Lost"
 msgstr "Lait F100 : Qté perdue"
 
-#: models/Stocks.py:145
+#: snisi_nutrition/models/Stocks.py:146
 msgid "Resomal Initial"
 msgstr "Résomal : Qté initiale"
 
-#: models/Stocks.py:147
+#: snisi_nutrition/models/Stocks.py:148
 msgid "Resomal Received"
 msgstr "Résomal : Qté reçue"
 
-#: models/Stocks.py:149
+#: snisi_nutrition/models/Stocks.py:150
 msgid "Resomal Used"
 msgstr "Résomal : Qté utilisée"
 
-#: models/Stocks.py:151
+#: snisi_nutrition/models/Stocks.py:152
 msgid "Resomal Lost"
 msgstr "Résomal : Qté perdue"
 
-#: models/Stocks.py:167
+#: snisi_nutrition/models/Stocks.py:168
 msgid "Plumpy_Sup Initial"
 msgstr "Plumpy Sup : Qté initiale"
 
-#: models/Stocks.py:169
+#: snisi_nutrition/models/Stocks.py:170
 msgid "Plumpy_Sup Received"
 msgstr "Plumpy Sup : Qté reçue"
 
-#: models/Stocks.py:171
+#: snisi_nutrition/models/Stocks.py:172
 msgid "Plumpy_Sup Used"
 msgstr "Plumpy Sup : Qté utilisée"
 
-#: models/Stocks.py:173
+#: snisi_nutrition/models/Stocks.py:174
 msgid "Plumpy_Sup Lost"
 msgstr "Plumpy Sup : Qté perdue"
 
-#: models/Stocks.py:189
+#: snisi_nutrition/models/Stocks.py:190
 msgid "Supercereal Initial"
 msgstr "Supercereal : Qté initiale"
 
-#: models/Stocks.py:191
+#: snisi_nutrition/models/Stocks.py:192
 msgid "Supercereal Received"
 msgstr "Supercereal : Qté reçue"
 
-#: models/Stocks.py:193
+#: snisi_nutrition/models/Stocks.py:194
 msgid "Supercereal Used"
 msgstr "Supercereal : Qté utilisée"
 
-#: models/Stocks.py:195
+#: snisi_nutrition/models/Stocks.py:196
 msgid "Supercereal Lost"
 msgstr "Supercereal : Qté perdue"
 
-#: models/Stocks.py:211
+#: snisi_nutrition/models/Stocks.py:212
 msgid "Supercereal_Plus Initial"
 msgstr "Supercereal+ : Qté initiale"
 
-#: models/Stocks.py:213
+#: snisi_nutrition/models/Stocks.py:214
 msgid "Supercereal_Plus Received"
 msgstr "Supercereal+ : Qté reçue"
 
-#: models/Stocks.py:215
+#: snisi_nutrition/models/Stocks.py:216
 msgid "Supercereal_Plus Used"
 msgstr "Supercereal+ : Qté utilisée"
 
-#: models/Stocks.py:217
+#: snisi_nutrition/models/Stocks.py:218
 msgid "Supercereal_Plus Lost"
 msgstr "Supercereal+ : Qté perdue"
 
-#: models/Stocks.py:233
+#: snisi_nutrition/models/Stocks.py:234
 msgid "Oil Initial"
 msgstr "Huile : Qté initiale"
 
-#: models/Stocks.py:235
+#: snisi_nutrition/models/Stocks.py:236
 msgid "Oil Received"
 msgstr "Huile : Qté reçue"
 
-#: models/Stocks.py:237
+#: snisi_nutrition/models/Stocks.py:238
 msgid "Oil Used"
 msgstr "Huile : Qté utilisée"
 
-#: models/Stocks.py:239
+#: snisi_nutrition/models/Stocks.py:240
 msgid "Oil Lost"
 msgstr "Huile : Qté perdue"
 
-#: models/Stocks.py:255
+#: snisi_nutrition/models/Stocks.py:256
 msgid "Amoxycilline_125_Vials Initial"
 msgstr "Amoxycilline 125 : Qté initiale"
 
-#: models/Stocks.py:257
+#: snisi_nutrition/models/Stocks.py:258
 msgid "Amoxycilline_125_Vials Received"
 msgstr "Amoxycilline 125 : Qté reçue"
 
-#: models/Stocks.py:259
+#: snisi_nutrition/models/Stocks.py:260
 msgid "Amoxycilline_125_Vials Used"
 msgstr "Amoxycilline 125 : Qté utilisée"
 
-#: models/Stocks.py:261
+#: snisi_nutrition/models/Stocks.py:262
 msgid "Amoxycilline_125_Vials Lost"
 msgstr "Amoxycilline 125 : Qté perdue"
 
-#: models/Stocks.py:277
+#: snisi_nutrition/models/Stocks.py:278
 msgid "Amoxycilline_250_Caps Initial"
 msgstr "Amoxycilline 250 : Qté initiale"
 
-#: models/Stocks.py:279
+#: snisi_nutrition/models/Stocks.py:280
 msgid "Amoxycilline_250_Caps Received"
 msgstr "Amoxycilline 250 : Qté reçue"
 
-#: models/Stocks.py:281
+#: snisi_nutrition/models/Stocks.py:282
 msgid "Amoxycilline_250_Caps Used"
 msgstr "Amoxycilline 250 : Qté utilisée"
 
-#: models/Stocks.py:283
+#: snisi_nutrition/models/Stocks.py:284
 msgid "Amoxycilline_250_Caps Lost"
 msgstr "Amoxycilline 250 : Qté perdue"
 
-#: models/Stocks.py:299
+#: snisi_nutrition/models/Stocks.py:300
 msgid "Albendazole Initial"
 msgstr "Albendazole : Qté initiale"
 
-#: models/Stocks.py:301
+#: snisi_nutrition/models/Stocks.py:302
 msgid "Albendazole Received"
 msgstr "Albendazole : Qté reçue"
 
-#: models/Stocks.py:303
+#: snisi_nutrition/models/Stocks.py:304
 msgid "Albendazole Used"
 msgstr "Albendazole : Qté utilisée"
 
-#: models/Stocks.py:305
+#: snisi_nutrition/models/Stocks.py:306
 msgid "Albendazole Lost"
 msgstr "Albendazole : Qté perdue"
 
-#: models/Stocks.py:321
+#: snisi_nutrition/models/Stocks.py:322
 msgid "Vita_100_Injectable Initial"
 msgstr "Vitamine A 100 : Qté initiale"
 
-#: models/Stocks.py:323
+#: snisi_nutrition/models/Stocks.py:324
 msgid "Vita_100_Injectable Received"
 msgstr "Vitamine A 100 : Qté reçue"
 
-#: models/Stocks.py:325
+#: snisi_nutrition/models/Stocks.py:326
 msgid "Vita_100_Injectable Used"
 msgstr "Vitamine A 100 : Qté utilisée"
 
-#: models/Stocks.py:327
+#: snisi_nutrition/models/Stocks.py:328
 msgid "Vita_100_Injectable Lost"
 msgstr "Vitamine A 100 : Qté perdue"
 
-#: models/Stocks.py:343
+#: snisi_nutrition/models/Stocks.py:344
 msgid "Vita_200_Injectable Initial"
 msgstr "Vitamine A 200 : Qté initiale"
 
-#: models/Stocks.py:345
+#: snisi_nutrition/models/Stocks.py:346
 msgid "Vita_200_Injectable Received"
 msgstr "Vitamine A 200 : Qté reçue"
 
-#: models/Stocks.py:347
+#: snisi_nutrition/models/Stocks.py:348
 msgid "Vita_200_Injectable Used"
 msgstr "Vitamine A 200 : Qté utilisée"
 
-#: models/Stocks.py:349
+#: snisi_nutrition/models/Stocks.py:350
 msgid "Vita_200_Injectable Lost"
 msgstr "Vitamine A 200 : Qté perdue"
 
-#: models/Stocks.py:365
+#: snisi_nutrition/models/Stocks.py:366
 msgid "Iron_Folic_Acid Initial"
 msgstr "Fer/Acide folique : Qté initiale"
 
-#: models/Stocks.py:367
+#: snisi_nutrition/models/Stocks.py:368
 msgid "Iron_Folic_Acid Received"
 msgstr "Fer/Acide folique : Qté reçue"
 
-#: models/Stocks.py:369
+#: snisi_nutrition/models/Stocks.py:370
 msgid "Iron_Folic_Acid Used"
 msgstr "Fer/Acide folique : Qté utilisée"
 
-#: models/Stocks.py:371
+#: snisi_nutrition/models/Stocks.py:372
 msgid "Iron_Folic_Acid Lost"
 msgstr "Fer/Acide folique : Qté perdue"
 
-#: models/Stocks.py:470
+#: snisi_nutrition/models/Stocks.py:501
 msgid "Nutrition Inputs Report"
 msgstr "Rapport Stocks"
 
-#: models/Stocks.py:471
+#: snisi_nutrition/models/Stocks.py:502
 msgid "Nutrition Inputs Reports"
 msgstr "Rapports Stocks"
 
-#: models/Stocks.py:491
+#: snisi_nutrition/models/Stocks.py:522
 msgid "Aggregated Nutrition Inputs Report"
 msgstr "Rapport Stocks agrégé"
 
-#: models/Stocks.py:492
+#: snisi_nutrition/models/Stocks.py:523
 msgid "Aggregated Nutrition Inputs Reports"
 msgstr "Rapports Stocks agrégés"
 
-#: models/URENAM.py:35
+#: snisi_nutrition/models/URENAM.py:35
 msgid "[6-23m] Start of Month Male"
 msgstr "[6-23m] Total début du mois M"
 
-#: models/URENAM.py:37
+#: snisi_nutrition/models/URENAM.py:37
 msgid "[6-23m] Start of Month Female"
 msgstr "[6-23m] Total début du mois F"
 
-#: models/URENAM.py:40
+#: snisi_nutrition/models/URENAM.py:40
 msgid "[6-23m] New Cases"
 msgstr "[6-23m] Nouveaux cas"
 
-#: models/URENAM.py:42
+#: snisi_nutrition/models/URENAM.py:42
 msgid "[6-23m] Returned"
 msgstr "[6-23m] Réadmissions"
 
-#: models/URENAM.py:44
+#: snisi_nutrition/models/URENAM.py:44
 msgid "[6-23m] Total Admitted Male"
 msgstr "[6-23m] Total admissions M"
 
-#: models/URENAM.py:46
+#: snisi_nutrition/models/URENAM.py:46
 msgid "[6-23m] Total Admitted Female"
 msgstr "[6-23m] Total admissions F"
 
-#: models/URENAM.py:49
+#: snisi_nutrition/models/URENAM.py:49
 msgid "[6-23m] Healed"
 msgstr "[6-23m] Guéris"
 
-#: models/URENAM.py:51
+#: snisi_nutrition/models/URENAM.py:51
 msgid "[6-23m] Deceased"
 msgstr "[6-23m] Décès"
 
-#: models/URENAM.py:53
+#: snisi_nutrition/models/URENAM.py:53
 msgid "[6-23m] Abandon"
 msgstr "[6-23m] Abandons"
 
-#: models/URENAM.py:56
+#: snisi_nutrition/models/URENAM.py:56
 msgid "[6-23m] Not Responding"
 msgstr "[6-23m] Non répondants"
 
-#: models/URENAM.py:59
+#: snisi_nutrition/models/URENAM.py:59
 msgid "[6-23m] Total Out Male"
 msgstr "[6-23m] Total sorties M"
 
-#: models/URENAM.py:61
+#: snisi_nutrition/models/URENAM.py:61
 msgid "[6-23m] Total Out Female"
 msgstr "[6-23m] Total sorties F"
 
-#: models/URENAM.py:64
+#: snisi_nutrition/models/URENAM.py:64
 msgid "[6-23m] Referred"
 msgstr "[6-23m] Référence NUT "
 
-#: models/URENAM.py:67
+#: snisi_nutrition/models/URENAM.py:67
 msgid "[6-23m] End of Month Male"
 msgstr "[6-23m] Total fin du mois M"
 
-#: models/URENAM.py:69
+#: snisi_nutrition/models/URENAM.py:69
 msgid "[6-23m] End of Month Female"
 msgstr "[6-23m] Total fin du mois F"
 
-#: models/URENAM.py:73
+#: snisi_nutrition/models/URENAM.py:73
 msgid "[23-59m] Start of Month Male"
 msgstr "[23-59m] Total début du mois M"
 
-#: models/URENAM.py:75
+#: snisi_nutrition/models/URENAM.py:75
 msgid "[23-59m] Start of Month Female"
 msgstr "[23-59m] Total début du mois F"
 
-#: models/URENAM.py:78
+#: snisi_nutrition/models/URENAM.py:78
 msgid "[23-59m] New Cases"
 msgstr "[23-59m] Nouveaux cas"
 
-#: models/URENAM.py:80
+#: snisi_nutrition/models/URENAM.py:80
 msgid "[23-59m] Returned"
 msgstr "[23-59m] Réadmissions"
 
-#: models/URENAM.py:82
+#: snisi_nutrition/models/URENAM.py:82
 msgid "[23-59m] Total Admitted Male"
 msgstr "[23-59m] Total admissions M"
 
-#: models/URENAM.py:84
+#: snisi_nutrition/models/URENAM.py:84
 msgid "[23-59m] Total Admitted Female"
 msgstr "[23-59m] Total admissions F"
 
-#: models/URENAM.py:87
+#: snisi_nutrition/models/URENAM.py:87
 msgid "[23-59m] Healed"
 msgstr "[23-59m] Guéris"
 
-#: models/URENAM.py:89
+#: snisi_nutrition/models/URENAM.py:89
 msgid "[23-59m] Deceased"
 msgstr "[23-59m] Décès"
 
-#: models/URENAM.py:91
+#: snisi_nutrition/models/URENAM.py:91
 msgid "[23-59m] Abandon"
 msgstr "[23-59m] Abandons"
 
-#: models/URENAM.py:93
+#: snisi_nutrition/models/URENAM.py:93
 msgid "[23-59m] Not Responding"
 msgstr "[23-59m] Non répondants"
 
-#: models/URENAM.py:95
+#: snisi_nutrition/models/URENAM.py:95
 msgid "[23-59m] Total Out Male"
 msgstr "[23-59m] Total sorties M"
 
-#: models/URENAM.py:97
+#: snisi_nutrition/models/URENAM.py:97
 msgid "[23-59m] Total Out Female"
 msgstr "[23-59m] Total sorties F"
 
-#: models/URENAM.py:100
+#: snisi_nutrition/models/URENAM.py:100
 msgid "[23-59m] Referred"
 msgstr "[23-59m] Référence NUT"
 
-#: models/URENAM.py:103
+#: snisi_nutrition/models/URENAM.py:103
 msgid "[23-59m] End of Month Male"
 msgstr "[23-59m] Total fin du mois M"
 
-#: models/URENAM.py:105
+#: snisi_nutrition/models/URENAM.py:105
 msgid "[23-59m] End of Month Female"
 msgstr "[23-59m] Total fin du mois F"
 
-#: models/URENAM.py:109 models/URENAS.py:73 models/URENI.py:112
+#: snisi_nutrition/models/URENAM.py:109 snisi_nutrition/models/URENAS.py:73
+#: snisi_nutrition/models/URENI.py:112
 msgid "[59m+] Start of Month Male"
 msgstr "[59m+] Total début du mois M"
 
-#: models/URENAM.py:111 models/URENAS.py:75 models/URENI.py:114
+#: snisi_nutrition/models/URENAM.py:111 snisi_nutrition/models/URENAS.py:75
+#: snisi_nutrition/models/URENI.py:114
 msgid "[59m+] Start of Month Female"
 msgstr "[59m+] Total début du mois F"
 
-#: models/URENAM.py:114 models/URENAS.py:78 models/URENI.py:117
+#: snisi_nutrition/models/URENAM.py:114 snisi_nutrition/models/URENAS.py:78
+#: snisi_nutrition/models/URENI.py:117
 msgid "[59m+] New Cases"
 msgstr "[59m+] Nouveaux cas"
 
-#: models/URENAM.py:116 models/URENAS.py:80 models/URENI.py:119
+#: snisi_nutrition/models/URENAM.py:116 snisi_nutrition/models/URENAS.py:80
+#: snisi_nutrition/models/URENI.py:119
 msgid "[59m+] Returned"
 msgstr "[59m+] Réadmissions"
 
-#: models/URENAM.py:118 models/URENAS.py:82 models/URENI.py:121
+#: snisi_nutrition/models/URENAM.py:118 snisi_nutrition/models/URENAS.py:82
+#: snisi_nutrition/models/URENI.py:121
 msgid "[59m+] Total Admitted Male"
 msgstr "[59m+] Total admissions M"
 
-#: models/URENAM.py:120 models/URENAS.py:84 models/URENI.py:123
+#: snisi_nutrition/models/URENAM.py:120 snisi_nutrition/models/URENAS.py:84
+#: snisi_nutrition/models/URENI.py:123
 msgid "[59m+] Total Admitted Female"
 msgstr "[59m+] Total admissions F"
 
-#: models/URENAM.py:123 models/URENAS.py:89 models/URENI.py:128
+#: snisi_nutrition/models/URENAM.py:123 snisi_nutrition/models/URENAS.py:89
+#: snisi_nutrition/models/URENI.py:128
 msgid "[59m+] Healed"
 msgstr "[59m+] Guéris"
 
-#: models/URENAM.py:125 models/URENAS.py:91 models/URENI.py:130
+#: snisi_nutrition/models/URENAM.py:125 snisi_nutrition/models/URENAS.py:91
+#: snisi_nutrition/models/URENI.py:130
 msgid "[59m+] Deceased"
 msgstr "[59m+] Décès"
 
-#: models/URENAM.py:127 models/URENAS.py:93 models/URENI.py:132
+#: snisi_nutrition/models/URENAM.py:127 snisi_nutrition/models/URENAS.py:93
+#: snisi_nutrition/models/URENI.py:132
 msgid "[59m+] Abandon"
 msgstr "[59m+] Abandons"
 
-#: models/URENAM.py:129 models/URENAS.py:95
+#: snisi_nutrition/models/URENAM.py:129 snisi_nutrition/models/URENAS.py:95
 msgid "[59m+] Not Responding"
 msgstr "[59m+] Non répondants"
 
-#: models/URENAM.py:131 models/URENAS.py:97 models/URENI.py:136
+#: snisi_nutrition/models/URENAM.py:131 snisi_nutrition/models/URENAS.py:97
+#: snisi_nutrition/models/URENI.py:136
 msgid "[59m+] Total Out Male"
 msgstr "[59m+] Total sorties M"
 
-#: models/URENAM.py:133 models/URENAS.py:99 models/URENI.py:138
+#: snisi_nutrition/models/URENAM.py:133 snisi_nutrition/models/URENAS.py:99
+#: snisi_nutrition/models/URENI.py:138
 msgid "[59m+] Total Out Female"
 msgstr "[59m+] Total sorties F"
 
-#: models/URENAM.py:136 models/URENAS.py:102 models/URENI.py:141
+#: snisi_nutrition/models/URENAM.py:136 snisi_nutrition/models/URENAS.py:102
+#: snisi_nutrition/models/URENI.py:141
 msgid "[59m+] Referred"
 msgstr "[59m+] Référence NUT"
 
-#: models/URENAM.py:139 models/URENAS.py:105 models/URENI.py:144
+#: snisi_nutrition/models/URENAM.py:139 snisi_nutrition/models/URENAS.py:105
+#: snisi_nutrition/models/URENI.py:144
 msgid "[59m+] End of Month Male"
 msgstr "[59m+] Total fin du mois M"
 
-#: models/URENAM.py:141 models/URENAS.py:107 models/URENI.py:146
+#: snisi_nutrition/models/URENAM.py:141 snisi_nutrition/models/URENAS.py:107
+#: snisi_nutrition/models/URENI.py:146
 msgid "[59m+] End of Month Female"
 msgstr "[59m+] Total fin du mois F"
 
-#: models/URENAM.py:145
+#: snisi_nutrition/models/URENAM.py:145
 msgid "[PW/BF] Start of Month Female"
 msgstr "[FE/FA] Total début du mois F"
 
-#: models/URENAM.py:148
+#: snisi_nutrition/models/URENAM.py:148
 msgid "[PW/BF] New Cases"
 msgstr "[FE/FA] Nouveaux cas"
 
-#: models/URENAM.py:150
+#: snisi_nutrition/models/URENAM.py:150
 msgid "[PW/BF] Returned"
 msgstr "[FE/FA] Réadmissions"
 
-#: models/URENAM.py:152
+#: snisi_nutrition/models/URENAM.py:152
 msgid "[PW/BF] Total Admitted Female"
 msgstr "[FE/FA] Total admissions F"
 
-#: models/URENAM.py:155
+#: snisi_nutrition/models/URENAM.py:155
 msgid "[PW/BF] Healed"
 msgstr "[FE/FA] Guéris"
 
-#: models/URENAM.py:157
+#: snisi_nutrition/models/URENAM.py:157
 msgid "[PW/BF] Deceased"
 msgstr "[FE/FA] Décès"
 
-#: models/URENAM.py:159
+#: snisi_nutrition/models/URENAM.py:159
 msgid "[PW/BF] Abandon"
 msgstr "[FE/FA] Abandons"
 
-#: models/URENAM.py:161
+#: snisi_nutrition/models/URENAM.py:161
 msgid "[PW/BF] Not Responding"
 msgstr "[FE/FA] Non répondants"
 
-#: models/URENAM.py:163
+#: snisi_nutrition/models/URENAM.py:163
 msgid "[PW/BF] Total Out Female"
 msgstr "[FE/FA] Total sorties F"
 
-#: models/URENAM.py:166
+#: snisi_nutrition/models/URENAM.py:166
 msgid "[PW/BF] Referred"
 msgstr "[FE/FA] Référence NUT"
 
-#: models/URENAM.py:169
+#: snisi_nutrition/models/URENAM.py:169
 msgid "[PW/BF] End of Month Female"
 msgstr "[FE/FA] Total fin du mois F"
 
-#: models/URENAM.py:173
+#: snisi_nutrition/models/URENAM.py:173
 msgid "[Ex-SAM] Start of Month Male"
 msgstr "[ExMAS] Total début du mois M"
 
-#: models/URENAM.py:175
+#: snisi_nutrition/models/URENAM.py:175
 msgid "[Ex-SAM] Start of Month Female"
 msgstr "[ExMAS] Total début du mois F"
 
-#: models/URENAM.py:178
+#: snisi_nutrition/models/URENAM.py:178
 msgid "[Ex-SAM] Grand Total In"
 msgstr "[ExMAS] Total général admissions"
 
-#: models/URENAM.py:181
+#: snisi_nutrition/models/URENAM.py:181
 msgid "[Ex-SAM] Grand Total Out"
 msgstr "[ExMAS] Total général sorties"
 
-#: models/URENAM.py:184
+#: snisi_nutrition/models/URENAM.py:184
 msgid "[Ex-SAM] End of Month Male"
 msgstr "[ExMAS] Total fin du mois M"
 
-#: models/URENAM.py:186
+#: snisi_nutrition/models/URENAM.py:186
 msgid "[Ex-SAM] End of Month Female"
 msgstr "[ExMAS] Total fin du mois F"
 
-#: models/URENAM.py:468
+#: snisi_nutrition/models/URENAM.py:468
 msgid "URENAM Report"
 msgstr "Rapport URENAM"
 
-#: models/URENAM.py:469
+#: snisi_nutrition/models/URENAM.py:469
 msgid "URENAM Reports"
 msgstr "Rapports URENAM"
 
-#: models/URENAM.py:489
+#: snisi_nutrition/models/URENAM.py:489
 msgid "Aggregated URENAM Report"
 msgstr "Rapport URENAM agrégé"
 
-#: models/URENAM.py:490
+#: snisi_nutrition/models/URENAM.py:490
 msgid "Aggregated URENAM Reports"
 msgstr "Rapports URENAM agrégés"
 
-#: models/URENAS.py:35 models/URENI.py:74
+#: snisi_nutrition/models/URENAS.py:35 snisi_nutrition/models/URENI.py:74
 msgid "[6-59m] Start of Month Male"
 msgstr "[6-59m] Total début du mois M"
 
-#: models/URENAS.py:37 models/URENI.py:76
+#: snisi_nutrition/models/URENAS.py:37 snisi_nutrition/models/URENI.py:76
 msgid "[6-59m] Start of Month Female"
 msgstr "[6-59m] Total début du mois F"
 
-#: models/URENAS.py:40 models/URENI.py:79
+#: snisi_nutrition/models/URENAS.py:40 snisi_nutrition/models/URENI.py:79
 msgid "[6-59m] New Cases"
 msgstr "[6-59m] Nouveaux cas"
 
-#: models/URENAS.py:42 models/URENI.py:81
+#: snisi_nutrition/models/URENAS.py:42 snisi_nutrition/models/URENI.py:81
 msgid "[6-59m] Returned"
 msgstr "[6-59m] Réadmissions"
 
-#: models/URENAS.py:44 models/URENI.py:83
+#: snisi_nutrition/models/URENAS.py:44 snisi_nutrition/models/URENI.py:83
 msgid "[6-59m] Total Admitted Male"
 msgstr "[6-59m] Total admissions M"
 
-#: models/URENAS.py:46 models/URENI.py:85
+#: snisi_nutrition/models/URENAS.py:46 snisi_nutrition/models/URENI.py:85
 msgid "[6-59m] Total Admitted Female"
 msgstr "[6-59m] Total admissions F"
 
-#: models/URENAS.py:48
+#: snisi_nutrition/models/URENAS.py:48
 msgid "[6-59m] Transferred from URENI"
 msgstr "[6-59m] Transf. de l'URENI"
 
-#: models/URENAS.py:51 models/URENI.py:90
+#: snisi_nutrition/models/URENAS.py:51 snisi_nutrition/models/URENI.py:90
 msgid "[6-59m] Healed"
 msgstr "[6-59m] Guéris"
 
-#: models/URENAS.py:53 models/URENI.py:92
+#: snisi_nutrition/models/URENAS.py:53 snisi_nutrition/models/URENI.py:92
 msgid "[6-59m] Deceased"
 msgstr "[6-59m] Décès"
 
-#: models/URENAS.py:55 models/URENI.py:94
+#: snisi_nutrition/models/URENAS.py:55 snisi_nutrition/models/URENI.py:94
 msgid "[6-59m] Abandon"
 msgstr "[6-59m] Abandons"
 
-#: models/URENAS.py:57
+#: snisi_nutrition/models/URENAS.py:57
 msgid "[6-59m] Not Responding"
 msgstr "[6-59m] Non répondants"
 
-#: models/URENAS.py:59 models/URENI.py:98
+#: snisi_nutrition/models/URENAS.py:59 snisi_nutrition/models/URENI.py:98
 msgid "[6-59m] Total Out Male"
 msgstr "[6-59m] Total sorties M"
 
-#: models/URENAS.py:61 models/URENI.py:100
+#: snisi_nutrition/models/URENAS.py:61 snisi_nutrition/models/URENI.py:100
 msgid "[6-59m] Total Out Female"
 msgstr "[6-59m] Total sorties F"
 
-#: models/URENAS.py:64 models/URENI.py:103
+#: snisi_nutrition/models/URENAS.py:64 snisi_nutrition/models/URENI.py:103
 msgid "[6-59m] Referred"
 msgstr "[6-59m] Réf. URENI"
 
-#: models/URENAS.py:67 models/URENI.py:106
+#: snisi_nutrition/models/URENAS.py:67 snisi_nutrition/models/URENI.py:106
 msgid "[6-59m] End of Month Male"
 msgstr "[6-59m] Total fin du mois M"
 
-#: models/URENAS.py:69 models/URENI.py:108
+#: snisi_nutrition/models/URENAS.py:69 snisi_nutrition/models/URENI.py:108
 msgid "[6-59m] End of Month Female"
 msgstr "[6-59m] Total fin du mois F"
 
-#: models/URENAS.py:86
+#: snisi_nutrition/models/URENAS.py:86
 msgid "[59m+] Transferred from URENI"
 msgstr "[59m+] Transf. de l'URENI"
 
-#: models/URENAS.py:201
+#: snisi_nutrition/models/URENAS.py:201
 msgid "URENAS Report"
 msgstr "Rapport URENAS"
 
-#: models/URENAS.py:202
+#: snisi_nutrition/models/URENAS.py:202
 msgid "URENAS Reports"
 msgstr "Rapports URENAS"
 
-#: models/URENAS.py:222
+#: snisi_nutrition/models/URENAS.py:222
 msgid "Aggregated URENAS Report"
 msgstr "Rapport URENAS agrégé"
 
-#: models/URENAS.py:223
+#: snisi_nutrition/models/URENAS.py:223
 msgid "Aggregated URENAS Reports"
 msgstr "Rapports URENAS agrégés"
 
-#: models/URENI.py:35
+#: snisi_nutrition/models/URENI.py:35
 msgid "[0-6m] Start of Month Male"
 msgstr "[0-6m] Total début du mois M"
 
-#: models/URENI.py:37
+#: snisi_nutrition/models/URENI.py:37
 msgid "[0-6m] Start of Month Female"
 msgstr "[0-6m] Total début du mois F"
 
-#: models/URENI.py:40
+#: snisi_nutrition/models/URENI.py:40
 msgid "[0-6m] New Cases"
 msgstr "[0-6m] Nouveaux cas"
 
-#: models/URENI.py:42
+#: snisi_nutrition/models/URENI.py:42
 msgid "[0-6m] Returned"
 msgstr "[0-6m] Réadmissions"
 
-#: models/URENI.py:44
+#: snisi_nutrition/models/URENI.py:44
 msgid "[0-6m] Total Admitted Male"
 msgstr "[0-6m] Total admissions M"
 
-#: models/URENI.py:46
+#: snisi_nutrition/models/URENI.py:46
 msgid "[0-6m] Total Admitted Female"
 msgstr "[0-6m] Total admissions F"
 
-#: models/URENI.py:49
+#: snisi_nutrition/models/URENI.py:49
 msgid "[0-6m] Transferred"
 msgstr "[0-6m] Transfert"
 
-#: models/URENI.py:52
+#: snisi_nutrition/models/URENI.py:52
 msgid "[0-6m] Healed"
 msgstr "[0-6m] Guéris"
 
-#: models/URENI.py:54
+#: snisi_nutrition/models/URENI.py:54
 msgid "[0-6m] Deceased"
 msgstr "[0-6m] Décès"
 
-#: models/URENI.py:56
+#: snisi_nutrition/models/URENI.py:56
 msgid "[0-6m] Abandon"
 msgstr "[0-6m] Abandons"
 
-#: models/URENI.py:58
+#: snisi_nutrition/models/URENI.py:58
 msgid "[0-6m] Not Respondant"
 msgstr "[0-6m] Non répondants"
 
-#: models/URENI.py:60
+#: snisi_nutrition/models/URENI.py:60
 msgid "[0-6m] Total Out Male"
 msgstr "[0-6m] Total sorties M"
 
-#: models/URENI.py:62
+#: snisi_nutrition/models/URENI.py:62
 msgid "[0-6m] Total Out Female"
 msgstr "[0-6m] Total sorties F"
 
-#: models/URENI.py:65
+#: snisi_nutrition/models/URENI.py:65
 msgid "[0-6m] Referred"
 msgstr "[0-6m] Réf."
 
-#: models/URENI.py:68
+#: snisi_nutrition/models/URENI.py:68
 msgid "[0-6m] End of Month Male"
 msgstr "[0-6m] Total fin du mois M"
 
-#: models/URENI.py:70
+#: snisi_nutrition/models/URENI.py:70
 msgid "[0-6m] End of Month Female"
 msgstr "[0-6m] Total fin du mois F"
 
-#: models/URENI.py:87
+#: snisi_nutrition/models/URENI.py:87
 msgid "[6-59m] Transferred"
 msgstr "[6-59m] Transf."
 
-#: models/URENI.py:96
+#: snisi_nutrition/models/URENI.py:96
 msgid "[6-59m] Not Respondant"
 msgstr "[0-6m] Non répondants"
 
-#: models/URENI.py:125
+#: snisi_nutrition/models/URENI.py:125
 msgid "[59m+] Transferred"
 msgstr "[59m+] Transf. "
 
-#: models/URENI.py:134
+#: snisi_nutrition/models/URENI.py:134
 msgid "[59m+] Not Respondant"
 msgstr "[59m+] Non répondants"
 
-#: models/URENI.py:277
+#: snisi_nutrition/models/URENI.py:277
 msgid "URENI Report"
 msgstr "Rapport URENI"
 
-#: models/URENI.py:278
+#: snisi_nutrition/models/URENI.py:278
 msgid "URENI Reports"
 msgstr "Rapports URENI"
 
-#: models/URENI.py:298
+#: snisi_nutrition/models/URENI.py:298
 msgid "Aggregated URENI Report"
 msgstr "Rapport URENI agrégé"
 
-#: models/URENI.py:299
+#: snisi_nutrition/models/URENI.py:299
 msgid "Aggregated URENI Reports"
 msgstr "Rapports URENI agrégés"
 
-#: models/Weekly.py:37
+#: snisi_nutrition/models/Weekly.py:40
 msgid "Week Period"
 msgstr "Période hebdomadaire"
 
-#: models/Weekly.py:38
+#: snisi_nutrition/models/Weekly.py:41
 msgid "Week Periods"
 msgstr "Périodes hebdomadaire"
 
-#: models/Weekly.py:82 models/Weekly.py:118
+#: snisi_nutrition/models/Weekly.py:102 snisi_nutrition/models/Weekly.py:138
 msgid "Week Reporting Period"
 msgstr "Période de rapportage hebdomadaire"
 
-#: models/Weekly.py:83 models/Weekly.py:119
+#: snisi_nutrition/models/Weekly.py:103 snisi_nutrition/models/Weekly.py:139
 msgid "Week Reporting Periods"
 msgstr "Périodes de rapportage hebdomadaire"
 
-#: models/Weekly.py:153
+#: snisi_nutrition/models/Weekly.py:173
 msgid "Week District Validation Period"
 msgstr "Période de validation hebdomadaire District"
 
-#: models/Weekly.py:154
+#: snisi_nutrition/models/Weekly.py:174
 msgid "Week District Validation Periods"
 msgstr "Périodes de validation hebdomadaire District"
 
-#: models/Weekly.py:188
+#: snisi_nutrition/models/Weekly.py:208
 msgid "Week Region Validation Period"
 msgstr "Période de validation hebdomadaire Région"
 
-#: models/Weekly.py:189
+#: snisi_nutrition/models/Weekly.py:209
 msgid "Week Region Validation Periods"
 msgstr "Périodes de validation hebdomadaire Région"
 
-#: models/Weekly.py:220
+#: snisi_nutrition/models/Weekly.py:240
 msgid "MAM Screening"
 msgstr "Dépistage MAM"
 
-#: models/Weekly.py:222
+#: snisi_nutrition/models/Weekly.py:242
 msgid "MAM Cases"
 msgstr "Cas MAM"
 
-#: models/Weekly.py:224
+#: snisi_nutrition/models/Weekly.py:244
 msgid "MAM Deaths"
 msgstr "Décès MAM"
 
-#: models/Weekly.py:227
+#: snisi_nutrition/models/Weekly.py:247
 msgid "SAM Screening"
 msgstr "Dépistage MAS"
 
-#: models/Weekly.py:229
+#: snisi_nutrition/models/Weekly.py:249
 msgid "SAM Cases"
 msgstr "Cas MAS"
 
-#: models/Weekly.py:231
+#: snisi_nutrition/models/Weekly.py:251
 msgid "SAM Deaths"
 msgstr "Décès MAS"
 
-#: models/Weekly.py:234
+#: snisi_nutrition/models/Weekly.py:254
 msgid "SAM+ Screening"
 msgstr "Dépistage MAS-C"
 
-#: models/Weekly.py:236
+#: snisi_nutrition/models/Weekly.py:256
 msgid "SAM+ Cases"
 msgstr "Cas MAS-C"
 
-#: models/Weekly.py:238
+#: snisi_nutrition/models/Weekly.py:258
 msgid "SAM+ Deaths"
 msgstr "Décès MAS-C"
 
-#: models/Weekly.py:273
+#: snisi_nutrition/models/Weekly.py:311
 msgid "Weekly Nutrition Report"
 msgstr "Rapport Nut hebdomadaire"
 
-#: models/Weekly.py:274
+#: snisi_nutrition/models/Weekly.py:312
 msgid "Weekly Nutrition Reports"
 msgstr "Rapports Nut hebdomadaire"
 
-#: models/Weekly.py:294
+#: snisi_nutrition/models/Weekly.py:332
 msgid "Aggregated Weekly Nutrition Report"
 msgstr "Rapport Nut hebdomadaire agrégé"
 
-#: models/Weekly.py:295
+#: snisi_nutrition/models/Weekly.py:333
 msgid "Aggregated Weekly Nutrition Reports"
 msgstr "Rapports Nut hebdomadaire agrégés"
 
-#: xls_import.py:40
+#: snisi_nutrition/xls_import.py:39
 msgid "Health Center"
 msgstr "Centre de santé"
 
-#: xls_import.py:43
+#: snisi_nutrition/xls_import.py:42
 msgid "Month"
 msgstr "Mois"
 
-#: xls_import.py:46
+#: snisi_nutrition/xls_import.py:45
 msgid "Year"
 msgstr "Année"

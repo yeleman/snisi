@@ -82,8 +82,10 @@
                 {% if user|allowed_to_home:"access_trachoma" %}
                 <a class="pure-menu-heading">CÉCITÉ</a>
                 <ul>
-                    <li><a href="{% url 'trachoma_missions' %}">Données brutes</a></li>
-                    <li><a href="{% url 'trachoma_dashboard' %}">Données analysées</a></li>
+                    <li><a href="{% url 'trachoma_missions' %}">Données brutes TT</a></li>
+                    <li><a href="{% url 'trachoma_dashboard' %}">Données analysées TT</a></li>
+                    <li><a class="pure-button-disabled" href="">Données brutes cataracte</a></li>
+                    <li><a class="pure-button-disabled" href="">Données analysées cataracte</a></li>
                 </ul>
                 {% endif %}
 

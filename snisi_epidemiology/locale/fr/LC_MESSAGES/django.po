@@ -7,30 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
-"PO-Revision-Date: 2015-01-14 09:45-0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:55+0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:88
+#: snisi_epidemiology/integrity.py:88
 #, python-brace-format
 msgid "{field_name}: ({case}) number case lower than ({death}) number death"
 msgstr ""
 "{field_name}: Nombre de cas ({case}) inférieur au nombre de décès ({death})."
 
-#: integrity.py:99 integrity.py:239 integrity.py:355
+#: snisi_epidemiology/integrity.py:99 snisi_epidemiology/integrity.py:239
+#: snisi_epidemiology/integrity.py:355
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Données manquantes pour {f}"
 
-#: integrity.py:171
+#: snisi_epidemiology/integrity.py:171
 #, python-brace-format
 msgid ""
 "{field_name} ({hc}): ({case}) number case lower than ({death}) number death"
@@ -38,258 +39,268 @@ msgstr ""
 "{field_name} ({hc}): Nombre de cas ({case}) inférieur au nombre de décès "
 "({death})."
 
-#: integrity.py:249
+#: snisi_epidemiology/integrity.py:249
 #, python-brace-format
 msgid "Missing data for {f}/{row}"
 msgstr "Données manquantes pour {f}/{row}"
 
-#: models.py:39
+#: snisi_epidemiology/models.py:39
 msgid "Week Period"
 msgstr "Période semaine"
 
-#: models.py:40
+#: snisi_epidemiology/models.py:40
 msgid "Week Periods"
 msgstr "Périodes semaine"
 
-#: models.py:84
+#: snisi_epidemiology/models.py:84
 msgid "Week Reporting Period"
 msgstr "Période rapportage semaine"
 
-#: models.py:85
+#: snisi_epidemiology/models.py:85
 msgid "Week Reporting Periods"
 msgstr "Périodes rapportage semaine"
 
-#: models.py:119
+#: snisi_epidemiology/models.py:119
 msgid "Week District Validation Period"
 msgstr "Période validation district semaine"
 
-#: models.py:120
+#: snisi_epidemiology/models.py:120
 msgid "Week District Validation Periods"
 msgstr "Périodes validation district semaine"
 
-#: models.py:154
+#: snisi_epidemiology/models.py:154
 msgid "Week Region Validation Period"
 msgstr "Période validation région semaine"
 
-#: models.py:155
+#: snisi_epidemiology/models.py:155
 msgid "Week Region Validation Periods"
 msgstr "Périodes validation région semaine"
 
-#: models.py:186
+#: snisi_epidemiology/models.py:186
 msgid "Ebola"
 msgstr "Ébola"
 
-#: models.py:187
+#: snisi_epidemiology/models.py:187
 msgid "AFP"
 msgstr "Paralysie flasque aiguë"
 
-#: models.py:188
+#: snisi_epidemiology/models.py:188
 msgid "Influenza A H1N1"
 msgstr "Grippe A H1N1"
 
-#: models.py:189
+#: snisi_epidemiology/models.py:189
 msgid "Cholera"
 msgstr "Choléra"
 
-#: models.py:190
+#: snisi_epidemiology/models.py:190
 msgid "Red Diarrhea"
 msgstr "Diarrhée rouge"
 
-#: models.py:191
+#: snisi_epidemiology/models.py:191
 msgid "Measles"
 msgstr "Rougeole"
 
-#: models.py:192
+#: snisi_epidemiology/models.py:192
 msgid "Yellow Fever"
 msgstr "Fièvre jaune"
 
-#: models.py:193
+#: snisi_epidemiology/models.py:193
 msgid "NNT"
 msgstr "TNN"
 
-#: models.py:194
+#: snisi_epidemiology/models.py:194
 msgid "Meningitis"
 msgstr "Méningite"
 
-#: models.py:195
+#: snisi_epidemiology/models.py:195
 msgid "Rabies"
 msgstr "Rage"
 
-#: models.py:196
+#: snisi_epidemiology/models.py:196
 msgid "Acute Measles Diarrhea"
 msgstr "Rougeole aiguë et diarrhée"
 
-#: models.py:197
+#: snisi_epidemiology/models.py:197
 msgid "Other Notifiable Diseases"
 msgstr "Maladie à déclaration obligatoire"
 
-#: models.py:200
+#: snisi_epidemiology/models.py:200
 msgid "Suspected Ebola cases"
 msgstr "Cas suspects Ébola"
 
-#: models.py:201
+#: snisi_epidemiology/models.py:201
 msgid "Suspected Ebola death"
 msgstr "Décès suspects Ébola"
 
-#: models.py:204
+#: snisi_epidemiology/models.py:204
 msgid "Suspected AFP cases"
 msgstr "Cas suspects paralysie flasque aiguë"
 
-#: models.py:206
+#: snisi_epidemiology/models.py:206
 msgid "Suspected AFP death"
 msgstr "Décès suspects paralysie flasque aiguë"
 
-#: models.py:209
+#: snisi_epidemiology/models.py:209
 msgid "Suspected Influenza A H1N1 cases"
 msgstr "Cas suspects grippe A H1N1"
 
-#: models.py:211
+#: snisi_epidemiology/models.py:211
 msgid "Suspected Influenza A H1N1 death"
 msgstr "Décès suspects grippe A H1N1"
 
-#: models.py:213
+#: snisi_epidemiology/models.py:213
 msgid "Suspected Cholera cases"
 msgstr "Cas suspects choléra"
 
-#: models.py:214
+#: snisi_epidemiology/models.py:214
 msgid "Suspected Cholera death"
 msgstr "Décès suspects choléra"
 
-#: models.py:216
+#: snisi_epidemiology/models.py:216
 msgid "Suspected Red Diarrhea cases"
 msgstr "Cas suspects diarrhée rouge"
 
-#: models.py:217
+#: snisi_epidemiology/models.py:217
 msgid "Suspected Red Diarrhea death"
 msgstr "Décès suspects diarrhée rouge"
 
-#: models.py:219
+#: snisi_epidemiology/models.py:219
 msgid "Suspected Measles cases"
 msgstr "Cas suspects rougeole"
 
-#: models.py:220
+#: snisi_epidemiology/models.py:220
 msgid "Suspected Measles death"
 msgstr "Décès suspects rougeole"
 
-#: models.py:222
+#: snisi_epidemiology/models.py:222
 msgid "Suspected Yellow Fever cases"
 msgstr "Cas suspects fièvre jaune"
 
-#: models.py:223
+#: snisi_epidemiology/models.py:223
 msgid "Suspected Yellow Fever death"
 msgstr "Décès suspects fièvre jaune"
 
-#: models.py:225
+#: snisi_epidemiology/models.py:225
 msgid "Suspected NNT cases"
 msgstr "Cas suspects TNN"
 
-#: models.py:226
+#: snisi_epidemiology/models.py:226
 msgid "Suspected NNT death"
 msgstr "Décès suspects TNN"
 
-#: models.py:228
+#: snisi_epidemiology/models.py:228
 msgid "Suspected Meningitis cases"
 msgstr "Cas suspects méningite"
 
-#: models.py:229
+#: snisi_epidemiology/models.py:229
 msgid "Suspected Meningitis death"
 msgstr "Décès suspect méningite"
 
-#: models.py:231
+#: snisi_epidemiology/models.py:231
 msgid "Suspected Rabies cases"
 msgstr "Cas suspects rage"
 
-#: models.py:232
+#: snisi_epidemiology/models.py:232
 msgid "Suspected Rabies death"
 msgstr "Décès suspects rage"
 
-#: models.py:235
+#: snisi_epidemiology/models.py:235
 msgid "Suspected Acute Measles Diarrhea cases"
 msgstr "Cas suspects rougeole aiguë et diarrhée"
 
-#: models.py:237
+#: snisi_epidemiology/models.py:237
 msgid "Suspected Acute Measles Diarrhea death"
 msgstr "Décès suspects rougeole aiguë et diarrhée"
 
-#: models.py:240
+#: snisi_epidemiology/models.py:240
 msgid "Suspected Other Notifiable Diseases cases"
 msgstr "Autres cas suspects de maladie à déclaration obligatoire"
 
-#: models.py:242
+#: snisi_epidemiology/models.py:242
 msgid "Suspected Other Notifiable Diseases death"
 msgstr "Autres décès suspects maladie à déclaration obligatoire"
 
-#: models.py:294
+#: snisi_epidemiology/models.py:294
 #, python-brace-format
 msgid "{cscom} / {period} / {receipt}"
 msgstr "{cscom} / {period} / {receipt}"
 
-#: models.py:358
+#: snisi_epidemiology/models.py:358
 msgid "Epidemiology Report"
 msgstr "Rapport épidémiologie"
 
-#: models.py:359
+#: snisi_epidemiology/models.py:359
 msgid "Epidemiology Reports"
 msgstr "Rapports épidémiologie"
 
-#: models.py:379
+#: snisi_epidemiology/models.py:379
 msgid "Aggregated Epidemiology Report"
 msgstr "Rapport épidémiologie agrégé"
 
-#: models.py:380
+#: snisi_epidemiology/models.py:380
 msgid "Aggregated Epidemiology Reports"
 msgstr "Rapports épidémiologie agrégés"
 
-#: models.py:383
+#: snisi_epidemiology/models.py:383
 msgid "Primary. Sources"
 msgstr "Sources primaires"
 
-#: models.py:407
+#: snisi_epidemiology/models.py:407
 msgid "Epidemiology Alert"
 msgstr "Alerte épidémiologie"
 
-#: models.py:408
+#: snisi_epidemiology/models.py:408
 msgid "Epidemiology Alerts"
 msgstr "Alerte épidémiologie"
 
-#: models.py:411
+#: snisi_epidemiology/models.py:411
 msgid "Disease"
 msgstr "Maladie"
 
-#: models.py:412
+#: snisi_epidemiology/models.py:412
 msgid "Suspected cases"
 msgstr "Cas suspects"
 
-#: models.py:413
+#: snisi_epidemiology/models.py:413
 msgid "Confirmed cases"
 msgstr "Cas confirmés"
 
-#: models.py:414
+#: snisi_epidemiology/models.py:414
 msgid "Deaths"
 msgstr "Décès"
 
-#: xls_import.py:34 xls_import.py:144 xls_import.py:153 xls_import.py:238
-#: xls_import.py:323 xls_import.py:408 xls_import.py:493 xls_import.py:578
-#: xls_import.py:663 xls_import.py:748 xls_import.py:833 xls_import.py:918
-#: xls_import.py:1003 xls_import.py:1088 xls_import.py:1173 xls_import.py:1258
-#: xls_import.py:1343 xls_import.py:1428 xls_import.py:1513 xls_import.py:1598
-#: xls_import.py:1683 xls_import.py:1768 xls_import.py:1853 xls_import.py:1938
-#: xls_import.py:2023 xls_import.py:2108 xls_import.py:2193 xls_import.py:2278
-#: xls_import.py:2363 xls_import.py:2448 xls_import.py:2533 xls_import.py:2618
-#: xls_import.py:2703 xls_import.py:2788 xls_import.py:2873 xls_import.py:2958
-#: xls_import.py:3043 xls_import.py:3128 xls_import.py:3213 xls_import.py:3298
-#: xls_import.py:3383 xls_import.py:3468
+#: snisi_epidemiology/xls_import.py:33 snisi_epidemiology/xls_import.py:143
+#: snisi_epidemiology/xls_import.py:152 snisi_epidemiology/xls_import.py:237
+#: snisi_epidemiology/xls_import.py:322 snisi_epidemiology/xls_import.py:407
+#: snisi_epidemiology/xls_import.py:492 snisi_epidemiology/xls_import.py:577
+#: snisi_epidemiology/xls_import.py:662 snisi_epidemiology/xls_import.py:747
+#: snisi_epidemiology/xls_import.py:832 snisi_epidemiology/xls_import.py:917
+#: snisi_epidemiology/xls_import.py:1002 snisi_epidemiology/xls_import.py:1087
+#: snisi_epidemiology/xls_import.py:1172 snisi_epidemiology/xls_import.py:1257
+#: snisi_epidemiology/xls_import.py:1342 snisi_epidemiology/xls_import.py:1427
+#: snisi_epidemiology/xls_import.py:1512 snisi_epidemiology/xls_import.py:1597
+#: snisi_epidemiology/xls_import.py:1682 snisi_epidemiology/xls_import.py:1767
+#: snisi_epidemiology/xls_import.py:1852 snisi_epidemiology/xls_import.py:1937
+#: snisi_epidemiology/xls_import.py:2022 snisi_epidemiology/xls_import.py:2107
+#: snisi_epidemiology/xls_import.py:2192 snisi_epidemiology/xls_import.py:2277
+#: snisi_epidemiology/xls_import.py:2362 snisi_epidemiology/xls_import.py:2447
+#: snisi_epidemiology/xls_import.py:2532 snisi_epidemiology/xls_import.py:2617
+#: snisi_epidemiology/xls_import.py:2702 snisi_epidemiology/xls_import.py:2787
+#: snisi_epidemiology/xls_import.py:2872 snisi_epidemiology/xls_import.py:2957
+#: snisi_epidemiology/xls_import.py:3042 snisi_epidemiology/xls_import.py:3127
+#: snisi_epidemiology/xls_import.py:3212 snisi_epidemiology/xls_import.py:3297
+#: snisi_epidemiology/xls_import.py:3382 snisi_epidemiology/xls_import.py:3467
 msgid "Health Center"
 msgstr "Centre de santé"
 
-#: xls_import.py:36 xls_import.py:146
+#: snisi_epidemiology/xls_import.py:35 snisi_epidemiology/xls_import.py:145
 msgid "Day"
 msgstr "Jour"
 
-#: xls_import.py:38 xls_import.py:148
+#: snisi_epidemiology/xls_import.py:37 snisi_epidemiology/xls_import.py:147
 msgid "Month"
 msgstr "Mois"
 
-#: xls_import.py:40 xls_import.py:150
+#: snisi_epidemiology/xls_import.py:39 snisi_epidemiology/xls_import.py:149
 msgid "Year"
 msgstr "Année"

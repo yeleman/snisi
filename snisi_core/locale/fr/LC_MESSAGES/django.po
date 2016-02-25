@@ -7,810 +7,842 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
-"PO-Revision-Date: 2015-02-16 13:52-0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:55+0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../../..\n"
+"X-Poedit-SearchPath-0: .\n"
 
-#: admin.py:74
+#: snisi_core/admin.py:74
 msgid "Personal info"
 msgstr "Informations personnelles"
 
-#: admin.py:77
+#: snisi_core/admin.py:77
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:79
+#: snisi_core/admin.py:79
 msgid "Important dates"
 msgstr "Dates importantes"
 
-#: integrity.py:91
+#: snisi_core/integrity.py:91
 msgid "Missing Data for {}"
 msgstr "Donnée manquante pour {}"
 
-#: models/Actions.py:21 models/Actions.py:22
+#: snisi_core/models/Actions.py:21 snisi_core/models/Actions.py:22
 msgid "Action"
 msgstr "Action"
 
-#: models/Actions.py:25
+#: snisi_core/models/Actions.py:25
 msgid "Logged In"
 msgstr "s'est connecté"
 
-#: models/Actions.py:26
+#: snisi_core/models/Actions.py:26
 msgid "Logged Out"
 msgstr "s'est déconnecté"
 
-#: models/Actions.py:27
+#: snisi_core/models/Actions.py:27
 msgid "Changed Password"
 msgstr "a changé son mot de passe"
 
-#: models/Actions.py:28
+#: snisi_core/models/Actions.py:28
 msgid "Uploaded Report"
 msgstr "a envoyé un rapport"
 
-#: models/Actions.py:29
+#: snisi_core/models/Actions.py:29
 msgid "Edited Report"
 msgstr "a édité un rapport"
 
-#: models/Actions.py:30
+#: snisi_core/models/Actions.py:30
 msgid "Validated Report"
 msgstr "a validé un rapport"
 
-#: models/Actions.py:31
+#: snisi_core/models/Actions.py:31
 msgid "Created Report"
 msgstr "a créé un rapport"
 
-#: models/Actions.py:32
+#: snisi_core/models/Actions.py:32
 msgid "Created Provider"
 msgstr "a créé un compte utilisateur"
 
-#: models/Actions.py:33
+#: snisi_core/models/Actions.py:33
 msgid "Edited Provider"
 msgstr "a édité un compte utilisateur"
 
-#: models/Actions.py:34
+#: snisi_core/models/Actions.py:34
 msgid "Changed Provider Role/Location"
 msgstr "a changé le role/localité d'un utilisateur"
 
-#: models/Actions.py:35
+#: snisi_core/models/Actions.py:35
 msgid "Disabled Provider"
 msgstr "a désactivé un compte utilisateur"
 
-#: models/Actions.py:36
+#: snisi_core/models/Actions.py:36
 msgid "Enabled Provider"
 msgstr "a activé un compte utilisateur"
 
-#: models/Actions.py:37
+#: snisi_core/models/Actions.py:37
 msgid "Edited Profile"
 msgstr "a édité son profil"
 
-#: models/Actions.py:38
+#: snisi_core/models/Actions.py:38
 msgid "Added Phone Number"
 msgstr "a ajouté un numéro de téléphone"
 
-#: models/Actions.py:39
+#: snisi_core/models/Actions.py:39
 msgid "Removed Phone Number"
 msgstr "a supprimé un numéro de téléphone"
 
-#: models/Actions.py:40
+#: snisi_core/models/Actions.py:40
 msgid "Asked for Help"
 msgstr "a demandé de l'aide"
 
-#: models/Actions.py:41
+#: snisi_core/models/Actions.py:41
 msgid "Sent Report SMS"
 msgstr "a envoyé un rapport par SMS"
 
-#: models/Actions.py:42
+#: snisi_core/models/Actions.py:42
 msgid "Sent Unhandled SMS"
 msgstr "a envoyé un SMS non valide"
 
-#: models/Actions.py:44
+#: snisi_core/models/Actions.py:44
 msgid "Autovalidated Reports"
 msgstr "a auto-validé les rapports"
 
-#: models/Actions.py:45
+#: snisi_core/models/Actions.py:45
 msgid "Created Aggregated Reports"
 msgstr "a créé les rapports aggrégés"
 
-#: models/Actions.py:47
+#: snisi_core/models/Actions.py:47
 msgid "Created Entity"
 msgstr "a créé une entité"
 
-#: models/Actions.py:48
+#: snisi_core/models/Actions.py:48
 msgid "Edited Entity"
 msgstr "a édité une entité"
 
-#: models/Actions.py:49
+#: snisi_core/models/Actions.py:49
 msgid "Disabled Entity"
 msgstr "a désactivé une entité"
 
-#: models/Actions.py:50
+#: snisi_core/models/Actions.py:50
 msgid "Enabled Entity"
 msgstr "a activé une entité"
 
-#: models/Actions.py:51
+#: snisi_core/models/Actions.py:51
 msgid "Created Cluster"
 msgstr "a créé un Cluster"
 
-#: models/Actions.py:52
+#: snisi_core/models/Actions.py:52
 msgid "Disabled Cluster"
 msgstr "a désactivé un cluster"
 
-#: models/Actions.py:53
+#: snisi_core/models/Actions.py:53
 msgid "Enabled Cluster"
 msgstr "a activé un Cluster"
 
-#: models/Actions.py:54
+#: snisi_core/models/Actions.py:54
 msgid "Created domain"
 msgstr "a créé un domaine"
 
-#: models/Actions.py:55
+#: snisi_core/models/Actions.py:55
 msgid "Created Participations"
 msgstr "a créé des participations"
 
-#: models/Actions.py:56
+#: snisi_core/models/Actions.py:56
 msgid "Created Report Expectations"
 msgstr "a créé les attentes de rapports"
 
-#: models/Actions.py:58
+#: snisi_core/models/Actions.py:58
 msgid "Started In Time Data Collection"
 msgstr "a démarré la période de collecte"
 
-#: models/Actions.py:59
+#: snisi_core/models/Actions.py:59
 msgid "Ended In Time Data Collection"
 msgstr "a terminé la période de collecte"
 
-#: models/Actions.py:60 models/Actions.py:61
+#: snisi_core/models/Actions.py:60 snisi_core/models/Actions.py:61
 msgid "Started Late Data Collection"
 msgstr "a démarré la période de collecte-en-retard"
 
-#: models/Actions.py:62
+#: snisi_core/models/Actions.py:62
 msgid "Started District Validation"
 msgstr "a démarré la période de validation districts"
 
-#: models/Actions.py:63
+#: snisi_core/models/Actions.py:63
 msgid "Ended District Validation"
 msgstr "a terminé la période de validation districts"
 
-#: models/Actions.py:64
+#: snisi_core/models/Actions.py:64
 msgid "Started Region Validation"
 msgstr "a démarré la période de validation régions"
 
-#: models/Actions.py:65
+#: snisi_core/models/Actions.py:65
 msgid "Ended Region Validation"
 msgstr "a terminé la période de validation régions"
 
-#: models/Actions.py:66
+#: snisi_core/models/Actions.py:66
 msgid "Raised Exception"
 msgstr "a levé une exception technique"
 
-#: models/Actions.py:67
+#: snisi_core/models/Actions.py:67
 msgid "Generated Static Files"
 msgstr "a généré les fichiers statiques"
 
-#: models/Actions.py:68
+#: snisi_core/models/Actions.py:68
 msgid "Restarted Web Server"
 msgstr "a redémarré le serveur Web"
 
-#: models/Actions.py:76
+#: snisi_core/models/Actions.py:76
 msgid "Web"
 msgstr "Web"
 
-#: models/Actions.py:77 models/Notifications.py:102
+#: snisi_core/models/Actions.py:77 snisi_core/models/Notifications.py:104
 msgid "SMS"
 msgstr "SMS"
 
-#: models/Actions.py:78
+#: snisi_core/models/Actions.py:78
 msgid "Server"
 msgstr "Server"
 
-#: models/Actions.py:94
+#: snisi_core/models/Actions.py:94
 #, python-brace-format
 msgid "{provider} {label} on {date}"
 msgstr "{provider} {label} le {date}"
 
-#: models/Actions.py:100
+#: snisi_core/models/Actions.py:100
 #, python-brace-format
 msgid "{label} on {date}"
 msgstr "{label} le {date}"
 
-#: models/Entities.py:37
+#: snisi_core/models/Entities.py:50
 msgid "Entity Type"
 msgstr "Type d'entité"
 
-#: models/Entities.py:38
+#: snisi_core/models/Entities.py:51
 msgid "Entity Types"
 msgstr "Types d'entités"
 
-#: models/Entities.py:40 models/Entities.py:62 models/Privileges.py:23
-#: models/Reporting.py:815 models/Roles.py:23
+#: snisi_core/models/Entities.py:53 snisi_core/models/Entities.py:77
+#: snisi_core/models/Privileges.py:23 snisi_core/models/Reporting.py:852
+#: snisi_core/models/Roles.py:23
 msgid "Slug"
 msgstr "Code"
 
-#: models/Entities.py:41 models/Entities.py:63 models/Privileges.py:24
-#: models/Reporting.py:816 models/Roles.py:24
+#: snisi_core/models/Entities.py:54 snisi_core/models/Entities.py:56
+#: snisi_core/models/Entities.py:78 snisi_core/models/Privileges.py:24
+#: snisi_core/models/Reporting.py:853 snisi_core/models/Roles.py:24
 msgid "Name"
 msgstr "Nom"
 
-#: models/Entities.py:59
+#: snisi_core/models/Entities.py:74
 msgid "Entity"
 msgstr "Entité"
 
-#: models/Entities.py:60
+#: snisi_core/models/Entities.py:75
 msgid "Entities"
 msgstr "Entités"
 
-#: models/Entities.py:65 models/Periods.py:111
+#: snisi_core/models/Entities.py:80 snisi_core/models/Periods.py:111
 msgid "Type"
 msgstr "Type"
 
-#: models/Entities.py:68
+#: snisi_core/models/Entities.py:83
 msgid "Parent"
 msgstr "Parent"
 
-#: models/Entities.py:132
+#: snisi_core/models/Entities.py:147
 #, python-brace-format
 msgid "{name}/{parent}"
 msgstr "{name}/{parent}"
 
-#: models/Entities.py:138
+#: snisi_core/models/Entities.py:153
 #, python-brace-format
 msgid "{name} ({code})"
 msgstr "{name} ({code})"
 
-#: models/Entities.py:143 models/Entities.py:149
+#: snisi_core/models/Entities.py:158 snisi_core/models/Entities.py:170
 #, python-brace-format
 msgid "{type} de {name}"
 msgstr "{type} de {name}"
 
-#: models/Entities.py:543
+#: snisi_core/models/Entities.py:164 snisi_core/models/Entities.py:176
+#, python-brace-format
+msgid "{type} {name}"
+msgstr "{type} {name}"
+
+#: snisi_core/models/Entities.py:586
 msgid "Health Entity"
 msgstr "Entité sanitaire"
 
-#: models/Entities.py:544
+#: snisi_core/models/Entities.py:587
 msgid "Health Entities"
 msgstr "Entités sanitaires"
 
-#: models/Entities.py:559
+#: snisi_core/models/Entities.py:602
 msgid "Admin. Entity"
 msgstr "Entité administrative"
 
-#: models/Entities.py:560
+#: snisi_core/models/Entities.py:603
 msgid "Admin. Entities"
 msgstr "Entités administratives"
 
-#: models/FixedWeekPeriods.py:54 models/FixedWeekPeriods.py:99
-#: models/FixedWeekPeriods.py:144 models/FixedWeekPeriods.py:189
-#: models/ReportingPeriods.py:39 models/ReportingPeriods.py:141
-#: models/ReportingPeriods.py:194 models/ReportingPeriods.py:247
-#: models/ReportingPeriods.py:300 models/ReportingPeriods.py:353
+#: snisi_core/models/FixedWeekPeriods.py:57
+#: snisi_core/models/FixedWeekPeriods.py:107
+#: snisi_core/models/FixedWeekPeriods.py:157
+#: snisi_core/models/FixedWeekPeriods.py:207
+#: snisi_core/models/ReportingPeriods.py:39
+#: snisi_core/models/ReportingPeriods.py:141
+#: snisi_core/models/ReportingPeriods.py:194
+#: snisi_core/models/ReportingPeriods.py:247
+#: snisi_core/models/ReportingPeriods.py:300
+#: snisi_core/models/ReportingPeriods.py:353
 msgid "Monthly Reporting Period"
 msgstr "Période de rapportage mensuel"
 
-#: models/FixedWeekPeriods.py:55 models/FixedWeekPeriods.py:100
-#: models/FixedWeekPeriods.py:145 models/FixedWeekPeriods.py:190
-#: models/FixedWeekPeriods.py:236 models/ReportingPeriods.py:40
-#: models/ReportingPeriods.py:142 models/ReportingPeriods.py:195
-#: models/ReportingPeriods.py:248 models/ReportingPeriods.py:301
-#: models/ReportingPeriods.py:354
+#: snisi_core/models/FixedWeekPeriods.py:58
+#: snisi_core/models/FixedWeekPeriods.py:108
+#: snisi_core/models/FixedWeekPeriods.py:158
+#: snisi_core/models/FixedWeekPeriods.py:208
+#: snisi_core/models/FixedWeekPeriods.py:259
+#: snisi_core/models/ReportingPeriods.py:40
+#: snisi_core/models/ReportingPeriods.py:142
+#: snisi_core/models/ReportingPeriods.py:195
+#: snisi_core/models/ReportingPeriods.py:248
+#: snisi_core/models/ReportingPeriods.py:301
+#: snisi_core/models/ReportingPeriods.py:354
 msgid "Monthly Reporting Periods"
 msgstr "Périodes de rapportage mensuel"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/FixedWeekPeriods.py:69
+#: snisi_core/models/FixedWeekPeriods.py:76
 msgid "1-7 F Y"
 msgstr "1-7 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/FixedWeekPeriods.py:73
+#: snisi_core/models/FixedWeekPeriods.py:80
 msgid "1st to 7th F Y"
 msgstr "1er to 7 F Y"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/FixedWeekPeriods.py:114
+#: snisi_core/models/FixedWeekPeriods.py:126
 msgid "8-14 F Y"
 msgstr "8-14 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/FixedWeekPeriods.py:118
+#: snisi_core/models/FixedWeekPeriods.py:130
 msgid "8th to 14th F Y"
 msgstr "8 au 14 F Y"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/FixedWeekPeriods.py:159
+#: snisi_core/models/FixedWeekPeriods.py:176
 msgid "15-21 F Y"
 msgstr "15-21 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/FixedWeekPeriods.py:163
+#: snisi_core/models/FixedWeekPeriods.py:180
 msgid "15th to 21th F Y"
 msgstr "15 au 21 F Y"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/FixedWeekPeriods.py:204
+#: snisi_core/models/FixedWeekPeriods.py:226
 msgid "22-28 F Y"
 msgstr "22-28 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/FixedWeekPeriods.py:208
+#: snisi_core/models/FixedWeekPeriods.py:230
 msgid "22th to 28th F Y"
 msgstr "22 au 28 F Y"
 
-#: models/FixedWeekPeriods.py:235
+#: snisi_core/models/FixedWeekPeriods.py:258
 msgid "Fifth Monthly Reporting Period"
 msgstr "Période cinquième semaine mensuelle"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/FixedWeekPeriods.py:250
+#: snisi_core/models/FixedWeekPeriods.py:277
 msgid "29+ F Y"
 msgstr "29+ F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/FixedWeekPeriods.py:254
+#: snisi_core/models/FixedWeekPeriods.py:281
 msgid "29th + F Y"
 msgstr "29+ F Y"
 
-#: models/Groups.py:20
+#: snisi_core/models/Groups.py:20
 msgid "Group"
 msgstr "Group"
 
-#: models/Groups.py:21
+#: snisi_core/models/Groups.py:21
 msgid "Groups"
 msgstr "Groups"
 
-#: models/Groups.py:28 models/Projects.py:66 models/Projects.py:105
+#: snisi_core/models/Groups.py:28 snisi_core/models/Projects.py:65
+#: snisi_core/models/Projects.py:104
 #, python-brace-format
 msgid "{name}"
 msgstr "{name}"
 
-#: models/Notifications.py:43
+#: snisi_core/models/Notifications.py:45
 msgid "Notification"
 msgstr "Notification"
 
-#: models/Notifications.py:44
+#: snisi_core/models/Notifications.py:46
 msgid "Notifications"
 msgstr "Notifications"
 
-#: models/Notifications.py:53
+#: snisi_core/models/Notifications.py:55
 msgid "Immediately"
 msgstr "Immédiatement"
 
-#: models/Notifications.py:54
+#: snisi_core/models/Notifications.py:56
 msgid "Quickly"
 msgstr "Rapidement"
 
-#: models/Notifications.py:55
+#: snisi_core/models/Notifications.py:57
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: models/Notifications.py:56
+#: snisi_core/models/Notifications.py:58
 msgid "Soon"
 msgstr "Bientôt"
 
-#: models/Notifications.py:57
+#: snisi_core/models/Notifications.py:59
 msgid "Later"
 msgstr "Plus tard"
 
-#: models/Notifications.py:66
+#: snisi_core/models/Notifications.py:68
 msgid "Delivered"
 msgstr "Délivré"
 
-#: models/Notifications.py:67
+#: snisi_core/models/Notifications.py:69
 msgid "Not delivered"
 msgstr "Non délivré"
 
-#: models/Notifications.py:68
+#: snisi_core/models/Notifications.py:70
 msgid "Expired"
 msgstr "Expiré"
 
-#: models/Notifications.py:69 models/Providers.py:51
+#: snisi_core/models/Notifications.py:71 snisi_core/models/Providers.py:51
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: models/Notifications.py:79
+#: snisi_core/models/Notifications.py:81
 msgid "Action Required"
 msgstr "Action requise"
 
-#: models/Notifications.py:80
+#: snisi_core/models/Notifications.py:82
 msgid "Info"
 msgstr "Info"
 
-#: models/Notifications.py:81
+#: snisi_core/models/Notifications.py:83
 msgid "Success"
 msgstr "Confirm."
 
-#: models/Notifications.py:82
+#: snisi_core/models/Notifications.py:84
 msgid "Warning"
 msgstr "Attention"
 
-#: models/Notifications.py:83
+#: snisi_core/models/Notifications.py:85
 msgid "Error"
 msgstr "Erreur"
 
-#: models/Notifications.py:87
+#: snisi_core/models/Notifications.py:89
 msgid "TODO"
 msgstr "À FAIRE"
 
-#: models/Notifications.py:89
+#: snisi_core/models/Notifications.py:91
 msgid "OK"
 msgstr "OK"
 
-#: models/Notifications.py:90
+#: snisi_core/models/Notifications.py:92
 msgid "/!\\"
 msgstr "/!\\"
 
-#: models/Notifications.py:91
+#: snisi_core/models/Notifications.py:93
 msgid "ERR"
 msgstr "ERR"
 
-#: models/Notifications.py:101
+#: snisi_core/models/Notifications.py:103
 msgid "Email"
 msgstr "Email"
 
-#: models/Notifications.py:103
+#: snisi_core/models/Notifications.py:105
 msgid "Preferred"
 msgstr "Préferré"
 
-#: models/Notifications.py:104
+#: snisi_core/models/Notifications.py:106
 msgid "All methods"
 msgstr "Toutes méthodes"
 
-#: models/Notifications.py:105
+#: snisi_core/models/Notifications.py:107
 msgid "All contacts"
 msgstr "Tous les contacts"
 
-#: models/Numbers.py:21
+#: snisi_core/models/Numbers.py:21
 msgid "Phone Number Type"
 msgstr "Type de numéro"
 
-#: models/Numbers.py:22
+#: snisi_core/models/Numbers.py:22
 msgid "Phone number types"
 msgstr "Types de numéro"
 
-#: models/Numbers.py:53
+#: snisi_core/models/Numbers.py:53
 msgid "Phone Number"
 msgstr "Numéro de téléphone"
 
-#: models/Numbers.py:54
+#: snisi_core/models/Numbers.py:54
 msgid "Phone numbers"
 msgstr "Numéros de téléphone"
 
-#: models/PeriodicTasks.py:24
+#: snisi_core/models/PeriodicTasks.py:24
 msgid "Periodic Task"
 msgstr "Tâche périodique"
 
-#: models/PeriodicTasks.py:25
+#: snisi_core/models/PeriodicTasks.py:25
 msgid "Periodic Tasks"
 msgstr "Tâches périodiques"
 
-#: models/PeriodicTasks.py:34
+#: snisi_core/models/PeriodicTasks.py:34
 msgid "{}{}"
 msgstr "{}{}"
 
-#: models/Periods.py:84 models/Periods.py:554 models/Periods.py:592
-#: models/Periods.py:638 models/Periods.py:684 models/Periods.py:790
+#: snisi_core/models/Periods.py:84 snisi_core/models/Periods.py:564
+#: snisi_core/models/Periods.py:602 snisi_core/models/Periods.py:648
+#: snisi_core/models/Periods.py:694 snisi_core/models/Periods.py:800
 msgid "Period"
 msgstr "Période"
 
-#: models/Periods.py:85 models/Periods.py:555 models/Periods.py:593
-#: models/Periods.py:639 models/Periods.py:685 models/Periods.py:791
+#: snisi_core/models/Periods.py:85 snisi_core/models/Periods.py:565
+#: snisi_core/models/Periods.py:603 snisi_core/models/Periods.py:649
+#: snisi_core/models/Periods.py:695 snisi_core/models/Periods.py:801
 msgid "Periods"
 msgstr "Périodes"
 
-#: models/Periods.py:96
+#: snisi_core/models/Periods.py:96
 msgid "Day"
 msgstr "Jour"
 
-#: models/Periods.py:97
+#: snisi_core/models/Periods.py:97
 msgid "Week"
 msgstr "Semaine"
 
-#: models/Periods.py:98
+#: snisi_core/models/Periods.py:98
 msgid "Month"
 msgstr "Mois"
 
-#: models/Periods.py:99
+#: snisi_core/models/Periods.py:99
 msgid "Quarter"
 msgstr "Trimestre"
 
-#: models/Periods.py:100
+#: snisi_core/models/Periods.py:100
 msgid "Semester"
 msgstr "Semestre"
 
-#: models/Periods.py:101
+#: snisi_core/models/Periods.py:101
 msgid "Year"
 msgstr "Année"
 
-#: models/Periods.py:102
+#: snisi_core/models/Periods.py:102
 msgid "Custom"
 msgstr "Personnalisée"
 
-#: models/Periods.py:106
+#: snisi_core/models/Periods.py:106
 msgid "Start On"
 msgstr "Du"
 
-#: models/Periods.py:107
+#: snisi_core/models/Periods.py:107
 msgid "End On"
 msgstr "Au"
 
-#: models/Periods.py:255
+#: snisi_core/models/Periods.py:255
 msgid "c"
 msgstr "c"
 
 #. Translators: Django's date format for DayPeriod.name()
-#: models/Periods.py:565
+#: snisi_core/models/Periods.py:575
 msgid "m/d/Y"
 msgstr "m/d/Y"
 
 #. Translators: Django's date format for DayPeriod.full_name()
-#: models/Periods.py:569
+#: snisi_core/models/Periods.py:579
 msgid "F d Y"
 msgstr "F d Y"
 
 #. Translators: Django's date format for WeekPeriod.name()
-#: models/Periods.py:607
+#: snisi_core/models/Periods.py:617
 msgid "W/Y"
 msgstr "W/Y"
 
-#: models/Periods.py:612
+#: snisi_core/models/Periods.py:622
 msgid "W"
 msgstr "W"
 
-#: models/Periods.py:613
+#: snisi_core/models/Periods.py:623
 msgid "d"
 msgstr "d"
 
-#: models/Periods.py:614
+#: snisi_core/models/Periods.py:624
 msgid "d F Y"
 msgstr "d F Y"
 
 #. Translators: Week Full name representation: weeknum, start and end
-#: models/Periods.py:611
+#: snisi_core/models/Periods.py:621
 #, python-format
 msgid "Week %(weeknum)s (%(start)s to %(end)s)"
 msgstr "Semaine %(weeknum)s (%(start)s au %(end)s)"
 
 #. Translators: Django's date template format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/Periods.py:653 models/Periods.py:657 models/Periods.py:749
-#: models/ReportingPeriods.py:157 models/ReportingPeriods.py:162
-#: models/ReportingPeriods.py:210 models/ReportingPeriods.py:215
-#: models/ReportingPeriods.py:263 models/ReportingPeriods.py:268
-#: models/ReportingPeriods.py:316 models/ReportingPeriods.py:321
-#: models/ReportingPeriods.py:369 models/ReportingPeriods.py:374
-#: models/ReportingPeriods.py:422 models/ReportingPeriods.py:427
-#: models/ReportingPeriods.py:475 models/ReportingPeriods.py:480
-#: models/ReportingPeriods.py:528 models/ReportingPeriods.py:533
-#: models/ReportingPeriods.py:581 models/ReportingPeriods.py:586
-#: models/ReportingPeriods.py:634 models/ReportingPeriods.py:639
+#: snisi_core/models/Periods.py:663 snisi_core/models/Periods.py:667
+#: snisi_core/models/Periods.py:759 snisi_core/models/ReportingPeriods.py:157
+#: snisi_core/models/ReportingPeriods.py:162
+#: snisi_core/models/ReportingPeriods.py:210
+#: snisi_core/models/ReportingPeriods.py:215
+#: snisi_core/models/ReportingPeriods.py:263
+#: snisi_core/models/ReportingPeriods.py:268
+#: snisi_core/models/ReportingPeriods.py:316
+#: snisi_core/models/ReportingPeriods.py:321
+#: snisi_core/models/ReportingPeriods.py:369
+#: snisi_core/models/ReportingPeriods.py:374
+#: snisi_core/models/ReportingPeriods.py:422
+#: snisi_core/models/ReportingPeriods.py:427
+#: snisi_core/models/ReportingPeriods.py:475
+#: snisi_core/models/ReportingPeriods.py:480
+#: snisi_core/models/ReportingPeriods.py:528
+#: snisi_core/models/ReportingPeriods.py:533
+#: snisi_core/models/ReportingPeriods.py:581
+#: snisi_core/models/ReportingPeriods.py:586
+#: snisi_core/models/ReportingPeriods.py:634
+#: snisi_core/models/ReportingPeriods.py:639
 msgid "F Y"
 msgstr "F Y"
 
 #. Translators: django date format for accomp Quarter in Quarter.name()
-#: models/Periods.py:711 models/Periods.py:747
+#: snisi_core/models/Periods.py:721 snisi_core/models/Periods.py:757
 msgid "Y"
 msgstr "Y"
 
 #. Translators: Quarter.name() repr using Quarter number and other
-#: models/Periods.py:713
+#: snisi_core/models/Periods.py:723
 #, python-format
 msgid "Q%(quarter)s.%(year)s"
 msgstr "T%(quarter)s.%(year)s"
 
 #. Translators: suffix for 1st
-#: models/Periods.py:727
+#: snisi_core/models/Periods.py:737
 msgid "st"
 msgstr "er"
 
 #. Translators: suffix for 2nd
-#: models/Periods.py:730
+#: snisi_core/models/Periods.py:740
 msgid "nd"
 msgstr "ème"
 
 #. Translators: suffix for 3rd
-#: models/Periods.py:733
+#: snisi_core/models/Periods.py:743
 msgid "rd"
 msgstr "ème"
 
 #. Translators: suffix for 4th
 #. Translators: suffix for 5th
-#: models/Periods.py:736 models/Periods.py:739
+#: snisi_core/models/Periods.py:746 snisi_core/models/Periods.py:749
 msgid "th"
 msgstr "ème"
 
 #. Translators: Django's date format for YearPeriod.name()
-#: models/Periods.py:748 models/Periods.py:801
+#: snisi_core/models/Periods.py:758 snisi_core/models/Periods.py:811
 msgid "F"
 msgstr "F"
 
-#: models/Periods.py:828
+#: snisi_core/models/Periods.py:838
 msgid "Fixed Days Period"
 msgstr "Période à jours fixe"
 
-#: models/Periods.py:829
+#: snisi_core/models/Periods.py:839
 msgid "Fixed Days Periods"
 msgstr "Périodes à jours fixe"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/Periods.py:836
+#: snisi_core/models/Periods.py:846
 #, python-brace-format
 msgid "{sd}-{ed} F Y"
 msgstr "{sd}-{ed} F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/Periods.py:841
+#: snisi_core/models/Periods.py:851
 #, python-brace-format
 msgid "{sd} to {ed} F Y"
 msgstr "{sd} au {ed} F Y"
 
-#: models/Privileges.py:20
+#: snisi_core/models/Privileges.py:20
 msgid "Privilege"
 msgstr "Privilège"
 
-#: models/Privileges.py:21
+#: snisi_core/models/Privileges.py:21
 msgid "Privileges"
 msgstr "Privilèges"
 
-#: models/Privileges.py:44
+#: snisi_core/models/Privileges.py:44
 msgid "Accreditation"
 msgstr "Accréditation"
 
-#: models/Privileges.py:45
+#: snisi_core/models/Privileges.py:45
 msgid "Accreditations"
 msgstr "Accréditations"
 
-#: models/Privileges.py:53
+#: snisi_core/models/Privileges.py:53
 #, python-brace-format
 msgid "{provider}"
 msgstr "{provider}"
 
-#: models/Privileges.py:54
+#: snisi_core/models/Privileges.py:54
 #, python-brace-format
 msgid "{provider} at {location}"
 msgstr "{provider} à {location}"
 
-#: models/Projects.py:31
+#: snisi_core/models/Projects.py:30
 msgid "Domain"
 msgstr "Domain"
 
-#: models/Projects.py:32
+#: snisi_core/models/Projects.py:31
 msgid "Domains"
 msgstr "Domains"
 
-#: models/Projects.py:90
+#: snisi_core/models/Projects.py:89
 msgid "Cluster"
 msgstr "Cluster"
 
-#: models/Projects.py:91
+#: snisi_core/models/Projects.py:90
 msgid "Clusters"
 msgstr "Clusters"
 
-#: models/Projects.py:139
+#: snisi_core/models/Projects.py:142
 msgid "Participation"
 msgstr "Participation"
 
-#: models/Projects.py:140
+#: snisi_core/models/Projects.py:143
 msgid "Participations"
 msgstr "Participations"
 
-#: models/Projects.py:152
+#: snisi_core/models/Projects.py:155
 #, python-brace-format
 msgid "{cluster}/{entity}"
 msgstr "{cluster}/{entity}"
 
-#: models/Providers.py:49
+#: snisi_core/models/Providers.py:49
 msgid "Man"
 msgstr "Homme"
 
-#: models/Providers.py:50
+#: snisi_core/models/Providers.py:50
 msgid "Woman"
 msgstr "Femme"
 
-#: models/Providers.py:61
+#: snisi_core/models/Providers.py:61
 msgid "Mr."
 msgstr "M."
 
-#: models/Providers.py:62
+#: snisi_core/models/Providers.py:62
 msgid "Mrs."
 msgstr "Mlle"
 
-#: models/Providers.py:63
+#: snisi_core/models/Providers.py:63
 msgid "Miss"
 msgstr "Mme"
 
-#: models/Providers.py:64
+#: snisi_core/models/Providers.py:64
 msgid "Dr."
 msgstr "Dr"
 
-#: models/Providers.py:65
+#: snisi_core/models/Providers.py:65
 msgid "Pr."
 msgstr "Pr"
 
-#: models/Providers.py:73
+#: snisi_core/models/Providers.py:73
 msgid "Provider"
 msgstr "Utilisateur"
 
-#: models/Providers.py:74
+#: snisi_core/models/Providers.py:74
 msgid "Providers"
 msgstr "Utilisateurs"
 
-#: models/Providers.py:77
+#: snisi_core/models/Providers.py:77
 msgid "username"
 msgstr "identifiant"
 
-#: models/Providers.py:78
+#: snisi_core/models/Providers.py:78
 msgid ""
 "Required. 50 characters or fewer. Letters, numbers and @/./+/-/_ characters"
 msgstr "Requis, 50 characters ou moins. Lettres, chiffres et  @/./+/-/_"
 
-#: models/Providers.py:81
+#: snisi_core/models/Providers.py:81
 msgid "Enter a valid username."
 msgstr "Entrez un identifiant valide."
 
-#: models/Providers.py:86
+#: snisi_core/models/Providers.py:86
 msgid "Gender"
 msgstr "Genre\t"
 
-#: models/Providers.py:90
+#: snisi_core/models/Providers.py:90
 msgid "Title"
 msgstr "Titre"
 
-#: models/Providers.py:92
+#: snisi_core/models/Providers.py:92
 msgid "First Name"
 msgstr "Prénom"
 
-#: models/Providers.py:94
+#: snisi_core/models/Providers.py:94
 msgid "Middle Name"
 msgstr "Autres prénoms"
 
-#: models/Providers.py:96
+#: snisi_core/models/Providers.py:96
 msgid "Last Name"
 msgstr "Nom"
 
-#: models/Providers.py:98
+#: snisi_core/models/Providers.py:98
 msgid "Maiden Name"
 msgstr "Nom de jeune fille"
 
-#: models/Providers.py:100
+#: snisi_core/models/Providers.py:100
 msgid "Position"
 msgstr "Emploi"
 
-#: models/Providers.py:102 models/Roles.py:20
+#: snisi_core/models/Providers.py:102 snisi_core/models/Roles.py:20
 msgid "Role"
 msgstr "Role"
 
-#: models/Providers.py:105
+#: snisi_core/models/Providers.py:105
 msgid "Location"
 msgstr "Localité"
 
-#: models/Providers.py:107
+#: snisi_core/models/Providers.py:107
 msgid "Access Since"
 msgstr "Accès depuis"
 
-#: models/Providers.py:114
+#: snisi_core/models/Providers.py:114
 msgid "email address"
 msgstr "adresse email"
 
-#: models/Providers.py:116
+#: snisi_core/models/Providers.py:116
 msgid "staff status"
 msgstr "statute staff"
 
-#: models/Providers.py:117
+#: snisi_core/models/Providers.py:117
 msgid "Designates whether the user can log into this admin site."
 msgstr "Désignes si l'utilisateur peu se connecter au site d'administration."
 
-#: models/Providers.py:120
+#: snisi_core/models/Providers.py:120
 msgid "active"
 msgstr "actif"
 
-#: models/Providers.py:121
+#: snisi_core/models/Providers.py:121
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
@@ -818,369 +850,384 @@ msgstr ""
 "Détermine si cet utilisateur est considéré comme actif. Déselectionner pour "
 "supprimer un compte."
 
-#: models/Providers.py:123
+#: snisi_core/models/Providers.py:123
 msgid "date joined"
 msgstr "Date d'inscription"
 
-#: models/Providers.py:232
+#: snisi_core/models/Providers.py:238
 #, python-brace-format
 msgid "{title_full_name}/{access}"
 msgstr "{title_full_name}/{access}"
 
-#: models/Providers.py:235
+#: snisi_core/models/Providers.py:241
 #, python-brace-format
 msgid "{name} ({position})"
 msgstr "{name} ({position})"
 
-#: models/Providers.py:244
+#: snisi_core/models/Providers.py:250
 #, python-brace-format
 msgid "{maiden}{first}{middle}{last}"
 msgstr "{maiden}{first}{middle}{last}"
 
-#: models/Providers.py:250
+#: snisi_core/models/Providers.py:256
 #, python-brace-format
 msgid "{title}{full_name}"
 msgstr "{title}{full_name}"
 
-#: models/Providers.py:255
+#: snisi_core/models/Providers.py:261
 #, python-brace-format
 msgid "{first_i}{middle_i}{last}"
 msgstr "{first_i}{middle_i}{last}"
 
-#: models/Providers.py:261
+#: snisi_core/models/Providers.py:267
 #, python-brace-format
 msgid "{title}{short_name}"
 msgstr "{title}{short_name}"
 
-#: models/Providers.py:265
+#: snisi_core/models/Providers.py:271
 msgid "Désactivé"
 msgstr "Désactivé"
 
-#: models/Providers.py:267
+#: snisi_core/models/Providers.py:273
 #, python-brace-format
 msgid "{role}"
 msgstr "{role}"
 
-#: models/Providers.py:268
+#: snisi_core/models/Providers.py:274
 #, python-brace-format
 msgid "{role} à {location}"
 msgstr "{role} à {location}"
 
-#: models/Reporting.py:37
+#: snisi_core/models/Reporting.py:37
 msgid "Periodical Source"
 msgstr "Périodique source"
 
-#: models/Reporting.py:38
+#: snisi_core/models/Reporting.py:38
 msgid "Periodical Aggregated"
 msgstr "Périodique agrégé"
 
-#: models/Reporting.py:39
+#: snisi_core/models/Reporting.py:39
 msgid "Occasional Source"
 msgstr "Occasionnel source"
 
-#: models/Reporting.py:40
+#: snisi_core/models/Reporting.py:40
 msgid "Occasional Aggregated"
 msgstr "Occasionnel agrégé"
 
-#: models/Reporting.py:105 models/Reporting.py:890
+#: snisi_core/models/Reporting.py:105 snisi_core/models/Reporting.py:927
 msgid "Complete"
 msgstr "Complet"
 
-#: models/Reporting.py:106
+#: snisi_core/models/Reporting.py:106
 msgid "Incomplete"
 msgstr "Incomplet"
 
-#: models/Reporting.py:114
+#: snisi_core/models/Reporting.py:114
 msgid "Not Checked"
 msgstr "Non vérifié"
 
-#: models/Reporting.py:115
+#: snisi_core/models/Reporting.py:115
 msgid "Incorrect"
 msgstr "Incorrect"
 
-#: models/Reporting.py:116
+#: snisi_core/models/Reporting.py:116
 msgid "Correct"
 msgstr "Correct"
 
-#: models/Reporting.py:124
+#: snisi_core/models/Reporting.py:124
 msgid "Arrived On Time"
 msgstr "Arrivé à temps"
 
-#: models/Reporting.py:125
+#: snisi_core/models/Reporting.py:125
 msgid "Arrived Late"
 msgstr "Arrivé en retard"
 
-#: models/Reporting.py:126
+#: snisi_core/models/Reporting.py:126
 msgid "N/A"
 msgstr "N/A"
 
-#: models/Reporting.py:134
+#: snisi_core/models/Reporting.py:134
 msgid "Not Validated"
 msgstr "Non validé"
 
-#: models/Reporting.py:135
+#: snisi_core/models/Reporting.py:135
 msgid "Validated"
 msgstr "Validé"
 
-#: models/Reporting.py:136
+#: snisi_core/models/Reporting.py:136
 msgid "Refused"
 msgstr "Refusé"
 
-#: models/Reporting.py:137
+#: snisi_core/models/Reporting.py:137
 msgid "N/a"
 msgstr "N/a"
 
-#: models/Reporting.py:162
+#: snisi_core/models/Reporting.py:163
 msgid "Created By"
 msgstr "Créé par"
 
-#: models/Reporting.py:165
+#: snisi_core/models/Reporting.py:166
 msgid "Created On"
 msgstr "Créé le"
 
-#: models/Reporting.py:170
+#: snisi_core/models/Reporting.py:171
 msgid "Modified By"
 msgstr "Modifié par"
 
-#: models/Reporting.py:174
+#: snisi_core/models/Reporting.py:175
 msgid "Modified On"
 msgstr "Modifié le"
 
-#: models/Reporting.py:195
+#: snisi_core/models/Reporting.py:196
 msgid "Validated By"
 msgstr "Validé par"
 
-#: models/Reporting.py:525
+#: snisi_core/models/Reporting.py:566
 msgid "Aggr. Sources (all)"
 msgstr "Sources agrégés (toutes)"
 
-#: models/Reporting.py:533
+#: snisi_core/models/Reporting.py:574
 msgid "Aggr. Sources (direct)"
 msgstr "Source agrégés (directes)"
 
-#: models/Reporting.py:811
+#: snisi_core/models/Reporting.py:848
 msgid "Report Class"
 msgstr "Classe de rapport"
 
-#: models/Reporting.py:812
+#: snisi_core/models/Reporting.py:849
 msgid "Report Classes"
 msgstr "Classes de rapport"
 
-#: models/Reporting.py:817
+#: snisi_core/models/Reporting.py:854
 msgid "cls"
 msgstr "Classe (code)"
 
-#: models/Reporting.py:818
+#: snisi_core/models/Reporting.py:855
 msgid "Period Type"
 msgstr "Type de période"
 
-#: models/Reporting.py:870
+#: snisi_core/models/Reporting.py:907
 msgid "Expected Report"
 msgstr "Rapport Attendu"
 
-#: models/Reporting.py:871
+#: snisi_core/models/Reporting.py:908
 msgid "Expected Reports"
 msgstr "Rapports Attendus"
 
-#: models/Reporting.py:883
+#: snisi_core/models/Reporting.py:920
 msgid "Single"
 msgstr "Un seul"
 
-#: models/Reporting.py:884
+#: snisi_core/models/Reporting.py:921
 msgid "1+"
 msgstr "1+"
 
-#: models/Reporting.py:885
+#: snisi_core/models/Reporting.py:922
 msgid "0+"
 msgstr "0+"
 
-#: models/Reporting.py:886
+#: snisi_core/models/Reporting.py:923
 msgid "Multiple"
 msgstr "Multiple"
 
-#: models/Reporting.py:891
+#: snisi_core/models/Reporting.py:928
 msgid "Matching"
 msgstr "Correspond"
 
-#: models/Reporting.py:892
+#: snisi_core/models/Reporting.py:929
 msgid "Missing"
 msgstr "Manquant"
 
-#: models/Reporting.py:1053
+#: snisi_core/models/Reporting.py:1090
 msgid "Expected Validation"
 msgstr "Validation Attendue"
 
-#: models/Reporting.py:1054
+#: snisi_core/models/Reporting.py:1091
 msgid "Expected Validations"
 msgstr "Validations Attendues"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ReportingPeriods.py:54
+#: snisi_core/models/ReportingPeriods.py:54
 msgid "1-5 F Y"
 msgstr "1-5 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:58
+#: snisi_core/models/ReportingPeriods.py:58
 msgid "1st to 5th F Y"
 msgstr "1er au 5 F Y"
 
-#: models/ReportingPeriods.py:90 models/ReportingPeriods.py:406
-#: models/ReportingPeriods.py:459 models/ReportingPeriods.py:512
-#: models/ReportingPeriods.py:565 models/ReportingPeriods.py:618
+#: snisi_core/models/ReportingPeriods.py:90
+#: snisi_core/models/ReportingPeriods.py:406
+#: snisi_core/models/ReportingPeriods.py:459
+#: snisi_core/models/ReportingPeriods.py:512
+#: snisi_core/models/ReportingPeriods.py:565
+#: snisi_core/models/ReportingPeriods.py:618
 msgid "Monthly Extended Reporting Period"
 msgstr "Période de rapportage mensuel étendue"
 
-#: models/ReportingPeriods.py:91
+#: snisi_core/models/ReportingPeriods.py:91
 msgid "Monthly Extended Reporting Periods"
 msgstr "Périodes de rapportage mensuel étendues"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ReportingPeriods.py:105
+#: snisi_core/models/ReportingPeriods.py:105
 msgid "6-10 F Y"
 msgstr "6-10 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:109
+#: snisi_core/models/ReportingPeriods.py:109
 msgid "6th to 10th F Y"
 msgstr "6 au 10 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:156 models/ReportingPeriods.py:161
+#: snisi_core/models/ReportingPeriods.py:156
+#: snisi_core/models/ReportingPeriods.py:161
 msgid "W1/RP {}"
 msgstr "W1/RP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:209 models/ReportingPeriods.py:214
+#: snisi_core/models/ReportingPeriods.py:209
+#: snisi_core/models/ReportingPeriods.py:214
 msgid "W2/RP {}"
 msgstr "W2/RP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:262 models/ReportingPeriods.py:267
+#: snisi_core/models/ReportingPeriods.py:262
+#: snisi_core/models/ReportingPeriods.py:267
 msgid "W3/RP {}"
 msgstr "W3/RP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:315 models/ReportingPeriods.py:320
+#: snisi_core/models/ReportingPeriods.py:315
+#: snisi_core/models/ReportingPeriods.py:320
 msgid "W4/RP {}"
 msgstr "W4/RP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:368 models/ReportingPeriods.py:373
+#: snisi_core/models/ReportingPeriods.py:368
+#: snisi_core/models/ReportingPeriods.py:373
 msgid "W5/RP {}"
 msgstr "W5/RP {}"
 
-#: models/ReportingPeriods.py:407 models/ReportingPeriods.py:460
-#: models/ReportingPeriods.py:513 models/ReportingPeriods.py:566
-#: models/ReportingPeriods.py:619
+#: snisi_core/models/ReportingPeriods.py:407
+#: snisi_core/models/ReportingPeriods.py:460
+#: snisi_core/models/ReportingPeriods.py:513
+#: snisi_core/models/ReportingPeriods.py:566
+#: snisi_core/models/ReportingPeriods.py:619
 msgid "Monthly ExtendedReporting Periods"
 msgstr "Périodes de rapportage mensuel étendues"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:421 models/ReportingPeriods.py:426
+#: snisi_core/models/ReportingPeriods.py:421
+#: snisi_core/models/ReportingPeriods.py:426
 msgid "W1/ERP {}"
 msgstr "W1/ERP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:474 models/ReportingPeriods.py:479
+#: snisi_core/models/ReportingPeriods.py:474
+#: snisi_core/models/ReportingPeriods.py:479
 msgid "W2/ERP {}"
 msgstr "W2/ERP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:527 models/ReportingPeriods.py:532
+#: snisi_core/models/ReportingPeriods.py:527
+#: snisi_core/models/ReportingPeriods.py:532
 msgid "W3/ERP {}"
 msgstr "W3/ERP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:580 models/ReportingPeriods.py:585
+#: snisi_core/models/ReportingPeriods.py:580
+#: snisi_core/models/ReportingPeriods.py:585
 msgid "W4/ERP {}"
 msgstr "W4/ERP {}"
 
 #. Translators: Django's date tmpl format for MonthPeriod.name()
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ReportingPeriods.py:633 models/ReportingPeriods.py:638
+#: snisi_core/models/ReportingPeriods.py:633
+#: snisi_core/models/ReportingPeriods.py:638
 msgid "W5/ERP {}"
 msgstr "W5/ERP {}"
 
-#: models/Roles.py:21
+#: snisi_core/models/Roles.py:21
 msgid "Roles"
 msgstr "Roles"
 
-#: models/SMSMessages.py:17
+#: snisi_core/models/SMSMessages.py:17
 msgid "SMS Message"
 msgstr "Message SMS"
 
-#: models/SMSMessages.py:18
+#: snisi_core/models/SMSMessages.py:18
 msgid "SMS Messages"
 msgstr "Messages SMS"
 
-#: models/SMSMessages.py:23
+#: snisi_core/models/SMSMessages.py:23
 msgid "Incoming"
 msgstr "Entrant"
 
-#: models/SMSMessages.py:24
+#: snisi_core/models/SMSMessages.py:24
 msgid "Outgoing"
 msgstr "Sortant"
 
-#: models/ValidationPeriods.py:30
+#: snisi_core/models/ValidationPeriods.py:30
 msgid "District Validation Period"
 msgstr "Période de validation district"
 
-#: models/ValidationPeriods.py:31
+#: snisi_core/models/ValidationPeriods.py:31
 msgid "District Validation Periods"
 msgstr "Périodes de validation district"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ValidationPeriods.py:45
+#: snisi_core/models/ValidationPeriods.py:45
 msgid "1-15 F Y"
 msgstr "1-15 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ValidationPeriods.py:49
+#: snisi_core/models/ValidationPeriods.py:49
 msgid "1st to 15th F Y"
 msgstr "1er au 15 F Y"
 
-#: models/ValidationPeriods.py:81
+#: snisi_core/models/ValidationPeriods.py:81
 msgid "Region Validation Period"
 msgstr "Période de validation régionale"
 
-#: models/ValidationPeriods.py:82
+#: snisi_core/models/ValidationPeriods.py:82
 msgid "Region Validation Periods"
 msgstr "Périodes de validation régionale"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ValidationPeriods.py:96
+#: snisi_core/models/ValidationPeriods.py:96
 msgid "15-25 F Y"
 msgstr "15-25 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ValidationPeriods.py:100
+#: snisi_core/models/ValidationPeriods.py:100
 msgid "15th to 25th F Y"
 msgstr "15 au 25 F Y"
 
-#: models/ValidationPeriods.py:132
+#: snisi_core/models/ValidationPeriods.py:132
 msgid "National Validation Period"
 msgstr "Période de validation nationale"
 
-#: models/ValidationPeriods.py:133
+#: snisi_core/models/ValidationPeriods.py:133
 msgid "National Validation Periods"
 msgstr "Périodes de validation nationale"
 
 #. Translators: Django's date template format for MonthPeriod.name()
-#: models/ValidationPeriods.py:147
+#: snisi_core/models/ValidationPeriods.py:147
 msgid "26-27 F Y"
 msgstr "26-27 F Y"
 
 #. Translators: Django's date tmpl format for MonthPeriod.full_name()
-#: models/ValidationPeriods.py:151
+#: snisi_core/models/ValidationPeriods.py:151
 msgid "26th to 27th F Y"
 msgstr "26 au 27 F Y"
 

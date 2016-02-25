@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
-"PO-Revision-Date: 2015-01-14 09:48-0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
+"PO-Revision-Date: 2016-02-05 09:59+0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:51
+#: snisi_reprohealth/integrity.py:51
 #, python-brace-format
 msgid ""
 "Number of new + old clients ({noc}) must equals number of Under25 + Over25 "
@@ -28,7 +28,7 @@ msgstr ""
 "Nombre d'anciens et nouveaux clients ({noc}) doit être égal à la somme des "
 "moins et plus de 25ans ({uo25})."
 
-#: integrity.py:67
+#: snisi_reprohealth/integrity.py:67
 #, python-brace-format
 msgid ""
 "Number of new + old clients ({noc}) must equals sum of provided services "
@@ -37,14 +37,14 @@ msgstr ""
 "Nombre d'anciens et nouveaux clients ({noc}) doit être égal à la somme des "
 "services prestés ({alls})."
 
-#: integrity.py:76
+#: snisi_reprohealth/integrity.py:76
 #, python-brace-format
 msgid "Number of first visits ({fv}) can't be more than new clients ({nc})."
 msgstr ""
 "Nombre de premières visites ({fv}) ne peut être supérieure aux nouveaux "
 "clients ({nc})."
 
-#: integrity.py:85
+#: snisi_reprohealth/integrity.py:85
 #, python-brace-format
 msgid ""
 "Number of long-term visits ({ltv}) must equals number of IDU + Implants "
@@ -53,753 +53,778 @@ msgstr ""
 "Nombre de visites long-terme ({ltv}) doit être égal à DIU + Implants "
 "({iudi})."
 
-#: integrity.py:99
+#: snisi_reprohealth/integrity.py:99
 #, python-brace-format
 msgid "{f}: Amount ({a}) lower than Revenue ({r})."
 msgstr "{f}: Montant ({a}) supérieur aux revenus ({r})."
 
-#: integrity.py:115
+#: snisi_reprohealth/integrity.py:115
 #, python-brace-format
 msgid "{f}: Used + Lost ({c}) higher than Initial + Received ({a})."
 msgstr "{f}: Utilisées + Perdues ({c}) supérieures à Initiales + Reçues ({a})."
 
-#: integrity.py:129
+#: snisi_reprohealth/integrity.py:129
 #, python-brace-format
 msgid "{f}: Provided Quantity ({pq}) different from Financial Quantity ({fq})."
 msgstr ""
 "{f}: Quantités fournies ({pq}) différentes des quantité pour finances ({fq})."
 
-#: integrity.py:142
+#: snisi_reprohealth/integrity.py:142
 #, python-brace-format
 msgid "{f}: Provided Quantity ({pq}) different from Stocks Quantity ({sq})."
 msgstr ""
 "{f}: Quantités fournies ({pq}) différentes des quantité consommées pour "
 "stocks ({sq})."
 
-#: integrity.py:152
+#: snisi_reprohealth/integrity.py:152
 #, python-brace-format
 msgid "Missing data for {f}"
 msgstr "Donnée manquante pour {f}"
 
-#: models/ChildrenMortality.py:28
+#: snisi_reprohealth/models/ChildrenMortality.py:28
 msgid "Home"
 msgstr "Domicile"
 
-#: models/ChildrenMortality.py:29 xls_import.py:37
+#: snisi_reprohealth/models/ChildrenMortality.py:29
+#: snisi_reprohealth/xls_import.py:36
 msgid "Health Center"
 msgstr "Centre de santé"
 
-#: models/ChildrenMortality.py:30 models/ChildrenMortality.py:62
-#: models/MaternalMortality.py:40
+#: snisi_reprohealth/models/ChildrenMortality.py:30
+#: snisi_reprohealth/models/ChildrenMortality.py:62
+#: snisi_reprohealth/models/MaternalMortality.py:40
 msgid "Other"
 msgstr "Autre"
 
-#: models/ChildrenMortality.py:36
+#: snisi_reprohealth/models/ChildrenMortality.py:36
 msgid "Female"
 msgstr "Féminin"
 
-#: models/ChildrenMortality.py:37
+#: snisi_reprohealth/models/ChildrenMortality.py:37
 msgid "Male"
 msgstr "Masculin"
 
-#: models/ChildrenMortality.py:52 models/MaternalMortality.py:34
+#: snisi_reprohealth/models/ChildrenMortality.py:52
+#: snisi_reprohealth/models/MaternalMortality.py:34
 msgid "Fever"
 msgstr "Fièvre"
 
-#: models/ChildrenMortality.py:53 models/MaternalMortality.py:36
+#: snisi_reprohealth/models/ChildrenMortality.py:53
+#: snisi_reprohealth/models/MaternalMortality.py:36
 msgid "Diarrhea"
 msgstr "Diarrhée "
 
-#: models/ChildrenMortality.py:54
+#: snisi_reprohealth/models/ChildrenMortality.py:54
 msgid "Dyspnea"
 msgstr "Dyspnée (diff. respirer)"
 
-#: models/ChildrenMortality.py:55
+#: snisi_reprohealth/models/ChildrenMortality.py:55
 msgid "Anemia"
 msgstr "Anémie"
 
-#: models/ChildrenMortality.py:56
+#: snisi_reprohealth/models/ChildrenMortality.py:56
 msgid "Rash"
 msgstr "Rougeurs"
 
-#: models/ChildrenMortality.py:57
+#: snisi_reprohealth/models/ChildrenMortality.py:57
 msgid "Cough"
 msgstr "Toux"
 
-#: models/ChildrenMortality.py:58
+#: snisi_reprohealth/models/ChildrenMortality.py:58
 msgid "Vomiting"
 msgstr "Vomissements"
 
-#: models/ChildrenMortality.py:59
+#: snisi_reprohealth/models/ChildrenMortality.py:59
 msgid "Nuchal Rigidity"
 msgstr "Raideur de la nuque"
 
-#: models/ChildrenMortality.py:60
+#: snisi_reprohealth/models/ChildrenMortality.py:60
 msgid "Red Eye"
 msgstr "Yeux rouges"
 
-#: models/ChildrenMortality.py:61
+#: snisi_reprohealth/models/ChildrenMortality.py:61
 msgid "Eat Refusal"
 msgstr "Refus de s'alimenter"
 
-#: models/ChildrenMortality.py:70
+#: snisi_reprohealth/models/ChildrenMortality.py:70
 msgid "Children Mortality Report"
 msgstr "Rapport de décès infantile"
 
-#: models/ChildrenMortality.py:71
+#: snisi_reprohealth/models/ChildrenMortality.py:71
 msgid "Children Mortality Reports"
 msgstr "Rapports de décès infantiles"
 
-#: models/ChildrenMortality.py:76 models/MaternalMortality.py:53
+#: snisi_reprohealth/models/ChildrenMortality.py:76
+#: snisi_reprohealth/models/MaternalMortality.py:53
 msgid "Reporting location"
 msgstr "Lieu de rapportage/collecte"
 
-#: models/ChildrenMortality.py:78 models/MaternalMortality.py:55
+#: snisi_reprohealth/models/ChildrenMortality.py:78
+#: snisi_reprohealth/models/MaternalMortality.py:55
 msgid "Name of the deceased"
 msgstr "Nom du défunt"
 
-#: models/ChildrenMortality.py:81
+#: snisi_reprohealth/models/ChildrenMortality.py:81
 msgid "Sex"
 msgstr "Sexe"
 
-#: models/ChildrenMortality.py:82 models/MaternalMortality.py:56
+#: snisi_reprohealth/models/ChildrenMortality.py:82
+#: snisi_reprohealth/models/MaternalMortality.py:56
 msgid "Date of birth"
 msgstr "Date de naissance"
 
-#: models/ChildrenMortality.py:84 models/MaternalMortality.py:58
+#: snisi_reprohealth/models/ChildrenMortality.py:84
+#: snisi_reprohealth/models/MaternalMortality.py:58
 msgid "DOB is an estimation?"
 msgstr "DDN est une estimation ?"
 
-#: models/ChildrenMortality.py:85 models/MaternalMortality.py:59
+#: snisi_reprohealth/models/ChildrenMortality.py:85
+#: snisi_reprohealth/models/MaternalMortality.py:59
 msgid "Date of death"
 msgstr "Date du décès"
 
-#: models/ChildrenMortality.py:88
+#: snisi_reprohealth/models/ChildrenMortality.py:88
 msgid "Death Location"
 msgstr "Lieu du décès"
 
-#: models/ChildrenMortality.py:91 models/MaternalMortality.py:62
+#: snisi_reprohealth/models/ChildrenMortality.py:91
+#: snisi_reprohealth/models/MaternalMortality.py:62
 msgid "Place of death"
 msgstr "Lieu du décès"
 
-#: models/ChildrenMortality.py:107 models/MaternalMortality.py:92
+#: snisi_reprohealth/models/ChildrenMortality.py:107
+#: snisi_reprohealth/models/MaternalMortality.py:92
 #, python-brace-format
 msgid "{name}/{dod}"
 msgstr "{name}/{dod}"
 
-#: models/ChildrenMortality.py:124
+#: snisi_reprohealth/models/ChildrenMortality.py:124
 msgid "Aggregated Children Mortality Report"
 msgstr "Rapport de mortalité infantile"
 
-#: models/ChildrenMortality.py:125
+#: snisi_reprohealth/models/ChildrenMortality.py:125
 msgid "Aggregated Children Mortality Reports"
 msgstr "Rapports de mortalité infantile Aggrégés"
 
-#: models/ChildrenMortality.py:160 models/Commodities.py:287
-#: models/MaternalMortality.py:189
+#: snisi_reprohealth/models/ChildrenMortality.py:160
+#: snisi_reprohealth/models/Commodities.py:287
+#: snisi_reprohealth/models/MaternalMortality.py:189
 msgid "Primary. Sources"
 msgstr "Sources primaires"
 
-#: models/Commodities.py:52
+#: snisi_reprohealth/models/Commodities.py:52
 msgid "Yes"
 msgstr "Oui"
 
-#: models/Commodities.py:53 models/Commodities.py:62
+#: snisi_reprohealth/models/Commodities.py:53
+#: snisi_reprohealth/models/Commodities.py:62
 msgid "No"
 msgstr "Non"
 
-#: models/Commodities.py:60
+#: snisi_reprohealth/models/Commodities.py:60
 msgid "Yes. Supplies available"
 msgstr "Oui et disponible"
 
-#: models/Commodities.py:61
+#: snisi_reprohealth/models/Commodities.py:61
 msgid "Yes. Supplies not available"
 msgstr "Oui mais indisponible."
 
-#: models/Commodities.py:71
+#: snisi_reprohealth/models/Commodities.py:71
 msgid "RH Commodities Report"
 msgstr "Rapport de produits SR"
 
-#: models/Commodities.py:72
+#: snisi_reprohealth/models/Commodities.py:72
 msgid "RH Commodities Reports"
 msgstr "Rapports de produits SR"
 
-#: models/Commodities.py:80
+#: snisi_reprohealth/models/Commodities.py:80
 msgid "Male condom. Quantity in hand (pieces) or -1."
 msgstr "Préservatif masculin. Quantité en main (pièces) ou -1."
 
-#: models/Commodities.py:82
+#: snisi_reprohealth/models/Commodities.py:82
 msgid "Female condom. Quantity in hand (pieces) or -1."
 msgstr "Préservatif féminin. Quantité en main (pièces) ou -1."
 
-#: models/Commodities.py:84
+#: snisi_reprohealth/models/Commodities.py:84
 msgid "Oral pills. Quantity in hand (cycles) or -1."
 msgstr "Pilule orale. Quantité en main (cycles) ou -1."
 
-#: models/Commodities.py:86
+#: snisi_reprohealth/models/Commodities.py:86
 msgid "Injectable. Quantity in hand (vials) or -1."
 msgstr "Injectable. Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:88
+#: snisi_reprohealth/models/Commodities.py:88
 msgid "IUD. Quantity in hand (unit) or -1."
 msgstr "DIU. Quantité en main (unité) ou -1."
 
-#: models/Commodities.py:90
+#: snisi_reprohealth/models/Commodities.py:90
 msgid "Implants. Quantity in hand (unit) or -1."
 msgstr "Implants. Quantité en main (unité) ou -1."
 
-#: models/Commodities.py:92
+#: snisi_reprohealth/models/Commodities.py:92
 msgid "Female sterilization"
 msgstr "Stérilisatiom féminine"
 
-#: models/Commodities.py:95
+#: snisi_reprohealth/models/Commodities.py:95
 msgid "Male sterilization"
 msgstr "Stérilisation masculine"
 
-#: models/Commodities.py:100
+#: snisi_reprohealth/models/Commodities.py:100
 msgid "Amoxicillin (Injectable). Quantity in hand (vials) or -1."
 msgstr "Amoxicillin (Injectable). Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:102
+#: snisi_reprohealth/models/Commodities.py:102
 msgid "Amoxicillin (capsule/gel). Quantity in hand (capsules) or -1."
 msgstr "Amoxicillin (capsule/gel). Quantité en main (capsules) ou -1."
 
-#: models/Commodities.py:104
+#: snisi_reprohealth/models/Commodities.py:104
 msgid "Amoxicillin (Suspension). Quantity in hand (vials) or -1."
 msgstr "Amoxicillin (Suspension). Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:106
+#: snisi_reprohealth/models/Commodities.py:106
 msgid "Azithromicine (tablet/gel). Quantity in hand (tablets) or -1."
 msgstr "Azithromicine (plaquette/gel). Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:108
+#: snisi_reprohealth/models/Commodities.py:108
 msgid "Azithromicine (Suspension). Quantity in hand (bottles) or -1."
 msgstr "Azithromicine (suspension). Quantité en main (flacons) ou -1."
 
-#: models/Commodities.py:110
+#: snisi_reprohealth/models/Commodities.py:110
 msgid "Benzatine penicillin. Quantity in hand (vials) or -1."
 msgstr "trioxifène pénicilline. Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:112
+#: snisi_reprohealth/models/Commodities.py:112
 msgid "Cefexime. Quantity in hand (tablets) or -1."
 msgstr "Cefexime. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:114
+#: snisi_reprohealth/models/Commodities.py:114
 msgid "Clotrimazole. Quantity in hand (tablets) or -1."
 msgstr "Clotrimazole. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:116
+#: snisi_reprohealth/models/Commodities.py:116
 msgid "Ergometrine (tablets). Quantity in hand (tablets) or -1."
 msgstr "Ergometrine (plaquettes). Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:118
+#: snisi_reprohealth/models/Commodities.py:118
 msgid "Ergometrine (vials). Quantity in hand (vials) or -1."
 msgstr "Ergometrine. Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:120
+#: snisi_reprohealth/models/Commodities.py:120
 msgid "Iron. Quantity in hand (tablets) or -1."
 msgstr "Fer. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:122
+#: snisi_reprohealth/models/Commodities.py:122
 msgid "Folate. Quantity in hand (tablets) or -1."
 msgstr "Folacine. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:124
+#: snisi_reprohealth/models/Commodities.py:124
 msgid "Iron/Folate. Quantity in hand (tablets) or -1."
 msgstr "Fer/Folacine. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:126
+#: snisi_reprohealth/models/Commodities.py:126
 msgid "Magnesium Sulfate. Quantity in hand (vials) or -1."
 msgstr "Sulfate de magnesium. Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:128
+#: snisi_reprohealth/models/Commodities.py:128
 msgid "Metronidazole (injectable). Quantity in hand (vials) or -1."
 msgstr "Metronidazole (injectable). Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:130
+#: snisi_reprohealth/models/Commodities.py:130
 msgid "Oxytocine. Quantity in hand (vials) or -1."
 msgstr "Oxytocine. Quantité en main (ampoules) ou -1."
 
-#: models/Commodities.py:132
+#: snisi_reprohealth/models/Commodities.py:132
 msgid "Ceftriaxone 500mg. Quantity in hand (tablets) or -1."
 msgstr "Ceftriaxone 500mg. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:134
+#: snisi_reprohealth/models/Commodities.py:134
 msgid "Ceftriaxone 1g. Quantity in hand (tablets) or -1."
 msgstr "Ceftriaxone 1g. Quantité en main (plaquettes) ou -1."
 
-#: models/Commodities.py:219
+#: snisi_reprohealth/models/Commodities.py:219
 msgid "Aggregated RH Commodities Report"
 msgstr "Rapport de produits SR Aggrégé"
 
-#: models/Commodities.py:220
+#: snisi_reprohealth/models/Commodities.py:220
 msgid "Aggregated RH Commodities Reports"
 msgstr "Rapports de produits SR Aggrégés"
 
-#: models/MaternalMortality.py:33
+#: snisi_reprohealth/models/MaternalMortality.py:33
 msgid "Bleeding"
 msgstr "Saignements"
 
-#: models/MaternalMortality.py:35
+#: snisi_reprohealth/models/MaternalMortality.py:35
 msgid "High Blood Pressure"
 msgstr "Haute préssion sanguin"
 
-#: models/MaternalMortality.py:37
+#: snisi_reprohealth/models/MaternalMortality.py:37
 msgid "Crisis"
 msgstr "Crise"
 
-#: models/MaternalMortality.py:38
+#: snisi_reprohealth/models/MaternalMortality.py:38
 msgid "Miscarriage"
 msgstr "Fausse-couche"
 
-#: models/MaternalMortality.py:39
+#: snisi_reprohealth/models/MaternalMortality.py:39
 msgid "Abortion"
 msgstr "Avortement"
 
-#: models/MaternalMortality.py:48
+#: snisi_reprohealth/models/MaternalMortality.py:48
 msgid "Maternal Mortality Report"
 msgstr "Rapport de mortalité maternelle"
 
-#: models/MaternalMortality.py:49
+#: snisi_reprohealth/models/MaternalMortality.py:49
 msgid "Maternal Mortality Reports"
 msgstr "Rapports de mortalité maternelle"
 
-#: models/MaternalMortality.py:64
+#: snisi_reprohealth/models/MaternalMortality.py:64
 msgid "Living children of the deceased"
 msgstr "Nb. d'enfants vivants de la défunte"
 
-#: models/MaternalMortality.py:66
+#: snisi_reprohealth/models/MaternalMortality.py:66
 msgid "Dead children of the deceased"
 msgstr "Nb d'enfants morts de la défunte"
 
-#: models/MaternalMortality.py:67
+#: snisi_reprohealth/models/MaternalMortality.py:67
 msgid "Pregnant?"
 msgstr "Enceinte ?"
 
-#: models/MaternalMortality.py:70
+#: snisi_reprohealth/models/MaternalMortality.py:70
 msgid "Duration of the pregnancy (weeks)"
 msgstr "Durée de la grossesse (semaines)"
 
-#: models/MaternalMortality.py:72
+#: snisi_reprohealth/models/MaternalMortality.py:72
 msgid "Pregnancy related death"
 msgstr "Décès lié à la grossesse"
 
-#: models/MaternalMortality.py:110
+#: snisi_reprohealth/models/MaternalMortality.py:110
 msgid "Aggregated Maternal Mortality Report"
 msgstr "Rapport de mortalité maternelle Aggrégé"
 
-#: models/MaternalMortality.py:111
+#: snisi_reprohealth/models/MaternalMortality.py:111
 msgid "Aggregated Maternal Mortality Reports"
 msgstr "Rapports de mortalité maternelle Aggrégés"
 
-#: models/PFActivities.py:29 models/PFActivities.py:67
+#: snisi_reprohealth/models/PFActivities.py:29
+#: snisi_reprohealth/models/PFActivities.py:67
 msgid "IUD"
 msgstr "DIU"
 
-#: models/PFActivities.py:30 models/PFActivities.py:79
+#: snisi_reprohealth/models/PFActivities.py:30
+#: snisi_reprohealth/models/PFActivities.py:79
 msgid "Implants"
 msgstr "Implants"
 
-#: models/PFActivities.py:31 models/PFActivities.py:69
+#: snisi_reprohealth/models/PFActivities.py:31
+#: snisi_reprohealth/models/PFActivities.py:69
 msgid "Injections"
 msgstr "Injectables"
 
-#: models/PFActivities.py:32 models/PFActivities.py:71
+#: snisi_reprohealth/models/PFActivities.py:32
+#: snisi_reprohealth/models/PFActivities.py:71
 msgid "Pills"
 msgstr "Pilules"
 
-#: models/PFActivities.py:33 models/PFActivities.py:73
+#: snisi_reprohealth/models/PFActivities.py:33
+#: snisi_reprohealth/models/PFActivities.py:73
 msgid "Male condoms"
 msgstr "Préservatifs masculin"
 
-#: models/PFActivities.py:34 models/PFActivities.py:75
+#: snisi_reprohealth/models/PFActivities.py:34
+#: snisi_reprohealth/models/PFActivities.py:75
 msgid "Female condoms"
 msgstr "Préservatif féminin"
 
-#: models/PFActivities.py:35 models/PFActivities.py:99
+#: snisi_reprohealth/models/PFActivities.py:35
+#: snisi_reprohealth/models/PFActivities.py:99
 msgid "HIV Tests"
 msgstr "Détermine VIH"
 
-#: models/PFActivities.py:36 models/PFActivities.py:107
+#: snisi_reprohealth/models/PFActivities.py:36
+#: snisi_reprohealth/models/PFActivities.py:107
 msgid "IUD removals"
 msgstr "Retraits DIU"
 
-#: models/PFActivities.py:37 models/PFActivities.py:105
+#: snisi_reprohealth/models/PFActivities.py:37
+#: snisi_reprohealth/models/PFActivities.py:105
 msgid "Implant removals"
 msgstr "Retraits implants"
 
-#: models/PFActivities.py:38
+#: snisi_reprohealth/models/PFActivities.py:38
 msgid "Tubal ligation"
 msgstr "Ligature des trompes"
 
-#: models/PFActivities.py:39 models/PFActivities.py:77
+#: snisi_reprohealth/models/PFActivities.py:39
+#: snisi_reprohealth/models/PFActivities.py:77
 msgid "Emergency controls"
 msgstr "Contraception d'urgence"
 
-#: models/PFActivities.py:40
+#: snisi_reprohealth/models/PFActivities.py:40
 msgid "New clients"
 msgstr "Nouveaux clients"
 
-#: models/PFActivities.py:41
+#: snisi_reprohealth/models/PFActivities.py:41
 msgid "Previous clients"
 msgstr "Anciens clients"
 
-#: models/PFActivities.py:42
+#: snisi_reprohealth/models/PFActivities.py:42
 msgid "-25 visits"
 msgstr "Visites de clients âgés de 24ans ou moins"
 
-#: models/PFActivities.py:43
+#: snisi_reprohealth/models/PFActivities.py:43
 msgid "25+ visits"
 msgstr "Visites de clients âgés de 25ans ou plus"
 
-#: models/PFActivities.py:44
+#: snisi_reprohealth/models/PFActivities.py:44
 msgid "First Visits"
 msgstr "Clients utilisants une méthode de PF pour la première fois"
 
-#: models/PFActivities.py:45
+#: snisi_reprohealth/models/PFActivities.py:45
 msgid "Short-term method visits"
 msgstr "Visites de clients pour méthode de PF à court terme"
 
-#: models/PFActivities.py:46
+#: snisi_reprohealth/models/PFActivities.py:46
 msgid "Long-term method visits"
 msgstr "Visites de clients pour méthode de PF de longue durée"
 
-#: models/PFActivities.py:47 models/PFActivities.py:97
+#: snisi_reprohealth/models/PFActivities.py:47
+#: snisi_reprohealth/models/PFActivities.py:97
 msgid "HIV Counseiling"
 msgstr "Counseling VIH"
 
-#: models/PFActivities.py:48 models/PFActivities.py:101
+#: snisi_reprohealth/models/PFActivities.py:48
+#: snisi_reprohealth/models/PFActivities.py:101
 msgid "HIV+ results"
 msgstr "Clients dépistés séropositifs"
 
-#: models/PFActivities.py:49
+#: snisi_reprohealth/models/PFActivities.py:49
 msgid "Pregnancy Tests"
 msgstr "Tests de grossesse"
 
-#: models/PFActivities.py:65
+#: snisi_reprohealth/models/PFActivities.py:65
 msgid "Tubal Ligations"
 msgstr "Ligature des trompes"
 
-#: models/PFActivities.py:83
+#: snisi_reprohealth/models/PFActivities.py:83
 msgid "New Clients"
 msgstr "Nouveaux clients"
 
-#: models/PFActivities.py:85
+#: snisi_reprohealth/models/PFActivities.py:85
 msgid "Previous Clients"
 msgstr "Anciens clients"
 
-#: models/PFActivities.py:87
+#: snisi_reprohealth/models/PFActivities.py:87
 msgid "Visits from under 25yo."
 msgstr "Visites de moins de 25 ans."
 
-#: models/PFActivities.py:89
+#: snisi_reprohealth/models/PFActivities.py:89
 msgid "Visits from over 25yo."
 msgstr "Visites de plus de 25 ans."
 
-#: models/PFActivities.py:91
+#: snisi_reprohealth/models/PFActivities.py:91
 msgid "Clients visiting for the first time."
 msgstr "Client venus pour la première fois"
 
-#: models/PFActivities.py:93
+#: snisi_reprohealth/models/PFActivities.py:93
 msgid "Short-term methods related visits"
 msgstr "Visites pour méthodes courte durée"
 
-#: models/PFActivities.py:95
+#: snisi_reprohealth/models/PFActivities.py:95
 msgid "Long-term methods related visits"
 msgstr "Visites pour méthodes longue durée"
 
-#: models/PFActivities.py:111
+#: snisi_reprohealth/models/PFActivities.py:111
 msgid "IUD: Quantity"
 msgstr "DIU : Quantité"
 
-#: models/PFActivities.py:113
+#: snisi_reprohealth/models/PFActivities.py:113
 msgid "IUD: Price"
 msgstr "DIU : Prix"
 
-#: models/PFActivities.py:115
+#: snisi_reprohealth/models/PFActivities.py:115
 msgid "IUD: Revenue"
 msgstr "DIU : Revenus"
 
-#: models/PFActivities.py:118
+#: snisi_reprohealth/models/PFActivities.py:118
 msgid "Implants: Quantity"
 msgstr "Implants : Quantité"
 
-#: models/PFActivities.py:120
+#: snisi_reprohealth/models/PFActivities.py:120
 msgid "Implants: Price"
 msgstr "Implants : Prix"
 
-#: models/PFActivities.py:122
+#: snisi_reprohealth/models/PFActivities.py:122
 msgid "Implants: Revenue"
 msgstr "Implants : Revenus"
 
-#: models/PFActivities.py:125
+#: snisi_reprohealth/models/PFActivities.py:125
 msgid "Injections: Quantity"
 msgstr "Injectables : Quantité"
 
-#: models/PFActivities.py:127
+#: snisi_reprohealth/models/PFActivities.py:127
 msgid "Injections: Price"
 msgstr "Injectables : Prix"
 
-#: models/PFActivities.py:129
+#: snisi_reprohealth/models/PFActivities.py:129
 msgid "Injections: Revenue"
 msgstr "Injectables : Revenus"
 
-#: models/PFActivities.py:132
+#: snisi_reprohealth/models/PFActivities.py:132
 msgid "Pills: Quantity"
 msgstr "Pilules : Quantité"
 
-#: models/PFActivities.py:134
+#: snisi_reprohealth/models/PFActivities.py:134
 msgid "Pills: Price"
 msgstr "Pilules : Prix"
 
-#: models/PFActivities.py:136
+#: snisi_reprohealth/models/PFActivities.py:136
 msgid "Pills: Revenue"
 msgstr "Pilules : Revenus"
 
-#: models/PFActivities.py:139
+#: snisi_reprohealth/models/PFActivities.py:139
 msgid "Male Condoms: Quantity"
 msgstr "Préservatif masc. : Quantité"
 
-#: models/PFActivities.py:141
+#: snisi_reprohealth/models/PFActivities.py:141
 msgid "Male Condoms: Price"
 msgstr "Préservatif masc. : Prix"
 
-#: models/PFActivities.py:143
+#: snisi_reprohealth/models/PFActivities.py:143
 msgid "Male Condoms: Revenue"
 msgstr "Préservatif masc. : Revenus"
 
-#: models/PFActivities.py:146
+#: snisi_reprohealth/models/PFActivities.py:146
 msgid "Female Condoms: Quantity"
 msgstr "Préservatif féminin : Quantité"
 
-#: models/PFActivities.py:148
+#: snisi_reprohealth/models/PFActivities.py:148
 msgid "Female Condoms: Price"
 msgstr "Préservatif féminin : Prix"
 
-#: models/PFActivities.py:150
+#: snisi_reprohealth/models/PFActivities.py:150
 msgid "Female Condoms: Revenue"
 msgstr "Préservatif féminin : Revenus"
 
-#: models/PFActivities.py:153
+#: snisi_reprohealth/models/PFActivities.py:153
 msgid "HIV Tests: Quantity"
 msgstr "Tests VIH : Quantité"
 
-#: models/PFActivities.py:155
+#: snisi_reprohealth/models/PFActivities.py:155
 msgid "HIV Tests: Price"
 msgstr "Tests VIH : Prix"
 
-#: models/PFActivities.py:157
+#: snisi_reprohealth/models/PFActivities.py:157
 msgid "HIV Tests: Revenue"
 msgstr "Tests VIH : Revenus"
 
-#: models/PFActivities.py:160
+#: snisi_reprohealth/models/PFActivities.py:160
 msgid "IUD Removals: Quantity"
 msgstr "Retraits DIU : Quantité"
 
-#: models/PFActivities.py:162
+#: snisi_reprohealth/models/PFActivities.py:162
 msgid "IUD Removals: Price"
 msgstr "Retraits DIU : Prix"
 
-#: models/PFActivities.py:164
+#: snisi_reprohealth/models/PFActivities.py:164
 msgid "IUD Removals: Revenue"
 msgstr "Retraits DIU : Revenus"
 
-#: models/PFActivities.py:167
+#: snisi_reprohealth/models/PFActivities.py:167
 msgid "Implants Removals: Quantity"
 msgstr "Retraits implants : Quantité"
 
-#: models/PFActivities.py:169
+#: snisi_reprohealth/models/PFActivities.py:169
 msgid "Implants Removals: Price"
 msgstr "Retraits implants : Prix"
 
-#: models/PFActivities.py:171
+#: snisi_reprohealth/models/PFActivities.py:171
 msgid "Implants Removals"
 msgstr "Retraits implants"
 
-#: models/PFActivities.py:174
+#: snisi_reprohealth/models/PFActivities.py:174
 msgid "Emergency Controls: Quantity"
 msgstr "Contraception d'urgence : Quantité"
 
-#: models/PFActivities.py:176
+#: snisi_reprohealth/models/PFActivities.py:176
 msgid "Emergency Controls: Price"
 msgstr "Contraception d'urgence : Prix"
 
-#: models/PFActivities.py:178
+#: snisi_reprohealth/models/PFActivities.py:178
 msgid "Emergency Controls"
 msgstr "Contraception d'urgence"
 
-#: models/PFActivities.py:182
+#: snisi_reprohealth/models/PFActivities.py:182
 msgid "IUD: Initial Quantity"
 msgstr "DIU : Quantité initiale"
 
-#: models/PFActivities.py:184
+#: snisi_reprohealth/models/PFActivities.py:184
 msgid "IUD: Quantity Used"
 msgstr "DIU : Quantité utilisée"
 
-#: models/PFActivities.py:186
+#: snisi_reprohealth/models/PFActivities.py:186
 msgid "IUD: Quantity Lost"
 msgstr "DIU : Quantité perdue"
 
-#: models/PFActivities.py:188
+#: snisi_reprohealth/models/PFActivities.py:188
 msgid "IUD: Quantity Received"
 msgstr "DIU : Quantité reçus"
 
-#: models/PFActivities.py:191
+#: snisi_reprohealth/models/PFActivities.py:191
 msgid "Implants: Initial Quantity"
 msgstr "Implants :  : Quantité initiale"
 
-#: models/PFActivities.py:193
+#: snisi_reprohealth/models/PFActivities.py:193
 msgid "Implants: Quantity Used"
 msgstr "Implants: Quantité utilisée"
 
-#: models/PFActivities.py:195
+#: snisi_reprohealth/models/PFActivities.py:195
 msgid "Implants: Quantity Lost"
 msgstr "Implants: Quantité perdue"
 
-#: models/PFActivities.py:197
+#: snisi_reprohealth/models/PFActivities.py:197
 msgid "Implants: Quantity Received"
 msgstr "Implants : Quantité reçue"
 
-#: models/PFActivities.py:200
+#: snisi_reprohealth/models/PFActivities.py:200
 msgid "Injections: Initial Quantity"
 msgstr "Injectables : Quantité initiale"
 
-#: models/PFActivities.py:202
+#: snisi_reprohealth/models/PFActivities.py:202
 msgid "Injections: Quantity Used"
 msgstr "Injectables : Quantité utilisée"
 
-#: models/PFActivities.py:204
+#: snisi_reprohealth/models/PFActivities.py:204
 msgid "Injections: Quantity Lost"
 msgstr "Injectables : Quantité perdue"
 
-#: models/PFActivities.py:206
+#: snisi_reprohealth/models/PFActivities.py:206
 msgid "Injections: Quantity Received"
 msgstr "Injectable : Quantité reçue"
 
-#: models/PFActivities.py:209
+#: snisi_reprohealth/models/PFActivities.py:209
 msgid "Pills: Initial Quantity"
 msgstr "Pilules : Quantité initiale"
 
-#: models/PFActivities.py:211
+#: snisi_reprohealth/models/PFActivities.py:211
 msgid "Pills: Quantity Used"
 msgstr "Pilules : Quantité utilisée"
 
-#: models/PFActivities.py:213
+#: snisi_reprohealth/models/PFActivities.py:213
 msgid "Pills: Quantity Lost"
 msgstr "Pilules : Quantité perdue"
 
-#: models/PFActivities.py:215
+#: snisi_reprohealth/models/PFActivities.py:215
 msgid "Pills: Quantity Received"
 msgstr "Pilules : Quantité reçue"
 
-#: models/PFActivities.py:218
+#: snisi_reprohealth/models/PFActivities.py:218
 msgid "Male Condoms: Initial Quantity"
 msgstr "Préservatif masc. : Quantité initiale"
 
-#: models/PFActivities.py:220
+#: snisi_reprohealth/models/PFActivities.py:220
 msgid "Male Condoms: Quantity Used"
 msgstr "Préservatif masc. : Quantité utilisée"
 
-#: models/PFActivities.py:222
+#: snisi_reprohealth/models/PFActivities.py:222
 msgid "Male Condoms: Quantity Lost"
 msgstr "Préservatif masc. : Quantité perdue"
 
-#: models/PFActivities.py:224
+#: snisi_reprohealth/models/PFActivities.py:224
 msgid "Male Condoms: Quantity Received"
 msgstr "Préservatif masculin: Quantité reçue"
 
-#: models/PFActivities.py:227
+#: snisi_reprohealth/models/PFActivities.py:227
 msgid "Female Condoms: Initial Quantity"
 msgstr "Préservatif féminin : Quantité initiale"
 
-#: models/PFActivities.py:229
+#: snisi_reprohealth/models/PFActivities.py:229
 msgid "Female Condoms: Quantity Used"
 msgstr "Préservatif féminin: Quantité utilisée"
 
-#: models/PFActivities.py:231
+#: snisi_reprohealth/models/PFActivities.py:231
 msgid "Female Condoms: Quantity Lost"
 msgstr "Préservatif féminin: Quantité perdue"
 
-#: models/PFActivities.py:233
+#: snisi_reprohealth/models/PFActivities.py:233
 msgid "Female Condoms: Quantity Received"
 msgstr "Préservatif féminin: Quantité reçue"
 
-#: models/PFActivities.py:236
+#: snisi_reprohealth/models/PFActivities.py:236
 msgid "HIV Tests: Initial Quantity"
 msgstr "Tests VIH : Quantité initiale"
 
-#: models/PFActivities.py:238
+#: snisi_reprohealth/models/PFActivities.py:238
 msgid "HIV Tests: Quantity Used"
 msgstr "Tests VIH : Quantité utilisée"
 
-#: models/PFActivities.py:240
+#: snisi_reprohealth/models/PFActivities.py:240
 msgid "HIV Tests: Quantity Lost"
 msgstr "Tests VIH : Quantité perdue"
 
-#: models/PFActivities.py:242
+#: snisi_reprohealth/models/PFActivities.py:242
 msgid "HIV Tests: Quantity Received"
 msgstr "Tests VIH : Quantité reçue"
 
-#: models/PFActivities.py:244
+#: snisi_reprohealth/models/PFActivities.py:244
 msgid "Pregnancy Tests: Initial Quantity"
 msgstr "Tests grossesses : Quantité initiale"
 
-#: models/PFActivities.py:246
+#: snisi_reprohealth/models/PFActivities.py:246
 msgid "Pregnancy Tests: Quantity Used"
 msgstr "Tests grossesses : Quantité utilisée"
 
-#: models/PFActivities.py:248
+#: snisi_reprohealth/models/PFActivities.py:248
 msgid "Pregnancy Tests: Quantity Lost"
 msgstr "Tests grossesses : Quantité perdue"
 
-#: models/PFActivities.py:250
+#: snisi_reprohealth/models/PFActivities.py:250
 msgid "Pregnancy Tests: Quantity Received"
 msgstr "Tests grossessses : Quantité reçuee"
 
-#: models/PFActivities.py:253
+#: snisi_reprohealth/models/PFActivities.py:253
 msgid "Emergency Controls: Initial Quantity"
 msgstr "Contraception d'urgence : Quantité initiale"
 
-#: models/PFActivities.py:255
+#: snisi_reprohealth/models/PFActivities.py:255
 msgid "Emergency Controls: Quantity Used"
 msgstr "Contraception d'urgence : Quantité utilisée"
 
-#: models/PFActivities.py:257
+#: snisi_reprohealth/models/PFActivities.py:257
 msgid "Emergency Controls: Quantity Lost"
 msgstr "Contraception d'urgence : Quantité perdue"
 
-#: models/PFActivities.py:259
+#: snisi_reprohealth/models/PFActivities.py:259
 msgid "Emergency Controls: Quantity Received"
 msgstr "Contraception d'urgence: Quantité reçue"
 
-#: models/PFActivities.py:463
+#: snisi_reprohealth/models/PFActivities.py:463
 msgid "Provided Services Report"
 msgstr "Rapport des services prestés"
 
-#: models/PFActivities.py:464
+#: snisi_reprohealth/models/PFActivities.py:464
 msgid "Provided Services Reports"
 msgstr "Rapports des services prestés"
 
-#: models/PFActivities.py:510
+#: snisi_reprohealth/models/PFActivities.py:510
 msgid "Aggregated Provided Services Report"
 msgstr "Rapport des services prestés SR Aggrégé"
 
-#: models/PFActivities.py:511
+#: snisi_reprohealth/models/PFActivities.py:511
 msgid "Aggregated Provided Services Reports"
 msgstr "Rapports des services prestés Aggrégés"
 
-#: models/PFActivities.py:516
+#: snisi_reprohealth/models/PFActivities.py:516
 msgid "Primary. Sources (all)"
 msgstr "Sources primaires"
 
-#: models/PFActivities.py:523
+#: snisi_reprohealth/models/PFActivities.py:523
 msgid "Primary. Sources (direct)"
 msgstr "Sources primaires"
 
-#: xls_import.py:40
+#: snisi_reprohealth/xls_import.py:39
 msgid "Month"
 msgstr "Mois"
 
-#: xls_import.py:43
+#: snisi_reprohealth/xls_import.py:42
 msgid "Year"
 msgstr "Année"

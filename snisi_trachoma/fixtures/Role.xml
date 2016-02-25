@@ -12,6 +12,10 @@
         <field type="CharField" name="slug">tt_tso</field>
         <field type="CharField" name="name">TSO</field>
     </object>
+    <object pk="tt_surgeon" model="snisi_core.role">
+        <field type="CharField" name="slug">tt_surgeon</field>
+        <field type="CharField" name="name">Chirurgien</field>
+    </object>
     <object pk="pf_mtn" model="snisi_core.role">
         <field type="CharField" name="slug">pf_mtn</field>
         <field type="CharField" name="name">Point Focal MTN</field>

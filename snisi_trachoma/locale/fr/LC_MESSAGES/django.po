@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
 "PO-Revision-Date: 2014-04-14 14:29-0000\n"
 "Last-Translator: \n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,58 +19,59 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: integrity.py:48 integrity.py:221 integrity.py:479
+#: snisi_trachoma/integrity.py:48 snisi_trachoma/integrity.py:221
+#: snisi_trachoma/integrity.py:479
 msgid "Données manquantes pour {}"
 msgstr "Données manquantes pour {}"
 
-#: models.py:32
+#: snisi_trachoma/models.py:32
 msgid "TT Backlog Village Report"
 msgstr "Rapport de visite village TT Backlog"
 
-#: models.py:33
+#: snisi_trachoma/models.py:33
 msgid "TT Backlog Village Reports"
 msgstr "Rapports de visite village TT Backlog"
 
-#: models.py:83
+#: snisi_trachoma/models.py:83
 msgid "Fixed"
 msgstr "Fixe"
 
-#: models.py:84
+#: snisi_trachoma/models.py:84
 msgid "Mobile"
 msgstr "Mobile"
 
-#: models.py:85
+#: snisi_trachoma/models.py:85
 msgid "Advanced"
 msgstr "Avancée"
 
-#: models.py:93
+#: snisi_trachoma/models.py:93
 msgid "AMO"
 msgstr "AMO"
 
-#: models.py:94
+#: snisi_trachoma/models.py:94
 msgid "TSO"
 msgstr "TSO"
 
-#: models.py:95
+#: snisi_trachoma/models.py:95
 msgid "OPT"
 msgstr "OPT"
 
-#: models.py:100
+#: snisi_trachoma/models.py:100
 msgid "TT Backlog Mission Report"
 msgstr "Rapport de mission TT Backlog Aggrégé"
 
-#: models.py:101
+#: snisi_trachoma/models.py:101
 msgid "TT Backlog Mission Reports"
 msgstr "Rapports de mission TT Backlog"
 
-#: models.py:117 models.py:253
+#: snisi_trachoma/models.py:117 snisi_trachoma/models.py:253
 msgid "Rapports Villages"
 msgstr "Rapports Villages"
 
-#: models.py:229
+#: snisi_trachoma/models.py:229
 msgid "Aggregated TT Backlog Mission Report"
 msgstr "Rapports de mission TT Backlog"
 
-#: models.py:230
+#: snisi_trachoma/models.py:230
 msgid "Aggregated TT Backlog Mission Reports"
 msgstr "Rapports de mission TT Backlog Aggrégé"

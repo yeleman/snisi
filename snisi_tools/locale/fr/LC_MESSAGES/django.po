@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: snisi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 13:55+0000\n"
+"POT-Creation-Date: 2016-02-05 10:06+0000\n"
 "PO-Revision-Date: 2015-02-16 12:23-0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: french <snisi@sante.gov.ml>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: emails.py:49
+#: snisi_tools/emails.py:49
 msgid "No Recipients for that message"
 msgstr "Aucun destinataire pour ce message"
 
-#: emails.py:53
+#: snisi_tools/emails.py:53
 msgid "Unable to send empty email messages"
 msgstr "Impossible d'envoyer un message vide"
 
-#: emails.py:64
+#: snisi_tools/emails.py:64
 #, python-brace-format
 msgid "Message from {site}"
 msgstr "Message de {site}"

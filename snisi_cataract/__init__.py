@@ -8,7 +8,7 @@ from __future__ import (unicode_literals, absolute_import,
 from snisi_core.models.Projects import Domain
 
 PROJECT_BRAND = "PNSO"
-DOMAIN_SLUG = 'trachoma'
+DOMAIN_SLUG = 'cataract'
 
 
 def get_domain():
