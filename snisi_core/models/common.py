@@ -143,14 +143,9 @@ class ActiveManager(models.Manager):
 
 
 def agg_field_average(agg_report, field):
-    logger.debug("agg_field_average on `{}`".format(field))
-    logger.debug("Nb sources: {}".format(agg_report.indiv_sources.count()))
     values = [getattr(indiv_report, field, 0)
               for indiv_report in agg_report.indiv_sources.all()]
-    logger.debug(values)
     value = np.average(values)
-    logger.debug(value)
     if np.isnan(value):
-        logger.debug("isNaN")
         return 0
     return value

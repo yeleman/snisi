@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Missions cataracte à {{ entity }} pour {{ period }}{% endblock %}
+
+{% block content %}
+
+<div id="entity_periods_filter" class="pure-form" method="POST">
+    <legend>Missions de chirurgie de la cataracte</legend>
+    {% include "parts/entity_filter_select.html" with root=root lineage=lineage children=children %}
+
+    {% include "parts/periods_filter.html" with selectID="filter_periodA" selected_period=period all_periods=all_periods %}
+
+    <button type="submit" class="pure-button pure-button-primary">Afficher</button>
+</div>
+
+<h2>Missions démarrée en {{ period }} à {{ entity }}</h2>
+{% if missions|length == 0 %}
+<p>Il n'y a aucune mission démarrée pendant la période {{ period }} à {{ entity }}.</p>
+{% else %}
+<table class="pure-table missions-list data-centered data-first-col-left">
+    <tr><th>Mission</th><th>District</th><th>Stratégie</th><th>Date départ</th><th>Statut</th><th>Nb de chirurgie</th></tr>
+    {% for mission in missions %}
+    <tr data-receipt="{{ mission.receipt }}">
+        <td><a class="mission-url" href="{% url 'cataract_mission' mission.receipt %}">{{ mission.receipt }}</a></td>
+        <td>{% include "parts/entity_link.html" with entity=mission.entity %}</td>
+        <td>{{ mission.verbose_strategy }}</td>
+        <td>{{ mission.started_on }}</td>
+        <td>{{ mission.verbose_completion_status }}</th>
+        <td>{{ mission.nb_surgery_reports }}</td>
+        <!-- <td>{% include "parts/user_link.html" with provider=mission.operator %}</td> -->
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% endblock %}
+
+{% block onJQready %}
+entities_browser = getEntitiesBrowser({
+    parentID: 'entity_periods_filter',
+    root: "{{ root.slug }}",
+    baseURL: '/api/entities/getclusterchildren/cataract',
+    lineage: [{% for s in lineage %}"{{ s }}",{% endfor %}],
+    lineage_data: [{% for d in lineage_data %}"{{ d|default_if_none:"null" }}",{% endfor %}],
+    auto_launch: true,
+    add_default_option: true,
+    default_option: {value: '-1', label: "AUCUN"}
+});
+registerEntityPeriodsFilter({
+    entity_browser: entities_browser,
+    periodAID: 'filter_periodA',
+    single_period: true,
+    url_tmpl: "{% url 'cataract_missions' %}/<entity>/<period_str>"
+});
+
+{% endblock %}

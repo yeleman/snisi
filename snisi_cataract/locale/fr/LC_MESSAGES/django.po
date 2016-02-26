@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-05 10:06+0000\n"
-"PO-Revision-Date: 2016-02-05 10:05+0000\n"
+"POT-Creation-Date: 2016-02-26 10:52+0000\n"
+"PO-Revision-Date: 2016-02-26 10:58+0000\n"
 "Last-Translator: reg <rgaudin@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,103 +18,211 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: snisi_cataract/integrity.py:47 snisi_cataract/integrity.py:224
-#: snisi_cataract/integrity.py:464 snisi_cataract/integrity.py:582
+#: snisi_cataract/indicators.py:87
+msgid "Nb. surgeries Patient aged 15-18"
+msgstr "Nb. de chirurgies patient âgé de 15-18 ans"
+
+#: snisi_cataract/indicators.py:89
+msgid "Nb. surgeries Patient aged 18-20"
+msgstr "Nb. de chirurgies patient âgé de 18-20 ans"
+
+#: snisi_cataract/indicators.py:91
+msgid "Nb. surgeries Patient aged 20-25"
+msgstr "Nb. de chirurgies patient âgé de 20-25 ans"
+
+#: snisi_cataract/indicators.py:93
+msgid "Nb. surgeries Patient aged 25-30"
+msgstr "Nb. de chirurgies patient âgé de 25-30 ans"
+
+#: snisi_cataract/indicators.py:95
+msgid "Nb. surgeries Patient aged 30-35"
+msgstr "Nb. de chirurgies patient âgé de 30-35 ans"
+
+#: snisi_cataract/indicators.py:97
+msgid "Nb. surgeries Patient aged 35-40"
+msgstr "Nb. de chirurgies patient âgé de 35-40 ans"
+
+#: snisi_cataract/indicators.py:99
+msgid "Nb. surgeries Patient aged 40-45"
+msgstr "Nb. de chirurgies patient âgé de 40-45 ans"
+
+#: snisi_cataract/indicators.py:101
+msgid "Nb. surgeries Patient aged 45-50"
+msgstr "Nb. de chirurgies patient âgé de 45-50 ans"
+
+#: snisi_cataract/integrity.py:47 snisi_cataract/integrity.py:226
+#: snisi_cataract/integrity.py:468 snisi_cataract/integrity.py:587
 msgid "Missing data for {}"
 msgstr "Données manquantes pour {}"
 
-#: snisi_cataract/models.py:32
+#: snisi_cataract/models.py:35
 msgid "AMO"
 msgstr "AMO"
 
-#: snisi_cataract/models.py:33
+#: snisi_cataract/models.py:36
 msgid "TSO"
 msgstr "TSO"
 
-#: snisi_cataract/models.py:34
+#: snisi_cataract/models.py:37
 msgid "OPT"
 msgstr "OPT"
 
-#: snisi_cataract/models.py:40
+#: snisi_cataract/models.py:38
+msgid "Surgeon"
+msgstr "Chirurgien"
+
+#: snisi_cataract/models.py:44
 msgid "R.E"
 msgstr "OD"
 
-#: snisi_cataract/models.py:41
+#: snisi_cataract/models.py:45
 msgid "L.E"
 msgstr "OG"
 
-#: snisi_cataract/models.py:47
+#: snisi_cataract/models.py:51
 msgid "Male"
 msgstr "Homme"
 
-#: snisi_cataract/models.py:48
+#: snisi_cataract/models.py:52
 msgid "Female"
-msgstr ""
+msgstr "Femme"
 
-#: snisi_cataract/models.py:56
+#: snisi_cataract/models.py:60
 msgid "Fixed"
 msgstr "Fixe"
 
-#: snisi_cataract/models.py:57
+#: snisi_cataract/models.py:61
 msgid "Mobile"
 msgstr "Mobile"
 
-#: snisi_cataract/models.py:58
+#: snisi_cataract/models.py:62
 msgid "Advanced"
 msgstr "Avancée"
 
-#: snisi_cataract/models.py:69
+#: snisi_cataract/models.py:73
 msgid "CAT Surgery Report"
 msgstr "Rapport de chirurgie cataracte"
 
-#: snisi_cataract/models.py:70
+#: snisi_cataract/models.py:74
 msgid "CAT Surgery Reports"
 msgstr "Rapport de chirurgie cataracte"
 
-#: snisi_cataract/models.py:78
+#: snisi_cataract/models.py:82
 msgid "in years"
 msgstr "en années"
 
-#: snisi_cataract/models.py:135
+#: snisi_cataract/models.py:139
 #, python-brace-format
 msgid "{gender}/{age}y/{eye}"
 msgstr "{gender}/{age}a/{eye}"
 
-#: snisi_cataract/models.py:156
+#: snisi_cataract/models.py:162
+msgid "Nb. surgeries Male"
+msgstr "Nombre de chirurgies Homme"
+
+#: snisi_cataract/models.py:165
+msgid "Nb. surgeries Female"
+msgstr "Nombre de chirurgies Femme"
+
+#: snisi_cataract/models.py:168
+msgid "Nb. surgeries Right Eye"
+msgstr "Nombre de chirurgies Œil Droit"
+
+#: snisi_cataract/models.py:171
+msgid "Nb. surgeries Left Eye"
+msgstr "Nombre de chirurgies Œil Gauche"
+
+#: snisi_cataract/models.py:176
+msgid "Nb. surgeries Patient under 15"
+msgstr "Nb. de chirurgies patient moins de 15 ans"
+
+#: snisi_cataract/models.py:179
+msgid "Nb. surgeries Patient under 18"
+msgstr "Nb. de chirurgies patient moins de 18 ans"
+
+#: snisi_cataract/models.py:182
+msgid "Nb. surgeries Patient under 20"
+msgstr "Nb. de chirurgies patient moins de 20 ans"
+
+#: snisi_cataract/models.py:185
+msgid "Nb. surgeries Patient under 25"
+msgstr "Nb. de chirurgies patient moins de 25 ans"
+
+#: snisi_cataract/models.py:188
+msgid "Nb. surgeries Patient under 30"
+msgstr "Nb. de chirurgies patient moins de 30 ans"
+
+#: snisi_cataract/models.py:191
+msgid "Nb. surgeries Patient under 35"
+msgstr "Nb. de chirurgies patient moins de 35 ans"
+
+#: snisi_cataract/models.py:194
+msgid "Nb. surgeries Patient under 40"
+msgstr "Nb. de chirurgies patient moins de 40 ans"
+
+#: snisi_cataract/models.py:197
+msgid "Nb. surgeries Patient under 45"
+msgstr "Nb. de chirurgies patient moins de 45 ans"
+
+#: snisi_cataract/models.py:200
+msgid "Nb. surgeries Patient under 50"
+msgstr "Nb. de chirurgies patient moins de 50 ans"
+
+#: snisi_cataract/models.py:203
+msgid "Nb. surgeries Patient over 50"
+msgstr "Nb. de chirurgies patient de plus de 50 ans"
+
+#: snisi_cataract/models.py:207
+msgid "Nb of surgeries"
+msgstr "Nombre de chirurgies"
+
+#: snisi_cataract/models.py:260
 msgid "CAT Surgery Mission Report"
 msgstr "Rapport de mission chirurgie cataracte"
 
-#: snisi_cataract/models.py:157
+#: snisi_cataract/models.py:261
 msgid "CAT Surgery Mission Reports"
 msgstr "Rapports de mission chirurgie cataracte"
 
-#: snisi_cataract/models.py:160
+#: snisi_cataract/models.py:264
 msgid "Start Date"
 msgstr "Date de début"
 
-#: snisi_cataract/models.py:161
+#: snisi_cataract/models.py:265
 msgid "End Date"
 msgstr "Date de fin"
 
-#: snisi_cataract/models.py:164
+#: snisi_cataract/models.py:268
 msgid "Operator"
 msgstr "Opérateur"
 
-#: snisi_cataract/models.py:167
+#: snisi_cataract/models.py:271
 msgid "Operatr Profile"
 msgstr "Profil opérateur"
 
-#: snisi_cataract/models.py:171
+#: snisi_cataract/models.py:275
 msgid "Strategy"
 msgstr "Stratégie"
 
-#: snisi_cataract/models.py:175
+#: snisi_cataract/models.py:279
 msgid "Surgery Reports"
 msgstr "Rapports de chirurgie"
 
-#: snisi_cataract/models.py:198
-msgid "Nb of surgeries"
-msgstr "Nombre de chirurgies"
+#: snisi_cataract/models.py:458
+msgid "Aggregated CAT Surgery Mission Report"
+msgstr "Rapport agrégé de mission chirurgie cataracte"
+
+#: snisi_cataract/models.py:459
+msgid "Aggregated CAT Surgery Mission Reports"
+msgstr "Rapports agrégés de mission chirurgie cataracte"
+
+#: snisi_cataract/models.py:463
+msgid "Primary. Sources"
+msgstr "Sources primaires"
+
+#: snisi_cataract/models.py:469
+msgid "Primary. Sources (direct)"
+msgstr "Sources primaires (directes)"
 
 #~ msgid "FEMALE"
 #~ msgstr "Femme"

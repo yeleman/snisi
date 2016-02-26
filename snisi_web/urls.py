@@ -12,14 +12,14 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponse
 
 from snisi_web.url_regexp import (RGXP_ENTITY,
-                                  RGXP_RECEIPT,
-                                  RGXP_PERIOD)
+                                  RGXP_RECEIPT)
 from snisi_malaria import urls as malaria_urls
 from snisi_vacc import urls as vacc_urls
 from snisi_epidemiology import urls as epidemio_urls
 from snisi_reprohealth import urls as reprohealth_urls
 from snisi_nutrition import urls as nutrition_urls
 from snisi_trachoma import urls as trachoma_urls
+from snisi_cataract import urls as cataract_urls
 
 urlpatterns = patterns(
     '',
@@ -30,6 +30,7 @@ urlpatterns = patterns(
     url(r'^msi_pf', include(reprohealth_urls)),
     url(r'^epidemiology', include(epidemio_urls)),
     url(r'^trachoma', include(trachoma_urls)),
+    url(r'^cataract', include(cataract_urls)),
 
     url(r'^download/(?P<fpath>.*)$',
         'snisi_web.views.downloads.serve_protected_files', name='protected'),

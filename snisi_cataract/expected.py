@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 DOMAIN = get_domain()
 
 mission_report_class = ReportClass.get_or_none("cat_mission")
+aggmission_report_class = ReportClass.get_or_none("cat_mission_aggregated")
 
 
 def create_expected_for(period):
@@ -54,10 +55,33 @@ def create_expected_for(period):
 
         for entity in cataract_cluster.members(only_active=True):
 
+            # no mission at HC level
+            if entity.type.slug == 'health_center':
+                continue
+
             edict = copy.copy(expected_dict)
+            edict.update({'entity': entity})
+
+            # health district has both (CATMissionR and AggCATMissionR)
+            if entity.type.slug == 'health_district':
+                finddict = copy.copy(edict)
+
+                e, created = ExpectedReporting.objects \
+                    .get_or_create(**finddict)
+                if created:
+                    logger.debug("Created {}".format(e))
+                    created_list.append(e)
+                else:
+                    logger.debug("Exists already: {}".format(e))
+                if not e.completion_status:
+                    e.completion_status = ExpectedReporting.COMPLETION_MISSING
+                    e.save()
+
             edict.update({
-                'entity': entity,
-            })
+                'report_class': aggmission_report_class,
+                'within_period': False,
+                'amount_expected': ExpectedReporting.EXPECTED_SINGLE,
+                })
 
             finddict = copy.copy(edict)
 

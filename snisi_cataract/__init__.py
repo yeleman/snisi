@@ -9,6 +9,8 @@ from snisi_core.models.Projects import Domain
 
 PROJECT_BRAND = "PNSO"
 DOMAIN_SLUG = 'cataract'
+ROUTINE_REGION_AGG_DAY = 26
+ROUTINE_DISTRICT_AGG_DAYS = 26
 
 
 def get_domain():

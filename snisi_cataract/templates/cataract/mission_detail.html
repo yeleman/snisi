@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Mission TT Backlog {{ mission.receipt }}{% endblock %}
+
+{% block content %}
+
+<h2>Mission {{ mission.receipt }} à {{ mission.entity }}</h2>
+
+<table class="pure-table">
+<tr>
+    <th>RÉGION</th>
+        <td>{% include "parts/entity_link.html" with entity=mission.entity.get_health_region %}</td>
+    <th>Opérateur</th>
+        <td>{% include "parts/user_link.html" with provider=mission.operator %}</td>
+</tr>
+<tr>
+    <th>DISTRICT</th>
+        <td>{% include "parts/entity_link.html" with entity=mission.entity.get_health_district %}</td>
+    <th>Début mission</th>
+        <td>{{ mission.started_on }}</td>
+</tr>
+<tr>
+    <th>STRATÉGIE</th>
+        <td>{{ mission.verbose_strategy }}</td>
+    <th>Fin mission</th>
+        <td>{% if mission.completion_status == mission.COMPLETE %}{{ mission.ended_on }}{% else %}En cours…{% endif %}</td>
+</tr>
+</table>
+
+<table class="pure-table data-centered">
+<thead>
+<caption>Répartition des chirurgies de la mission</caption>
+<tr><th colspan="10">Nombre de chirurgies</th></tr>
+<tr>
+    <th>Total</th>
+    <th>Homme</th>
+    <th>Femme</th>
+    <th>Œil Droit</th>
+    <th>Œil Gauche</th>
+    <th>Délai min</th>
+    <th>Délai max</th>
+    <th>Délai moy.</th>
+    <th>AV moy.</th>
+    <th>Nb. jours</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>{{ mission.nb_surgery_reports }}</strong></td>
+    <td>{{ mission.nb_surgery_male }}</td>
+    <td>{{ mission.nb_surgery_female }}</td>
+    <td>{{ mission.nb_surgery_right_eye }}</td>
+    <td>{{ mission.nb_surgery_left_eye }}</td>
+    <td>{{ mission.result_delay_min }}</td>
+    <td>{{ mission.result_delay_max }}</td>
+    <td>{{ mission.result_delay_mean }}</td>
+    <td>{{ mission.visual_acuity_mean }}</td>
+    <td>{{ mission.nb_days }}j.</td>
+</tr>
+<tr><th colspan="10">Répartition par tranches d'âges</th></tr>
+<tr>
+    <th>-15a</th>
+    <th>15-18a</th>
+    <th>18-20a</th>
+    <th>20-25a</th>
+    <th>25-30a</th>
+    <th>30-35a</th>
+    <th>35-40a</th>
+    <th>40-45a</th>
+    <th>45-50a</th>
+    <th>+50a</th>
+</tr>
+<tr>
+	<td>{{ mission.nb_age_under_15 }}</td>
+	<td>{{ mission.age_between_15_18 }}</td>
+	<td>{{ mission.age_between_18_20 }}</td>
+	<td>{{ mission.age_between_20_25 }}</td>
+	<td>{{ mission.age_between_25_30 }}</td>
+	<td>{{ mission.age_between_30_35 }}</td>
+	<td>{{ mission.age_between_35_40 }}</td>
+	<td>{{ mission.age_between_40_45 }}</td>
+	<td>{{ mission.age_between_45_50 }}</td>
+	<td>{{ mission.nb_age_over_50 }}</td>
+</tr>
+</tbody>
+</table>
+
+<table class="pure-table data-centered data-first-col-left">
+<thead>
+<caption>Chirurgies individuelles</caption>
+<tr>
+    <th>Aire</th>
+    <th>Date chir.</th>
+    <th>Nº ordre</th>
+    <th>ID</th>
+    <th>Sexe</th>
+    <th>Œil</th>
+    <th>Age</th>
+    <th>Acuité visu.</th>
+    <th>Date résult.</th>
+</tr>
+</thead>
+<tbody>
+{% for surgery in mission.surgery_reports.all %}
+<tr>
+    <td>{% include "parts/entity_link.html" with entity=surgery.location.casted %}</td>
+    <td>{{ surgery.surgery_date }}</td>
+    <td>{{ surgery.number }}</td>
+    <td>{{ surgery.surgery_ident }}</td>
+    <td>{{ surgery.verbose_gender }}</td>
+    <td>{{ surgery.verbose_eye }}</td>
+    <td>{{ surgery.age }}</td>
+    <td>{{ surgery.visual_acuity|default_if_none:"-" }}</td>
+    <td>{{ surgery.result_date|default_if_none:"-" }}</td>
+</tr>
+{% empty %}
+<tr><td colspan="9">Aucune chirurgie pour le moment.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def provider_is_allowed(prole, plocation, privileges,
                         location, action, domain, extension):
 
-    # malaria-specific permissions only
+    # trachoma-specific permissions only
     if not domain == get_domain():
         return
 
@@ -28,8 +28,7 @@ def provider_is_allowed(prole, plocation, privileges,
             if plocation == plocation.get_health_district():
 
                 # can upload report for villages within district and district
-                if action in ('create-report'):
-                    return location in plocation.get_villages() + [location]
+                return location in plocation.get_villages() + [location]
 
             # Not handled
             else:

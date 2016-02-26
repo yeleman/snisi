@@ -66,7 +66,8 @@ class CATMissionStartChecker(ReportIntegrityChecker):
         if (user_district is None
                 or not user_district == entity
                 or self.get('submitter').role.slug
-                not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
+                not in ('tt_tso', 'tt_opt', 'tt_amo',
+                        'tt_surgeon', 'charge_sis')):
             self.add_error("Vous n'êtes pas autorisé à créer un rapport de "
                            "mission pour ce district: {}".format(entity),
                            blocking=True, field='submitter')
@@ -106,17 +107,17 @@ class CATMissionStartChecker(ReportIntegrityChecker):
 
         # started_on must be <= today
         today = datetime.date.today()
-        started_on = parse_date_string(self.get('started_on'))
+        started_on = parse_date_string(self.get('started_on'), as_date=True)
         if started_on is None:
             self.add_error("La date de démarrage est incorrecte: "
                            "{}.".format(self.get('started_on')),
                            blocking=True, field='started_on')
-        if started_on.date() > today:
+        if started_on > today:
             self.add_error("La date de démarrage est dans "
                            "le futur: {}.".format(started_on),
                            blocking=True, field='started_on')
 
-        if started_on.date() < today - datetime.timedelta(days=21):
+        if started_on < today - datetime.timedelta(days=21):
             self.add_error("La date de démarrage est trop "
                            "ancienne: {}.".format(started_on),
                            blocking=True, field='started_on')
@@ -127,7 +128,8 @@ class CATMissionStartChecker(ReportIntegrityChecker):
         operator_type = {
             'amo': cat_models.AMO,
             'tso': cat_models.TSO,
-            'opt': cat_models.OPT
+            'opt': cat_models.OPT,
+            'surgeon': cat_models.SURGEON,
         }.get(self.get('operator_type').lower())
         if operator_type not in cat_models.OPERATOR_TYPES.keys():
             self.add_error("Profil agent innatendu: "
@@ -316,7 +318,8 @@ class CATSurgeryChecker(ReportIntegrityChecker):
             if (user_district is None
                     or not user_district == district
                     or self.get('submitter').role.slug
-                    not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
+                    not in ('tt_tso', 'tt_opt', 'tt_amo',
+                            'tt_surgeon', 'charge_sis')):
                 self.add_error("Vous n'êtes pas autorisé à créer un rapport "
                                "de chirurgie pour ce district: {}"
                                .format(district),
@@ -352,7 +355,8 @@ class CATSurgeryChecker(ReportIntegrityChecker):
             if (user_district is None
                     or not user_district == district
                     or self.get('submitter').role.slug
-                    not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
+                    not in ('tt_tso', 'tt_opt', 'tt_amo',
+                            'tt_surgeon', 'charge_sis')):
                 self.add_error("Vous n'êtes pas autorisé à créer un rapport "
                                "de chirurgie pour cette aire: {}"
                                .format(health_area),
@@ -528,7 +532,8 @@ class CATSurgeryResultChecker(ReportIntegrityChecker):
         if (user_district is None
                 or not user_district == district
                 or self.get('submitter').role.slug
-                not in ('tt_tso', 'tt_opt', 'tt_amo', 'charge_sis')):
+                not in ('tt_tso', 'tt_opt', 'tt_amo',
+                        'tt_surgeon', 'charge_sis')):
             self.add_error("Vous n'êtes pas autorisé à envoyer de résultat "
                            "chirurgie pour ce district: {}"
                            .format(user_district),
@@ -596,12 +601,13 @@ class CATMissionEndChecker(ReportIntegrityChecker):
         # started_on must be <= today
         today = datetime.date.today()
         try:
-            self.set('clean_ended_on', parse_date_string(self.get('ended_on')))
+            self.set('clean_ended_on',
+                     parse_date_string(self.get('ended_on'), as_date=True))
         except:
             self.add_error("La date de fin de mission est incorrecte: "
                            "{}.".format(self.get('clean_ended_on')),
                            blocking=True)
-        if self.get('clean_ended_on').date() > today:
+        if self.get('clean_ended_on') > today:
             self.add_error("La date de fin de mission est dans "
                            "le futur: {}".format(self.get('clean_ended_on')),
                            blocking=True, field='ended_on')
@@ -623,10 +629,11 @@ class CATMissionEndChecker(ReportIntegrityChecker):
         missionR = open_missions.all()[0]
         self.set('missionR', missionR)
 
-        if self.get('clean_ended_on').date() < missionR.started_on:
-            self.add_error("La date de fin de mission est antérieure "
+        if self.get('clean_ended_on') < missionR.started_on:
+            self.add_error("La date de fin de mission {} est antérieure "
                            "à la date de début: {}"
-                           .format(self.get('clean_ended_on')),
+                           .format(self.get('clean_ended_on'),
+                                   missionR.started_on),
                            blocking=True, field='ended_on')
 
         expected_reporting = ExpectedReporting.get_or_none(
@@ -644,7 +651,7 @@ def close_mission_report(provider, expected_reporting, completed_on,
     report.integrity_status = CATMissionR.CORRECT
     report.completion_status = CATMissionR.COMPLETE
     report.completed_on = completed_on
-    report.update_delays()
+    report.update_stats()
 
     try:
         with reversion.create_revision():
@@ -691,7 +698,7 @@ def close_mission_report(provider, expected_reporting, completed_on,
                          receipt=report.receipt)
             )
 
-    return report, ("Le rapport de mission cataracte "
-                    "a été enregistré. "
+    return report, ("La de mission cataracte "
+                    "a bien été cloturée. "
                     "Le No de reçu est #{receipt}."
                     .format(receipt=report.receipt))

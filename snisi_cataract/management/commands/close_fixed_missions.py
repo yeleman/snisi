@@ -24,7 +24,7 @@ class Command(BaseCommand):
         now = timezone.now()
         if not period.end_on < now:
             logger.error("Can not close mission before end of period")
-            # return
+            return
 
         for mission in CATMissionR.objects.filter(strategy=FIXED,
                                                   period=period):
