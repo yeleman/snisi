@@ -24,7 +24,7 @@ class Command(BaseCommand):
         logger.info("snisi_cataract daily-checkups")
 
         day = timezone.now().day
-        period = MonthPeriod.current()
+        period = MonthPeriod.current().previous()
 
         category_matrix = {
             'end_of_cataract_mission_period': generate_aggregated_reports,
@@ -36,8 +36,12 @@ class Command(BaseCommand):
             task, created = PeriodicTask.get_or_create(slug, category)
 
             if task.can_trigger():
-                category_matrix.get(category)(period)
-                task.trigger()
+                try:
+                    category_matrix.get(category)(period)
+                except Exception as e:
+                    logger.exception(e)
+                else:
+                    task.trigger()
 
         if day >= ROUTINE_REGION_AGG_DAY:
             # validate all district reports

@@ -15,7 +15,7 @@ from snisi_core.models.Projects import Cluster
 from snisi_core.models.Roles import Role
 from snisi_core.models.Entities import Entity
 from snisi_core.models.Providers import Provider
-from snisi_cataract import ROUTINE_REGION_AGG_DAY, ROUTINE_DISTRICT_AGG_DAYS
+from snisi_cataract import ROUTINE_DISTRICT_AGG_DAYS
 from snisi_cataract.models import AggCATMissionR, CATMissionR
 
 logger = logging.getLogger(__name__)
@@ -35,23 +35,23 @@ get_regions = lambda: [e for e in cluster.members()
 
 
 def generate_aggregated_reports(period, ensure_correct_date=True):
-    generate_district_reports(period, ensure_correct_date)
-    generate_region_country_reports(period, ensure_correct_date)
+    if ensure_correct_date:
+        now = timezone.now()
+        district_agg_day = period.end_on + datetime.timedelta(
+            days=ROUTINE_DISTRICT_AGG_DAYS - 1)
+        print(period, district_agg_day, now.date())
+        if now.date() < district_agg_day.date():
+            raise Exception("Not allowed to generate district agg "
+                            "before the 26th of following month")
+
+    generate_district_reports(period)
+    generate_region_country_reports(period)
 
 
 def generate_district_reports(period,
                               ensure_correct_date=True):
 
     logger.info("Switching to {}".format(period))
-
-    if ensure_correct_date:
-        now = timezone.now()
-        district_agg_day = period.end_on + datetime.timedelta(
-            days=ROUTINE_DISTRICT_AGG_DAYS)
-        if not now.date() < district_agg_day.date():
-            logger.error("Not allowed to generate district agg "
-                         "before the 26th")
-            return
 
     districts = get_districts()
 
@@ -99,15 +99,6 @@ def generate_region_country_reports(period,
                                     ensure_correct_date=True):
 
     logger.info("Switching to {}".format(period))
-
-    if ensure_correct_date:
-        now = timezone.now()
-        region_agg_day = period.end_on + datetime.timedelta(
-            days=ROUTINE_REGION_AGG_DAY)
-        if not now.date() < region_agg_day.date():
-            logger.error("Not allowed to generate district agg "
-                         "before the 26th of the following period")
-            return
 
     regions = get_regions()
 
