@@ -542,7 +542,7 @@ def all_malariar_as_xls(save_to=None):
     sheet = wb.add_sheet("malaria-routine-reports")
 
     headers = ["CODE", "REGION", "DISTRICT", "CSCOM",
-               "YEAR", "MONTH", "RECEIVED_ON"] + MalariaR.data_fields()
+               "YEAR", "MONTH", "RECEIVED_ON", "VALIDATED_ON", "AUTO_VALIDATED"] + MalariaR.data_fields()
 
     for col, item in enumerate(headers):
         sheet.write(0, col, item)
@@ -563,13 +563,15 @@ def all_malariar_as_xls(save_to=None):
         col += 1
         sheet.write(row, col, report.period.middle().month)
         col += 1
-        sheet.write(row, col, report.created_on.strftime("%Y-%m-%d"))
+        sheet.write(row, col, getattr(report.created_on, 'isoformat', lambda: "")())
         col += 1
-
+        sheet.write(row, col, getattr(report.validated_on, 'isoformat', lambda: "")())
+        col += 1
+        sheet.write(row, col, report.auto_validated)
+        col += 1
         for field in report.data_fields():
             sheet.write(row, col, report.get(field))
             col += 1
-
         row += 1
 
     if save_to:
@@ -620,7 +622,7 @@ def all_dailymalariar_xls(save_to=None):
         col += 1
         sheet.write(row, col, report.period.middle().day)
         col += 1
-        sheet.write(row, col, report.created_on.strftime("%Y-%m-%d"))
+        sheet.write(row, col, getattr(report.created_on, 'isoformat', lambda: "")())
         col += 1
 
         for field in report.data_fields():
