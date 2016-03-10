@@ -122,6 +122,10 @@ class Entity(MPTTModel):
             feature.update({"geometry": self.geojson})
         return feature
 
+    @property
+    def is_central(self):
+        return self.level == 0
+
     def to_dict(self):
         return {'slug': self.slug,
                 'name': self.name,

@@ -349,18 +349,24 @@ class CATSurgeryChecker(ReportIntegrityChecker):
                                field='district', blocking=True)
             self.set('district', district)
 
-            # check auth for user at district
-            user_district = self.get('submitter') \
-                .location.get_health_district()
-            if (user_district is None
-                    or not user_district == district
-                    or self.get('submitter').role.slug
-                    not in ('tt_tso', 'tt_opt', 'tt_amo',
-                            'tt_surgeon', 'charge_sis')):
-                self.add_error("Vous n'êtes pas autorisé à créer un rapport "
-                               "de chirurgie pour cette aire: {}"
-                               .format(health_area),
-                               blocking=True, field='submitter')
+            # tt_surgeon has permission everywhere
+            submitter = self.get('submitter')
+            if not (submitter.role.slug == 'tt_surgeon'
+                    and submitter.location.is_central):
+
+                # check auth for user at district
+                user_district = self.get('submitter') \
+                    .location.get_health_district()
+                if (user_district is None
+                        or not user_district == district
+                        or self.get('submitter').role.slug
+                        not in ('tt_tso', 'tt_opt', 'tt_amo',
+                                'tt_surgeon', 'charge_sis')):
+                    self.add_error("Vous n'êtes pas autorisé à créer un rapport "
+                                   "de chirurgie pour cette aire: {}"
+                                   .format(health_area),
+                                   blocking=True, field='submitter')
+
             self.set('clean_location', health_area)
 
             # No ExpectedReporting for CATSurgeryR ; open missionR instead
@@ -527,17 +533,24 @@ class CATSurgeryResultChecker(ReportIntegrityChecker):
         # user must has rights on surgery_report district
         district = self.get('surgery_report').location.get_health_district()
 
-        # check auth for user at district
-        user_district = self.get('submitter').location.get_health_district()
-        if (user_district is None
-                or not user_district == district
-                or self.get('submitter').role.slug
-                not in ('tt_tso', 'tt_opt', 'tt_amo',
-                        'tt_surgeon', 'charge_sis')):
-            self.add_error("Vous n'êtes pas autorisé à envoyer de résultat "
-                           "chirurgie pour ce district: {}"
-                           .format(user_district),
-                           blocking=True, field='submitter')
+        # tt_surgeon has permission everywhere
+        submitter = self.get('submitter')
+        if not (submitter.role.slug == 'tt_surgeon'
+                and submitter.location.is_central):
+
+            # check auth for user at district
+            user_district = self.get('submitter') \
+                .location.get_health_district()
+            if (user_district is None
+                    or not user_district == district
+                    or self.get('submitter').role.slug
+                    not in ('tt_tso', 'tt_opt', 'tt_amo',
+                            'tt_surgeon', 'charge_sis')):
+                self.add_error("Vous n'êtes pas autorisé à "
+                               "envoyer de résultat "
+                               "chirurgie pour ce district: {}"
+                               .format(user_district),
+                               blocking=True, field='submitter')
 
         # result_date => surgery_date
         if not self.get('result_date') >= \
