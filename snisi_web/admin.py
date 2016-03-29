@@ -11,7 +11,7 @@ from snisi_core.models.Reporting import (SNISIReport,
                                          ReportClass,
                                          ExpectedReporting,
                                          ExpectedValidation)
-from snisi_core.models.Periods import Period
+from snisi_core.models.Periods import Period, MonthPeriod
 from snisi_core.models.SMSMessages import SMSMessage
 from snisi_core.models.Notifications import Notification
 from snisi_core.admin import (EntityAdmin, EntityTypeAdmin, PeriodAdmin,
@@ -19,7 +19,7 @@ from snisi_core.admin import (EntityAdmin, EntityTypeAdmin, PeriodAdmin,
                               PhoneNumberTypeAdmin, RoleAdmin, ProviderAdmin,
                               SNISIReportAdmin, ExpectedReportingAdmin,
                               ExpectedValidationAdmin, SMSMessageAdmin,
-                              NotificationAdmin)
+                              NotificationAdmin, MonthPeriodAdmin)
 from snisi_core.models.Roles import Role
 from snisi_core.models.Providers import Provider
 from snisi_core.models.Numbers import PhoneNumber, PhoneNumberType
@@ -34,6 +34,7 @@ admin.site.register(Provider, ProviderAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
 admin.site.register(PhoneNumberType, PhoneNumberTypeAdmin)
 admin.site.register(Period, PeriodAdmin)
+admin.site.register(MonthPeriod, MonthPeriodAdmin)
 admin.site.register(Entity, EntityAdmin)
 admin.site.register(HealthEntity, EntityAdmin)
 admin.site.register(AdministrativeEntity, EntityAdmin)

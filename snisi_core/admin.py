@@ -23,7 +23,7 @@ class EntityTypeAdmin(admin.ModelAdmin):
 
 
 class PeriodAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('period_type',)
 
 
 class MonthPeriodAdmin(admin.ModelAdmin):
