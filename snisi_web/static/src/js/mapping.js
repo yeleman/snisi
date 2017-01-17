@@ -113,10 +113,10 @@ function getMalariaMapManager(options) {
         this.color_yes = '#889f37'; //'#28ff00';
         this.color_no = '#4d2c74'; //'#ff1500';
         this.colors = options.colors || ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
-        this.tiles_url_tmpl = options.tiles_url_tmpl || 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
-        this.default_tiles_url_tmpl = 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
-        this.base_layer_url = 'http://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
-        this.marker_url_tmpl = 'http://tiles.sante.gov.ml/markers/#FILE#';
+        this.tiles_url_tmpl = options.tiles_url_tmpl || 'https://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.default_tiles_url_tmpl = 'https://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.base_layer_url = 'https://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
+        this.marker_url_tmpl = 'https://tiles.sante.gov.ml/markers/#FILE#';
         this.dont_use_default_tiles = options.dont_use_default_tiles || false;
         this.initial_latitude = 14.0512;
         this.initial_longitude = -5.519499;
@@ -127,7 +127,7 @@ function getMalariaMapManager(options) {
         this.default_region = options.default_region || "2732";
 
         // Internet Explorer needs tiles on same domain.
-        if (navigator.userAgent.match(/Trident/)) {
+        if (navigator.userAgent.match(/Trident/) || true) {
         	this.tiles_url_tmpl = this.tiles_url_tmpl
         		.replace('{s}.tiles.sante.gov.ml/', 'snisi.sante.gov.ml/tiles/');
         	this.base_layer_url = this.base_layer_url
