@@ -127,7 +127,7 @@ function getMalariaMapManager(options) {
         this.default_region = options.default_region || "2732";
 
         // Internet Explorer needs tiles on same domain.
-        if (navigator.userAgent.match(/Trident/) || true) {
+        if (navigator.userAgent.match(/Trident/)) {
         	this.tiles_url_tmpl = this.tiles_url_tmpl
         		.replace('{s}.tiles.sante.gov.ml/', 'snisi.sante.gov.ml/tiles/');
         	this.base_layer_url = this.base_layer_url
