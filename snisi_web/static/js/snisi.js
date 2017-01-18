@@ -842,6 +842,8 @@ function getEntitiesBrowser (options) {
 
 
 
+L.mapbox.accessToken = "pk.eyJ1IjoicmdhdWRpbiIsImEiOiJkUWF0TUZjIn0.ZWJWSo1vmDOKR8DPPwTEhA";
+
 Array.prototype.getUnique = function(){
    var u = {}, a = [];
    for(var i = 0, l = this.length; i < l; ++i){
@@ -1063,8 +1065,7 @@ function getMalariaMapManager(options) {
             doubleClickZoom: false,
             boxZoom: false,
             zoomControl: false,
-            attributionControl: false,
-            accessToken: "pk.eyJ1IjoicmdhdWRpbiIsImEiOiJkUWF0TUZjIn0.ZWJWSo1vmDOKR8DPPwTEhA",
+            attributionControl: false
         };
 
         if (this.static_map) {
