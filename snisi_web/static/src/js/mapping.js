@@ -113,9 +113,9 @@ function getMalariaMapManager(options) {
         this.color_yes = '#889f37'; //'#28ff00';
         this.color_no = '#4d2c74'; //'#ff1500';
         this.colors = options.colors || ["#fef0d9", "#fdcc8a", "#fc8d59", "#d7301f"];
-        this.tiles_url_tmpl = options.tiles_url_tmpl || 'https://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
-        this.default_tiles_url_tmpl = 'https://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
-        this.base_layer_url = 'https://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
+        this.tiles_url_tmpl = options.tiles_url_tmpl || 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.default_tiles_url_tmpl = 'http://{s}.tiles.sante.gov.ml/default/#SLUG#-#SUFFIX#/{z}/{x}/{y}.png';
+        this.base_layer_url = 'http://{s}.tiles.sante.gov.ml/mali-base/{z}/{x}/{y}.png';
         this.marker_url_tmpl = 'https://tiles.sante.gov.ml/markers/#FILE#';
         this.dont_use_default_tiles = options.dont_use_default_tiles || false;
         this.initial_latitude = 14.0512;
@@ -220,7 +220,8 @@ function getMalariaMapManager(options) {
             doubleClickZoom: false,
             boxZoom: false,
             zoomControl: false,
-            attributionControl: false
+            attributionControl: false,
+            accessToken: "pk.eyJ1IjoicmdhdWRpbiIsImEiOiJkUWF0TUZjIn0.ZWJWSo1vmDOKR8DPPwTEhA",
         };
 
         if (this.static_map) {
